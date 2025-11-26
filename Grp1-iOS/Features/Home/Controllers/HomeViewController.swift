@@ -114,9 +114,9 @@ class HomeViewController: UIViewController {
             
             let section = NSCollectionLayoutSection(group: group)
             section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 30, trailing: 0)
-            section.orthogonalScrollingBehavior = .groupPagingCentered
+//            section.orthogonalScrollingBehavior = .groupPagingCentered
             section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 30, trailing: 0)
-            section.boundarySupplementaryItems = [headerItem]
+//            section.boundarySupplementaryItems = [headerItem]
             return section
         }
         
@@ -156,7 +156,7 @@ extension HomeViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         switch section {
         case 0: return todaysPick.count
-        case 1: return trendingNews.count
+        case 1: return 1
         default: return marketHighlights.count
         }
     }
