@@ -14,17 +14,29 @@
 		1906A21A2ED58641002425A7 /* Exceptions for "Grp1-iOS" folder in "Grp1-iOS" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				Features/Home/Views/test.swift,
 				Info.plist,
 			);
 			target = 1906A2072ED58640002425A7 /* Grp1-iOS */;
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
+/* Begin PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
+		19E8399F2ED6E084001EB6DD /* Exceptions for "Grp1-iOS" folder in "Copy Bundle Resources" phase from "Grp1-iOS" target */ = {
+			isa = PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet;
+			buildPhase = 1906A2062ED58640002425A7 /* Resources */;
+			membershipExceptions = (
+				Features/Home/Views/test.swift,
+			);
+		};
+/* End PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		1906A20A2ED58640002425A7 /* Grp1-iOS */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
 				1906A21A2ED58641002425A7 /* Exceptions for "Grp1-iOS" folder in "Grp1-iOS" target */,
+				19E8399F2ED6E084001EB6DD /* Exceptions for "Grp1-iOS" folder in "Copy Bundle Resources" phase from "Grp1-iOS" target */,
 			);
 			path = "Grp1-iOS";
 			sourceTree = "<group>";
