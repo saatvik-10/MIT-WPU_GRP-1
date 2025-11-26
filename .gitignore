@@ -28,3 +28,4 @@ fastlane/screenshots/
 
 # Workspace stuff that changes per user
 *.xcworkspace/xcshareddata/WorkspaceSettings.xcsettings
+*.project.xcworkspace
