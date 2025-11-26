@@ -10,7 +10,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="gTV-IL-0wX" customClass="TodaysPickCollectionViewCell" customModule="TravelDestinationsApp" customModuleProvider="target">
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="gTV-IL-0wX" customClass="TodaysPickCollectionViewCell" customModule="Grp1_iOS" customModuleProvider="target">
             <rect key="frame" x="0.0" y="0.0" width="620" height="406"/>
             <autoresizingMask key="autoresizingMask"/>
             <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
@@ -32,14 +32,19 @@
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
+                    <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="fill" contentVerticalAlignment="fill" numberOfPages="4" translatesAutoresizingMaskIntoConstraints="NO" id="SwP-pg-Kw5">
+                        <rect key="frame" x="150" y="374.33333333333331" width="90.666666666666686" height="25.666666666666686"/>
+                    </pageControl>
                 </subviews>
             </view>
             <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
             <constraints>
                 <constraint firstAttribute="bottom" secondItem="JsC-Nz-Xld" secondAttribute="bottom" constant="40" id="6Ts-pB-V6u"/>
                 <constraint firstAttribute="trailing" secondItem="4YC-IK-yAM" secondAttribute="trailing" id="APP-Kp-iVX"/>
+                <constraint firstItem="SwP-pg-Kw5" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="150" id="DOB-Dt-OBX"/>
                 <constraint firstItem="JsC-Nz-Xld" firstAttribute="top" secondItem="f4g-Sg-d51" secondAttribute="bottom" constant="10" id="Efc-Fr-lKW"/>
                 <constraint firstAttribute="trailing" secondItem="JsC-Nz-Xld" secondAttribute="trailing" constant="20" id="Haf-2J-xeY"/>
+                <constraint firstAttribute="bottom" secondItem="SwP-pg-Kw5" secondAttribute="bottom" constant="6" id="NKI-ZS-Sq9"/>
                 <constraint firstAttribute="bottom" secondItem="4YC-IK-yAM" secondAttribute="bottom" id="O2Q-OB-aDX"/>
                 <constraint firstItem="JsC-Nz-Xld" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="20" id="S3c-Pc-qRQ"/>
                 <constraint firstItem="f4g-Sg-d51" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="20" id="eWU-nh-CAR"/>

@@ -12,6 +12,8 @@ class HomeViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = .black
+
         
         registerCells()
 
@@ -49,7 +51,7 @@ class HomeViewController: UIViewController {
                 
                 let groupSize = NSCollectionLayoutSize(
                     widthDimension: .fractionalWidth(1.0),
-                    heightDimension: .estimated(480)
+                    heightDimension: .estimated(410)
                 )
                 
                 let group = NSCollectionLayoutGroup.horizontal(
@@ -59,7 +61,7 @@ class HomeViewController: UIViewController {
                 
                 let section = NSCollectionLayoutSection(group: group)
                 section.orthogonalScrollingBehavior = .groupPagingCentered
-                section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 30, trailing: 0)
+                section.contentInsets = NSDirectionalEdgeInsets(top: -120, leading: 0, bottom: 15, trailing: 0)
                 section.boundarySupplementaryItems = [headerItem]
                 
                 return section
@@ -93,6 +95,33 @@ class HomeViewController: UIViewController {
                 return section
             }
             
+            // SECTION 3 - Real Explore (bigger vertical cards)
+            if section == 3 {
+                let itemSize = NSCollectionLayoutSize(
+                    widthDimension: .fractionalWidth(0.5),
+                    heightDimension: .fractionalHeight(1.0)
+                )
+                
+                let item = NSCollectionLayoutItem(layoutSize: itemSize)
+                item.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 10)
+                
+                let groupSize = NSCollectionLayoutSize(
+                    widthDimension: .fractionalWidth(0.9),
+                    heightDimension: .estimated(250)  // adjust height
+                )
+                
+                let group = NSCollectionLayoutGroup.horizontal(
+                    layoutSize: groupSize,
+                    subitems: [item]
+                )
+                
+                let section = NSCollectionLayoutSection(group: group)
+                section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 30, trailing: 0)
+                section.orthogonalScrollingBehavior = .groupPagingCentered
+                section.boundarySupplementaryItems = [headerItem]
+                return section
+            }
+            
             // SECTION 2 - Vertical List
             let itemSize = NSCollectionLayoutSize(
                 widthDimension: .fractionalWidth(1.0),
@@ -104,7 +133,7 @@ class HomeViewController: UIViewController {
             
             let groupSize = NSCollectionLayoutSize(
                 widthDimension: .fractionalWidth(1.0),
-                heightDimension: .estimated(180)
+                heightDimension: .estimated(175)
             )
             
             let group = NSCollectionLayoutGroup.horizontal(
@@ -140,6 +169,11 @@ class HomeViewController: UIViewController {
         )
         
         collectionView.register(
+            UINib(nibName: "RealExploreCollectionViewCell", bundle: nil),
+            forCellWithReuseIdentifier: "realexplore_cell"
+        )
+        
+        collectionView.register(
             UINib(nibName: "HeaderView", bundle: nil),
             forSupplementaryViewOfKind: "header",
             withReuseIdentifier: "header_cell"
@@ -150,14 +184,16 @@ class HomeViewController: UIViewController {
 extension HomeViewController: UICollectionViewDataSource {
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        3
+        4
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         switch section {
         case 0: return todaysPick.count
         case 1: return 1
-        default: return marketHighlights.count
+        case 2: return marketHighlights.count
+        case 3: return marketHighlights.count   // real explore section
+        default: return 0
         }
     }
     
@@ -173,8 +209,13 @@ extension HomeViewController: UICollectionViewDataSource {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "trending_cell", for: indexPath) as! TrendingCollectionViewCell
             cell.configureCell(with: trendingNews[indexPath.row])
             return cell
-        } else {
+        } else if indexPath.section == 2 {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "explore_cell", for: indexPath) as! ExploreCollectionViewCell
+            cell.configureCell(with: marketHighlights[indexPath.row])
+            return cell
+        }
+        else {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "realexplore_cell", for: indexPath) as! RealExploreCollectionViewCell
             cell.configureCell(with: marketHighlights[indexPath.row])
             return cell
         }
@@ -192,12 +233,23 @@ extension HomeViewController: UICollectionViewDataSource {
         ) as! HeaderView
         
         if indexPath.section == 0 {
-            headerView.headerLabel.text = "Today's Picks"
-        } else if indexPath.section == 1 {
-            headerView.headerLabel.text = "Your News Feed"
-        } else {
-            headerView.headerLabel.text = "Explore More"
+            headerView.headerLabel.text = "Home"
+            headerView.headerLabel.font = UIFont.systemFont(ofSize: 34, weight: .bold)  // << Bigger title
+            headerView.headerLabel.textColor = .black
         }
+        else if indexPath.section == 1 {
+            headerView.headerLabel.text = "Your News Feed"
+            headerView.headerLabel.font = UIFont.systemFont(ofSize: 22, weight: .semibold)
+            headerView.headerLabel.textColor = .black
+        }
+        else if indexPath.section == 2 {
+            headerView.headerLabel.text = "Explore More"
+            headerView.headerLabel.font = UIFont.systemFont(ofSize: 22, weight: .semibold)
+        }
+        else {
+            headerView.headerLabel.text = "Real Explore"
+            headerView.headerLabel.font = UIFont.systemFont(ofSize: 22, weight: .semibold)
+        }
+        
         return headerView
-    }
-}
+    }}

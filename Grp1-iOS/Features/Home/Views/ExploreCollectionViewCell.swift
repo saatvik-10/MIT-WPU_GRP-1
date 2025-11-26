@@ -10,7 +10,7 @@ class ExploreCollectionViewCell: UICollectionViewCell {
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        contentView.backgroundColor = UIColor.systemGray6
+        contentView.backgroundColor = .white
         contentView.layer.cornerRadius = 7
         contentView.layer.masksToBounds = true
         
