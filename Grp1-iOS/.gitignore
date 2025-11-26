@@ -1,0 +1,30 @@
+# Xcode
+xcuserdata/
+*.xcuserstate
+*.xcscmblueprint
+
+# Derived data
+DerivedData/
+build/
+
+# SwiftPM
+.swiftpm/
+
+# CocoaPods (if you use it)
+Pods/
+Podfile.lock
+
+# Carthage (if you use it)
+Carthage/Build/
+
+# Fastlane
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots/
+
+# Temporary junk
+*.DS_Store
+*.swp
+
+# Workspace stuff that changes per user
+*.xcworkspace/xcshareddata/WorkspaceSettings.xcsettings
