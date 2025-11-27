@@ -61,8 +61,9 @@ class HomeViewController: UIViewController {
                 
                 let section = NSCollectionLayoutSection(group: group)
                 section.orthogonalScrollingBehavior = .groupPagingCentered
-                section.contentInsets = NSDirectionalEdgeInsets(top: -120, leading: 0, bottom: 15, trailing: 0)
+                section.contentInsets = NSDirectionalEdgeInsets(top: -130, leading: 0, bottom: 15, trailing: 0)
                 section.boundarySupplementaryItems = [headerItem]
+                
                 
                 return section
             }

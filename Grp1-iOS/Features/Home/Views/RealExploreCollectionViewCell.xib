@@ -23,13 +23,22 @@
                         </constraints>
                     </imageView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jDc-G3-WRH">
-                        <rect key="frame" x="15" y="115" width="425" height="21"/>
+                        <rect key="frame" x="15" y="109" width="425" height="21"/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uUw-Z7-bPL">
-                        <rect key="frame" x="15" y="142" width="425" height="20.333333333333343"/>
+                        <rect key="frame" x="15" y="136" width="425" height="20.333333333333343"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="i5B-9I-fWx">
+                        <rect key="frame" x="10" y="714" width="150" height="21"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="150" id="A5s-NL-nLc"/>
+                        </constraints>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
@@ -42,11 +51,12 @@
                 <constraint firstItem="uUw-Z7-bPL" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="15" id="2WY-8R-GpD"/>
                 <constraint firstAttribute="trailing" secondItem="jDc-G3-WRH" secondAttribute="trailing" constant="15" id="Cxa-go-jhX"/>
                 <constraint firstAttribute="trailing" secondItem="uUw-Z7-bPL" secondAttribute="trailing" constant="15" id="G2d-tm-g5L"/>
+                <constraint firstItem="i5B-9I-fWx" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="10" id="Khl-PV-MqX"/>
                 <constraint firstItem="jDc-G3-WRH" firstAttribute="top" secondItem="iab-x8-JIg" secondAttribute="bottom" constant="7" id="Kje-7E-Vtd"/>
+                <constraint firstAttribute="bottom" secondItem="i5B-9I-fWx" secondAttribute="bottom" constant="10" id="LBD-2e-ThV"/>
                 <constraint firstItem="iab-x8-JIg" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="12" id="Lcr-ga-KrZ"/>
                 <constraint firstItem="iab-x8-JIg" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="11" id="MbU-sj-Ln8"/>
                 <constraint firstItem="jDc-G3-WRH" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="15" id="Zd6-ti-yUd"/>
-                <constraint firstItem="jDc-G3-WRH" firstAttribute="top" secondItem="iab-x8-JIg" secondAttribute="bottom" constant="13" id="jLj-dd-R1x"/>
                 <constraint firstItem="uUw-Z7-bPL" firstAttribute="top" secondItem="jDc-G3-WRH" secondAttribute="bottom" constant="6" id="sGK-LR-05c"/>
             </constraints>
             <size key="customSize" width="455" height="745"/>
@@ -54,6 +64,7 @@
                 <outlet property="headlineLabel" destination="uUw-Z7-bPL" id="oEu-wJ-Uza"/>
                 <outlet property="newsImageView" destination="iab-x8-JIg" id="P1i-1z-oy5"/>
                 <outlet property="pickLabel" destination="jDc-G3-WRH" id="3Ec-aD-8uY"/>
+                <outlet property="timeLabel" destination="i5B-9I-fWx" id="ggf-cF-eAm"/>
             </connections>
             <point key="canvasLocation" x="448.09160305343511" y="-91.197183098591552"/>
         </collectionViewCell>

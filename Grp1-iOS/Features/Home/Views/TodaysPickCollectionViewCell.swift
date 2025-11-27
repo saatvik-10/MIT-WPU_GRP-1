@@ -2,14 +2,18 @@ import UIKit
 
 class TodaysPickCollectionViewCell: UICollectionViewCell {
     
+    @IBOutlet weak var pageControl: UIPageControl!
     @IBOutlet weak var pickLabel: UILabel!
     @IBOutlet weak var headlineLabel: UILabel!
     @IBOutlet weak var newsImageView: UIImageView!
+    @IBOutlet weak var sourceLabel: UILabel!
     
     private var gradientLayer: CAGradientLayer?
 
     override func awakeFromNib() {
         super.awakeFromNib()
+        pageControl.numberOfPages = NewsDataStore.shared.getAllNews().count
+        pageControl.currentPage = 0
         
         contentView.clipsToBounds = true
         
@@ -17,8 +21,11 @@ class TodaysPickCollectionViewCell: UICollectionViewCell {
         newsImageView.clipsToBounds = true
         
         // LABELS STYLE
-        pickLabel.font = UIFont.systemFont(ofSize: 12, weight: .semibold)
+        pickLabel.font = UIFont.systemFont(ofSize: 15, weight: .semibold)
         pickLabel.textColor = UIColor.white.withAlphaComponent(0.85)
+        
+        sourceLabel.font = UIFont.systemFont(ofSize: 12, weight: .semibold)
+        sourceLabel.textColor = UIColor.white.withAlphaComponent(0.85)
 
         headlineLabel.numberOfLines = 2
         headlineLabel.font = UIFont.systemFont(ofSize: 25, weight: .bold)
@@ -106,5 +113,7 @@ class TodaysPickCollectionViewCell: UICollectionViewCell {
         
         pickLabel.text = "Today's Pick"
         headlineLabel.text = article.title
+        sourceLabel.text = article.source
     }
+    
 }

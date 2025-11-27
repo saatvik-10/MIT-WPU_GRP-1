@@ -5,6 +5,7 @@ class RealExploreCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var pickLabel: UILabel!
     @IBOutlet weak var headlineLabel: UILabel!
     @IBOutlet weak var newsImageView: UIImageView!
+    @IBOutlet weak var timeLabel: UILabel!
     
     private var gradientLayer: CAGradientLayer?
 
@@ -29,6 +30,9 @@ class RealExploreCollectionViewCell: UICollectionViewCell {
         headlineLabel.font = UIFont.systemFont(ofSize: 16, weight: .bold)
         headlineLabel.textColor = .black
         
+        timeLabel.font = UIFont.systemFont(ofSize: 11, weight: .semibold)
+        timeLabel.textColor = .systemGray
+        
 
     }
     
@@ -38,7 +42,8 @@ class RealExploreCollectionViewCell: UICollectionViewCell {
         newsImageView.image = UIImage(named: article.imageName)
         
         
-        pickLabel.text = "Today's Pick"
+        pickLabel.text = article.source
         headlineLabel.text = article.title
+        timeLabel.text = article.date
     }
 }

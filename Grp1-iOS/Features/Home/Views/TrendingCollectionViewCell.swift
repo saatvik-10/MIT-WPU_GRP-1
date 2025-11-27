@@ -2,9 +2,10 @@ import UIKit
 
 class TrendingCollectionViewCell: UICollectionViewCell {
     
-    @IBOutlet weak var pickLabel: UILabel!
+    @IBOutlet weak var sourceLabel: UILabel!
     @IBOutlet weak var headlineLabel: UILabel!
     @IBOutlet weak var newsImageView: UIImageView!
+    @IBOutlet weak var timeLabel: UILabel!
     
     private var gradientLayer: CAGradientLayer?
 
@@ -20,8 +21,10 @@ class TrendingCollectionViewCell: UICollectionViewCell {
         newsImageView.clipsToBounds = true
         
         // LABELS STYLE
-        pickLabel.font = UIFont.systemFont(ofSize: 10, weight: .semibold)
-        pickLabel.textColor = .systemGray
+        sourceLabel.font = UIFont.systemFont(ofSize: 10, weight: .bold)
+        sourceLabel.textColor = .systemGray
+        timeLabel.font = UIFont.systemFont(ofSize: 13, weight: .semibold)
+        timeLabel.textColor = .systemGray
 
         headlineLabel.numberOfLines = 2
         headlineLabel.font = UIFont.systemFont(ofSize: 16, weight: .bold)
@@ -39,7 +42,24 @@ class TrendingCollectionViewCell: UICollectionViewCell {
         
         newsImageView.image = UIImage(named: article.imageName)
         
-        pickLabel.text = "Today's Pick"
+        sourceLabel.text = article.source
         headlineLabel.text = article.title
+        timeLabel.text = article.date
+    }
+    @IBAction func moreButtonTapped(_ sender: UIButton) {
+        let recommendAction = UIAction(title: "Recommend this article more",
+                                           image: UIImage(systemName: "hand.thumbsup")) { _ in
+                print("Recommended!")
+            }
+
+            let lensAction = UIAction(title: "Article Lens",
+                                      image: UIImage(systemName: "eye")) { _ in
+                print("Article Lens launched!")
+            }
+
+            let menu = UIMenu(title: "", options: .displayInline, children: [recommendAction, lensAction])
+
+            sender.menu = menu
+            sender.showsMenuAsPrimaryAction = true
     }
 }

@@ -38,22 +38,42 @@
                             <constraint firstAttribute="width" constant="120" id="fcW-A0-pLP"/>
                         </constraints>
                     </imageView>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3yF-5k-BoQ">
+                        <rect key="frame" x="10" y="254" width="42" height="21"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5WS-C5-HMo">
+                        <rect key="frame" x="679" y="250" width="38" height="35"/>
+                        <color key="tintColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <state key="normal" title="Button"/>
+                        <buttonConfiguration key="configuration" style="plain" title="..."/>
+                        <connections>
+                            <action selector="moreButtonTapped:" destination="gTV-IL-0wX" eventType="touchUpInside" id="HsV-w5-BRa"/>
+                        </connections>
+                    </button>
                 </subviews>
             </view>
             <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
             <constraints>
                 <constraint firstItem="tl3-74-EOY" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="10" id="6Vx-gi-s41"/>
                 <constraint firstItem="jfC-yo-rrt" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="10" id="Ae5-FD-ec9"/>
+                <constraint firstAttribute="bottom" secondItem="3yF-5k-BoQ" secondAttribute="bottom" constant="10" id="At3-mU-WBY"/>
                 <constraint firstItem="tl3-74-EOY" firstAttribute="top" secondItem="jfC-yo-rrt" secondAttribute="bottom" constant="14" id="KoH-fo-tIV"/>
+                <constraint firstItem="3yF-5k-BoQ" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="10" id="Top-Zl-Qhx"/>
                 <constraint firstItem="jfC-yo-rrt" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="10" id="Vl2-DI-V0Y"/>
                 <constraint firstItem="Kx9-iw-zUd" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="15" id="dZf-Um-L7x"/>
                 <constraint firstAttribute="trailing" secondItem="Kx9-iw-zUd" secondAttribute="trailing" constant="15" id="hb9-hq-LrA"/>
+                <constraint firstAttribute="trailing" secondItem="5WS-C5-HMo" secondAttribute="trailing" constant="5" id="n09-VK-j1g"/>
+                <constraint firstAttribute="bottom" secondItem="5WS-C5-HMo" secondAttribute="bottom" id="n9s-7t-vdh"/>
             </constraints>
             <size key="customSize" width="722" height="285"/>
             <connections>
                 <outlet property="headlineLabel" destination="tl3-74-EOY" id="qf9-t1-PyZ"/>
                 <outlet property="newsImageView" destination="Kx9-iw-zUd" id="PE2-9V-sbC"/>
                 <outlet property="pickLabel" destination="jfC-yo-rrt" id="i8Z-Gf-OLa"/>
+                <outlet property="timeLabel" destination="3yF-5k-BoQ" id="PcH-nB-ELv"/>
             </connections>
             <point key="canvasLocation" x="651.90839694656484" y="63.028169014084511"/>
         </collectionViewCell>

@@ -17,5 +17,5 @@ struct NewsArticle {
     let imageName: String
     let category: String
     let date: String
+    let source: String        // <-- Added
 }
-
