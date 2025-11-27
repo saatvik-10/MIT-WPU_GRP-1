@@ -12,8 +12,8 @@ class TodaysPickCollectionViewCell: UICollectionViewCell {
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        pageControl.numberOfPages = NewsDataStore.shared.getAllNews().count
-        pageControl.currentPage = 0
+//        pageControl.numberOfPages = NewsDataStore.shared.getAllNews().count
+//        pageControl.currentPage = 0
         
         contentView.clipsToBounds = true
         
@@ -115,5 +115,9 @@ class TodaysPickCollectionViewCell: UICollectionViewCell {
         headlineLabel.text = article.title
         sourceLabel.text = article.source
     }
+//    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+//        let page = Int(scrollView.contentOffset.x / scrollView.frame.width)
+//        pageControl.currentPage = page
+//    }
     
 }

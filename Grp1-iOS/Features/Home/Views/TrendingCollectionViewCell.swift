@@ -8,8 +8,9 @@ class TrendingCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var timeLabel: UILabel!
     
     private var gradientLayer: CAGradientLayer?
-
+    var onArticleLensTapped: (() -> Void)?
     override func awakeFromNib() {
+        
         super.awakeFromNib()
         contentView.backgroundColor = .white
         contentView.layer.cornerRadius = 10
@@ -53,12 +54,11 @@ class TrendingCollectionViewCell: UICollectionViewCell {
             }
 
             let lensAction = UIAction(title: "Article Lens",
-                                      image: UIImage(systemName: "eye")) { _ in
-                print("Article Lens launched!")
+                                      image: UIImage(systemName: "eye")) { [weak self] _ in
+                self?.onArticleLensTapped?()
             }
 
             let menu = UIMenu(title: "", options: .displayInline, children: [recommendAction, lensAction])
-
             sender.menu = menu
             sender.showsMenuAsPrimaryAction = true
     }

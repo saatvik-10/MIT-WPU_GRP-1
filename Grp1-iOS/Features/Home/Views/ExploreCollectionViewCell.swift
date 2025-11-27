@@ -57,7 +57,7 @@ class ExploreCollectionViewCell: UICollectionViewCell {
             }
 
             let lensAction = UIAction(title: "Article Lens",
-                                      image: UIImage(systemName: "eye")) { _ in
+                                      image: UIImage(systemName: "circle.dotted.circle")) { _ in
                 print("Article Lens launched!")
             }
 

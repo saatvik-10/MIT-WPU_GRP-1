@@ -3,6 +3,7 @@ import UIKit
 class HomeViewController: UIViewController {
 
     @IBOutlet weak var collectionView: UICollectionView!
+    var onArticleLensTapped: (() -> Void)?
     
     let newsStore = NewsDataStore.shared
     
@@ -204,6 +205,8 @@ extension HomeViewController: UICollectionViewDataSource {
         if indexPath.section == 0 {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "today_cell", for: indexPath) as! TodaysPickCollectionViewCell
             cell.configureCell(with: todaysPick[indexPath.row])
+//            cell.onArticleLensTapped = { [weak self] in
+//                    self?.presentArticleLens()
             return cell
         }
         else if indexPath.section == 1 {
