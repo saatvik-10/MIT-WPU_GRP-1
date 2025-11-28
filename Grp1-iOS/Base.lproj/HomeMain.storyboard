@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="24412" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="t3i-W6-56d">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="24412" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24405"/>
@@ -75,28 +75,127 @@
             </objects>
             <point key="canvasLocation" x="1060.3053435114502" y="136.61971830985917"/>
         </scene>
-        <!--View Controller-->
-        <scene sceneID="SpI-Zp-h96">
+        <!--News View Controller-->
+        <scene sceneID="ahN-1u-Lpx">
             <objects>
-                <viewController id="VYk-9I-lzI" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="O18-1R-UUS">
+                <viewController id="GGw-0F-EBf" customClass="NewsViewController" customModule="Grp1_iOS" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="bxC-Gg-dMr">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" insetsLayoutMarginsFromSafeArea="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ewg-W5-RFR">
+                                <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                                <subviews>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="urban_6" translatesAutoresizingMaskIntoConstraints="NO" id="lLJ-eO-WG2">
+                                        <rect key="frame" x="0.0" y="0.0" width="393" height="344"/>
+                                    </imageView>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="6gW-ce-1on">
+                                        <rect key="frame" x="0.0" y="0.0" width="393" height="604"/>
+                                    </imageView>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="BBC news  3 hours ago" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dX1-If-usl">
+                                        <rect key="frame" x="10" y="215" width="333" height="13.333333333333343"/>
+                                        <fontDescription key="fontDescription" type="system" weight="medium" pointSize="11"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Nifty above 25,000, Sensex rises 583 pts led by IT, finance" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="he6-tI-CuQ">
+                                        <rect key="frame" x="10" y="232.33333333333334" width="373" height="45.666666666666657"/>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="19"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <segmentedControl opaque="NO" contentMode="scaleToFill" enabled="NO" selected="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="CnQ-OU-F2N">
+                                        <rect key="frame" x="9" y="304" width="375" height="32"/>
+                                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.0" colorSpace="custom" customColorSpace="displayP3"/>
+                                        <segments>
+                                            <segment title="Overview"/>
+                                            <segment title="Key Takeaways"/>
+                                        </segments>
+                                        <color key="tintColor" red="1" green="1" blue="1" alpha="0.0" colorSpace="custom" customColorSpace="displayP3"/>
+                                        <color key="selectedSegmentTintColor" red="1" green="1" blue="1" alpha="0.0" colorSpace="custom" customColorSpace="displayP3"/>
+                                    </segmentedControl>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oFr-7F-B4O">
+                                        <rect key="frame" x="17" y="342" width="359" height="424"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="19" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cal-Jf-heg">
+                                                <rect key="frame" x="15" y="15" width="329" height="394"/>
+                                                <string key="text">The market continued its upward move on Friday, with Nifty gaining 103 points and closing near the day’s high, showing strong buying interest throughout the session.
+
+Bullish patterns on the daily and weekly charts indicate that the ongoing uptrend is healthy and likely to continue in the coming week.
+
+Nifty may face resistance around the 25,400–25,550 zone, while strong support near 25,150 suggests that any pullback could be short-lived.
+
+Overall sentiment remains positive, and dips are expected to attract fresh buying.   </string>
+                                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                        </subviews>
+                                        <color key="backgroundColor" systemColor="systemGray6Color"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="424" id="5o8-df-Yoo"/>
+                                            <constraint firstAttribute="trailing" secondItem="cal-Jf-heg" secondAttribute="trailing" constant="15" id="C8a-tm-ahH"/>
+                                            <constraint firstItem="cal-Jf-heg" firstAttribute="top" secondItem="oFr-7F-B4O" secondAttribute="top" constant="15" id="Ct2-kB-IoZ"/>
+                                            <constraint firstAttribute="bottom" secondItem="cal-Jf-heg" secondAttribute="bottom" constant="15" id="G1X-5v-fi0"/>
+                                            <constraint firstItem="cal-Jf-heg" firstAttribute="leading" secondItem="oFr-7F-B4O" secondAttribute="leading" constant="15" id="aoM-FB-DtU"/>
+                                        </constraints>
+                                    </view>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="lOR-2H-AIb" firstAttribute="trailing" secondItem="dX1-If-usl" secondAttribute="trailing" constant="50" id="2H9-vG-Lvl"/>
+                                    <constraint firstItem="oFr-7F-B4O" firstAttribute="leading" secondItem="lOR-2H-AIb" secondAttribute="leading" constant="17" id="7SW-qZ-Fag"/>
+                                    <constraint firstItem="6gW-ce-1on" firstAttribute="leading" secondItem="lOR-2H-AIb" secondAttribute="leading" id="GXY-zU-6uS"/>
+                                    <constraint firstItem="lOR-2H-AIb" firstAttribute="trailing" secondItem="CnQ-OU-F2N" secondAttribute="trailing" constant="9" id="JN9-S3-LOt"/>
+                                    <constraint firstItem="lLJ-eO-WG2" firstAttribute="trailing" secondItem="lOR-2H-AIb" secondAttribute="trailing" id="L00-25-Wgf"/>
+                                    <constraint firstItem="6gW-ce-1on" firstAttribute="top" secondItem="lOR-2H-AIb" secondAttribute="top" id="Nk1-Ka-HKB"/>
+                                    <constraint firstItem="he6-tI-CuQ" firstAttribute="top" secondItem="dX1-If-usl" secondAttribute="bottom" constant="4" id="T4s-My-TSV"/>
+                                    <constraint firstItem="lLJ-eO-WG2" firstAttribute="top" secondItem="lOR-2H-AIb" secondAttribute="top" id="Y8P-wx-5E8"/>
+                                    <constraint firstItem="lOR-2H-AIb" firstAttribute="trailing" secondItem="he6-tI-CuQ" secondAttribute="trailing" constant="10" id="ipd-po-uWR"/>
+                                    <constraint firstItem="dX1-If-usl" firstAttribute="leading" secondItem="lOR-2H-AIb" secondAttribute="leading" constant="10" id="j7K-e6-poH"/>
+                                    <constraint firstItem="lOR-2H-AIb" firstAttribute="trailing" secondItem="oFr-7F-B4O" secondAttribute="trailing" constant="17" id="jKn-32-A4j"/>
+                                    <constraint firstItem="lLJ-eO-WG2" firstAttribute="leading" secondItem="lOR-2H-AIb" secondAttribute="leading" id="ng7-8g-xRx"/>
+                                    <constraint firstItem="lOR-2H-AIb" firstAttribute="bottom" secondItem="6gW-ce-1on" secondAttribute="bottom" constant="248" id="oJ9-nr-bFw"/>
+                                    <constraint firstItem="6gW-ce-1on" firstAttribute="trailing" secondItem="lOR-2H-AIb" secondAttribute="trailing" id="ps2-dn-FPh"/>
+                                    <constraint firstItem="CnQ-OU-F2N" firstAttribute="top" secondItem="he6-tI-CuQ" secondAttribute="bottom" constant="26" id="qNv-oi-DdP"/>
+                                    <constraint firstItem="oFr-7F-B4O" firstAttribute="top" secondItem="CnQ-OU-F2N" secondAttribute="bottom" constant="7" id="uDw-jk-L8Z"/>
+                                    <constraint firstItem="CnQ-OU-F2N" firstAttribute="leading" secondItem="lOR-2H-AIb" secondAttribute="leading" constant="9" id="whd-9B-qcB"/>
+                                    <constraint firstItem="he6-tI-CuQ" firstAttribute="leading" secondItem="lOR-2H-AIb" secondAttribute="leading" constant="10" id="xVe-e4-V8a"/>
+                                    <constraint firstItem="dX1-If-usl" firstAttribute="top" secondItem="lOR-2H-AIb" secondAttribute="top" constant="215" id="yWZ-qI-bRm"/>
+                                    <constraint firstItem="lOR-2H-AIb" firstAttribute="bottom" secondItem="lLJ-eO-WG2" secondAttribute="bottom" constant="508" id="ygC-yy-Sgd"/>
+                                </constraints>
+                                <viewLayoutGuide key="contentLayoutGuide" id="tXE-5r-Qas"/>
+                                <viewLayoutGuide key="frameLayoutGuide" id="lOR-2H-AIb"/>
+                            </scrollView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="rB3-cc-6MA"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="ewg-W5-RFR" firstAttribute="top" secondItem="bxC-Gg-dMr" secondAttribute="top" id="BaZ-r2-NIu"/>
+                            <constraint firstItem="ewg-W5-RFR" firstAttribute="trailing" secondItem="bxC-Gg-dMr" secondAttribute="trailing" id="Nqh-FR-JfN"/>
+                            <constraint firstAttribute="bottom" secondItem="ewg-W5-RFR" secondAttribute="bottom" id="ThR-Fk-eLV"/>
+                            <constraint firstItem="ewg-W5-RFR" firstAttribute="leading" secondItem="bxC-Gg-dMr" secondAttribute="leading" id="WwQ-8R-vPT"/>
+                        </constraints>
                     </view>
+                    <connections>
+                        <outlet property="gradientImageView" destination="6gW-ce-1on" id="XGN-m4-bur"/>
+                        <outlet property="overviewTextLabel" destination="cal-Jf-heg" id="uvE-Oe-Aly"/>
+                        <outlet property="overviewView" destination="oFr-7F-B4O" id="bE9-eI-tQY"/>
+                        <outlet property="topImageView" destination="lLJ-eO-WG2" id="zWH-hx-PYh"/>
+                    </connections>
                 </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="viQ-yO-Jtf" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="aGs-Mg-THj" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3208.3969465648852" y="136.61971830985917"/>
+            <point key="canvasLocation" x="3017.5572519083967" y="136.61971830985917"/>
         </scene>
     </scenes>
     <resources>
         <image name="house" catalog="system" width="128" height="104"/>
+        <image name="urban_6" width="1080" height="608"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="systemGray6Color">
-            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.94901960780000005" green="0.94901960780000005" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>
