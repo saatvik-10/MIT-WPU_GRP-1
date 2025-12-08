@@ -10,6 +10,13 @@
 import Foundation
 import UIKit
 
+/// One question–answer pair asked about an article
+struct ArticleQA {
+    let question: String
+    let answer: String
+    let createdAt: Date
+}
+
 struct NewsArticle {
     let id: Int
     let title: String
@@ -17,5 +24,8 @@ struct NewsArticle {
     let imageName: String
     let category: String
     let date: String
-    let source: String        // <-- Added
+    let source: String
+
+    /// All questions & answers asked for this article
+    var qaHistory: [ArticleQA] = []   // ✅ default value so old code still works
 }

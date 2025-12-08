@@ -49,17 +49,17 @@ class TrendingCollectionViewCell: UICollectionViewCell {
     }
     @IBAction func moreButtonTapped(_ sender: UIButton) {
         let recommendAction = UIAction(title: "Recommend this article more",
-                                           image: UIImage(systemName: "hand.thumbsup")) { _ in
-                print("Recommended!")
-            }
+                                       image: UIImage(systemName: "hand.thumbsup")) { _ in
+            print("Recommended!")
+        }
 
-            let lensAction = UIAction(title: "Article Lens",
-                                      image: UIImage(systemName: "eye")) { [weak self] _ in
-                self?.onArticleLensTapped?()
-            }
+        let lensAction = UIAction(title: "Article Lens",
+                                  image: UIImage(systemName: "eye")) { [weak self] _ in
+            self?.onArticleLensTapped?()      // <<< call the closure
+        }
 
-            let menu = UIMenu(title: "", options: .displayInline, children: [recommendAction, lensAction])
-            sender.menu = menu
-            sender.showsMenuAsPrimaryAction = true
+        let menu = UIMenu(title: "", options: .displayInline, children: [recommendAction, lensAction])
+        sender.menu = menu
+        sender.showsMenuAsPrimaryAction = true
     }
 }

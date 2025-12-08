@@ -1,6 +1,6 @@
 import UIKit
 
-class HomeViewController: UIViewController {
+class HomeViewController: UIViewController, UICollectionViewDelegate {
 
     @IBOutlet weak var collectionView: UICollectionView!
     var onArticleLensTapped: (() -> Void)?
@@ -24,7 +24,34 @@ class HomeViewController: UIViewController {
         
         collectionView.setCollectionViewLayout(generateLayout(), animated: true)
         collectionView.dataSource = self
+        collectionView.delegate = self
     }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+            
+            var selectedArticle: NewsArticle?
+
+            if indexPath.section == 0 {
+                selectedArticle = todaysPick[indexPath.row]
+            } else if indexPath.section == 1 {
+                selectedArticle = trendingNews[indexPath.row]
+            } else if indexPath.section == 2 {
+                selectedArticle = marketHighlights[indexPath.row]
+            } else {
+                selectedArticle = marketHighlights[indexPath.row]
+            }
+
+            performSegue(withIdentifier: "showArticleDetail", sender: selectedArticle)
+        }
+
+        override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+            if segue.identifier == "showArticleDetail" {
+                if let destinationVC = segue.destination as? news1ViewController,
+                   let article = sender as? NewsArticle {
+                    destinationVC.article = article
+                }
+            }
+        }
     
     func generateLayout()->UICollectionViewLayout {
         let layout = UICollectionViewCompositionalLayout { section, _ in
@@ -62,8 +89,9 @@ class HomeViewController: UIViewController {
                 
                 let section = NSCollectionLayoutSection(group: group)
                 section.orthogonalScrollingBehavior = .groupPagingCentered
-                section.contentInsets = NSDirectionalEdgeInsets(top: -130, leading: 0, bottom: 15, trailing: 0)
+                section.contentInsets = NSDirectionalEdgeInsets(top: -170, leading: 0, bottom: 15, trailing: 0)
                 section.boundarySupplementaryItems = [headerItem]
+                
                 
                 
                 return section
@@ -205,13 +233,22 @@ extension HomeViewController: UICollectionViewDataSource {
         if indexPath.section == 0 {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "today_cell", for: indexPath) as! TodaysPickCollectionViewCell
             cell.configureCell(with: todaysPick[indexPath.row])
-//            cell.onArticleLensTapped = { [weak self] in
-//                    self?.presentArticleLens()
+            //            cell.onArticleLensTapped = { [weak self] in
+            //                    self?.presentArticleLens()
             return cell
         }
         else if indexPath.section == 1 {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "trending_cell", for: indexPath) as! TrendingCollectionViewCell
             cell.configureCell(with: trendingNews[indexPath.row])
+            cell.onArticleLensTapped = { [weak self] in
+                    guard let self = self else { return }
+
+                    let popupVC = ArticleLensPopupViewController(nibName: "ArticleLensPopupViewController", bundle: nil)
+                    popupVC.modalPresentationStyle = .overFullScreen
+                    popupVC.modalTransitionStyle = .crossDissolve
+                    self.present(popupVC, animated: true)
+                }
+
             return cell
         } else if indexPath.section == 2 {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "explore_cell", for: indexPath) as! ExploreCollectionViewCell
@@ -225,7 +262,7 @@ extension HomeViewController: UICollectionViewDataSource {
         }
         
     }
-
+    
     func collectionView(_ collectionView: UICollectionView,
                         viewForSupplementaryElementOfKind kind: String,
                         at indexPath: IndexPath) -> UICollectionReusableView {
@@ -256,4 +293,5 @@ extension HomeViewController: UICollectionViewDataSource {
         }
         
         return headerView
-    }}
+    }
+}
