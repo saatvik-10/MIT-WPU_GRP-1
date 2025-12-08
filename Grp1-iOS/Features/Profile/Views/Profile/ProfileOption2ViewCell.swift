@@ -1,27 +1,45 @@
 import UIKit
 
-class ProfileOption2ViewCell: UICollectionViewCell {
+// MARK: - Protocol (for the Delegate pattern)
+protocol ProfileOptionCellDelegate: AnyObject {
+    func didTapOption(for cell: ProfileOption2ViewCell)
+}
 
+class ProfileOption2ViewCell: UICollectionViewCell {
+    
+    weak var delegate: ProfileOptionCellDelegate?
     
     @IBOutlet weak var optionButton: UIButton!
     
     override func awakeFromNib() {
         super.awakeFromNib()
+        
+        optionButton.removeTarget(nil, action: nil, for: .allEvents)
+        optionButton.addTarget(self, action: #selector(optionButtonTapped), for: .touchUpInside)
     }
 
-
+    @objc func optionButtonTapped() {
+        delegate?.didTapOption(for: self)
+    }
+    
+    // MARK: - Configure Function (Dynamically sets the button content)
     func configure(title: String, isDestructive: Bool) {
         var config = optionButton.configuration ?? .plain()
+        
         config.title = title
 
-        // apply red text if destructive
         config.baseForegroundColor = isDestructive ? .systemRed : .label
-
-        // hide arrow icon for logout
+        
         if isDestructive {
             config.image = nil
+        } else {
+            let chevronImage = UIImage(systemName: "chevron.right")
+            config.image = chevronImage
+            config.imagePlacement = .trailing
+            config.imagePadding = 8
         }
 
         optionButton.configuration = config
+        optionButton.isUserInteractionEnabled = true
     }
 }

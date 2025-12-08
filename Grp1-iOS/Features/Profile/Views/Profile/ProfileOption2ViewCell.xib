@@ -34,7 +34,7 @@
             </constraints>
             <size key="customSize" width="281" height="70"/>
             <connections>
-                <outlet property="optionButton" destination="FTb-HH-yxb" id="rNh-K0-Ehq"/>
+                <outlet property="optionButton" destination="FTb-HH-yxb" id="2nR-WL-cY5"/>
             </connections>
             <point key="canvasLocation" x="235.87786259541983" y="157.74647887323945"/>
         </collectionViewCell>

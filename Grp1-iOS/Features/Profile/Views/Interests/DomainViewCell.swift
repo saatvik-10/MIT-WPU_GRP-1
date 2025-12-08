@@ -13,15 +13,17 @@ class DomainViewCell: UICollectionViewCell {
     
     override func awakeFromNib() {
             super.awakeFromNib()
-            contentView.layer.cornerRadius = 16
-            contentView.backgroundColor = .systemGray6
+            
         }
     
     func configure(_ model: InterestModel) {
         domainTitle.text = model.title
-
+        contentView.layer.cornerRadius = 16
+        contentView.clipsToBounds = true
+        contentView.backgroundColor = .systemGray6
             if let iconName = model.icon {
-                domainImageView.image = UIImage(named: iconName)
+                domainImageView.image = UIImage(systemName: iconName)
+                domainImageView.tintColor = .black
                 domainImageView.isHidden = false
             } else {
                 domainImageView.isHidden = true

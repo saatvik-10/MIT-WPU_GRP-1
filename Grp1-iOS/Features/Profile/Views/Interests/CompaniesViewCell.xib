@@ -9,23 +9,21 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="tile_cell" id="gTV-IL-0wX" customClass="CompaniesViewCell" customModule="Grp1_iOS" customModuleProvider="target">
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="CompaniesViewCell" id="gTV-IL-0wX" customClass="CompaniesViewCell" customModule="Grp1_iOS" customModuleProvider="target">
             <rect key="frame" x="0.0" y="0.0" width="155" height="62"/>
             <autoresizingMask key="autoresizingMask"/>
             <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                 <rect key="frame" x="0.0" y="0.0" width="155" height="62"/>
                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 <subviews>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Krc-V6-SkM">
-                        <rect key="frame" x="20" y="10" width="42" height="21"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Krc-V6-SkM">
+                        <rect key="frame" x="20" y="15" width="115" height="18"/>
+                        <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GtQ-FI-6Aw">
-                        <rect key="frame" x="20" y="34" width="29" height="14"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" verticalCompressionResistancePriority="751" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GtQ-FI-6Aw">
+                        <rect key="frame" x="20" y="33" width="115" height="14"/>
                         <fontDescription key="fontDescription" type="system" pointSize="11"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
@@ -33,6 +31,15 @@
                 </subviews>
             </view>
             <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
+            <constraints>
+                <constraint firstItem="Krc-V6-SkM" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="20" id="CPC-uV-Ocl"/>
+                <constraint firstItem="Krc-V6-SkM" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="15" id="FPV-gV-37n"/>
+                <constraint firstAttribute="trailing" secondItem="Krc-V6-SkM" secondAttribute="trailing" constant="20" id="Gvu-un-3cz"/>
+                <constraint firstItem="GtQ-FI-6Aw" firstAttribute="top" secondItem="Krc-V6-SkM" secondAttribute="bottom" id="cf1-r5-swR"/>
+                <constraint firstAttribute="bottom" secondItem="GtQ-FI-6Aw" secondAttribute="bottom" constant="15" id="f2h-VK-7H5"/>
+                <constraint firstAttribute="trailing" secondItem="GtQ-FI-6Aw" secondAttribute="trailing" constant="20" id="jXA-2b-41e"/>
+                <constraint firstItem="GtQ-FI-6Aw" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="20" id="jyp-hP-Ie0"/>
+            </constraints>
             <size key="customSize" width="155" height="62"/>
             <connections>
                 <outlet property="companyName" destination="Krc-V6-SkM" id="xxe-Sd-qf8"/>

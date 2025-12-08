@@ -11,11 +11,11 @@ struct ProfileDataSource {
 
 struct InterestsDataSource {
     static let domains: [InterestModel] = [
-        InterestModel(title: "Stocks", subtitle: nil, icon: "stocks_icon"),
-        InterestModel(title: "Crypto", subtitle: nil, icon: "crypto_icon"),
-        InterestModel(title: "Macroeconomy", subtitle: nil, icon: "macro_icon"),
-        InterestModel(title: "Banking", subtitle: nil, icon: "bank_icon"),
-        InterestModel(title: "Commodities", subtitle: nil, icon: "commodities_icon")
+        InterestModel(title: "Stocks", subtitle: nil, icon: "chart.bar"),
+        InterestModel(title: "Crypto", subtitle: nil, icon: "bitcoinsign.circle"),
+        InterestModel(title: "Macroeconomy", subtitle: nil, icon: "globe"),
+        InterestModel(title: "Banking", subtitle: nil, icon: "indianrupeesign.bank.building"),
+        InterestModel(title: "Commodities", subtitle: nil, icon: "shippingbox")
     ]
 
     static let companies: [InterestModel] = [

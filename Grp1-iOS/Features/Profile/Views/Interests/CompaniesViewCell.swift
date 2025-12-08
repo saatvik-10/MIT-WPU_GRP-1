@@ -20,6 +20,10 @@ class CompaniesViewCell: UICollectionViewCell {
     func configure(_ model: InterestModel) {
         companyName.text = model.title
         companySymbol.text = model.subtitle
+        contentView.layer.cornerRadius = 16
+        DomainViewCell().clipsToBounds = true
+        contentView.backgroundColor = .systemGray6
     }
 
 }
+
