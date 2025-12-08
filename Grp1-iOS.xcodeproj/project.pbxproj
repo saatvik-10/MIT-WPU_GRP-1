@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		913158082EE2DCCA007A7588 /* MessageKit in Frameworks */ = {isa = PBXBuildFile; productRef = 913158072EE2DCCA007A7588 /* MessageKit */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		1906A2082ED58640002425A7 /* Grp1-iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Grp1-iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -14,6 +18,7 @@
 		1906A21A2ED58641002425A7 /* Exceptions for "Grp1-iOS" folder in "Grp1-iOS" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				Features/Home/Views/test.swift,
 				Info.plist,
 			);
 			target = 1906A2072ED58640002425A7 /* Grp1-iOS */;
@@ -36,6 +41,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				913158082EE2DCCA007A7588 /* MessageKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -78,6 +84,7 @@
 			);
 			name = "Grp1-iOS";
 			packageProductDependencies = (
+				913158072EE2DCCA007A7588 /* MessageKit */,
 			);
 			productName = "Grp1-iOS";
 			productReference = 1906A2082ED58640002425A7 /* Grp1-iOS.app */;
@@ -107,6 +114,9 @@
 			);
 			mainGroup = 1906A1FF2ED58640002425A7;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				913158062EE2DCCA007A7588 /* XCRemoteSwiftPackageReference "MessageKit" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 1906A2092ED58640002425A7 /* Products */;
 			projectDirPath = "";
@@ -341,6 +351,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		913158062EE2DCCA007A7588 /* XCRemoteSwiftPackageReference "MessageKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/MessageKit/MessageKit";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		913158072EE2DCCA007A7588 /* MessageKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 913158062EE2DCCA007A7588 /* XCRemoteSwiftPackageReference "MessageKit" */;
+			productName = MessageKit;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 1906A2002ED58640002425A7 /* Project object */;
 }
