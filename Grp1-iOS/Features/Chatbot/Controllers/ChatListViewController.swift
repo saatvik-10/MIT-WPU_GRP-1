@@ -6,13 +6,6 @@
 //
 
 import UIKit
-
-struct ChatPreview {
-    let id: UUID
-    let title: String
-    let timestamp: Date
-}
-
 class ChatListViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
     @IBOutlet weak var searchBar: UISearchBar!

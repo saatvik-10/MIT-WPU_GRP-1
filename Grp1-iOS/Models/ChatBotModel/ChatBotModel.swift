@@ -38,3 +38,9 @@ struct MockBotReplies {
     ]
 }
 
+struct ChatPreview {
+    let id: UUID
+    let title: String
+    let timestamp: Date
+}
+
