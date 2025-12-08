@@ -8,26 +8,6 @@ import UIKit
 import MessageKit
 import InputBarAccessoryView
 
-// MARK: - Models
-
-struct Sender: SenderType {
-    var senderId: String
-    var displayName: String
-}
-
-struct Message: MessageType {
-    var sender: SenderType
-    var messageId: String
-    var sentDate: Date
-    var kind: MessageKind
-    
-    init(sender: SenderType, messageId: String, kind: MessageKind) {
-        self.sender = sender
-        self.messageId = messageId
-        self.sentDate = Date()  // Auto-set to now
-        self.kind = kind
-    }
-}
 
 // MARK: - View Controller
 
@@ -48,14 +28,7 @@ class ChatDetailViewController: MessagesViewController {
     private var selectedMessageIndex: Int = 0
 
     // mock bot replies
-    let mockBotReplies: [String] = [
-        "Hi! I'm your financial learning assistant. Ask me anything about repo rate, inflation, or markets. 😊",
-        "Repo rate is the interest rate at which the RBI lends money to commercial banks.",
-        "When repo rate goes up, banks' borrowing cost increases — so they may increase loan interest rates too.",
-        "That's why your home loan EMI can go up if repo rate keeps increasing over time.",
-        "On the other hand, higher rates can be good for fixed deposits and debt mutual funds.",
-        "So repo rate changes affect both borrowers and savers in different ways."
-     ]
+    let mockBotReplies = MockBotReplies.replies
     var botReplyIndex = 0
 
     // MARK: - Lifecycle
@@ -202,17 +175,15 @@ class ChatDetailViewController: MessagesViewController {
 
     private func sendNextBotReply() {
         guard botReplyIndex < mockBotReplies.count else { return }
-
+        
         let text = mockBotReplies[botReplyIndex]
-        botReplyIndex += 1
-
-        // small delay to feel like "thinking"
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.7){
             let message = Message(
-                sender: self.botSender,
+                sender:self.botSender ,
                 messageId: UUID().uuidString,
-                kind: .text(text)
-            )
+                kind: .text(text))
+            
             self.messages.append(message)
             self.messagesCollectionView.insertSections([self.messages.count - 1])
             self.messagesCollectionView.scrollToLastItem(animated: true)
@@ -281,12 +252,6 @@ extension ChatDetailViewController: MessagesDataSource {
 
     func numberOfSections(in messagesCollectionView: MessagesCollectionView) -> Int {
         return messages.count
-    }
-    
-    // Required: Configure the avatar for each message
-    func avatar(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> Avatar? {
-        // Return nil since we're hiding avatars
-        return nil
     }
     
     // Required: Top label - REMOVED to hide timestamp
