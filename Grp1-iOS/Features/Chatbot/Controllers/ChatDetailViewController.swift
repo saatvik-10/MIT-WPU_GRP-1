@@ -1,4 +1,3 @@
-
 //
 //  ChatDetailViewController.swift
 //  ChatScreen
@@ -21,6 +20,13 @@ struct Message: MessageType {
     var messageId: String
     var sentDate: Date
     var kind: MessageKind
+    
+    init(sender: SenderType, messageId: String, kind: MessageKind) {
+        self.sender = sender
+        self.messageId = messageId
+        self.sentDate = Date()  // Auto-set to now
+        self.kind = kind
+    }
 }
 
 // MARK: - View Controller
@@ -37,6 +43,9 @@ class ChatDetailViewController: MessagesViewController {
 
     // all messages shown in chat
     var messages: [Message] = []
+    
+    // Store selected message index for menu actions
+    private var selectedMessageIndex: Int = 0
 
     // mock bot replies
     let mockBotReplies: [String] = [
@@ -105,9 +114,9 @@ class ChatDetailViewController: MessagesViewController {
         messageInputBar.inputTextView.isScrollEnabled = true
         
         // Send button configuration
-        messageInputBar.sendButton.setTitle("Send", for: .normal)
-        messageInputBar.sendButton.setTitleColor(.systemBlue, for: .normal)
-        messageInputBar.sendButton.setTitleColor(.systemGray, for: .disabled)
+        messageInputBar.sendButton.setImage(UIImage(systemName: "paperplane.fill"), for: .normal)
+        messageInputBar.sendButton.setTitle("", for: .normal)  // Remove text
+        messageInputBar.sendButton.tintColor = .systemBlue
         
         // Set message input bar padding
         messageInputBar.padding = UIEdgeInsets(top: 6, left: 12, bottom: 6, right: 12)
@@ -140,60 +149,53 @@ class ChatDetailViewController: MessagesViewController {
         if isNewChat {
             let welcomeMessage = Message(sender: botSender,
                                          messageId: UUID().uuidString,
-                                         sentDate: Date(),
                                          kind: .text(mockBotReplies[0]))
+            messages.append(welcomeMessage)
         }
         else{
             let m1 = Message(
                 sender: botSender,
                 messageId: UUID().uuidString,
-                sentDate: Date().addingTimeInterval(-120),
                 kind: .text(mockBotReplies[0])
             )
             
             let m2 = Message(
                 sender: currentUser,
                 messageId: UUID().uuidString,
-                sentDate: Date().addingTimeInterval(-60),
                 kind: .text("I want to understand the repo rate limit. Can you help me?")
             )
             
             let m3 = Message(
                 sender: botSender,
                 messageId: UUID().uuidString,
-                sentDate: Date(),
                 kind: .text(mockBotReplies[1])
             )
             
             let m4 = Message(
                 sender: currentUser,
                 messageId: UUID().uuidString,
-                sentDate: Date().addingTimeInterval(-60),
                 kind: .text("How does repo rate affect the banks ?")
             )
             
             let m5 = Message(
                 sender: botSender,
                 messageId: UUID().uuidString,
-                sentDate: Date().addingTimeInterval(-60),
                 kind: .text(mockBotReplies[2])
             )
             let m6 = Message(
                 sender: currentUser,
                 messageId: UUID().uuidString,
-                sentDate: Date().addingTimeInterval(-60),
                 kind: .text("How does it affect my Home loans, interests rate ? ")
             )
             let m7 = Message(
                 sender: botSender,
                 messageId: UUID().uuidString,
-                sentDate: Date().addingTimeInterval(-60),
                 kind: .text(mockBotReplies[3])
             )
             
             
-            messages = [m1, m2, m3,m4,m5,m6,m7]
-            botReplyIndex = 1
+            messages = [m1, m2, m3, m4, m5, m6, m7]
+            botReplyIndex = 4 // Updated to continue from m7
         }
         messagesCollectionView.reloadData()
     }
@@ -209,13 +211,58 @@ class ChatDetailViewController: MessagesViewController {
             let message = Message(
                 sender: self.botSender,
                 messageId: UUID().uuidString,
-                sentDate: Date(),
                 kind: .text(text)
             )
             self.messages.append(message)
             self.messagesCollectionView.insertSections([self.messages.count - 1])
             self.messagesCollectionView.scrollToLastItem(animated: true)
         }
+    }
+    
+    // MARK: - Menu Actions
+    
+    @objc private func copyMessageAction() {
+        guard selectedMessageIndex < messages.count else { return }
+        let message = messages[selectedMessageIndex]
+        
+        if case .text(let text) = message.kind {
+            UIPasteboard.general.string = text
+            showToast(message: "Copied to clipboard")
+        }
+    }
+    
+    @objc private func shareMessageAction() {
+        guard selectedMessageIndex < messages.count else { return }
+        let message = messages[selectedMessageIndex]
+        
+        if case .text(let text) = message.kind {
+            let activityVC = UIActivityViewController(activityItems: [text], applicationActivities: nil)
+            
+            // For iPad support
+            if let popover = activityVC.popoverPresentationController {
+                popover.sourceView = self.view
+                popover.sourceRect = CGRect(x: self.view.bounds.midX, y: self.view.bounds.midY, width: 0, height: 0)
+                popover.permittedArrowDirections = []
+            }
+            
+            present(activityVC, animated: true)
+        }
+    }
+    
+    private func showToast(message: String) {
+        let alert = UIAlertController(title: nil, message: message, preferredStyle: .alert)
+        present(alert, animated: true)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+            alert.dismiss(animated: true)
+        }
+    }
+    
+    // IMPORTANT: This allows the custom menu actions to work
+    override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
+        if action == #selector(copyMessageAction) || action == #selector(shareMessageAction) {
+            return true
+        }
+        return super.canPerformAction(action, withSender: sender)
     }
 }
 
@@ -242,30 +289,14 @@ extension ChatDetailViewController: MessagesDataSource {
         return nil
     }
     
-    // Required: Top label (can show sender name or timestamp)
+    // Required: Top label - REMOVED to hide timestamp
     func messageTopLabelAttributedText(for message: MessageType, at indexPath: IndexPath) -> NSAttributedString? {
-        let name = message.sender.displayName
-        return NSAttributedString(
-            string: name,
-            attributes: [
-                .font: UIFont.preferredFont(forTextStyle: .caption1),
-                .foregroundColor: UIColor.systemGray
-            ]
-        )
+        return nil
     }
     
-    // Required: Bottom label (can show delivery status, timestamp, etc)
+    // Required: Bottom label
     func messageBottomLabelAttributedText(for message: MessageType, at indexPath: IndexPath) -> NSAttributedString? {
-        let dateFormatter = DateFormatter()
-        dateFormatter.timeStyle = .short
-        let dateString = dateFormatter.string(from: message.sentDate)
-        return NSAttributedString(
-            string: dateString,
-            attributes: [
-                .font: UIFont.preferredFont(forTextStyle: .caption2),
-                .foregroundColor: UIColor.systemGray2
-            ]
-        )
+        return nil
     }
 }
 
@@ -295,6 +326,7 @@ extension ChatDetailViewController: MessagesLayoutDelegate, MessagesDisplayDeleg
         }
     }
     
+    
     // Configure message style
     func messageStyle(for message: MessageType,
                       at indexPath: IndexPath,
@@ -305,16 +337,38 @@ extension ChatDetailViewController: MessagesLayoutDelegate, MessagesDisplayDeleg
     
     // MARK: - Layout Delegate Methods
     
-    // Height for top label (sender name)
+    // Height for top label - SET TO 0 to hide timestamp
     func messageTopLabelHeight(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CGFloat {
-        return 20
-    }
-    
-    // Height for bottom label (timestamp)
-    func messageBottomLabelHeight(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CGFloat {
         return 16
     }
+    
+    // Height for bottom label
+    func messageBottomLabelHeight(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CGFloat {
+        return 0
+    }
+    
+    // MARK: - Long Press Menu (Copy & Share)
+    
+    // Enable the menu to appear on long press
+    func shouldShowMenuOnMessage(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> Bool {
+        // Store the index for use in menu actions
+        selectedMessageIndex = indexPath.section
+        return true
+    }
+    
+    // Define custom menu items
+    func menuItems(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> [UIMenuItem] {
+        
+        // Store the index for menu actions
+        selectedMessageIndex = indexPath.section
+        
+        let copyItem = UIMenuItem(title: "Copy", action: #selector(copyMessageAction))
+        let shareItem = UIMenuItem(title: "Share", action: #selector(shareMessageAction))
+        
+        return [copyItem, shareItem]
+    }
 }
+
 
 // MARK: - InputBarAccessoryViewDelegate
 
@@ -327,7 +381,6 @@ extension ChatDetailViewController: InputBarAccessoryViewDelegate {
         let newMessage = Message(
             sender: currentUser,
             messageId: UUID().uuidString,
-            sentDate: Date(),
             kind: .text(trimmed)
         )
         messages.append(newMessage)
