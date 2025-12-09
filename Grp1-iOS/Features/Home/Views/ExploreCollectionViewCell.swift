@@ -8,6 +8,13 @@ class ExploreCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var timeLabel: UILabel!
     
     private var gradientLayer: CAGradientLayer?
+    var onRecommendTapped: (() -> Void)?       // 👈 NEW
+    var onNotRecommendTapped: (() -> Void)?
+    
+    
+
+    var onArticleLensTapped: (() -> Void)?
+
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -51,20 +58,132 @@ class ExploreCollectionViewCell: UICollectionViewCell {
         timeLabel.text = article.date
     }
     @IBAction func moreButtonTapped(_ sender: UIButton) {
-        let recommendAction = UIAction(title: "Recommend this article more",
-                                           image: UIImage(systemName: "hand.thumbsup")) { _ in
-                print("Recommended!")
+        let recommendAction = UIAction(
+            title: "Recommend this article more",
+            image: UIImage(systemName: "hand.thumbsup")
+        ) { [weak self] _ in
+            self?.onRecommendTapped?()
+
+            guard let cell = sender.superview?.superview as? UICollectionViewCell else { return }
+
+            // --- GREEN CIRCLE BEHIND CARD ---
+            let bgCircle = UIView()
+            bgCircle.backgroundColor = UIColor.systemGreen
+            bgCircle.layer.cornerRadius = 35
+            bgCircle.alpha = 0
+            bgCircle.transform = CGAffineTransform(scaleX: 0.5, y: 0.5)
+
+            cell.superview?.insertSubview(bgCircle, belowSubview: cell)
+            bgCircle.translatesAutoresizingMaskIntoConstraints = false
+
+            NSLayoutConstraint.activate([
+                bgCircle.centerYAnchor.constraint(equalTo: cell.centerYAnchor),
+                bgCircle.centerXAnchor.constraint(equalTo: cell.centerXAnchor, constant: -80),
+                bgCircle.widthAnchor.constraint(equalToConstant: 70),
+                bgCircle.heightAnchor.constraint(equalToConstant: 70)
+            ])
+
+            // --- PLUS ICON IN CIRCLE ---
+            let plusIcon = UIImageView(image: UIImage(systemName: "plus"))
+            plusIcon.tintColor = .white
+            plusIcon.alpha = 0
+            plusIcon.contentMode = .scaleAspectFit
+            plusIcon.transform = CGAffineTransform(scaleX: 0.4, y: 0.4)
+            bgCircle.addSubview(plusIcon)
+            plusIcon.translatesAutoresizingMaskIntoConstraints = false
+            NSLayoutConstraint.activate([
+                plusIcon.centerXAnchor.constraint(equalTo: bgCircle.centerXAnchor),
+                plusIcon.centerYAnchor.constraint(equalTo: bgCircle.centerYAnchor),
+                plusIcon.widthAnchor.constraint(equalToConstant: 40),
+                plusIcon.heightAnchor.constraint(equalToConstant: 40)
+            ])
+
+            // --- ANIMATE CARD SLIDE RIGHT & CIRCLE POP ---
+            UIView.animate(withDuration: 0.25, animations: {
+                cell.transform = CGAffineTransform(translationX: 190, y: 0)   // slide right
+                bgCircle.alpha = 1
+                plusIcon.alpha = 1
+                bgCircle.transform = .identity
+                plusIcon.transform = .identity
+            }) { _ in
+                UIView.animate(withDuration: 0.25, delay: 0.5, animations: {
+                    cell.transform = .identity
+                    bgCircle.alpha = 0
+                    plusIcon.alpha = 0
+                }) { _ in
+                    bgCircle.removeFromSuperview()
+                }
+            }
+        }
+        
+        
+        
+        let noRecommendAction = UIAction(
+            title: "Do not Recommend",
+            image: UIImage(systemName: "hand.thumbsdown")
+        ) { [weak self] _ in
+            self?.onNotRecommendTapped?()
+
+            guard let cell = sender.superview?.superview as? UICollectionViewCell else { return }
+
+            // RED CROSS ICON
+            let cross = UIImageView(image: UIImage(systemName: "xmark.circle.fill"))
+            cross.tintColor = .systemRed
+            cross.alpha = 0
+            cross.transform = CGAffineTransform(scaleX: 0.6, y: 0.6)
+
+            cell.contentView.addSubview(cross)
+            cross.translatesAutoresizingMaskIntoConstraints = false
+            NSLayoutConstraint.activate([
+                cross.topAnchor.constraint(equalTo: cell.contentView.topAnchor, constant: 8),
+                cross.leadingAnchor.constraint(equalTo: cell.contentView.leadingAnchor, constant: 8),
+                cross.widthAnchor.constraint(equalToConstant: 28),
+                cross.heightAnchor.constraint(equalToConstant: 28)
+            ])
+
+            // SHAKE ANIMATION
+            let shake = CAKeyframeAnimation(keyPath: "transform.translation.x")
+            shake.values = [-8, 8, -6, 6, -4, 4, 0]
+            shake.duration = 0.45
+            cell.layer.add(shake, forKey: "shake")
+
+            // APPEAR + REMOVE
+            UIView.animate(withDuration: 0.3, animations: {
+                cross.alpha = 1
+                cross.transform = .identity
+            }) { _ in
+                UIView.animate(withDuration: 0.2, delay: 0.6, animations: {
+                    cross.alpha = 0
+                }) { _ in
+                    cross.removeFromSuperview()
+                }
+            }
+        }
+
+            let lensAction = UIAction(
+                title: "Article Lens",
+                image: UIImage(systemName: "eye")
+            ) { [weak self] _ in
+                self?.onArticleLensTapped?()
             }
 
-            let lensAction = UIAction(title: "Article Lens",
-                                      image: UIImage(systemName: "circle.dotted.circle")) { _ in
-                print("Article Lens launched!")
-            }
-
-            let menu = UIMenu(title: "", options: .displayInline, children: [recommendAction, lensAction])
-
+        let menu = UIMenu(
+            title: "",
+            options: .displayInline,
+            children: [recommendAction, noRecommendAction, lensAction]   // ← ADD noRecommendAction
+        )
             sender.menu = menu
             sender.showsMenuAsPrimaryAction = true
         
+    }
+}
+extension UIView {
+    func parentCell<T: UICollectionViewCell>() -> T? {
+        var view = self.superview
+        while view != nil {
+            if let cell = view as? T { return cell }
+            view = view?.superview
+        }
+        return nil
     }
 }

@@ -248,11 +248,25 @@ extension HomeViewController: UICollectionViewDataSource {
                     popupVC.modalTransitionStyle = .crossDissolve
                     self.present(popupVC, animated: true)
                 }
+            cell.onRecommendTapped = { [weak self] in
+                    self?.showToast(message: "Recommendation sent!")   // << toast works here
+                }
 
             return cell
         } else if indexPath.section == 2 {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "explore_cell", for: indexPath) as! ExploreCollectionViewCell
             cell.configureCell(with: marketHighlights[indexPath.row])
+            cell.onArticleLensTapped = { [weak self] in
+                    guard let self = self else { return }
+
+                    let popupVC = ArticleLensPopupViewController(nibName: "ArticleLensPopupViewController", bundle: nil)
+                    popupVC.modalPresentationStyle = .overFullScreen
+                    popupVC.modalTransitionStyle = .crossDissolve
+                    self.present(popupVC, animated: true)
+                }
+            cell.onRecommendTapped = { [weak self] in
+                    self?.showToast(message: "Recommendation sent!")   // << toast works here
+                }
             return cell
         }
         else {
@@ -274,7 +288,7 @@ extension HomeViewController: UICollectionViewDataSource {
         ) as! HeaderView
         
         if indexPath.section == 0 {
-            headerView.headerLabel.text = "Home"
+            headerView.headerLabel.text = " "
             headerView.headerLabel.font = UIFont.systemFont(ofSize: 34, weight: .bold)  // << Bigger title
             headerView.headerLabel.textColor = .black
         }
@@ -288,7 +302,7 @@ extension HomeViewController: UICollectionViewDataSource {
             headerView.headerLabel.font = UIFont.systemFont(ofSize: 22, weight: .semibold)
         }
         else {
-            headerView.headerLabel.text = "Real Explore"
+            headerView.headerLabel.text = "Explore More"
             headerView.headerLabel.font = UIFont.systemFont(ofSize: 22, weight: .semibold)
         }
         
