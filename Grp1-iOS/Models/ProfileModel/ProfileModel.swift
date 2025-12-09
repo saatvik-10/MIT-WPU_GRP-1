@@ -1,4 +1,22 @@
 import Foundation
+import UIKit
+
+enum UserLevel: String {
+    case beginner = "Beginner"
+    case intermediate = "Intermediate"
+    case advanced = "Advanced"
+    
+    var color: UIColor {
+        switch self {
+        case .beginner:
+            return .systemGreen
+        case .intermediate:
+            return .systemYellow
+        case .advanced:
+            return .systemRed
+        }
+    }
+}
 
 enum ProfileCellType {
     case progress
@@ -25,4 +43,10 @@ struct InterestModel {
     let title: String
     let subtitle: String?      // for companies
     let icon: String?          // for domains
+}
+
+struct ProfileView {
+    let image: String
+    let name: String
+    let level: UserLevel
 }

@@ -4,12 +4,17 @@ import UIKit
 // 1. Adopt the ProfileOptionCellDelegate protocol
 class ProfileViewController: UIViewController, ProfileOptionCellDelegate {
 
+    @IBOutlet weak var profileLevel: UILabel!
+    @IBOutlet weak var profileImage: UIImageView!
+    @IBOutlet weak var profileName: UILabel!
     @IBOutlet weak var collectionView: UICollectionView!
     
     let items = ProfileDataSource.items
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        setupProfileHeader()
 
         collectionView.dataSource = self
         // Note: We only need dataSource for data. Delegate logic is handled by the protocol now.
@@ -30,6 +35,23 @@ class ProfileViewController: UIViewController, ProfileOptionCellDelegate {
         )
         
         collectionView.setCollectionViewLayout(generateLayout(), animated: false)
+    }
+    
+    func setupProfileHeader() {
+        let profileData = Profile.current
+
+        profileName.text = profileData.name
+        profileLevel.text = profileData.level.rawValue
+        profileLevel.textColor = profileData.level.color
+
+        let imageName = profileData.image
+        if !imageName.isEmpty {
+            profileImage.image = UIImage(named: imageName)
+            profileImage.layer.cornerRadius = profileImage.frame.size.width / 2
+            profileImage.clipsToBounds = true
+        } else {
+            profileImage.image = UIImage(systemName: "person")
+        }
     }
 
     func generateLayout() -> UICollectionViewLayout {

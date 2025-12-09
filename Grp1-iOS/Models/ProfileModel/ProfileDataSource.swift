@@ -27,4 +27,10 @@ struct InterestsDataSource {
     ]
 }
 
-
+struct Profile {
+    static let current: ProfileView = ProfileView(
+        image: "avatar",
+        name: "Anandita Babar",
+        level: .beginner
+    )
+}
