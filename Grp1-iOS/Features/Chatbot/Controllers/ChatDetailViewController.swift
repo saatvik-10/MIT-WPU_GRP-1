@@ -11,8 +11,14 @@ import InputBarAccessoryView
 
 // MARK: - View Controller
 
+protocol ChatDetailViewControllerDelegate: AnyObject {
+    func chatDetail(_ vc: ChatDetailViewController,didCreateNewChatWithFirstQuestion question: String)
+}
+
+
 class ChatDetailViewController: MessagesViewController {
 
+    weak var delegate : ChatDetailViewControllerDelegate?
     // You can set this from previous screen
     var chatTitle: String?
     var isNewChat : Bool = false
@@ -126,10 +132,8 @@ class ChatDetailViewController: MessagesViewController {
     private func loadDummyMessages() {
         // some starting messages (user + bot)
         if isNewChat {
-            let welcomeMessage = Message(sender: botSender,
-                                         messageId: UUID().uuidString,
-                                         kind: .text(mockBotReplies[0]))
-            messages.append(welcomeMessage)
+            messages = []
+            botReplyIndex = 0
         }
         else{
             let m1 = Message(
@@ -183,6 +187,7 @@ class ChatDetailViewController: MessagesViewController {
         guard botReplyIndex < mockBotReplies.count else { return }
         
         let text = mockBotReplies[botReplyIndex]
+        botReplyIndex += 1
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.7){
             let message = Message(
@@ -349,6 +354,21 @@ extension ChatDetailViewController: InputBarAccessoryViewDelegate {
         guard !trimmed.isEmpty else { return }
 
         // user message
+        if isNewChat {
+            delegate?.chatDetail(self, didCreateNewChatWithFirstQuestion: trimmed)
+            isNewChat = false
+            
+            let welcomeMsg = Message(
+                sender: botSender,
+                messageId: UUID().uuidString,
+                kind: .text(mockBotReplies[0])
+            )
+            messages.append(welcomeMsg)
+            messagesCollectionView.insertSections([messages.count - 1])
+            botReplyIndex = 1
+        }
+        
+        
         let newMessage = Message(
             sender: currentUser,
             messageId: UUID().uuidString,
@@ -368,3 +388,4 @@ extension ChatDetailViewController: InputBarAccessoryViewDelegate {
         sendNextBotReply()
     }
 }
+
