@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="24412" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="t3i-W6-56d">
-    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <device id="retina6_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24405"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
@@ -14,11 +14,11 @@
             <objects>
                 <viewController id="BYZ-38-t0r" customClass="HomeViewController" customModule="Grp1_iOS" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <rect key="frame" x="0.0" y="0.0" width="430" height="932"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="feY-SO-TRv">
-                                <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                                <rect key="frame" x="0.0" y="-33" width="430" height="965"/>
                                 <color key="backgroundColor" systemColor="systemGray6Color"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="SjN-mx-edl">
                                     <size key="itemSize" width="210" height="203"/>
@@ -28,7 +28,7 @@
                                 </collectionViewFlowLayout>
                                 <cells>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="tlq-S2-gkS">
-                                        <rect key="frame" x="91.666666666666671" y="0.0" width="210" height="203"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="210" height="203"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="Sk7-KX-gH3">
                                             <rect key="frame" x="0.0" y="0.0" width="210" height="203"/>
@@ -44,7 +44,7 @@
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="XiW-qS-PcS"/>
                         <constraints>
-                            <constraint firstItem="feY-SO-TRv" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="TiE-o4-QUy"/>
+                            <constraint firstItem="feY-SO-TRv" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" constant="-33" id="aoD-So-khX"/>
                             <constraint firstItem="feY-SO-TRv" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="dTa-7l-bZc"/>
                             <constraint firstAttribute="trailing" secondItem="feY-SO-TRv" secondAttribute="trailing" id="pDA-BN-iGF"/>
                             <constraint firstAttribute="bottom" secondItem="feY-SO-TRv" secondAttribute="bottom" id="zIf-R1-rV4"/>
@@ -53,6 +53,7 @@
                     <navigationItem key="navigationItem" largeTitleDisplayMode="always" style="browser" id="3Xb-i7-yOr"/>
                     <connections>
                         <outlet property="collectionView" destination="feY-SO-TRv" id="eDd-2Z-adZ"/>
+                        <segue destination="BqM-84-1bU" kind="show" identifier="toExploreMore" id="l13-Xl-gJx"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -64,7 +65,7 @@
             <objects>
                 <viewController id="HMR-Se-myz" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="KPD-lE-y99">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <rect key="frame" x="0.0" y="0.0" width="430" height="932"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <viewLayoutGuide key="safeArea" id="YAm-7D-uGL"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -101,7 +102,7 @@
             <objects>
                 <viewController id="jWv-to-Z7E" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="WoA-Xq-1bd">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <rect key="frame" x="0.0" y="0.0" width="430" height="932"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <viewLayoutGuide key="safeArea" id="4tL-wO-mL9"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -117,7 +118,7 @@
             <objects>
                 <viewController id="hRg-el-kEu" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="XFP-9J-8hb">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <rect key="frame" x="0.0" y="0.0" width="430" height="932"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <viewLayoutGuide key="safeArea" id="XlK-51-GZH"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -133,41 +134,41 @@
             <objects>
                 <viewController storyboardIdentifier="news1ViewController" id="RW8-V3-59t" customClass="news1ViewController" customModule="Grp1_iOS" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="KSv-zy-usd">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <rect key="frame" x="0.0" y="0.0" width="430" height="932"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="JYZ-WH-P5M">
-                                <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                                <rect key="frame" x="0.0" y="0.0" width="430" height="932"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uq0-jf-7vI">
-                                        <rect key="frame" x="0.0" y="0.0" width="393" height="1750"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="430" height="1750"/>
                                         <subviews>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="urban_6" translatesAutoresizingMaskIntoConstraints="NO" id="ZKl-PX-dzR">
-                                                <rect key="frame" x="0.0" y="-170" width="393" height="407"/>
+                                                <rect key="frame" x="0.0" y="-170" width="430" height="407"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="407" id="RHM-9X-5En"/>
                                                 </constraints>
                                             </imageView>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="80U-0C-Ql1">
-                                                <rect key="frame" x="-10" y="-110" width="413" height="601"/>
+                                                <rect key="frame" x="-10" y="-110" width="450" height="601"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="601" id="YjV-Az-cYe"/>
                                                 </constraints>
                                             </imageView>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="BBC news  3 hours ago" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cAS-Rx-qhM">
-                                                <rect key="frame" x="10" y="110" width="333" height="13.333333333333329"/>
+                                                <rect key="frame" x="10" y="110" width="370" height="13.333333333333329"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="11"/>
                                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Nifty above 25,000, Sensex rises 583 pts led by IT, finance" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="4" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pH7-BD-D8p">
-                                                <rect key="frame" x="10" y="127.33333333333333" width="373" height="45.666666666666671"/>
+                                                <rect key="frame" x="10" y="127.33333333333333" width="410" height="45.666666666666671"/>
                                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="19"/>
                                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="vBW-Gj-mU6">
-                                                <rect key="frame" x="9" y="199" width="375" height="32"/>
+                                                <rect key="frame" x="9" y="199" width="412" height="32"/>
                                                 <segments>
                                                     <segment title="Overview"/>
                                                     <segment title="Key Takeaways"/>
@@ -175,10 +176,10 @@
                                                 <color key="selectedSegmentTintColor" white="1" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             </segmentedControl>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fQp-ra-bih">
-                                                <rect key="frame" x="17" y="244" width="359" height="424"/>
+                                                <rect key="frame" x="17" y="244" width="396" height="424"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="21" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OuD-kg-sle">
-                                                        <rect key="frame" x="15" y="15" width="329" height="394"/>
+                                                        <rect key="frame" x="15" y="15" width="366" height="394"/>
                                                         <string key="text">The market continued its upward move on Friday, with Nifty gaining 103 points and closing near the day’s high, showing strong buying interest throughout the session.
 
 Bullish patterns on the daily and weekly charts indicate that the ongoing uptrend is healthy and likely to continue in the coming week.
@@ -201,7 +202,7 @@ Overall sentiment remains positive, and dips are expected to attract fresh buyin
                                                 </constraints>
                                             </view>
                                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="Nuz-gK-vkj">
-                                                <rect key="frame" x="0.0" y="1048" width="393" height="702"/>
+                                                <rect key="frame" x="0.0" y="1048" width="430" height="702"/>
                                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                 <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="kmC-28-wvm">
                                                     <size key="itemSize" width="196" height="131"/>
@@ -211,7 +212,7 @@ Overall sentiment remains positive, and dips are expected to attract fresh buyin
                                                 </collectionViewFlowLayout>
                                                 <cells>
                                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="KUR-nq-tAM">
-                                                        <rect key="frame" x="98.666666666666671" y="0.0" width="196" height="131"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="196" height="131"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                         <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="NKG-B2-hOb">
                                                             <rect key="frame" x="0.0" y="0.0" width="196" height="131"/>
@@ -222,16 +223,16 @@ Overall sentiment remains positive, and dips are expected to attract fresh buyin
                                                 </cells>
                                             </collectionView>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Jargons" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DCd-VE-pN3">
-                                                <rect key="frame" x="10" y="706" width="91" height="27"/>
+                                                <rect key="frame" x="10" y="706" width="128" height="27"/>
                                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="22"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="g1x-L6-LQf">
-                                                <rect key="frame" x="17" y="748" width="359" height="254"/>
+                                                <rect key="frame" x="17" y="748" width="396" height="254"/>
                                                 <subviews>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0Hs-dK-T6e">
-                                                        <rect key="frame" x="142" y="97" width="75" height="35"/>
+                                                        <rect key="frame" x="142" y="97" width="112" height="35"/>
                                                         <state key="normal" title="Button"/>
                                                         <buttonConfiguration key="configuration" style="filled" title="NA"/>
                                                     </button>
@@ -314,14 +315,64 @@ Overall sentiment remains positive, and dips are expected to attract fresh buyin
             </objects>
             <point key="canvasLocation" x="3849.6183206106871" y="136.61971830985917"/>
         </scene>
+        <!--Explore More-->
+        <scene sceneID="GSM-uE-AVd">
+            <objects>
+                <viewController id="BqM-84-1bU" customClass="ExploreMoreViewController" customModule="Grp1_iOS" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="MzI-it-gjN">
+                        <rect key="frame" x="0.0" y="0.0" width="430" height="932"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="del-ne-d1T">
+                                <rect key="frame" x="0.0" y="0.0" width="430" height="932"/>
+                                <color key="backgroundColor" systemColor="systemGray6Color"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="Ftu-N2-qe3">
+                                    <size key="itemSize" width="128" height="128"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                                <cells>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="V5f-l9-Loc">
+                                        <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="obW-oF-747">
+                                            <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </collectionViewCellContentView>
+                                        <connections>
+                                            <segue destination="RW8-V3-59t" kind="show" identifier="showArticleDetail" id="weS-b8-hd6"/>
+                                        </connections>
+                                    </collectionViewCell>
+                                </cells>
+                            </collectionView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="6yT-Dc-gkW"/>
+                        <color key="backgroundColor" systemColor="systemGray6Color"/>
+                        <constraints>
+                            <constraint firstItem="del-ne-d1T" firstAttribute="trailing" secondItem="6yT-Dc-gkW" secondAttribute="trailing" id="GVj-bI-Bdv"/>
+                            <constraint firstItem="del-ne-d1T" firstAttribute="top" secondItem="MzI-it-gjN" secondAttribute="top" id="Vds-nW-so4"/>
+                            <constraint firstItem="del-ne-d1T" firstAttribute="leading" secondItem="6yT-Dc-gkW" secondAttribute="leading" id="d7w-eF-vkP"/>
+                            <constraint firstAttribute="bottom" secondItem="del-ne-d1T" secondAttribute="bottom" id="tAp-Pn-BmI"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="Explore More" id="VsN-eb-MUv"/>
+                    <connections>
+                        <outlet property="collectionView" destination="del-ne-d1T" id="oA8-Le-Sxv"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="IbA-zV-pdP" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="5007.9069767441861" y="-670.17167381974252"/>
+        </scene>
         <!--Home-->
         <scene sceneID="3fo-9t-zx9">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="8JV-RM-7Fr" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Home" image="house" catalog="system" id="QI9-fg-fRO"/>
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="XMt-N7-va3">
-                        <rect key="frame" x="0.0" y="118" width="393" height="54"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" largeTitles="YES" id="XMt-N7-va3">
+                        <rect key="frame" x="0.0" y="118" width="430" height="106"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
@@ -334,6 +385,9 @@ Overall sentiment remains positive, and dips are expected to attract fresh buyin
             <point key="canvasLocation" x="1987.0229007633586" y="136.61971830985917"/>
         </scene>
     </scenes>
+    <inferredMetricsTieBreakers>
+        <segue reference="weS-b8-hd6"/>
+    </inferredMetricsTieBreakers>
     <resources>
         <image name="circle.dotted.circle" catalog="system" width="128" height="123"/>
         <image name="ellipsis" catalog="system" width="128" height="37"/>

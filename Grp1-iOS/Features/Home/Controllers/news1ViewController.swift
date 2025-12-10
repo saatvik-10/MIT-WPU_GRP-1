@@ -220,8 +220,10 @@ class news1ViewController: UIViewController, UICollectionViewDataSource {
         
         if indexPath.section == 0 {
             headerView.headerLabel.text = "More Like This"
+            headerView.arrowImageView.isHidden = true
         } else {
             headerView.headerLabel.text = "Questions Asked"
+            headerView.arrowImageView.isHidden = true
         }
         
         headerView.headerLabel.font = UIFont.systemFont(ofSize: 22, weight: .bold)

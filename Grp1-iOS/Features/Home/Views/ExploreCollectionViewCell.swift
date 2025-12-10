@@ -62,6 +62,8 @@ class ExploreCollectionViewCell: UICollectionViewCell {
             title: "Recommend this article more",
             image: UIImage(systemName: "hand.thumbsup")
         ) { [weak self] _ in
+            let generator = UINotificationFeedbackGenerator()
+            generator.notificationOccurred(.success)
             self?.onRecommendTapped?()
 
             guard let cell = sender.superview?.superview as? UICollectionViewCell else { return }
@@ -122,6 +124,8 @@ class ExploreCollectionViewCell: UICollectionViewCell {
             title: "Do not Recommend",
             image: UIImage(systemName: "hand.thumbsdown")
         ) { [weak self] _ in
+            let generator = UINotificationFeedbackGenerator()
+            generator.notificationOccurred(.error )
             self?.onNotRecommendTapped?()
 
             guard let cell = sender.superview?.superview as? UICollectionViewCell else { return }

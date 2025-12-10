@@ -45,7 +45,10 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5WS-C5-HMo">
-                        <rect key="frame" x="679" y="250" width="38" height="35"/>
+                        <rect key="frame" x="667" y="250" width="50" height="35"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="50" id="mw9-wl-ekj"/>
+                        </constraints>
                         <color key="tintColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <state key="normal" title="Button"/>
                         <buttonConfiguration key="configuration" style="plain" title="..."/>

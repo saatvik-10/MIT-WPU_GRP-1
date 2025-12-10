@@ -27,6 +27,8 @@ class ArticleLensPopupViewController: UIViewController {
     }
 
     private func animateIn() {
+        let generator = UINotificationFeedbackGenerator()
+        generator.notificationOccurred(.success)
         UIView.animate(
             withDuration: 0.35,
             delay: 0,
@@ -42,6 +44,8 @@ class ArticleLensPopupViewController: UIViewController {
     }
 
     private func animateOut(completion: (() -> Void)? = nil) {
+        let generator = UINotificationFeedbackGenerator()
+        generator.notificationOccurred(.success)
         UIView.animate(
             withDuration: 0.28,
             delay: 0,

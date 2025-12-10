@@ -3,6 +3,16 @@ import UIKit
 class HomeViewController: UIViewController, UICollectionViewDelegate {
 
     @IBOutlet weak var collectionView: UICollectionView!
+    var autoScrollTimer: Timer?
+        var currentIndex = 0
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        startAutoScroll()
+    }
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        stopAutoScroll()
+    }
     var onArticleLensTapped: (() -> Void)?
     
     let newsStore = NewsDataStore.shared
@@ -25,6 +35,38 @@ class HomeViewController: UIViewController, UICollectionViewDelegate {
         collectionView.setCollectionViewLayout(generateLayout(), animated: true)
         collectionView.dataSource = self
         collectionView.delegate = self
+    }
+    func startAutoScroll() {
+        stopAutoScroll()   // avoid duplicate timers
+
+        autoScrollTimer = Timer.scheduledTimer(withTimeInterval: 3.5, repeats: true) { [weak self] _ in
+            self?.scrollTodaysPick()
+        }
+    }
+
+    func stopAutoScroll() {
+        autoScrollTimer?.invalidate()
+        autoScrollTimer = nil
+    }
+
+    func scrollTodaysPick() {
+        guard todaysPick.count > 1 else { return }
+
+        let section = 0
+        let lastIndex = todaysPick.count - 1
+
+        // Move to next
+        if currentIndex < lastIndex {
+            currentIndex += 1
+        } else {
+            currentIndex = 0
+        }
+
+        let indexPath = IndexPath(item: currentIndex, section: section)
+
+        collectionView.scrollToItem(at: indexPath,
+                                    at: .centeredHorizontally,
+                                    animated: true)
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -289,23 +331,41 @@ extension HomeViewController: UICollectionViewDataSource {
         
         if indexPath.section == 0 {
             headerView.headerLabel.text = " "
+            headerView.arrowImageView.isHidden = true
             headerView.headerLabel.font = UIFont.systemFont(ofSize: 34, weight: .bold)  // << Bigger title
             headerView.headerLabel.textColor = .black
         }
         else if indexPath.section == 1 {
             headerView.headerLabel.text = "Your News Feed"
+            headerView.arrowImageView.isHidden = true
             headerView.headerLabel.font = UIFont.systemFont(ofSize: 22, weight: .semibold)
             headerView.headerLabel.textColor = .black
         }
         else if indexPath.section == 2 {
             headerView.headerLabel.text = "Explore More"
+            headerView.arrowImageView.isHidden = true
             headerView.headerLabel.font = UIFont.systemFont(ofSize: 22, weight: .semibold)
         }
         else {
             headerView.headerLabel.text = "Explore More"
+            headerView.arrowImageView.isHidden = false
             headerView.headerLabel.font = UIFont.systemFont(ofSize: 22, weight: .semibold)
         }
         
+        
+        headerView.onTap = { [weak self] in
+                guard let self = self else { return }
+
+                if indexPath.section == 2 || indexPath.section == 3 {
+                    self.openExploreMore()
+                }
+            }
+        
         return headerView
+    }
+    
+    
+    func openExploreMore() {
+        self.performSegue(withIdentifier: "toExploreMore", sender: nil)
     }
 }
