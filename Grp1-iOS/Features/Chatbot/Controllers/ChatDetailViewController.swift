@@ -41,6 +41,12 @@ class ChatDetailViewController: MessagesViewController {
         
         // Configure navigation bar
         navigationController?.navigationBar.prefersLargeTitles = false
+        navigationItem.largeTitleDisplayMode = .never
+        
+        let smallFont = UIFont.systemFont(ofSize: 16, weight: .semibold)
+            navigationController?.navigationBar.titleTextAttributes = [
+                .font : smallFont
+            ]
 
         // MessageKit setup - ORDER MATTERS!
         messagesCollectionView.messagesDataSource = self
@@ -112,7 +118,7 @@ class ChatDetailViewController: MessagesViewController {
         }
         
         // IMPORTANT: Open keyboard after view appears for better animation
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+        DispatchQueue.main.asyncAfter(deadline: .now() ) {
             self.messageInputBar.inputTextView.becomeFirstResponder()
         }
     }
@@ -223,7 +229,7 @@ class ChatDetailViewController: MessagesViewController {
     private func showToast(message: String) {
         let alert = UIAlertController(title: nil, message: message, preferredStyle: .alert)
         present(alert, animated: true)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+        DispatchQueue.main.asyncAfter(deadline: .now() ) {
             alert.dismiss(animated: true)
         }
     }
