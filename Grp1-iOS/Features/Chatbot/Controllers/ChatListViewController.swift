@@ -39,26 +39,6 @@ class ChatListViewController: UIViewController {
         super.viewDidAppear(animated)
     }
     
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        let appearance = UINavigationBarAppearance()
-            appearance.configureWithDefaultBackground()
-            appearance.largeTitleTextAttributes = [
-                .font: UIFont.systemFont(ofSize: 34, weight: .bold)
-            ]
-            appearance.titleTextAttributes = [
-                .font: UIFont.systemFont(ofSize: 18, weight: .semibold)
-            ]
-
-            // Apply ONLY to ChatList
-            navigationItem.standardAppearance = appearance
-            navigationItem.scrollEdgeAppearance = appearance
-
-            navigationItem.largeTitleDisplayMode = .always
-            navigationController?.navigationBar.prefersLargeTitles = true
-    }
-    
     // MARK: - Setup Methods
     
     private func setupTableView() {
