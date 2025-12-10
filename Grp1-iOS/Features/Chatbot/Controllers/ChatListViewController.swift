@@ -7,13 +7,16 @@
 
 import UIKit
 
-class ChatListViewController: UIViewController {
+class ChatListViewController: UIViewController, ChatDetailViewControllerDelegate {
+    
+    
     
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var tableView: UITableView!
     
     @IBAction func newChatButton(_ sender: Any) {
         openChatDetail(withTitle: "New Chat", isNewChat: true)
+        
     }
     var chats: [ChatPreview] = [
         ChatPreview(id: UUID(), title: "What is inflation?", timestamp: Date()),
@@ -66,7 +69,16 @@ class ChatListViewController: UIViewController {
         }
         tableView.reloadData()
     }
-
+    func chatDetail(_ vc: ChatDetailViewController, didCreateNewChatWithFirstQuestion question: String) {
+        let newPreview = ChatPreview(
+            id: UUID(),
+            title: question,
+            timestamp: Date()
+        )
+        chats.insert(newPreview, at: 0)
+        filteredChats = chats
+        tableView.reloadData()
+    }
 
     
     // MARK: - Navigation
@@ -74,7 +86,8 @@ class ChatListViewController: UIViewController {
     private func openChatDetail(withTitle title: String, isNewChat: Bool = false) {
         let chatDetailVC = ChatDetailViewController()
         chatDetailVC.chatTitle = title
-        chatDetailVC.isNewChat = isNewChat
+        chatDetailVC.isNewChat = true
+        chatDetailVC.delegate = self
         navigationController?.pushViewController(chatDetailVC, animated: true)
     }
 }
@@ -102,6 +115,8 @@ extension ChatListViewController: UITableViewDataSource {
         
         return cell
     }
+    
+    
 }
 
 // MARK: - UITableViewDelegate
