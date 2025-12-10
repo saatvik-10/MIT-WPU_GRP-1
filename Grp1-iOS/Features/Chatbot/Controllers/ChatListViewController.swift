@@ -86,7 +86,7 @@ class ChatListViewController: UIViewController, ChatDetailViewControllerDelegate
     private func openChatDetail(withTitle title: String, isNewChat: Bool = false) {
         let chatDetailVC = ChatDetailViewController()
         chatDetailVC.chatTitle = title
-        chatDetailVC.isNewChat = true
+        chatDetailVC.isNewChat = isNewChat
         chatDetailVC.delegate = self
         navigationController?.pushViewController(chatDetailVC, animated: true)
     }
@@ -116,7 +116,43 @@ extension ChatListViewController: UITableViewDataSource {
         return cell
     }
     
-    
+    func tableView(_ tableView: UITableView,
+                   trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath)
+                   -> UISwipeActionsConfiguration? {
+
+        let deleteAction = UIContextualAction(style: .destructive, title: "Delete") { _, _, completion in
+            
+            let alert = UIAlertController(
+                title: "Delete Chat?",
+                message: "This chat will be permanently removed.",
+                preferredStyle: .alert
+            )
+            
+            alert.addAction(UIAlertAction(title: "Cancel", style: .cancel) { _ in
+                completion(false) // cancel deletion
+            })
+            
+            alert.addAction(UIAlertAction(title: "Delete", style: .destructive) { _ in
+                
+                // DELETE from your lists
+                self.chats.remove(at: indexPath.row)
+                self.filteredChats = self.chats
+                
+                // DELETE from UI
+                tableView.deleteRows(at: [indexPath], with: .automatic)
+                
+                completion(true)
+            })
+            
+            self.present(alert, animated: true)
+        }
+
+        deleteAction.image = UIImage(systemName: "trash")
+
+        let config = UISwipeActionsConfiguration(actions: [deleteAction])
+        config.performsFirstActionWithFullSwipe = false  // force tap → alert
+        return config
+    }
 }
 
 // MARK: - UITableViewDelegate
