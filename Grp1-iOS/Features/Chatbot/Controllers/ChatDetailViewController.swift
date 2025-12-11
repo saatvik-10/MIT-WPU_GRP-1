@@ -213,38 +213,12 @@ class ChatDetailViewController: MessagesViewController {
         }
     }
     
-    @objc private func shareMessageAction() {
-        guard selectedMessageIndex < messages.count else { return }
-        let message = messages[selectedMessageIndex]
-        
-        if case .text(let text) = message.kind {
-            let activityVC = UIActivityViewController(activityItems: [text], applicationActivities: nil)
-            
-            // For iPad support
-            if let popover = activityVC.popoverPresentationController {
-                popover.sourceView = self.view
-                popover.sourceRect = CGRect(x: self.view.bounds.midX, y: self.view.bounds.midY, width: 0, height: 0)
-                popover.permittedArrowDirections = []
-            }
-            
-            present(activityVC, animated: true)
-        }
-    }
-    
     private func showToast(message: String) {
         let alert = UIAlertController(title: nil, message: message, preferredStyle: .alert)
         present(alert, animated: true)
         DispatchQueue.main.asyncAfter(deadline: .now() ) {
             alert.dismiss(animated: true)
         }
-    }
-    
-    // IMPORTANT: This allows the custom menu actions to work
-    override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
-        if action == #selector(copyMessageAction) || action == #selector(shareMessageAction) {
-            return true
-        }
-        return super.canPerformAction(action, withSender: sender)
     }
 }
 
@@ -321,27 +295,6 @@ extension ChatDetailViewController: MessagesLayoutDelegate, MessagesDisplayDeleg
     // Height for bottom label
     func messageBottomLabelHeight(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CGFloat {
         return 0
-    }
-    
-    // MARK: - Long Press Menu (Copy & Share)
-    
-    // Enable the menu to appear on long press
-    func shouldShowMenuOnMessage(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> Bool {
-        // Store the index for use in menu actions
-        selectedMessageIndex = indexPath.section
-        return true
-    }
-    
-    // Define custom menu items
-    func menuItems(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> [UIMenuItem] {
-        
-        // Store the index for menu actions
-        selectedMessageIndex = indexPath.section
-        
-        let copyItem = UIMenuItem(title: "Copy", action: #selector(copyMessageAction))
-        let shareItem = UIMenuItem(title: "Share", action: #selector(shareMessageAction))
-        
-        return [copyItem, shareItem]
     }
 }
 
