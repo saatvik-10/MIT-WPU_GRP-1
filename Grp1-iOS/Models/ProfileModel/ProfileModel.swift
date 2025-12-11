@@ -24,19 +24,29 @@ enum ProfileCellType {
 }
 
 struct ProfileOption {
+    let icon: String
     let title: String
     let cellType: ProfileCellType
     let isDestructive: Bool
 }
 
-struct Domain {
-    let title: String
-    let iconName: String
-}
+enum InterestType {
+    case domain
+    case company
 
-struct Company {
-    let name: String
-    let symbol: String
+    var title: String {
+        switch self {
+        case .domain: return "Add New Domain"
+        case .company: return "Add New Company"
+        }
+    }
+
+    var searchPlaceholder: String {
+        switch self {
+        case .domain: return "Search Domains"
+        case .company: return "Search Companies"
+        }
+    }
 }
 
 struct InterestModel {

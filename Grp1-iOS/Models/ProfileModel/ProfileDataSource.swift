@@ -1,11 +1,11 @@
 struct ProfileDataSource {
     static let items: [ProfileOption] = [
-        ProfileOption(title: "Progress",      cellType: .progress, isDestructive: false),
-        ProfileOption(title: "Interests",     cellType: .option,   isDestructive: false),
-        ProfileOption(title: "Bookmarks",     cellType: .option,   isDestructive: false),
-        ProfileOption(title: "Achievements",  cellType: .option,   isDestructive: false),
-        ProfileOption(title: "About Us",      cellType: .option,   isDestructive: false),
-        ProfileOption(title: "Logout",        cellType: .option,   isDestructive: true)
+        ProfileOption(icon: "", title: "Progress",      cellType: .progress, isDestructive: false),
+        ProfileOption(icon: "chart.xyaxis.line", title: "Interests",     cellType: .option,   isDestructive: false),
+        ProfileOption(icon: "star.fill", title: "Bookmarks",     cellType: .option ,   isDestructive: false),
+        ProfileOption(icon: "bookmark.fill", title: "Achievements",  cellType: .option,   isDestructive: false),
+        ProfileOption(icon: "trophy.fill", title: "About Us",      cellType: .option,   isDestructive: false),
+        ProfileOption(icon: "person.3", title: "Logout",        cellType: .option,   isDestructive: true)
     ]
 }
 

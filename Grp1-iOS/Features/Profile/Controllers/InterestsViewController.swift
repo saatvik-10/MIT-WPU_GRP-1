@@ -17,12 +17,20 @@ class InterestsViewController: UIViewController {
         setupSegmented()
         setupCollectionView()
     }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let navController = segue.destination as? UINavigationController,
+           let vc = navController.viewControllers.first as? AddInterestViewController {
+            
+            vc.interestType = (segmented.selectedSegmentIndex == 0) ? .domain : .company
+            vc.sourceItems = (segmented.selectedSegmentIndex == 0) ? domains : companies
+        }
+    }
 }
-
 
 // MARK: - Setup segmented + collectionview
 extension InterestsViewController {
-
+    
     private func setupSegmented() {
         segmented.removeAllSegments()
         segmented.insertSegment(withTitle: "Domains", at: 0, animated: false)
@@ -36,7 +44,6 @@ extension InterestsViewController {
         collectionView.delegate = self
         collectionView.setCollectionViewLayout(generateLayout(), animated: false)
 
-        // register both XIB cells
         collectionView.register(
             UINib(nibName: "DomainViewCell", bundle: nil),
             forCellWithReuseIdentifier: "DomainViewCell"
@@ -53,8 +60,7 @@ extension InterestsViewController {
     }
 }
 
-
-// MARK: - CollectionView datasource
+// MARK: - CollectionView datasource & delegate
 extension InterestsViewController: UICollectionViewDataSource, UICollectionViewDelegate {
 
     func collectionView(_ collectionView: UICollectionView,
@@ -68,7 +74,6 @@ extension InterestsViewController: UICollectionViewDataSource, UICollectionViewD
         let model = currentItems[indexPath.row]
 
         if segmented.selectedSegmentIndex == 0 {
-            // DOMAIN CELL
             let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: "DomainViewCell",
                 for: indexPath
@@ -76,7 +81,6 @@ extension InterestsViewController: UICollectionViewDataSource, UICollectionViewD
             cell.configure(model)
             return cell
         } else {
-            // COMPANIES CELL
             let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: "CompaniesViewCell",
                 for: indexPath
@@ -91,7 +95,6 @@ extension InterestsViewController: UICollectionViewDataSource, UICollectionViewD
         print("Tapped → \(currentItems[indexPath.row].title)")
     }
 }
-
 
 // MARK: - Compositional Layout
 extension InterestsViewController {
