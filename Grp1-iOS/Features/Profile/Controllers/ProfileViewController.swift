@@ -120,35 +120,16 @@ extension ProfileViewController:
             return cell
         }
     }
-    
-    // 3. IMPORTANT: This method is now redundant and can be removed/ignored
-    // because the button is consuming the tap.
-    // The navigation logic is moved to the delegate method below.
-    /*
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        // This will not be called because the button intercepts the tap
-    }
-    */
 }
-
-//---
-
 // MARK: - ProfileOptionCellDelegate (The Navigation Trigger)
 extension ProfileViewController {
-    
-    // 4. This method is called by the button inside the cell.
     func didTapOption(for cell: ProfileOption2ViewCell) {
         
-        // Find the index of the cell that was tapped
         guard let indexPath = collectionView.indexPath(for: cell) else { return }
         let item = items[indexPath.row]
-
-        print("Tapped (via Delegate) → \(item.title)")
         
-        // Handle navigation based on the item title
         switch item.title {
         case "Interests":
-            // 5. Navigation Logic (Instantiate and Push)
             guard let storyboard = self.storyboard else { return }
             guard let interestsVC = storyboard.instantiateViewController(withIdentifier: "InterestsViewController") as? InterestsViewController else {
                 print("❌ Instantiation Error: Check Storyboard ID 'InterestsViewController'.")
@@ -158,8 +139,12 @@ extension ProfileViewController {
             
         case "Bookmarks":
             print("Navigating to Bookmarks...")
-            // TODO: Add navigation logic for Bookmarks
-            break
+            guard let storyboard = self.storyboard else { return }
+            guard let bookmarksVC = storyboard.instantiateViewController(withIdentifier: "BookmarkViewController") as? BookmarkViewController else {
+                print("❌ Instantiation Error: Check Storyboard ID 'BookmarkViewController'.")
+                return
+            }
+            navigationController?.pushViewController(bookmarksVC, animated: true)
             
         case "Achievements":
             print("Navigating to Achievements...")

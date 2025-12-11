@@ -60,3 +60,8 @@ struct ProfileView {
     let name: String
     let level: UserLevel
 }
+
+struct BookmarkItem {
+    let icon: UIImage
+    let title: String
+}

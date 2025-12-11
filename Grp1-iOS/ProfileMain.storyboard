@@ -35,9 +35,6 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                         </collectionViewCellContentView>
                                         <size key="customSize" width="264" height="204"/>
-                                        <connections>
-                                            <segue destination="KqL-1o-AIi" kind="show" id="MeB-G2-Tkv"/>
-                                        </connections>
                                     </collectionViewCell>
                                 </cells>
                             </collectionView>
@@ -112,6 +109,68 @@
             </objects>
             <point key="canvasLocation" x="2008" y="131"/>
         </scene>
+        <!--Bookmarks-->
+        <scene sceneID="KTU-1k-99L">
+            <objects>
+                <viewController storyboardIdentifier="BookmarkViewController" id="nVT-bV-ibC" customClass="BookmarkViewController" customModule="Grp1_iOS" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="FI6-ZV-4hH">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Yel-Xo-klO">
+                                <rect key="frame" x="0.0" y="172" width="393" height="612"/>
+                                <subviews>
+                                    <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="Dgt-N3-pYB">
+                                        <rect key="frame" x="0.0" y="0.0" width="393" height="612"/>
+                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                        <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="5HM-9M-cFA">
+                                            <size key="itemSize" width="393" height="511"/>
+                                            <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                            <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                            <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                        </collectionViewFlowLayout>
+                                        <cells>
+                                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="BookmarkViewCell" id="LTv-uZ-o9L">
+                                                <rect key="frame" x="0.66666666666666663" y="0.0" width="392" height="536"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="ccu-uz-CKe">
+                                                    <rect key="frame" x="0.0" y="0.0" width="392" height="536"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                </collectionViewCellContentView>
+                                                <size key="customSize" width="392" height="536"/>
+                                            </collectionViewCell>
+                                        </cells>
+                                    </collectionView>
+                                </subviews>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstItem="Dgt-N3-pYB" firstAttribute="top" secondItem="Yel-Xo-klO" secondAttribute="top" id="6I9-fs-K5o"/>
+                                    <constraint firstAttribute="trailing" secondItem="Dgt-N3-pYB" secondAttribute="trailing" id="KKV-xi-aqr"/>
+                                    <constraint firstAttribute="bottom" secondItem="Dgt-N3-pYB" secondAttribute="bottom" id="cjz-p3-gPl"/>
+                                    <constraint firstItem="Dgt-N3-pYB" firstAttribute="leading" secondItem="Yel-Xo-klO" secondAttribute="leading" id="qvB-jr-qF3"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="lhL-s4-xXL"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="lhL-s4-xXL" firstAttribute="trailing" secondItem="Yel-Xo-klO" secondAttribute="trailing" id="VKL-cO-fxG"/>
+                            <constraint firstItem="Yel-Xo-klO" firstAttribute="leading" secondItem="lhL-s4-xXL" secondAttribute="leading" id="Xgb-3T-B0M"/>
+                            <constraint firstItem="lhL-s4-xXL" firstAttribute="bottom" secondItem="Yel-Xo-klO" secondAttribute="bottom" id="aV8-1l-Y6h"/>
+                            <constraint firstItem="Yel-Xo-klO" firstAttribute="top" secondItem="lhL-s4-xXL" secondAttribute="top" id="cjA-zo-tlo"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="Bookmarks" id="7U6-L7-hEf">
+                        <barButtonItem key="rightBarButtonItem" title="Item" image="plus" catalog="system" id="fho-d8-LkO"/>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="collectionView" destination="Dgt-N3-pYB" id="0uN-Tk-Dl9"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="v3T-N5-jOB" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2932.06106870229" y="890.84507042253529"/>
+        </scene>
         <!--Interests-->
         <scene sceneID="zGI-x2-xv3">
             <objects>
@@ -121,7 +180,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="G0f-QB-GkL">
-                                <rect key="frame" x="0.0" y="223" width="393" height="561"/>
+                                <rect key="frame" x="0.0" y="169" width="393" height="615"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="eka-HJ-eH6">
                                     <size key="itemSize" width="392" height="536"/>
@@ -142,7 +201,7 @@
                                 </cells>
                             </collectionView>
                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="7H5-Ed-lrF">
-                                <rect key="frame" x="20" y="172" width="353" height="32"/>
+                                <rect key="frame" x="20" y="118" width="353" height="32"/>
                                 <segments>
                                     <segment title="Domains"/>
                                     <segment title="Companies"/>
@@ -264,8 +323,28 @@
             </objects>
             <point key="canvasLocation" x="3678.6259541984732" y="130.98591549295776"/>
         </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="eiG-3h-0um">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="xkf-Yg-nDX" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationItem key="navigationItem" id="M4Z-7A-R6z"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="aRX-r6-jgT">
+                        <rect key="frame" x="0.0" y="118" width="393" height="54"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="nVT-bV-ibC" kind="relationship" relationship="rootViewController" id="QRC-Ef-m8K"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Ojg-0l-zaw" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2006.8702290076335" y="890.84507042253529"/>
+        </scene>
     </scenes>
     <resources>
+        <image name="plus" catalog="system" width="128" height="113"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

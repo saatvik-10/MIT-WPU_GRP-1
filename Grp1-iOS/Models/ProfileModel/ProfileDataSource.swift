@@ -1,3 +1,4 @@
+import UIKit
 struct ProfileDataSource {
     static let items: [ProfileOption] = [
         ProfileOption(icon: "", title: "Progress",      cellType: .progress, isDestructive: false),
@@ -33,4 +34,21 @@ struct Profile {
         name: "Anandita Babar",
         level: .beginner
     )
+}
+
+struct Bookmarks {
+    static let mockBookmarks: [BookmarkItem] = [
+        BookmarkItem(
+            icon: UIImage(systemName: "folder")!,
+            title: "Swift",
+        ),
+        BookmarkItem(
+            icon: UIImage(systemName: "folder")!,
+            title: "Blockchain",
+        ),
+        BookmarkItem(
+            icon: UIImage(systemName: "folder")!,
+            title: "Web Development",
+        )
+    ]
 }
