@@ -278,7 +278,7 @@ Overall sentiment remains positive, and dips are expected to attract fresh buyin
                                 <action selector="doneTapped:" destination="zua-AY-Mfj" id="mNu-ys-Jn7"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" title="post" id="FAq-in-1gq"/>
+                        <barButtonItem key="rightBarButtonItem" title="Item" id="FAq-in-1gq"/>
                     </navigationItem>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="NzD-8Y-Rd3" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
