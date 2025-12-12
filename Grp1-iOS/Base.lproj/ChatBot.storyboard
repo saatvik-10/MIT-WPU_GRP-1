@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="24412" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Nzq-r4-wrW">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="24412" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Sjr-W1-o9p">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24405"/>
@@ -99,7 +99,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="849.61832061068696" y="400.7042253521127"/>
+            <point key="canvasLocation" x="1776.3358778625955" y="400.7042253521127"/>
         </scene>
         <!--Chat Detail View Controller-->
         <scene sceneID="Bbc-sp-Xn2">
@@ -114,12 +114,13 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="WhU-HT-HbA" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1963" y="401"/>
+            <point key="canvasLocation" x="2889.3129770992364" y="400.7042253521127"/>
         </scene>
-        <!--Navigation Controller-->
+        <!--Item-->
         <scene sceneID="CsK-ib-kAj">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Nzq-r4-wrW" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Item" selectedImage="pencil.circle" catalog="system" id="M5H-4x-dHP"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="HZG-a8-R7M">
                         <rect key="frame" x="0.0" y="118" width="393" height="54"/>
@@ -139,10 +140,28 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="nYa-Ij-qre" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-161" y="401"/>
+            <point key="canvasLocation" x="765.64885496183206" y="400.7042253521127"/>
+        </scene>
+        <!--Tab Bar Controller-->
+        <scene sceneID="csK-t1-VTZ">
+            <objects>
+                <tabBarController automaticallyAdjustsScrollViewInsets="NO" id="Sjr-W1-o9p" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="KKW-7r-Ccf">
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    </tabBar>
+                    <connections>
+                        <segue destination="Nzq-r4-wrW" kind="relationship" relationship="viewControllers" id="B8u-hf-bA9"/>
+                    </connections>
+                </tabBarController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="MOs-2h-MQJ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-161.06870229007632" y="400.7042253521127"/>
         </scene>
     </scenes>
     <resources>
+        <image name="pencil.circle" catalog="system" width="128" height="123"/>
         <image name="square.and.pencil" catalog="system" width="128" height="121"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
