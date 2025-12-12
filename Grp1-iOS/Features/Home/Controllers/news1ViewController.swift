@@ -581,7 +581,7 @@ class news1ViewController: UIViewController, UICollectionViewDataSource {
             if let nav = segue.destination as? UINavigationController {
 
                 // 2. First VC inside nav is ChatDetailViewController
-                if let chatVC = nav.topViewController as? ChatDetailViewController {
+                if let chatVC = nav.topViewController as? HomeChatDetailViewController {
 
                     // 3. Pass dominant color
                     chatVC.dominantColor = self.dominantColor

@@ -17,8 +17,6 @@ protocol ChatDetailViewControllerDelegate: AnyObject {
 
 
 class ChatDetailViewController: MessagesViewController {
-    
-    var dominantColor: UIColor?
 
     weak var delegate : ChatDetailViewControllerDelegate?
     // You can set this from previous screen
@@ -41,21 +39,9 @@ class ChatDetailViewController: MessagesViewController {
 
     // MARK: - Lifecycle
 
-    
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-//        if let dom = dominantColor {
-//                view.backgroundColor = dom   // <--- SET SCREEN COLOR
-//                messagesCollectionView.backgroundColor = dom
-//                messageInputBar.backgroundView.backgroundColor = dom
-//                messageInputBar.inputTextView.backgroundColor = dom
-//            }
-//        
-        view.backgroundColor = .systemBackground
-        messagesCollectionView.backgroundColor = .systemBackground
-        messageInputBar.backgroundView.backgroundColor = .systemBackground
-        
+
         // navigation title
         title = chatTitle ?? "Chat"
         
@@ -74,7 +60,7 @@ class ChatDetailViewController: MessagesViewController {
         messagesCollectionView.messagesDisplayDelegate = self
         
         // IMPORTANT: Configure the collection view
-        messagesCollectionView.backgroundColor = dominantColor
+        messagesCollectionView.backgroundColor = .systemBackground
         
         // Dismiss keyboard when tapping on messages
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
@@ -156,10 +142,43 @@ class ChatDetailViewController: MessagesViewController {
                 kind: .text(mockBotReplies[0])
             )
             
+            let m2 = Message(
+                sender: currentUser,
+                messageId: UUID().uuidString,
+                kind: .text("I want to understand the repo rate limit. Can you help me?")
+            )
+            
+            let m3 = Message(
+                sender: botSender,
+                messageId: UUID().uuidString,
+                kind: .text(mockBotReplies[1])
+            )
+            
+            let m4 = Message(
+                sender: currentUser,
+                messageId: UUID().uuidString,
+                kind: .text("How does repo rate affect the banks ?")
+            )
+            
+            let m5 = Message(
+                sender: botSender,
+                messageId: UUID().uuidString,
+                kind: .text(mockBotReplies[2])
+            )
+            let m6 = Message(
+                sender: currentUser,
+                messageId: UUID().uuidString,
+                kind: .text("How does it affect my Home loans, interests rate ? ")
+            )
+            let m7 = Message(
+                sender: botSender,
+                messageId: UUID().uuidString,
+                kind: .text(mockBotReplies[3])
+            )
             
             
-            messages = [m1]
-            botReplyIndex = 1 // Updated to continue from m7
+            messages = [m1, m2, m3, m4, m5, m6, m7]
+            botReplyIndex = 4 // Updated to continue from m7
         }
         messagesCollectionView.reloadData()
     }
@@ -184,14 +203,23 @@ class ChatDetailViewController: MessagesViewController {
     
     // MARK: - Menu Actions
     
-    
-    @IBAction func doneTapped(_ sender: Any) {
-        let generator = UINotificationFeedbackGenerator()
-        generator.notificationOccurred(.success)
-        dismiss(animated: true)
+    @objc private func copyMessageAction() {
+        guard selectedMessageIndex < messages.count else { return }
+        let message = messages[selectedMessageIndex]
+        
+        if case .text(let text) = message.kind {
+            UIPasteboard.general.string = text
+            chatBotShowToast(message: "Copied to clipboard")
+        }
     }
     
-    
+    private func chatBotShowToast(message: String) {
+        let alert = UIAlertController(title: nil, message: message, preferredStyle: .alert)
+        present(alert, animated: true)
+        DispatchQueue.main.asyncAfter(deadline: .now() ) {
+            alert.dismiss(animated: true)
+        }
+    }
 }
 
 // MARK: - MessagesDataSource
@@ -232,7 +260,7 @@ extension ChatDetailViewController: MessagesLayoutDelegate, MessagesDisplayDeleg
                          at indexPath: IndexPath,
                          in messagesCollectionView: MessagesCollectionView) -> UIColor {
         if message.sender.senderId == currentUser.senderId {
-            return AppTheme.shared.dominantColor
+            return UIColor.systemBlue
         } else {
             return UIColor.systemGray5
         }
@@ -313,6 +341,4 @@ extension ChatDetailViewController: InputBarAccessoryViewDelegate {
         sendNextBotReply()
     }
 }
-
-
 
