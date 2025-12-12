@@ -14,6 +14,7 @@
 		1906A21A2ED58641002425A7 /* Exceptions for "Grp1-iOS" folder in "Grp1-iOS" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				Features/Home/Views/test.swift,
 				Info.plist,
 			);
 			target = 1906A2072ED58640002425A7 /* Grp1-iOS */;
