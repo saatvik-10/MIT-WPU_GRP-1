@@ -1,12 +1,12 @@
 import UIKit
 struct ProfileDataSource {
     static let items: [ProfileOption] = [
-        ProfileOption(icon: "", title: "Progress",      cellType: .progress, isDestructive: false),
-        ProfileOption(icon: "chart.xyaxis.line", title: "Interests",     cellType: .option,   isDestructive: false),
-        ProfileOption(icon: "star.fill", title: "Bookmarks",     cellType: .option ,   isDestructive: false),
-        ProfileOption(icon: "bookmark.fill", title: "Achievements",  cellType: .option,   isDestructive: false),
-        ProfileOption(icon: "trophy.fill", title: "About Us",      cellType: .option,   isDestructive: false),
-        ProfileOption(icon: "person.3", title: "Logout",        cellType: .option,   isDestructive: true)
+        ProfileOption(title: "Progress", subTitle: "Level 2", isDestructive: false),
+        ProfileOption(title: "Interests", subTitle: "Details", isDestructive: false),
+        ProfileOption(title: "Bookmarks", subTitle: "Level 2", isDestructive: false),
+        ProfileOption(title: "Achievements", subTitle: "", isDestructive: false),
+        ProfileOption(title: "About Us", subTitle: "5", isDestructive: false),
+        ProfileOption(title: "Logout", subTitle: "", isDestructive: true)
     ]
 }
 

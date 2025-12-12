@@ -18,15 +18,9 @@ enum UserLevel: String {
     }
 }
 
-enum ProfileCellType {
-    case progress
-    case option
-}
-
 struct ProfileOption {
-    let icon: String
     let title: String
-    let cellType: ProfileCellType
+    let subTitle: String
     let isDestructive: Bool
 }
 

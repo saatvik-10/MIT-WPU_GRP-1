@@ -20,7 +20,7 @@ class DomainViewCell: UICollectionViewCell {
         domainTitle.text = model.title
         contentView.layer.cornerRadius = 16
         contentView.clipsToBounds = true
-        contentView.backgroundColor = .systemGray6
+        contentView.backgroundColor = .white
             if let iconName = model.icon {
                 domainImageView.image = UIImage(systemName: iconName)
                 domainImageView.tintColor = .black

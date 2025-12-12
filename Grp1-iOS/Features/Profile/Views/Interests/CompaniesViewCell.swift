@@ -22,7 +22,7 @@ class CompaniesViewCell: UICollectionViewCell {
         companySymbol.text = model.subtitle
         contentView.layer.cornerRadius = 16
         DomainViewCell().clipsToBounds = true
-        contentView.backgroundColor = .systemGray6
+        contentView.backgroundColor = .white
     }
 
 }

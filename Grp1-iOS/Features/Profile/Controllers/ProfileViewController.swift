@@ -1,7 +1,5 @@
 import UIKit
 
-// MARK: - Main View Controller
-// 1. Adopt the ProfileOptionCellDelegate protocol
 class ProfileViewController: UIViewController, ProfileOptionCellDelegate {
 
     @IBOutlet weak var profileLevel: UILabel!
@@ -17,18 +15,10 @@ class ProfileViewController: UIViewController, ProfileOptionCellDelegate {
         setupProfileHeader()
 
         collectionView.dataSource = self
-        // Note: We only need dataSource for data. Delegate logic is handled by the protocol now.
-        // We can safely keep collectionView.delegate = self, but it is no longer mandatory
-        // for the selection, only for other CollectionView delegate methods if used.
         collectionView.delegate = self
         
         collectionView.backgroundColor = UIColor.systemGray6
 
-        // Register XIBs/NIBs
-        collectionView.register(
-            UINib(nibName: "ProfileOptionViewCell", bundle: nil),
-            forCellWithReuseIdentifier: "progress_cell"
-        )
         collectionView.register(
             UINib(nibName: "ProfileOption2ViewCell", bundle: nil),
             forCellWithReuseIdentifier: "option_cell"
@@ -83,8 +73,6 @@ class ProfileViewController: UIViewController, ProfileOptionCellDelegate {
     }
 }
 
-//---
-
 // MARK: - UICollectionViewDataSource & Delegate
 extension ProfileViewController:
     UICollectionViewDataSource,
@@ -94,31 +82,19 @@ extension ProfileViewController:
         return items.count
     }
 
-    func collectionView(_ collectionView: UICollectionView,
+    func collectionView(_ : UICollectionView,
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
 
         let item = items[indexPath.row]
 
-        switch item.cellType {
-        case .progress:
-            guard let cell = collectionView.dequeueReusableCell(
-                withReuseIdentifier: "progress_cell", for: indexPath
-            ) as? ProfileOptionViewCell else { return UICollectionViewCell() }
-            
-            cell.configure(title: item.title, level: 2, progress: 0.6)
-            return cell
-
-        case .option:
-            guard let cell = collectionView.dequeueReusableCell(
-                withReuseIdentifier: "option_cell", for: indexPath
-            ) as? ProfileOption2ViewCell else { return UICollectionViewCell() }
-            
-            // 2. Set the delegate to self (the View Controller)
-            cell.delegate = self
-            
-            cell.configure(title: item.title, isDestructive: item.isDestructive)
-            return cell
-        }
+        guard let cell = collectionView.dequeueReusableCell(
+            withReuseIdentifier: "option_cell", for: indexPath
+        ) as? ProfileOption2ViewCell else { return UICollectionViewCell() }
+        
+        cell.delegate = self
+        
+        cell.configure(title: item.title, subTitle: item.subTitle, isDestructive: item.isDestructive)
+        return cell
     }
 }
 // MARK: - ProfileOptionCellDelegate (The Navigation Trigger)
