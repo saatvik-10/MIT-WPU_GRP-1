@@ -20,6 +20,7 @@ class HomeViewController: UIViewController, UICollectionViewDelegate {
     var todaysPick: [NewsArticle] = []
     var trendingNews: [NewsArticle] = []
     var marketHighlights: [NewsArticle] = []
+    var article: NewsArticle?
 
     override func viewDidLoad() {
         super.viewDidLoad()

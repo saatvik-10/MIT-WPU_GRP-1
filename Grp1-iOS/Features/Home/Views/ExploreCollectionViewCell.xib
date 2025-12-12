@@ -22,11 +22,8 @@
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tl3-74-EOY">
-                        <rect key="frame" x="10" y="45" width="200" height="30"/>
-                        <constraints>
-                            <constraint firstAttribute="width" constant="200" id="vTs-bn-DGo"/>
-                        </constraints>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tl3-74-EOY">
+                        <rect key="frame" x="10" y="45" width="567" height="30"/>
                         <fontDescription key="fontDescription" type="system" pointSize="25"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
@@ -68,6 +65,7 @@
                 <constraint firstItem="jfC-yo-rrt" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="10" id="Vl2-DI-V0Y"/>
                 <constraint firstItem="Kx9-iw-zUd" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="15" id="dZf-Um-L7x"/>
                 <constraint firstAttribute="trailing" secondItem="Kx9-iw-zUd" secondAttribute="trailing" constant="15" id="hb9-hq-LrA"/>
+                <constraint firstItem="Kx9-iw-zUd" firstAttribute="leading" secondItem="tl3-74-EOY" secondAttribute="trailing" constant="10" id="kKO-0E-nHd"/>
                 <constraint firstAttribute="trailing" secondItem="5WS-C5-HMo" secondAttribute="trailing" constant="5" id="n09-VK-j1g"/>
                 <constraint firstAttribute="bottom" secondItem="5WS-C5-HMo" secondAttribute="bottom" id="n9s-7t-vdh"/>
             </constraints>

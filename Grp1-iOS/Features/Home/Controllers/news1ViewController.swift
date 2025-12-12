@@ -4,6 +4,9 @@ class news1ViewController: UIViewController, UICollectionViewDataSource {
     
     
     
+    @IBOutlet weak var dateLabel: UILabel!
+    @IBOutlet weak var headlineLabel: UILabel!
+    @IBOutlet weak var floatingButton: UIButton!
     @IBOutlet weak var collectionView: UICollectionView!
     
     @IBOutlet weak var optionsButton: UIBarButtonItem!
@@ -15,6 +18,7 @@ class news1ViewController: UIViewController, UICollectionViewDataSource {
     @IBOutlet weak var topImageView: UIImageView!
     @IBOutlet weak var overviewTextLabel: UILabel!
     
+    var passedDominantColor: UIColor = .systemBackground
     let newsStore = NewsDataStore.shared
     var relatedNews: [NewsArticle] = []     // for "More Like This"
     var qaHistory: [ArticleQA] = []         // for "Questions Asked"
@@ -22,20 +26,20 @@ class news1ViewController: UIViewController, UICollectionViewDataSource {
     var article: NewsArticle?               // set from previous screen
     
     private var gradientApplied = false
+    var extractedDominantColor: UIColor?
+    var dominantColor: UIColor?
+    // in news1ViewController
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        
         // --- Your original overview text ---
         overviewTextLabel.numberOfLines = 0
-        overviewTextLabel.attributedText = bulletPointList(strings: [
-            "The market continued its upward move on Friday, with Nifty gaining 103 points and closing near the day’s high, showing strong buying interest throughout the session.",
-            "Bullish patterns on the daily and weekly charts indicate that the ongoing uptrend is healthy and likely to continue in the coming week.",
-            "Nifty may face resistance around the 25,400–25,550 zone, while strong support near 25,150 suggests that any pullback could be short-lived.",
-            "Overall sentiment remains positive, and dips are expected to attract fresh buying, keeping the market biased toward further upside."
-        ])
-        
+        if let points = article?.overview {
+            overviewTextLabel.attributedText = bulletPointList(strings: points)
+        }
         view.backgroundColor = .white
         overviewView.layer.cornerRadius = 25
         overviewView.layer.masksToBounds = true
@@ -60,6 +64,26 @@ class news1ViewController: UIViewController, UICollectionViewDataSource {
         setupCollectionView()
         setupGlassEffect()
         setupOptionsMenu()
+        
+    }
+    
+//    private func setupUI() {
+//        guard let article = article else { return }
+//        
+//        if let image = UIImage(named: article.imageName) {
+//            topImageView.image = image
+//        }
+//    }
+    
+    private func setupUI() {
+        guard let article = article else { return }
+
+        headlineLabel.text = article.title
+        dateLabel.text = ("\(article.source) • \(article.date)")
+
+        if let image = UIImage(named: article.imageName) {
+            topImageView.image = image
+        }
     }
     
     // MARK: - Collection View Setup
@@ -248,13 +272,7 @@ class news1ViewController: UIViewController, UICollectionViewDataSource {
         return NSAttributedString(string: string, attributes: attributes)
     }
     
-    private func setupUI() {
-        guard let article = article else { return }
-        
-        if let image = UIImage(named: article.imageName) {
-            topImageView.image = image
-        }
-    }
+    
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
@@ -263,13 +281,17 @@ class news1ViewController: UIViewController, UICollectionViewDataSource {
            let img = topImageView.image,
            let color = dominantColor(from: img) {
             
+            extractedDominantColor = color
             let gradientImg = createGradientImage(
                 color: color,
                 size: gradientImageView.bounds.size
             )
-            
+            AppTheme.shared.dominantColor = color
             gradientImageView.image = gradientImg
             gradientApplied = true
+//            applyDominantColorToButton(color)
+            floatingButton.tintColor = color.withAlphaComponent(0.80)
+            
         }
     }
     
@@ -339,7 +361,10 @@ class news1ViewController: UIViewController, UICollectionViewDataSource {
             blue: CGFloat(bitmap[2]) / 255,
             alpha: 1
         )
+        
+        
     }
+    
     
     func showShareSheet() {
         guard let article = article else { return }
@@ -549,5 +574,129 @@ class news1ViewController: UIViewController, UICollectionViewDataSource {
             }
         }
     }
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "toChat" {
+
+            // 1. Destination is a UINavigationController
+            if let nav = segue.destination as? UINavigationController {
+
+                // 2. First VC inside nav is ChatDetailViewController
+                if let chatVC = nav.topViewController as? ChatDetailViewController {
+
+                    // 3. Pass dominant color
+                    chatVC.dominantColor = self.dominantColor
+                }
+            }
+        }
+    }
+    
+    
+    @IBAction func segmentChanged(_ sender: Any) {
+        guard let article = article else { return }
+
+            // 1️⃣ HAPTIC FEEDBACK
+            UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+
+            // 2️⃣ Determine new text + direction
+            let newText: NSAttributedString
+            let direction: CGFloat
+
+            if (sender as AnyObject).selectedSegmentIndex == 0 {
+                newText = bulletPointList(strings: article.overview)
+                direction = -1   // card exits LEFT, new enters from RIGHT
+            } else {
+                newText = bulletPointList(strings: article.keyTakeaways)
+                direction = 1    // card exits RIGHT, new enters from LEFT
+            }
+
+            // 3️⃣ ANIMATE THE WHOLE CARD
+            let card = overviewView!
+            let originalX = card.frame.origin.x
+            let width = card.frame.width
+
+            UIView.animate(withDuration: 0.25, animations: {
+                // Slide card OFF screen
+                card.frame.origin.x = originalX - direction * width
+                card.alpha = 0
+            }) { _ in
+                // Update text while card is off-screen
+                self.overviewTextLabel.attributedText = newText
+
+                // Move card to opposite side (off-screen)
+                card.frame.origin.x = originalX + direction * width
+
+                // Animate card back in
+                UIView.animate(
+                    withDuration: 0.32,
+                    delay: 0,
+                    usingSpringWithDamping: 0.82,
+                    initialSpringVelocity: 0.6,
+                    options: [.curveEaseOut],
+                    animations: {
+                        card.frame.origin.x = originalX
+                        card.alpha = 1
+                    },
+                    completion: nil
+                )
+            }
+        
+    }
     
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//func applyDominantColorToButton(_ color: UIColor) {
+//
+//    floatingButton.backgroundColor = .clear
+//    floatingButton.layer.cornerRadius = floatingButton.bounds.height / 2
+//    floatingButton.layer.masksToBounds = true
+//
+//    // REMOVE old layers
+//    floatingButton.subviews.forEach { sub in
+//        if sub is UIVisualEffectView || sub.tag == 999 { sub.removeFromSuperview() }
+//    }
+//
+//    // --- Blur Layer (glassy look) ---
+//    let blurEffect = UIBlurEffect(style: .systemUltraThinMaterialLight)
+//    let blurView = UIVisualEffectView(effect: blurEffect)
+//    blurView.frame = floatingButton.bounds
+//    blurView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+//    blurView.layer.cornerRadius = floatingButton.layer.cornerRadius
+//    blurView.layer.masksToBounds = true
+//    blurView.tag = 999
+//    floatingButton.insertSubview(blurView, at: 0)
+//
+//    // --- Tint layer with dominant color (light + glossy) ---
+//    let tintLayer = UIView(frame: floatingButton.bounds)
+//    tintLayer.backgroundColor = color.withAlphaComponent(0.48)  // VERY light tint
+//    tintLayer.layer.cornerRadius = floatingButton.layer.cornerRadius
+//    tintLayer.isUserInteractionEnabled = false
+//    tintLayer.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+//    tintLayer.tag = 999
+//    floatingButton.insertSubview(tintLayer, aboveSubview: blurView)
+//
+//    // Make sure button text + image stay visible
+//    floatingButton.titleLabel?.textColor = .white
+//    floatingButton.tintColor = .white
+//    floatingButton.titleLabel?.layer.zPosition = 10
+//    floatingButton.imageView?.layer.zPosition = 10
+//
+//    // optional glossy border
+//    floatingButton.layer.borderWidth = 1
+//    floatingButton.layer.borderColor = UIColor.white.withAlphaComponent(0.3).cgColor
+//}

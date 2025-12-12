@@ -1,12 +1,3 @@
-//
-//  Model.swift
-//  SampleApp
-//
-//  Created by SDC-USER on 24/11/25.
-//
-
-
-
 import Foundation
 import UIKit
 
@@ -25,7 +16,12 @@ struct NewsArticle {
     let category: String
     let date: String
     let source: String
+    
+    /// NEW FIELDS
+    let overview: [String]                // summary
+    let keyTakeaways: [String]          // main points
+    let jargons: [String]               // technical words
 
     /// All questions & answers asked for this article
-    var qaHistory: [ArticleQA] = []   // ✅ default value so old code still works
+    var qaHistory: [ArticleQA] = []
 }

@@ -225,18 +225,18 @@ extension ExploreMoreViewController {
                     )
                 )
 
-                item.contentInsets = .init(top: 0, leading: 0, bottom: 0, trailing: 10)
+                item.contentInsets = .init(top: 0, leading: 10, bottom: 10, trailing: 10)
 
                 let group = NSCollectionLayoutGroup.horizontal(
                     layoutSize: .init(
-                        widthDimension: .fractionalWidth(0.9),
+                        widthDimension: .fractionalWidth(1.0),
                         heightDimension: .estimated(250)
                     ),
                     subitems: [item]
                 )
 
                 let section = NSCollectionLayoutSection(group: group)
-                section.orthogonalScrollingBehavior = .groupPagingCentered
+//                section.orthogonalScrollingBehavior = .groupPagingCentered
                 return section
             }
         }

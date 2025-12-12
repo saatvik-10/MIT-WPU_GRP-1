@@ -18,6 +18,8 @@ class ExploreCollectionViewCell: UICollectionViewCell {
 
     override func awakeFromNib() {
         super.awakeFromNib()
+        headlineLabel.numberOfLines = 0
+        headlineLabel.lineBreakMode = .byWordWrapping
         contentView.backgroundColor = .white
         contentView.layer.cornerRadius = 7
         contentView.layer.masksToBounds = true
