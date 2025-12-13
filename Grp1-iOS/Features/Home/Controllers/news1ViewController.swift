@@ -585,9 +585,22 @@ class news1ViewController: UIViewController, UICollectionViewDataSource {
 
                     // 3. Pass dominant color
                     chatVC.dominantColor = self.dominantColor
+                    chatVC.articleID = self.article?.id   // ✅ THIS IS KEY
+                    
                 }
             }
         }
+    }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        guard let articleID = article?.id else { return }
+
+        // Reload updated Q&A
+        qaHistory = newsStore.getQAHistory(for: articleID)
+
+        // Refresh UI
+        collectionView.reloadSections(IndexSet(integer: 1))
     }
     
     
