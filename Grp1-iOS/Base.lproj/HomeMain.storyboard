@@ -265,7 +265,7 @@ Overall sentiment remains positive, and dips are expected to attract fresh buyin
         <!--Ask Question-->
         <scene sceneID="Rxl-uJ-g1z">
             <objects>
-                <viewController id="zua-AY-Mfj" customClass="ChatDetailViewController" customModule="Grp1_iOS" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="zua-AY-Mfj" customClass="HomeChatDetailViewController" customModule="Grp1_iOS" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="UpF-yT-9H2">
                         <rect key="frame" x="0.0" y="0.0" width="430" height="873"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -393,6 +393,22 @@ Overall sentiment remains positive, and dips are expected to attract fresh buyin
             </objects>
             <point key="canvasLocation" x="1803" y="547"/>
         </scene>
+        <!--Threads-->
+        <scene sceneID="hNz-Mi-NZp">
+            <objects>
+                <viewController id="WB7-tt-gg0" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="YmF-bK-obY">
+                        <rect key="frame" x="0.0" y="0.0" width="430" height="932"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <viewLayoutGuide key="safeArea" id="2zT-bm-xub"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="Threads" image="pencil" catalog="system" id="aeg-LT-I2D"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="brF-cW-pMH" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2065" y="-588"/>
+        </scene>
         <!--Item-->
         <scene sceneID="wzl-QK-vZj">
             <objects>
@@ -408,11 +424,12 @@ Overall sentiment remains positive, and dips are expected to attract fresh buyin
                         <segue destination="8JV-RM-7Fr" kind="relationship" relationship="viewControllers" id="3cT-nc-E9T"/>
                         <segue destination="S9A-MC-iYs" kind="relationship" relationship="viewControllers" id="AB4-q7-b7n"/>
                         <segue destination="U3H-kQ-Flq" kind="relationship" relationship="viewControllers" id="dCZ-xT-9HQ"/>
+                        <segue destination="WB7-tt-gg0" kind="relationship" relationship="viewControllers" id="jwM-q3-fSX"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="aWM-vg-YaB" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1986.9767441860465" y="136.48068669527899"/>
+            <point key="canvasLocation" x="1984" y="136"/>
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
@@ -421,6 +438,7 @@ Overall sentiment remains positive, and dips are expected to attract fresh buyin
     <resources>
         <image name="ellipsis" catalog="system" width="128" height="37"/>
         <image name="house" catalog="system" width="128" height="104"/>
+        <image name="pencil" catalog="system" width="128" height="113"/>
         <image name="urban_6" width="1080" height="608"/>
         <image name="xmark" catalog="system" width="128" height="113"/>
         <systemColor name="systemBackgroundColor">

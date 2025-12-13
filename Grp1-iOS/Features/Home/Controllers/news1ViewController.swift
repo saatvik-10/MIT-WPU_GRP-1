@@ -34,7 +34,7 @@ class news1ViewController: UIViewController, UICollectionViewDataSource {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
+        collectionView.delegate = self
         // --- Your original overview text ---
         overviewTextLabel.numberOfLines = 0
         if let points = article?.overview {
@@ -642,6 +642,26 @@ class news1ViewController: UIViewController, UICollectionViewDataSource {
         
     }
     
+}
+
+extension news1ViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+
+        // Only respond to taps from the More Like This section
+        if indexPath.section == 0 {
+            let selected = relatedNews[indexPath.row]
+
+            // Create a NEW instance of news1ViewController
+            let storyboard = UIStoryboard(name: "HomeMain", bundle: nil)
+            if let vc = storyboard.instantiateViewController(withIdentifier: "news1ViewController") as? news1ViewController {
+
+                vc.article = selected   // pass the selected article
+
+                // Push onto navigation stack
+                self.navigationController?.pushViewController(vc, animated: true)
+            }
+        }
+    }
 }
 
 

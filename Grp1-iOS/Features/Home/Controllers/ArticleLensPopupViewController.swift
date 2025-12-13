@@ -23,6 +23,8 @@ class ArticleLensPopupViewController: UIViewController {
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        let generator = UINotificationFeedbackGenerator()
+        generator.notificationOccurred(.success)
         animateIn()
     }
 
