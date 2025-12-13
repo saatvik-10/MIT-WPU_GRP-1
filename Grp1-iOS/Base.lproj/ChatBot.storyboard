@@ -116,11 +116,11 @@
             </objects>
             <point key="canvasLocation" x="2889.3129770992364" y="400.7042253521127"/>
         </scene>
-        <!--Item-->
+        <!--Chatbot-->
         <scene sceneID="CsK-ib-kAj">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Nzq-r4-wrW" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Item" selectedImage="pencil.circle" catalog="system" id="M5H-4x-dHP"/>
+                    <tabBarItem key="tabBarItem" title="Chatbot" selectedImage="pencil.circle" catalog="system" id="M5H-4x-dHP"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="HZG-a8-R7M">
                         <rect key="frame" x="0.0" y="118" width="393" height="54"/>
