@@ -1,0 +1,246 @@
+//
+//  ExploreMoreViewController.swift
+//  Grp1-iOS
+//
+//  Created by SDC-USER on 10/12/25.
+//
+
+import UIKit
+
+
+
+class ExploreMoreViewController: UIViewController, UICollectionViewDelegate {
+
+    @IBOutlet weak var collectionView: UICollectionView!
+    let newsStore = NewsDataStore.shared
+
+        // Only 3 sections now
+        var exploreTrending: [NewsArticle] = []
+        var exploreList: [NewsArticle] = []
+        var exploreGrid: [NewsArticle] = []
+
+        override func viewDidLoad() {
+            super.viewDidLoad()
+
+            view.backgroundColor = .systemBackground
+
+            registerCells()
+
+            // Load data
+            exploreTrending = newsStore.getAllNews().reversed()
+            exploreList = newsStore.getAllNews().shuffled()
+            exploreGrid = newsStore.getAllNews().shuffled()
+
+            collectionView.setCollectionViewLayout(generateLayout(), animated: false)
+            collectionView.delegate = self
+            collectionView.dataSource = self
+        }
+
+        // MARK: - Select item → open article
+        func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+
+            var selected: NewsArticle?
+
+            switch indexPath.section {
+            case 0: selected = exploreTrending[indexPath.row]
+            case 1: selected = exploreList[indexPath.row]
+            case 2: selected = exploreGrid[indexPath.row]
+            default: break
+            }
+
+            performSegue(withIdentifier: "showArticleDetail", sender: selected)
+        }
+
+        override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+            if segue.identifier == "showArticleDetail",
+               let vc = segue.destination as? news1ViewController,
+               let article = sender as? NewsArticle {
+                vc.article = article
+            }
+        }
+
+}
+
+extension ExploreMoreViewController {
+
+    func registerCells() {
+
+        collectionView.register(
+            UINib(nibName: "TrendingCollectionViewCell", bundle: nil),
+            forCellWithReuseIdentifier: "trending_cell"
+        )
+
+        collectionView.register(
+            UINib(nibName: "ExploreCollectionViewCell", bundle: nil),
+            forCellWithReuseIdentifier: "explore_cell"
+        )
+
+        collectionView.register(
+            UINib(nibName: "RealExploreCollectionViewCell", bundle: nil),
+            forCellWithReuseIdentifier: "realexplore_cell"
+        )
+    }
+}
+
+
+
+extension ExploreMoreViewController: UICollectionViewDataSource {
+
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return 3   // ONLY 3 SECTIONS NOW
+    }
+
+    func collectionView(_ collectionView: UICollectionView,
+                        numberOfItemsInSection section: Int) -> Int {
+
+        switch section {
+        case 0: return exploreTrending.count
+        case 1: return exploreList.count
+        case 2: return exploreGrid.count
+        default: return 0
+        }
+    }
+
+    func collectionView(_ collectionView: UICollectionView,
+                        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+
+        switch indexPath.section {
+
+        // SECTION 0 → Trending Collection
+        case 0:
+            let cell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: "trending_cell",
+                for: indexPath
+            ) as! TrendingCollectionViewCell
+
+            cell.configureCell(with: exploreTrending[indexPath.row])
+
+            cell.onArticleLensTapped = { [weak self] in
+                guard let self = self else { return }
+                let popup = ArticleLensPopupViewController(nibName: "ArticleLensPopupViewController", bundle: nil)
+                popup.modalPresentationStyle = .overFullScreen
+                popup.modalTransitionStyle = .crossDissolve
+                self.present(popup, animated: true)
+            }
+
+            cell.onRecommendTapped = { [weak self] in
+                self?.showToast(message: "Recommendation sent!")
+            }
+
+            return cell
+
+        // SECTION 1 → Explore List (vertical list style)
+        case 1:
+            let cell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: "explore_cell",
+                for: indexPath
+            ) as! ExploreCollectionViewCell
+
+            cell.configureCell(with: exploreList[indexPath.row])
+
+            cell.onArticleLensTapped = { [weak self] in
+                guard let self = self else { return }
+                let popup = ArticleLensPopupViewController(nibName: "ArticleLensPopupViewController", bundle: nil)
+                popup.modalPresentationStyle = .overFullScreen
+                popup.modalTransitionStyle = .crossDissolve
+                self.present(popup, animated: true)
+            }
+
+            cell.onRecommendTapped = { [weak self] in
+                self?.showToast(message: "Recommendation sent!")
+            }
+
+            return cell
+
+        // SECTION 2 → Grid Style Explore
+        default:
+            let cell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: "realexplore_cell",
+                for: indexPath
+            ) as! RealExploreCollectionViewCell
+
+            cell.configureCell(with: exploreGrid[indexPath.row])
+            return cell
+        }
+    }
+}
+
+
+
+
+extension ExploreMoreViewController {
+
+    func generateLayout() -> UICollectionViewLayout {
+
+        return UICollectionViewCompositionalLayout { section, env in
+
+            switch section {
+
+            // SECTION 0 — Medium Trending Cards
+            case 0:
+                let item = NSCollectionLayoutItem(
+                    layoutSize: .init(
+                        widthDimension: .fractionalWidth(1.0),
+                        heightDimension: .fractionalHeight(1.0)
+                    )
+                )
+                item.contentInsets = .init(top: 0, leading: 10, bottom: 15, trailing: 10)
+
+                let group = NSCollectionLayoutGroup.horizontal(
+                    layoutSize: .init(
+                        widthDimension: .fractionalWidth(1.0),
+                        heightDimension: .estimated(320)
+                    ),
+                    subitems: [item]
+                )
+
+                return NSCollectionLayoutSection(group: group)
+
+            // SECTION 1 — Vertical list
+            case 1:
+                let item = NSCollectionLayoutItem(
+                    layoutSize: .init(
+                        widthDimension: .fractionalWidth(1.0),
+                        heightDimension: .fractionalHeight(1.0)
+                    )
+                )
+                item.contentInsets = .init(top: 0, leading: 10, bottom: 10, trailing: 10)
+
+                let group = NSCollectionLayoutGroup.horizontal(
+                    layoutSize: .init(
+                        widthDimension: .fractionalWidth(1.0),
+                        heightDimension: .estimated(170)
+                    ),
+                    subitems: [item]
+                )
+
+                return NSCollectionLayoutSection(group: group)
+
+            // SECTION 2 — Grid Explore
+            default:
+                let item = NSCollectionLayoutItem(
+                    layoutSize: .init(
+                        widthDimension: .fractionalWidth(0.5),
+                        heightDimension: .fractionalHeight(1.0)
+                    )
+                )
+
+                item.contentInsets = .init(top: 0, leading: 10, bottom: 10, trailing: 10)
+
+                let group = NSCollectionLayoutGroup.horizontal(
+                    layoutSize: .init(
+                        widthDimension: .fractionalWidth(1.0),
+                        heightDimension: .estimated(250)
+                    ),
+                    subitems: [item]
+                )
+
+                let section = NSCollectionLayoutSection(group: group)
+//                section.orthogonalScrollingBehavior = .groupPagingCentered
+                return section
+            }
+        }
+    }
+}
+
+
