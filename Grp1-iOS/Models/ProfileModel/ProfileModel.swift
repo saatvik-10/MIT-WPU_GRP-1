@@ -55,6 +55,13 @@ struct ProfileView {
     let level: UserLevel
 }
 
+struct UserProfile {
+    let image: String
+    let name: String
+    let phone: String
+    let email: String
+}
+
 struct BookmarkItem {
     let icon: UIImage
     let title: String

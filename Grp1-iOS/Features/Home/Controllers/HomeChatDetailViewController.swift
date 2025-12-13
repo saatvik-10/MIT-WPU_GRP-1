@@ -17,9 +17,10 @@ protocol HomeChatDetailViewControllerDelegate: AnyObject {
 
 
 class HomeChatDetailViewController: MessagesViewController {
-    
+    var articleID: Int?   // 👈 which article this chat belongs to
     var dominantColor: UIColor?
-
+    private var lastQuestion: String?
+    private var lastAnswer: String?
     weak var delegate : HomeChatDetailViewControllerDelegate?
     // You can set this from previous screen
     var chatTitle: String?
@@ -168,6 +169,7 @@ class HomeChatDetailViewController: MessagesViewController {
         guard botReplyIndex < mockBotReplies.count else { return }
         
         let text = mockBotReplies[botReplyIndex]
+        lastAnswer = text
         botReplyIndex += 1
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.7){
@@ -191,6 +193,32 @@ class HomeChatDetailViewController: MessagesViewController {
         dismiss(animated: true)
     }
     
+    @IBAction func postTapped(_ sender: UIButton) {
+        guard
+                let articleID = articleID,
+                let question = lastQuestion,
+                let answer = lastAnswer
+            else { return }
+
+            // 1️⃣ SAVE TO DATA STORE
+            NewsDataStore.shared.addQA(
+                for: articleID,
+                question: question,
+                answer: answer
+            )
+
+            // 2️⃣ HAPTIC FEEDBACK
+            let generator = UINotificationFeedbackGenerator()
+            generator.notificationOccurred(.success)
+
+            // 3️⃣ SMALL SUCCESS ANIMATION (fade)
+            UIView.animate(withDuration: 0.2, animations: {
+                self.view.alpha = 0.95
+            }) { _ in
+                // 4️⃣ CLOSE MODAL
+                self.dismiss(animated: true)
+            }
+    }
     
 }
 
@@ -277,6 +305,7 @@ extension HomeChatDetailViewController: InputBarAccessoryViewDelegate {
     func inputBar(_ inputBar: InputBarAccessoryView, didPressSendButtonWith text: String) {
         let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmed.isEmpty else { return }
+        lastQuestion = trimmed
 
         // user message
         if isNewChat {

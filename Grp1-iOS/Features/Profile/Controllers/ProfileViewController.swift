@@ -1,24 +1,25 @@
 import UIKit
 
 class ProfileViewController: UIViewController, ProfileOptionCellDelegate {
-
+    
     @IBOutlet weak var profileLevel: UILabel!
-    @IBOutlet weak var profileImage: UIImageView!
+    @IBOutlet weak var profileBtn: UIButton!
+    //    @IBOutlet weak var profileImage: UIImageView!
     @IBOutlet weak var profileName: UILabel!
     @IBOutlet weak var collectionView: UICollectionView!
     
     let items = ProfileDataSource.items
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         setupProfileHeader()
-
+        
         collectionView.dataSource = self
         collectionView.delegate = self
         
         collectionView.backgroundColor = UIColor.systemGray6
-
+        
         collectionView.register(
             UINib(nibName: "ProfileOption2ViewCell", bundle: nil),
             forCellWithReuseIdentifier: "option_cell"
@@ -29,28 +30,37 @@ class ProfileViewController: UIViewController, ProfileOptionCellDelegate {
     
     func setupProfileHeader() {
         let profileData = Profile.current
-
+        
         profileName.text = profileData.name
         profileLevel.text = profileData.level.rawValue
         profileLevel.textColor = profileData.level.color
-
-        let imageName = profileData.image
-        if !imageName.isEmpty {
-            profileImage.image = UIImage(named: imageName)
-            profileImage.layer.cornerRadius = profileImage.frame.size.width / 2
-            profileImage.clipsToBounds = true
-        } else {
-            profileImage.image = UIImage(systemName: "person")
-        }
+        
+//        let imageName = profileData.image
+        
+        profileBtn.layer.cornerRadius = profileBtn.bounds.width / 2
+        profileBtn.clipsToBounds = true
+        
+        //            let image: UIImage
+        //
+        //            if !imageName.isEmpty {
+        //                image = UIImage(named: imageName) ?? UIImage(systemName: "person")!
+        //            } else {
+        //                image = UIImage(systemName: "person")!
+        //            }
+        //
+        //            profileBtn.setImage(image, for: .normal)
+        //            profileBtn.imageView?.contentMode = .scaleAspectFill
+        //            profileBtn.layer.cornerRadius = profileBtn.frame.width / 2
+        //            profileBtn.clipsToBounds = true
     }
-
+    
     func generateLayout() -> UICollectionViewLayout {
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
             heightDimension: .absolute(75)
         )
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
-
+        
         let groupSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
             heightDimension: .estimated(500)
@@ -59,7 +69,7 @@ class ProfileViewController: UIViewController, ProfileOptionCellDelegate {
             layoutSize: groupSize,
             subitems: [item]
         )
-
+        
         let section = NSCollectionLayoutSection(group: group)
         section.interGroupSpacing = 12
         section.contentInsets = NSDirectionalEdgeInsets(
@@ -68,7 +78,7 @@ class ProfileViewController: UIViewController, ProfileOptionCellDelegate {
             bottom: 20,
             trailing: 20
         )
-
+        
         return UICollectionViewCompositionalLayout(section: section)
     }
 }
@@ -77,16 +87,16 @@ class ProfileViewController: UIViewController, ProfileOptionCellDelegate {
 extension ProfileViewController:
     UICollectionViewDataSource,
     UICollectionViewDelegate {
-
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return items.count
     }
-
+    
     func collectionView(_ : UICollectionView,
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-
+        
         let item = items[indexPath.row]
-
+        
         guard let cell = collectionView.dequeueReusableCell(
             withReuseIdentifier: "option_cell", for: indexPath
         ) as? ProfileOption2ViewCell else { return UICollectionViewCell() }
@@ -131,7 +141,7 @@ extension ProfileViewController {
             print("Logging out...")
             // TODO: Add logout action/alert
             break
-
+            
         default:
             break
         }
