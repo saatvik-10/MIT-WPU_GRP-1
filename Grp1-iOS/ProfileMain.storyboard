@@ -9,6 +9,22 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
+        <!--View Controller-->
+        <scene sceneID="kY8-xd-Xzx">
+            <objects>
+                <viewController id="7Fd-fp-Ena" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="8Wc-Bf-ayD">
+                        <rect key="frame" x="0.0" y="0.0" width="440" height="956"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <viewLayoutGuide key="safeArea" id="db2-Zp-QK2"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="Rzh-8g-58V"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Q5F-PC-oTk" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3819.545454545455" y="-531.58995815899584"/>
+        </scene>
         <!--Profile View Controller-->
         <scene sceneID="s0d-6b-0kx">
             <objects>
@@ -41,29 +57,31 @@
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="HGH-As-bCT">
                                 <rect key="frame" x="15" y="140" width="410" height="75"/>
                                 <subviews>
-                                    <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4pS-DP-7Zk">
+                                    <stackView opaque="NO" contentMode="scaleToFill" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="4pS-DP-7Zk">
                                         <rect key="frame" x="0.0" y="0.0" width="410" height="75"/>
                                         <subviews>
-                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Upj-x3-vre">
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GXO-1C-imX">
                                                 <rect key="frame" x="0.0" y="0.0" width="90" height="75"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="width" constant="90" id="kJr-oq-NH1"/>
+                                                    <constraint firstAttribute="width" constant="90" id="Ea8-Wh-mWV"/>
                                                 </constraints>
-                                            </imageView>
+                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                <state key="normal" title="" image="profile"/>
+                                            </button>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" translatesAutoresizingMaskIntoConstraints="NO" id="JE0-1g-xA2">
-                                                <rect key="frame" x="90" y="0.0" width="320" height="75"/>
+                                                <rect key="frame" x="105" y="0.0" width="305" height="75"/>
                                                 <subviews>
                                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="Zrz-CO-Cbs">
-                                                        <rect key="frame" x="0.0" y="0.0" width="320" height="75"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="305" height="75"/>
                                                         <subviews>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0ts-zp-YTi">
-                                                                <rect key="frame" x="0.0" y="0.0" width="320" height="37.666666666666664"/>
+                                                                <rect key="frame" x="0.0" y="0.0" width="305" height="37.666666666666664"/>
                                                                 <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="22"/>
                                                                 <nil key="textColor"/>
                                                                 <nil key="highlightedColor"/>
                                                             </label>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xnd-aI-eDD">
-                                                                <rect key="frame" x="0.0" y="37.666666666666657" width="320" height="37.333333333333343"/>
+                                                                <rect key="frame" x="0.0" y="37.666666666666657" width="305" height="37.333333333333343"/>
                                                                 <fontDescription key="fontDescription" type="system" weight="medium" pointSize="14"/>
                                                                 <nil key="textColor"/>
                                                                 <nil key="highlightedColor"/>
@@ -100,7 +118,7 @@
                     <navigationItem key="navigationItem" id="jxp-Nc-DO8"/>
                     <connections>
                         <outlet property="collectionView" destination="pmo-Hj-OFl" id="tcK-wS-HPF"/>
-                        <outlet property="profileImage" destination="Upj-x3-vre" id="ocS-m7-pIF"/>
+                        <outlet property="profileBtn" destination="GXO-1C-imX" id="qUG-F6-pDJ"/>
                         <outlet property="profileLevel" destination="xnd-aI-eDD" id="AfN-zR-S9F"/>
                         <outlet property="profileName" destination="0ts-zp-YTi" id="dEG-yL-LLX"/>
                     </connections>
@@ -425,11 +443,30 @@
             </objects>
             <point key="canvasLocation" x="3855.7251908396943" y="890.84507042253529"/>
         </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="dhh-av-XCa">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="fnX-ao-Zg2" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="c0S-wy-XiG">
+                        <rect key="frame" x="0.0" y="124" width="440" height="54"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="7Fd-fp-Ena" kind="relationship" relationship="rootViewController" id="VRs-gc-iwD"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="QXv-oJ-b5J" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2927.727272727273" y="-531.58995815899584"/>
+        </scene>
     </scenes>
     <resources>
         <image name="checkmark" catalog="system" width="128" height="114"/>
         <image name="person.crop.circle.fill" catalog="system" width="128" height="123"/>
         <image name="plus" catalog="system" width="128" height="113"/>
+        <image name="profile" width="6000" height="6000"/>
         <image name="xmark" catalog="system" width="128" height="113"/>
         <systemColor name="linkColor">
             <color red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

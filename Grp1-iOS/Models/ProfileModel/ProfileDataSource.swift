@@ -3,7 +3,7 @@ struct ProfileDataSource {
     static let items: [ProfileOption] = [
         ProfileOption(title: "Progress", subTitle: "Level 2", isDestructive: false),
         ProfileOption(title: "Interests", subTitle: "Details", isDestructive: false),
-        ProfileOption(title: "Bookmarks", subTitle: "Level 2", isDestructive: false),
+        ProfileOption(title: "Bookmarks", subTitle: "3", isDestructive: false),
         ProfileOption(title: "Achievements", subTitle: "", isDestructive: false),
         ProfileOption(title: "About Us", subTitle: "5", isDestructive: false),
         ProfileOption(title: "Logout", subTitle: "", isDestructive: true)
@@ -30,7 +30,7 @@ struct InterestsDataSource {
 
 struct Profile {
     static let current: ProfileView = ProfileView(
-        image: "avatar",
+        image: "profile",
         name: "Anandita Babar",
         level: .beginner
     )
