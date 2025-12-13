@@ -18,7 +18,7 @@ struct InterestsDataSource {
         InterestModel(title: "Banking", subtitle: nil, icon: "indianrupeesign.bank.building"),
         InterestModel(title: "Commodities", subtitle: nil, icon: "shippingbox")
     ]
-
+    
     static let companies: [InterestModel] = [
         InterestModel(title: "Infosys", subtitle: "INFY", icon: nil),
         InterestModel(title: "Tata", subtitle: "TATA", icon: nil),
@@ -34,6 +34,10 @@ struct Profile {
         name: "Anandita Babar",
         level: .beginner
     )
+}
+
+struct User {
+    static let currUser: UserProfile = UserProfile(image: "profile", name: "Anandita Babar", phone: "1234567980", email: "anandita@gmail.com")
 }
 
 struct Bookmarks {
@@ -52,3 +56,4 @@ struct Bookmarks {
         )
     ]
 }
+
