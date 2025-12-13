@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		19DBF5332EEC236100E9C757 /* MessageKit in Frameworks */ = {isa = PBXBuildFile; productRef = 19DBF5322EEC236100E9C757 /* MessageKit */; };
+		190FF97D2EEAD9D300ADA7C7 /* MessageKit in Frameworks */ = {isa = PBXBuildFile; productRef = 190FF97C2EEAD9D300ADA7C7 /* MessageKit */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,7 +40,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				19DBF5332EEC236100E9C757 /* MessageKit in Frameworks */,
+				190FF97D2EEAD9D300ADA7C7 /* MessageKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -83,7 +83,7 @@
 			);
 			name = "Grp1-iOS";
 			packageProductDependencies = (
-				19DBF5322EEC236100E9C757 /* MessageKit */,
+				190FF97C2EEAD9D300ADA7C7 /* MessageKit */,
 			);
 			productName = "Grp1-iOS";
 			productReference = 1906A2082ED58640002425A7 /* Grp1-iOS.app */;
@@ -114,7 +114,7 @@
 			mainGroup = 1906A1FF2ED58640002425A7;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				19DBF5312EEC236100E9C757 /* XCRemoteSwiftPackageReference "Messagekit" */,
+				190FF97B2EEAD9D300ADA7C7 /* XCRemoteSwiftPackageReference "MessageKit" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 1906A2092ED58640002425A7 /* Products */;
@@ -154,7 +154,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = N6LUT8833Y;
+				DEVELOPMENT_TEAM = GW95636AQN;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Grp1-iOS/Info.plist";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -186,7 +186,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = N6LUT8833Y;
+				DEVELOPMENT_TEAM = GW95636AQN;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Grp1-iOS/Info.plist";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -354,9 +354,9 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		19DBF5312EEC236100E9C757 /* XCRemoteSwiftPackageReference "Messagekit" */ = {
+		190FF97B2EEAD9D300ADA7C7 /* XCRemoteSwiftPackageReference "MessageKit" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/MessageKit/Messagekit";
+			repositoryURL = "https://github.com/MessageKit/MessageKit";
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 5.0.0;
@@ -365,9 +365,9 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		19DBF5322EEC236100E9C757 /* MessageKit */ = {
+		190FF97C2EEAD9D300ADA7C7 /* MessageKit */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 19DBF5312EEC236100E9C757 /* XCRemoteSwiftPackageReference "Messagekit" */;
+			package = 190FF97B2EEAD9D300ADA7C7 /* XCRemoteSwiftPackageReference "MessageKit" */;
 			productName = MessageKit;
 		};
 /* End XCSwiftPackageProductDependency section */
