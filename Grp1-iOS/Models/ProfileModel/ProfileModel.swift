@@ -45,8 +45,8 @@ enum InterestType {
 
 struct InterestModel {
     let title: String
-    let subtitle: String?      // for companies
-    let icon: String?          // for domains
+    let subtitle: String?
+    let icon: String?
 }
 
 struct ProfileView {
@@ -60,6 +60,7 @@ struct UserProfile {
     let name: String
     let phone: String
     let email: String
+    let level: UserLevel
 }
 
 struct BookmarkItem {
