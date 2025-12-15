@@ -4,9 +4,13 @@
 //
 //  Created by SDC-USER on 11/12/25.
 //
+import Foundation
+
 struct OnboardingPage {
-    let title : String
-    let message : String
+    let title: String
+    let options: [(title: String, subtitle: String)]
 }
+
+
 
 
