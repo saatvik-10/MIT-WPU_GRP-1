@@ -28,9 +28,9 @@ class EditProfileViewController: UIViewController {
     private var profile = User.current
     
     private func setupUI() {
-        [nameField, emailField, phoneField].forEach {
-            $0?.isUserInteractionEnabled = false
-            $0?.borderStyle = .none
+        for textField in [nameField, emailField, phoneField] {
+            textField?.isUserInteractionEnabled = false
+            textField?.borderStyle = .none
         }
         
         emailField.keyboardType = .emailAddress
@@ -45,17 +45,17 @@ class EditProfileViewController: UIViewController {
     }
     
     private func enableEditing() {
-        [nameField, emailField, phoneField].forEach {
-            $0?.isUserInteractionEnabled = true
-            $0?.borderStyle = .roundedRect
+        for textField in [nameField, emailField, phoneField] {
+            textField?.isUserInteractionEnabled = true
+            textField?.borderStyle = .roundedRect
         }
         nameField.becomeFirstResponder()
     }
     
     private func disableEditing() {
-        [nameField, emailField, phoneField].forEach {
-            $0?.isUserInteractionEnabled = false
-            $0?.borderStyle = .none
+        for textField in [nameField, emailField, phoneField] {
+            textField?.isUserInteractionEnabled = false
+            textField?.borderStyle = .none
         }
         view.endEditing(true)
     }

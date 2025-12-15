@@ -106,46 +106,35 @@ extension ProfileViewController:
         return cell
     }
 }
-// MARK: - ProfileOptionCellDelegate (The Navigation Trigger)
+
 extension ProfileViewController {
+
     func didTapOption(for cell: ProfileOption2ViewCell) {
-        
         guard let indexPath = collectionView.indexPath(for: cell) else { return }
         let item = items[indexPath.row]
-        
+
         switch item.title {
+        case "Progress":
+            print("TODO: Progress Tapped")
+//            performSegue(withIdentifier: "progressSegue", sender: self)
+            
         case "Interests":
-            guard let storyboard = self.storyboard else { return }
-            guard let interestsVC = storyboard.instantiateViewController(withIdentifier: "InterestsViewController") as? InterestsViewController else {
-                print("Storyboard ID err")
-                return
-            }
-            navigationController?.pushViewController(interestsVC, animated: true)
-            
+            performSegue(withIdentifier: "interestsSegue", sender: self)
+
         case "Bookmarks":
-            print("Navigating to Bookmarks...")
-            guard let storyboard = self.storyboard else { return }
-            guard let bookmarksVC = storyboard.instantiateViewController(withIdentifier: "BookmarkViewController") as? BookmarkViewController else {
-                print("Storyboard ID err")
-                return
-            }
-            navigationController?.pushViewController(bookmarksVC, animated: true)
-            
+            performSegue(withIdentifier: "bookmarksSegue", sender: self)
+
         case "Achievements":
-            print("Navigating to Achievements...")
-            // TODO: Achievements
-            break
-            
+            print("TODO: Achievements Tapped")
+//            performSegue(withIdentifier: "achievementsSegue", sender: self)
+
         case "About us":
-            print("About us...")
-            // TODO: About us
-            break
-            
+            print("TODO: About us Tapped")
+//            performSegue(withIdentifier: "aboutUsSegue", sender: self)
+
         case "Logout":
-            print("Logging out...")
-            // TODO: Logout
-            break
-            
+            print("Logout tapped")
+
         default:
             break
         }
