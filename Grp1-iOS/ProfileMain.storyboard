@@ -261,6 +261,8 @@
                         <outlet property="profileBtn" destination="GXO-1C-imX" id="qUG-F6-pDJ"/>
                         <outlet property="profileLevel" destination="xnd-aI-eDD" id="AfN-zR-S9F"/>
                         <outlet property="profileName" destination="0ts-zp-YTi" id="dEG-yL-LLX"/>
+                        <segue destination="KqL-1o-AIi" kind="show" identifier="interestsSegue" id="MqY-Gi-KL2"/>
+                        <segue destination="nVT-bV-ibC" kind="show" identifier="bookmarksSegue" id="hjT-KB-wDE"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -276,10 +278,10 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Yel-Xo-klO">
-                                <rect key="frame" x="0.0" y="178" width="440" height="710"/>
+                                <rect key="frame" x="0.0" y="178" width="440" height="661"/>
                                 <subviews>
                                     <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="Dgt-N3-pYB">
-                                        <rect key="frame" x="0.0" y="0.0" width="440" height="710"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="440" height="661"/>
                                         <color key="backgroundColor" systemColor="systemGray6Color"/>
                                         <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="5HM-9M-cFA">
                                             <size key="itemSize" width="393" height="511"/>
@@ -328,7 +330,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="v3T-N5-jOB" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2932.06106870229" y="890.84507042253529"/>
+            <point key="canvasLocation" x="2933" y="856"/>
         </scene>
         <!--Interests-->
         <scene sceneID="zGI-x2-xv3">
@@ -339,7 +341,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="G0f-QB-GkL">
-                                <rect key="frame" x="0.0" y="175" width="440" height="713"/>
+                                <rect key="frame" x="0.0" y="229" width="440" height="610"/>
                                 <color key="backgroundColor" systemColor="systemGray6Color"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="eka-HJ-eH6">
                                     <size key="itemSize" width="392" height="536"/>
@@ -361,7 +363,7 @@
                                 </cells>
                             </collectionView>
                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="7H5-Ed-lrF">
-                                <rect key="frame" x="20" y="124" width="400" height="32"/>
+                                <rect key="frame" x="20" y="178" width="400" height="32"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <segments>
                                     <segment title="Domains"/>
@@ -396,7 +398,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="d6z-5b-6nM" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3753.4351145038167" y="130.98591549295776"/>
+            <point key="canvasLocation" x="4128" y="131"/>
         </scene>
         <!--test-->
         <scene sceneID="DGN-a1-khQ">
@@ -447,7 +449,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FFb-Zl-5YJ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="5532.06106870229" y="130.98591549295776"/>
+            <point key="canvasLocation" x="5907" y="131"/>
         </scene>
         <!--Profile-->
         <scene sceneID="R5s-z7-qea">
@@ -485,26 +487,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="nIH-PZ-rPs" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4605.3435114503818" y="130.98591549295776"/>
-        </scene>
-        <!--Navigation Controller-->
-        <scene sceneID="eiG-3h-0um">
-            <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="xkf-Yg-nDX" sceneMemberID="viewController">
-                    <toolbarItems/>
-                    <navigationItem key="navigationItem" id="M4Z-7A-R6z"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="aRX-r6-jgT">
-                        <rect key="frame" x="0.0" y="124" width="440" height="54"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <nil name="viewControllers"/>
-                    <connections>
-                        <segue destination="nVT-bV-ibC" kind="relationship" relationship="rootViewController" id="QRC-Ef-m8K"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Ojg-0l-zaw" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="2006.8702290076335" y="890.84507042253529"/>
+            <point key="canvasLocation" x="4981" y="131"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="tUH-l2-xmZ">
