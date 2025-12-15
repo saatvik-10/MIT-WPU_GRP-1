@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		913158082EE2DCCA007A7588 /* MessageKit in Frameworks */ = {isa = PBXBuildFile; productRef = 913158072EE2DCCA007A7588 /* MessageKit */; };
+		190FF97D2EEAD9D300ADA7C7 /* MessageKit in Frameworks */ = {isa = PBXBuildFile; productRef = 190FF97C2EEAD9D300ADA7C7 /* MessageKit */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -18,7 +18,6 @@
 		1906A21A2ED58641002425A7 /* Exceptions for "Grp1-iOS" folder in "Grp1-iOS" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				Features/Home/Views/test.swift,
 				Info.plist,
 			);
 			target = 1906A2072ED58640002425A7 /* Grp1-iOS */;
@@ -41,7 +40,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				913158082EE2DCCA007A7588 /* MessageKit in Frameworks */,
+				190FF97D2EEAD9D300ADA7C7 /* MessageKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -84,7 +83,7 @@
 			);
 			name = "Grp1-iOS";
 			packageProductDependencies = (
-				913158072EE2DCCA007A7588 /* MessageKit */,
+				190FF97C2EEAD9D300ADA7C7 /* MessageKit */,
 			);
 			productName = "Grp1-iOS";
 			productReference = 1906A2082ED58640002425A7 /* Grp1-iOS.app */;
@@ -115,7 +114,7 @@
 			mainGroup = 1906A1FF2ED58640002425A7;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				913158062EE2DCCA007A7588 /* XCRemoteSwiftPackageReference "MessageKit" */,
+				190FF97B2EEAD9D300ADA7C7 /* XCRemoteSwiftPackageReference "MessageKit" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 1906A2092ED58640002425A7 /* Products */;
@@ -155,7 +154,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 4S2XNJ3L9Y;
+				DEVELOPMENT_TEAM = GW95636AQN;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Grp1-iOS/Info.plist";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -168,7 +167,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = ishan.magar.1234.projtest;
+				PRODUCT_BUNDLE_IDENTIFIER = "pho3nix.Grp1-iOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
@@ -187,7 +186,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 4S2XNJ3L9Y;
+				DEVELOPMENT_TEAM = GW95636AQN;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Grp1-iOS/Info.plist";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -200,7 +199,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = ishan.magar.1234.projtest;
+				PRODUCT_BUNDLE_IDENTIFIER = "pho3nix.Grp1-iOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
@@ -355,7 +354,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		913158062EE2DCCA007A7588 /* XCRemoteSwiftPackageReference "MessageKit" */ = {
+		190FF97B2EEAD9D300ADA7C7 /* XCRemoteSwiftPackageReference "MessageKit" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/MessageKit/MessageKit";
 			requirement = {
@@ -366,9 +365,9 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		913158072EE2DCCA007A7588 /* MessageKit */ = {
+		190FF97C2EEAD9D300ADA7C7 /* MessageKit */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 913158062EE2DCCA007A7588 /* XCRemoteSwiftPackageReference "MessageKit" */;
+			package = 190FF97B2EEAD9D300ADA7C7 /* XCRemoteSwiftPackageReference "MessageKit" */;
 			productName = MessageKit;
 		};
 /* End XCSwiftPackageProductDependency section */

@@ -209,11 +209,11 @@ class ChatDetailViewController: MessagesViewController {
         
         if case .text(let text) = message.kind {
             UIPasteboard.general.string = text
-            showToast(message: "Copied to clipboard")
+            chatBotShowToast(message: "Copied to clipboard")
         }
     }
     
-    private func showToast(message: String) {
+    private func chatBotShowToast(message: String) {
         let alert = UIAlertController(title: nil, message: message, preferredStyle: .alert)
         present(alert, animated: true)
         DispatchQueue.main.asyncAfter(deadline: .now() ) {
