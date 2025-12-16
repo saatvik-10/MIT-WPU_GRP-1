@@ -19,8 +19,6 @@ class askQuestionsCollectionViewCell: UICollectionViewCell {
             contentView.backgroundColor = UIColor.systemBackground
             contentView.layer.cornerRadius = 20
             contentView.layer.masksToBounds = true
-            
-            // TEXT STYLING
             questionLabel.font = UIFont.systemFont(ofSize: 16, weight: .bold)
             questionLabel.textColor = .black
             questionLabel.numberOfLines = 0
@@ -37,7 +35,6 @@ class askQuestionsCollectionViewCell: UICollectionViewCell {
             questionLabel.text = qa.question
             answerLabel.text = qa.answer
             
-            // Format date to time string (e.g. 12:45 PM)
             let formatter = DateFormatter()
             formatter.dateFormat = "h:mm a"
             timeLabel.text = formatter.string(from: qa.createdAt)
