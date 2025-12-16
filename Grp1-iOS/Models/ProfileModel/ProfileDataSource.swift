@@ -28,16 +28,16 @@ struct InterestsDataSource {
     ]
 }
 
-struct Profile {
-    static let current: ProfileView = ProfileView(
+struct User {
+    static var current = UserProfile(
         image: "profile",
         name: "Anandita Babar",
-        level: .beginner
+        phone: "8446153201",
+        email: "anandita0902@gmail.com",
+        level: .beginner,
+        dob: "09/02/2025",
+        gender: .male
     )
-}
-
-struct User {
-    static let currUser: UserProfile = UserProfile(image: "profile", name: "Anandita Babar", phone: "1234567980", email: "anandita@gmail.com")
 }
 
 struct Bookmarks {

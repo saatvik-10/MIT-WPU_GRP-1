@@ -4,7 +4,6 @@ class ProfileViewController: UIViewController, ProfileOptionCellDelegate {
     
     @IBOutlet weak var profileLevel: UILabel!
     @IBOutlet weak var profileBtn: UIButton!
-    //    @IBOutlet weak var profileImage: UIImageView!
     @IBOutlet weak var profileName: UILabel!
     @IBOutlet weak var collectionView: UICollectionView!
     
@@ -13,7 +12,7 @@ class ProfileViewController: UIViewController, ProfileOptionCellDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        setupProfileHeader()
+//        setupProfileHeader()
         
         collectionView.dataSource = self
         collectionView.delegate = self
@@ -28,31 +27,31 @@ class ProfileViewController: UIViewController, ProfileOptionCellDelegate {
         collectionView.setCollectionViewLayout(generateLayout(), animated: false)
     }
     
-    func setupProfileHeader() {
-        let profileData = Profile.current
-        
-        profileName.text = profileData.name
-        profileLevel.text = profileData.level.rawValue
-        profileLevel.textColor = profileData.level.color
-        
-//        let imageName = profileData.image
-        
-        profileBtn.layer.cornerRadius = profileBtn.bounds.width / 2
-        profileBtn.clipsToBounds = true
-        
-        //            let image: UIImage
-        //
-        //            if !imageName.isEmpty {
-        //                image = UIImage(named: imageName) ?? UIImage(systemName: "person")!
-        //            } else {
-        //                image = UIImage(systemName: "person")!
-        //            }
-        //
-        //            profileBtn.setImage(image, for: .normal)
-        //            profileBtn.imageView?.contentMode = .scaleAspectFill
-        //            profileBtn.layer.cornerRadius = profileBtn.frame.width / 2
-        //            profileBtn.clipsToBounds = true
+    override func viewDidAppear(_ animated: Bool) {
+            super.viewDidAppear(animated)
+            setupProfileHeader()
+        }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "editProfileSegue",
+           let editVC = segue.destination as? EditProfileTableViewController {
+
+            editVC.onProfileUpdated = { [weak self] in
+                self?.setupProfileHeader()
+            }
+        }
     }
+    
+    func setupProfileHeader() {
+        let user = User.current
+
+        profileName.text = user.name
+        profileLevel.text = user.level.rawValue
+        profileLevel.textColor = user.level.color
+        profileBtn.layer.cornerRadius = profileBtn.bounds.height / 2
+        profileBtn.clipsToBounds = true
+    }
+
     
     func generateLayout() -> UICollectionViewLayout {
         let itemSize = NSCollectionLayoutSize(
@@ -107,41 +106,35 @@ extension ProfileViewController:
         return cell
     }
 }
-// MARK: - ProfileOptionCellDelegate (The Navigation Trigger)
+
 extension ProfileViewController {
+
     func didTapOption(for cell: ProfileOption2ViewCell) {
-        
         guard let indexPath = collectionView.indexPath(for: cell) else { return }
         let item = items[indexPath.row]
-        
+
         switch item.title {
+        case "Progress":
+            print("TODO: Progress Tapped")
+//            performSegue(withIdentifier: "progressSegue", sender: self)
+            
         case "Interests":
-            guard let storyboard = self.storyboard else { return }
-            guard let interestsVC = storyboard.instantiateViewController(withIdentifier: "InterestsViewController") as? InterestsViewController else {
-                print("❌ Instantiation Error: Check Storyboard ID 'InterestsViewController'.")
-                return
-            }
-            navigationController?.pushViewController(interestsVC, animated: true)
-            
+            performSegue(withIdentifier: "interestsSegue", sender: self)
+
         case "Bookmarks":
-            print("Navigating to Bookmarks...")
-            guard let storyboard = self.storyboard else { return }
-            guard let bookmarksVC = storyboard.instantiateViewController(withIdentifier: "BookmarkViewController") as? BookmarkViewController else {
-                print("❌ Instantiation Error: Check Storyboard ID 'BookmarkViewController'.")
-                return
-            }
-            navigationController?.pushViewController(bookmarksVC, animated: true)
-            
+            performSegue(withIdentifier: "bookmarksSegue", sender: self)
+
         case "Achievements":
-            print("Navigating to Achievements...")
-            // TODO: Add navigation logic for Achievements
-            break
-            
+            print("TODO: Achievements Tapped")
+//            performSegue(withIdentifier: "achievementsSegue", sender: self)
+
+        case "About us":
+            print("TODO: About us Tapped")
+//            performSegue(withIdentifier: "aboutUsSegue", sender: self)
+
         case "Logout":
-            print("Logging out...")
-            // TODO: Add logout action/alert
-            break
-            
+            print("Logout tapped")
+
         default:
             break
         }
