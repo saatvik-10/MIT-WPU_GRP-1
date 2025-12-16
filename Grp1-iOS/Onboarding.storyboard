@@ -12,7 +12,7 @@
         <!--Onboarding Page View Controller-->
         <scene sceneID="D2N-Ko-fz0">
             <objects>
-                <pageViewController autoresizesArchivedViewToFullSize="NO" transitionStyle="scroll" navigationOrientation="horizontal" spineLocation="none" id="92O-KG-e7c" customClass="OnboardingPageViewController" customModule="Grp1_iOS" sceneMemberID="viewController"/>
+                <pageViewController storyboardIdentifier="OnboardingPageViewController" autoresizesArchivedViewToFullSize="NO" useStoryboardIdentifierAsRestorationIdentifier="YES" transitionStyle="scroll" navigationOrientation="horizontal" spineLocation="none" id="92O-KG-e7c" customClass="OnboardingPageViewController" customModule="Grp1_iOS" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="m8U-29-dZe" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-746" y="92"/>
@@ -73,6 +73,9 @@
                                         <buttonConfiguration key="configuration" style="plain" title="Button">
                                             <fontDescription key="titleFontDescription" type="system" weight="semibold" pointSize="20"/>
                                         </buttonConfiguration>
+                                        <connections>
+                                            <action selector="optionTapped:" destination="cc7-Lh-gDL" eventType="touchUpInside" id="AYy-nO-HIb"/>
+                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lN1-hB-2oG">
                                         <rect key="frame" x="0.0" y="120" width="367" height="100"/>
@@ -85,6 +88,9 @@
                                         <buttonConfiguration key="configuration" style="plain" title="Button">
                                             <fontDescription key="titleFontDescription" type="system" weight="semibold" pointSize="20"/>
                                         </buttonConfiguration>
+                                        <connections>
+                                            <action selector="optionTapped:" destination="cc7-Lh-gDL" eventType="touchUpInside" id="WZ5-gd-Kpb"/>
+                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Dsh-wb-Snq">
                                         <rect key="frame" x="0.0" y="240" width="367" height="100"/>
@@ -97,6 +103,9 @@
                                         <buttonConfiguration key="configuration" style="plain" title="Button">
                                             <fontDescription key="titleFontDescription" type="system" weight="semibold" pointSize="20"/>
                                         </buttonConfiguration>
+                                        <connections>
+                                            <action selector="optionTapped:" destination="cc7-Lh-gDL" eventType="touchUpInside" id="paa-OZ-RYD"/>
+                                        </connections>
                                     </button>
                                 </subviews>
                             </stackView>
@@ -105,6 +114,9 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="filled" title="Next"/>
+                                <connections>
+                                    <action selector="nextTapped:" destination="cc7-Lh-gDL" eventType="touchUpInside" id="Iar-9Z-99w"/>
+                                </connections>
                             </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="zA6-Eq-4Sd"/>
@@ -130,6 +142,7 @@
                         <outlet property="advancedButton" destination="Dsh-wb-Snq" id="a29-ap-UGy"/>
                         <outlet property="beginnerButton" destination="CGX-eZ-o1L" id="zbc-yd-vmc"/>
                         <outlet property="intermediateButton" destination="lN1-hB-2oG" id="41C-vo-E8r"/>
+                        <outlet property="nextButton" destination="QNG-g6-vln" id="A6A-Cy-ANg"/>
                         <outlet property="stepHeaderLabel" destination="isO-Zj-hS9" id="Kxb-5d-0ab"/>
                     </connections>
                 </viewController>
@@ -143,7 +156,7 @@
             <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </namedColor>
         <systemColor name="separatorColor">
-            <color red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.12" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.28999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
