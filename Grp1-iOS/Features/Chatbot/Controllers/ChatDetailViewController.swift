@@ -62,7 +62,7 @@ class ChatDetailViewController: MessagesViewController {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         messagesCollectionView.addGestureRecognizer(tapGesture)
         
-        // Configure input bar - CRITICAL FOR KEYBOARD
+        // Configure input bar
         configureMessageInputBar()
 
         // initial dummy conversation
@@ -203,7 +203,7 @@ class ChatDetailViewController: MessagesViewController {
         }
     }
     
-    private func chatBotShowToast(message: String) {
+    func chatBotShowToast(message: String) {
         let alert = UIAlertController(title: nil, message: message, preferredStyle: .alert)
         present(alert, animated: true)
         DispatchQueue.main.asyncAfter(deadline: .now() ) {
@@ -245,7 +245,7 @@ extension ChatDetailViewController: MessagesDataSource {
 
 extension ChatDetailViewController: MessagesLayoutDelegate, MessagesDisplayDelegate {
 
-    // optional: different bubble colors
+    //different bubble colors
     func backgroundColor(for message: MessageType,
                          at indexPath: IndexPath,
                          in messagesCollectionView: MessagesCollectionView) -> UIColor {
