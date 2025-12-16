@@ -8,7 +8,7 @@
 import UIKit
 
 class collectionViewCell: UICollectionViewCell {
-    
+    var onMoreTapped: (() -> Void)?
     
     @IBOutlet weak var profileImg: UIImageView!
     @IBOutlet weak var userNameLabel: UILabel!
@@ -24,7 +24,9 @@ class collectionViewCell: UICollectionViewCell {
     @IBOutlet weak var commentsButton: UIButton!
    
     @IBOutlet weak var sharesButton: UIButton!
-    
+    @IBAction func moreButtonTapped(_ sender: UIButton) {
+        onMoreTapped?()
+    }
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
@@ -36,8 +38,25 @@ class collectionViewCell: UICollectionViewCell {
             profileImg.layer.cornerRadius = profileImg.frame.width / 2
             profileImg.clipsToBounds = true
         }
+    override func preferredLayoutAttributesFitting(
+        _ layoutAttributes: UICollectionViewLayoutAttributes
+    ) -> UICollectionViewLayoutAttributes {
 
-      
+        layoutIfNeeded()
+
+        let size = contentView.systemLayoutSizeFitting(
+            CGSize(
+                width: layoutAttributes.frame.width,
+                height: UIView.layoutFittingCompressedSize.height
+            )
+        )
+
+        var frame = layoutAttributes.frame
+        frame.size.height = ceil(size.height)
+        layoutAttributes.frame = frame
+
+        return layoutAttributes
+    }
     private func setupUI() {
         
         contentView.backgroundColor = .white

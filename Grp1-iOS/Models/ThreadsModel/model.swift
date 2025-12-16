@@ -34,7 +34,7 @@ JP Morgan Chase has told staff moving into its new headquarters in New York that
             id: 2,
             userName: "Ishan Magarde",
             userProfileImage: "beach_2",
-            timeAgo: "15hrs ago",
+            timeAgo: "19hrs ago",
             title: "Is stock market rally sustainable?",
             tags: ["Markets", "Nifty"],
             imageName: "beach_2",
@@ -52,6 +52,11 @@ Nifty and Sensex continue to touch new highs but analysts warn that valuation ma
         return threadPosts
     }
     
+    // Fetch Following threads
+    func getFollowingThreads() -> [ThreadPost]{
+        let follwedUsers = ["Ishan Magarde"]
+        return threadPosts.filter { follwedUsers.contains($0.userName)}
+    }
     /// Fetch current user’s threads (e.g. My Threads tab)
     func getThreads(forUser userName: String) -> [ThreadPost] {
         return threadPosts.filter { $0.userName == userName }

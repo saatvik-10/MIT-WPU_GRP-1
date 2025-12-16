@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="24412" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="24506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24405"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24504"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -53,7 +53,7 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="E2J-fR-weR">
-                        <rect key="frame" x="23.999999999999996" y="359.66666666666663" width="50.666666666666657" height="294.66666666666663"/>
+                        <rect key="frame" x="23.999999999999996" y="490" width="50.666666666666657" height="34.333333333333371"/>
                         <state key="normal" title="Button"/>
                         <buttonConfiguration key="configuration" style="plain" image="suit.heart" catalog="system" title=""/>
                     </button>
@@ -68,15 +68,17 @@
                         <buttonConfiguration key="configuration" style="plain" image="square.and.arrow.up" catalog="system" title=""/>
                     </button>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="top" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wpK-uS-fAf">
-                        <rect key="frame" x="285" y="10" width="49.666666666666686" height="35"/>
+                        <rect key="frame" x="285" y="10" width="47.666666666666686" height="35"/>
                         <state key="normal" title="Button"/>
-                        <buttonConfiguration key="configuration" style="plain" image="ellipsis.circle.fill" catalog="system" title=""/>
+                        <buttonConfiguration key="configuration" style="plain" image="ellipsis" catalog="system" title=""/>
+                        <connections>
+                            <action selector="moreButtonTapped:" destination="gTV-IL-0wX" eventType="touchUpInside" id="grj-sq-EYc"/>
+                        </connections>
                     </button>
                 </subviews>
             </view>
             <viewLayoutGuide key="safeArea" id="jIT-79-cu8"/>
             <constraints>
-                <constraint firstItem="Y16-RK-fsR" firstAttribute="centerY" secondItem="E2J-fR-weR" secondAttribute="centerY" id="23I-hw-vMm"/>
                 <constraint firstAttribute="width" secondItem="gTV-IL-0wX" secondAttribute="height" multiplier="67:90" id="5MY-0G-vzu"/>
                 <constraint firstItem="wpK-uS-fAf" firstAttribute="leading" secondItem="y3t-OW-3A3" secondAttribute="trailing" constant="4" id="7Qw-Io-JJg"/>
                 <constraint firstItem="cgw-iW-Vr4" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="24" id="7ac-CV-bPR"/>
@@ -91,18 +93,17 @@
                 <constraint firstItem="wpK-uS-fAf" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="10" id="G3j-3M-fcs"/>
                 <constraint firstItem="vba-so-vnV" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="16" id="HEH-SU-zA4"/>
                 <constraint firstAttribute="trailing" secondItem="6x1-HQ-YcS" secondAttribute="trailing" constant="24" id="JHS-Te-37D"/>
-                <constraint firstItem="E2J-fR-weR" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="24" id="KQK-eq-wHj"/>
-                <constraint firstItem="E2J-fR-weR" firstAttribute="top" secondItem="6x1-HQ-YcS" secondAttribute="bottom" constant="16" id="N7y-gu-jH2"/>
+                <constraint firstItem="E2J-fR-weR" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="24" id="JXB-FG-2vX"/>
                 <constraint firstItem="4eF-cw-GzW" firstAttribute="leading" secondItem="vba-so-vnV" secondAttribute="trailing" constant="12" id="POI-Rn-60b"/>
-                <constraint firstItem="IyF-Hf-0qc" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="490" id="PZB-tg-O5C"/>
+                <constraint firstAttribute="bottom" secondItem="IyF-Hf-0qc" secondAttribute="bottom" constant="15.67" id="Pno-NT-0dK"/>
                 <constraint firstItem="y3t-OW-3A3" firstAttribute="leading" secondItem="4eF-cw-GzW" secondAttribute="trailing" constant="88" id="VMP-XH-EIt"/>
                 <constraint firstItem="IyF-Hf-0qc" firstAttribute="leading" secondItem="E2J-fR-weR" secondAttribute="trailing" constant="28" id="Wry-aY-ENa"/>
                 <constraint firstAttribute="width" constant="402" id="XUC-uD-Fgn"/>
                 <constraint firstItem="Y16-RK-fsR" firstAttribute="leading" secondItem="IyF-Hf-0qc" secondAttribute="trailing" constant="28" id="aFb-dj-Ygf"/>
                 <constraint firstItem="Y16-RK-fsR" firstAttribute="bottom" secondItem="gTV-IL-0wX" secondAttribute="bottom" constant="-16" id="nmf-hh-y0I"/>
                 <constraint firstAttribute="trailing" secondItem="uZE-e7-gQi" secondAttribute="trailing" constant="24" id="qtw-46-x33"/>
-                <constraint firstItem="Y16-RK-fsR" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="490" id="ros-G6-G20"/>
                 <constraint firstItem="cgw-iW-Vr4" firstAttribute="top" secondItem="uZE-e7-gQi" secondAttribute="bottom" constant="20" id="uSx-Xh-Xtd"/>
+                <constraint firstAttribute="bottom" secondItem="E2J-fR-weR" secondAttribute="bottom" constant="15.67" id="uUN-Bx-ZhE"/>
                 <constraint firstItem="uZE-e7-gQi" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="24" id="xLU-zQ-6lY"/>
             </constraints>
             <size key="customSize" width="370" height="398"/>
@@ -118,12 +119,12 @@
                 <outlet property="titleLabel" destination="uZE-e7-gQi" id="a6l-W0-xvD"/>
                 <outlet property="userNameLabel" destination="4eF-cw-GzW" id="IPe-FE-RXV"/>
             </connections>
-            <point key="canvasLocation" x="345" y="77"/>
+            <point key="canvasLocation" x="343.51145038167937" y="76.760563380281695"/>
         </collectionViewCell>
     </objects>
     <resources>
         <image name="beach_11" width="1080" height="689"/>
-        <image name="ellipsis.circle.fill" catalog="system" width="128" height="123"/>
+        <image name="ellipsis" catalog="system" width="128" height="37"/>
         <image name="message" catalog="system" width="128" height="106"/>
         <image name="square.and.arrow.up" catalog="system" width="110" height="128"/>
         <image name="suit.heart" catalog="system" width="128" height="107"/>

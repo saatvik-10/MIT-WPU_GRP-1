@@ -17,10 +17,14 @@ class ThreadsHeaderCollectionReusableView: UICollectionReusableView {
     @IBOutlet weak var createButton: UIButton!
     
     @IBOutlet weak var pageSegmentedControl: UISegmentedControl!
+    
+    var onSegmentChanged: ((Int) -> Void)?
     override func awakeFromNib() {
         super.awakeFromNib()
+     
         // Initialization code
         setupUI()
+        setupActions()
     }
     
     private func setupUI() {
@@ -60,5 +64,21 @@ class ThreadsHeaderCollectionReusableView: UICollectionReusableView {
 
             pageSegmentedControl.setTitleTextAttributes(textAttrs, for: .normal)
         }
+    private func setupActions() {
+            pageSegmentedControl.addTarget(
+                self,
+                action: #selector(segmentChanged),
+                for: .valueChanged
+            )
+        }
+        
+    @objc private func segmentChanged() {
+        print("HEADER segment tapped:", pageSegmentedControl.selectedSegmentIndex)
+        onSegmentChanged?(pageSegmentedControl.selectedSegmentIndex)
+    }
     
+    func configure(selectedIndex: Int) {
+        pageSegmentedControl.selectedSegmentIndex = selectedIndex
+    }
+
 }
