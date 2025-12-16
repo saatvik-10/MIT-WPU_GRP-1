@@ -34,7 +34,7 @@ class ProfileViewController: UIViewController, ProfileOptionCellDelegate {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "editProfileSegue",
-           let editVC = segue.destination as? EditProfileViewController {
+           let editVC = segue.destination as? EditProfileTableViewController {
 
             editVC.onProfileUpdated = { [weak self] in
                 self?.setupProfileHeader()
