@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="24506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24504"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="gTV-IL-0wX" customClass="MyThreadsGridCollectionViewCell" customModule="Grp1_iOS" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="372" height="398"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="372" height="398"/>
+                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <subviews>
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="46P-xN-NoE">
+                        <rect key="frame" x="0.0" y="0.0" width="372" height="398"/>
+                    </imageView>
+                </subviews>
+            </view>
+            <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
+            <constraints>
+                <constraint firstAttribute="bottom" secondItem="46P-xN-NoE" secondAttribute="bottom" id="LL6-FW-IeP"/>
+                <constraint firstItem="46P-xN-NoE" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="UWp-21-Cjj"/>
+                <constraint firstItem="46P-xN-NoE" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="Xxd-Al-3vS"/>
+                <constraint firstAttribute="trailing" secondItem="46P-xN-NoE" secondAttribute="trailing" id="aYq-m1-l7R"/>
+            </constraints>
+            <connections>
+                <outlet property="postImageView" destination="46P-xN-NoE" id="JlN-TT-HfV"/>
+            </connections>
+            <point key="canvasLocation" x="109.9236641221374" y="153.52112676056339"/>
+        </collectionViewCell>
+    </objects>
+</document>
