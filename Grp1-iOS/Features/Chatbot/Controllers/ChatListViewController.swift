@@ -44,13 +44,13 @@ class ChatListViewController: UIViewController, ChatDetailViewControllerDelegate
     
     // MARK: - Setup Methods
     
-    private func setupTableView() {
+    func setupTableView() {
         tableView.dataSource = self
         tableView.delegate = self
         tableView.keyboardDismissMode = .onDrag // Dismiss keyboard when scrolling
     }
     
-    private func setupSearchBar() {
+     func setupSearchBar() {
         searchBar.delegate = self
         searchBar.placeholder = "Search chats..."
         searchBar.returnKeyType = .search
@@ -59,7 +59,7 @@ class ChatListViewController: UIViewController, ChatDetailViewControllerDelegate
     
     // MARK: - Search Logic
     
-    private func filterChats(with searchText: String) {
+     func filterChats(with searchText: String) {
         if searchText.isEmpty {
             filteredChats = chats
         } else {
@@ -83,7 +83,7 @@ class ChatListViewController: UIViewController, ChatDetailViewControllerDelegate
     
     // MARK: - Navigation
     
-    private func openChatDetail(withTitle title: String, isNewChat: Bool = false) {
+     func openChatDetail(withTitle title: String, isNewChat: Bool = false) {
         let chatDetailVC = ChatDetailViewController()
         chatDetailVC.chatTitle = title
         chatDetailVC.isNewChat = isNewChat
