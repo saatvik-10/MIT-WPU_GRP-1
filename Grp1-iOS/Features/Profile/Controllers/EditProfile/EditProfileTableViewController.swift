@@ -9,6 +9,7 @@ import UIKit
 
 class EditProfileTableViewController: UITableViewController {
     
+    @IBOutlet weak var userImage: UIImageView!
     @IBOutlet weak var nameField: UITextField!
     @IBOutlet weak var phoneField: UITextField!
     @IBOutlet weak var emailField: UITextField!
@@ -40,24 +41,20 @@ class EditProfileTableViewController: UITableViewController {
     private func populate() {
         let user = User.current
         
+        userImage.image = UIImage(named: user.image)
         nameField.text = user.name
         phoneField.text = user.phone
         emailField.text = user.email
         dobField.text = user.dob
         genderField.text = user.gender.rawValue
+        
+        userImage.layer.cornerRadius =
+        userImage.bounds.width / 2
+        userImage.clipsToBounds = true
+        userImage.contentMode = .scaleAspectFill
     }
     
     private var isEditingProfile = false
-    
-    //    private func enableEditing() {
-    //        nameField.text = nameLabel.text
-    //        phoneField.text = phoneLabel.text
-    //        emailField.text = emailLabel.text
-    //        dobField.text = dobLabel.text
-    //        genderField.text = genderLabel.text
-    //
-    //        toggleFields(showFields: true)
-    //    }
     
     @IBAction func editTapped(_ sender: UIBarButtonItem) {
         isEditingProfile.toggle()
@@ -72,9 +69,9 @@ class EditProfileTableViewController: UITableViewController {
     private func setEditingState(_ enabled: Bool) {
         let fields = [nameField, phoneField, emailField, dobField, genderField]
         
-        fields.forEach {
-            $0?.isUserInteractionEnabled = enabled
-            $0?.textColor = enabled ? .label : .secondaryLabel
+        for textField in fields {
+            textField?.isUserInteractionEnabled = enabled
+            textField?.textColor = enabled ? .label : .secondaryLabel
         }
         
         if enabled {
