@@ -14,7 +14,7 @@ class NewsDataStore {
             description: "IT sector sees renewed interest as major players beat earnings estimates.",
             imageName: "India-Brefing-Investing-in-India’s-IT-Sector",
             category: "Technology",
-            date: "Yesterday",
+            date: "16 Hours Ago",
             source: "Reuters",
             
             overview: [
@@ -52,7 +52,7 @@ class NewsDataStore {
             description: "The RBI kept repo rate unchanged as inflation stabilizes. Markets reacted positively.",
             imageName: "rbi-1722414243",
             category: "Economy",
-            date: "Today",
+            date: "2 Hours Ago",
             source: "Economic Times",
             
             // NEW FIELDS
@@ -94,9 +94,9 @@ class NewsDataStore {
             id: 2,
             title: "To de-Indianise US companies, top pollster Mark Mitchell plans to start consultancy",
             description: "Markets closed near the highs backed by strong buying across sectors.",
-            imageName: "news_1",
+            imageName: "Screenshot 2025-12-17 at 10.44.49 AM",
             category: "Markets",
-            date: "Today",
+            date: "5 Hours Ago",
             source: "Moneycontrol",
             
             overview: [
@@ -135,7 +135,7 @@ class NewsDataStore {
             description: "Weak dollar and geopolitical tensions push gold prices higher.",
             imageName: "Screenshot 2025-12-17 at 10.09.02 AM",
             category: "Commodities",
-            date: "Yesterday",
+            date: "18 Hours Ago",
             source: "Business Standard",
             
             overview: [
