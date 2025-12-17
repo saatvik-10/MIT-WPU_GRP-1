@@ -14,8 +14,10 @@ struct ThreadPost {
     let tags: [String]
     let imageName: String
     let description: String
-    let likes: Int
+    var likes: Int
     let comments: Int
     let shares: Int
+    
+    var isLiked: Bool 
 }
 

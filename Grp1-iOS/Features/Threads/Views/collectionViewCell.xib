@@ -56,6 +56,9 @@
                         <rect key="frame" x="23.999999999999996" y="490" width="50.666666666666657" height="34.333333333333371"/>
                         <state key="normal" title="Button"/>
                         <buttonConfiguration key="configuration" style="plain" image="suit.heart" catalog="system" title=""/>
+                        <connections>
+                            <action selector="likeButtonTapped:" destination="gTV-IL-0wX" eventType="touchUpInside" id="9Zz-GU-Myo"/>
+                        </connections>
                     </button>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IyF-Hf-0qc">
                         <rect key="frame" x="102.66666666666667" y="490" width="52.666666666666671" height="34.333333333333371"/>
