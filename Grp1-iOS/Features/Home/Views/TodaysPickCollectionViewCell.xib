@@ -32,9 +32,6 @@
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="fill" contentVerticalAlignment="fill" numberOfPages="4" translatesAutoresizingMaskIntoConstraints="NO" id="SwP-pg-Kw5">
-                        <rect key="frame" x="150" y="374.33333333333331" width="90.666666666666686" height="25.666666666666686"/>
-                    </pageControl>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hqJ-vM-sbD">
                         <rect key="frame" x="20" y="367" width="575" height="21"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -48,9 +45,7 @@
             <constraints>
                 <constraint firstAttribute="bottom" secondItem="JsC-Nz-Xld" secondAttribute="bottom" constant="40" id="6Ts-pB-V6u"/>
                 <constraint firstAttribute="trailing" secondItem="4YC-IK-yAM" secondAttribute="trailing" id="APP-Kp-iVX"/>
-                <constraint firstItem="SwP-pg-Kw5" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="150" id="DOB-Dt-OBX"/>
                 <constraint firstAttribute="trailing" secondItem="JsC-Nz-Xld" secondAttribute="trailing" constant="20" id="Haf-2J-xeY"/>
-                <constraint firstAttribute="bottom" secondItem="SwP-pg-Kw5" secondAttribute="bottom" constant="6" id="NKI-ZS-Sq9"/>
                 <constraint firstAttribute="bottom" secondItem="4YC-IK-yAM" secondAttribute="bottom" id="O2Q-OB-aDX"/>
                 <constraint firstItem="JsC-Nz-Xld" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="20" id="S3c-Pc-qRQ"/>
                 <constraint firstItem="f4g-Sg-d51" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="20" id="eWU-nh-CAR"/>
@@ -62,7 +57,6 @@
             <connections>
                 <outlet property="headlineLabel" destination="JsC-Nz-Xld" id="gtE-LE-dWI"/>
                 <outlet property="newsImageView" destination="4YC-IK-yAM" id="bDG-oB-fZm"/>
-                <outlet property="pageControl" destination="hqJ-vM-sbD" id="4nA-wk-mGH"/>
                 <outlet property="pickLabel" destination="f4g-Sg-d51" id="Y7Q-Mu-c92"/>
                 <outlet property="sourceLabel" destination="hqJ-vM-sbD" id="jXB-Eh-lNw"/>
             </connections>

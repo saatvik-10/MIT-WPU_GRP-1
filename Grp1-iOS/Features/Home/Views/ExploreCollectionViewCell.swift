@@ -8,7 +8,7 @@ class ExploreCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var timeLabel: UILabel!
     
     private var gradientLayer: CAGradientLayer?
-    var onRecommendTapped: (() -> Void)?       // 👈 NEW
+    var onRecommendTapped: (() -> Void)?
     var onNotRecommendTapped: (() -> Void)?
     
     
@@ -31,7 +31,7 @@ class ExploreCollectionViewCell: UICollectionViewCell {
         newsImageView.layer.masksToBounds = true
         newsImageView.clipsToBounds = true
         
-        // LABELS STYLE
+      
         pickLabel.font = UIFont.systemFont(ofSize: 10, weight: .semibold)
         pickLabel.textColor = .systemGray
 
@@ -41,8 +41,6 @@ class ExploreCollectionViewCell: UICollectionViewCell {
         
         timeLabel.font = UIFont.systemFont(ofSize: 13, weight: .semibold)
         timeLabel.textColor = .systemGray
-        
-        // LABEL SHADOW FOR BETTER VISIBILITY
 //        headlineLabel.layer.shadowColor = UIColor.black.cgColor
 //        headlineLabel.layer.shadowOpacity = 0.6
 //        headlineLabel.layer.shadowRadius = 4
@@ -70,7 +68,7 @@ class ExploreCollectionViewCell: UICollectionViewCell {
 
             guard let cell = sender.superview?.superview as? UICollectionViewCell else { return }
 
-            // --- GREEN CIRCLE BEHIND CARD ---
+ 
             let bgCircle = UIView()
             bgCircle.backgroundColor = UIColor.systemGreen
             bgCircle.layer.cornerRadius = 35
@@ -87,7 +85,7 @@ class ExploreCollectionViewCell: UICollectionViewCell {
                 bgCircle.heightAnchor.constraint(equalToConstant: 70)
             ])
 
-            // --- PLUS ICON IN CIRCLE ---
+  
             let plusIcon = UIImageView(image: UIImage(systemName: "plus"))
             plusIcon.tintColor = .white
             plusIcon.alpha = 0
@@ -102,7 +100,7 @@ class ExploreCollectionViewCell: UICollectionViewCell {
                 plusIcon.heightAnchor.constraint(equalToConstant: 40)
             ])
 
-            // --- ANIMATE CARD SLIDE RIGHT & CIRCLE POP ---
+ 
             UIView.animate(withDuration: 0.25, animations: {
                 cell.transform = CGAffineTransform(translationX: 190, y: 0)   // slide right
                 bgCircle.alpha = 1
@@ -132,7 +130,7 @@ class ExploreCollectionViewCell: UICollectionViewCell {
 
             guard let cell = sender.superview?.superview as? UICollectionViewCell else { return }
 
-            // RED CROSS ICON
+ 
             let cross = UIImageView(image: UIImage(systemName: "xmark.circle.fill"))
             cross.tintColor = .systemRed
             cross.alpha = 0
@@ -147,13 +145,11 @@ class ExploreCollectionViewCell: UICollectionViewCell {
                 cross.heightAnchor.constraint(equalToConstant: 28)
             ])
 
-            // SHAKE ANIMATION
             let shake = CAKeyframeAnimation(keyPath: "transform.translation.x")
             shake.values = [-8, 8, -6, 6, -4, 4, 0]
             shake.duration = 0.45
             cell.layer.add(shake, forKey: "shake")
 
-            // APPEAR + REMOVE
             UIView.animate(withDuration: 0.3, animations: {
                 cross.alpha = 1
                 cross.transform = .identity
@@ -176,7 +172,7 @@ class ExploreCollectionViewCell: UICollectionViewCell {
         let menu = UIMenu(
             title: "",
             options: .displayInline,
-            children: [recommendAction, noRecommendAction, lensAction]   // ← ADD noRecommendAction
+            children: [recommendAction, noRecommendAction, lensAction]
         )
             sender.menu = menu
             sender.showsMenuAsPrimaryAction = true
