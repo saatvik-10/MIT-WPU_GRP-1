@@ -32,9 +32,11 @@ struct User {
     static var current = UserProfile(
         image: "profile",
         name: "Anandita Babar",
-        phone: "1234567890",
-        email: "anandita@gmail.com",
-        level: .beginner
+        phone: "8446153201",
+        email: "anandita0902@gmail.com",
+        level: .beginner,
+        dob: "09/02/2025",
+        gender: .male
     )
 }
 

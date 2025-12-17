@@ -38,7 +38,7 @@ class HomeViewController: UIViewController, UICollectionViewDelegate {
         collectionView.delegate = self
     }
     func startAutoScroll() {
-        stopAutoScroll()   // avoid duplicate timers
+        stopAutoScroll()
 
         autoScrollTimer = Timer.scheduledTimer(withTimeInterval: 3.5, repeats: true) { [weak self] _ in
             self?.scrollTodaysPick()
@@ -110,7 +110,6 @@ class HomeViewController: UIViewController, UICollectionViewDelegate {
                 alignment: .top
             )
             
-            // SECTION 0 - Full screen horizontal cards
             if section == 0 {
                 let itemSize = NSCollectionLayoutSize(
                     widthDimension: .fractionalWidth(1.0),
@@ -140,7 +139,7 @@ class HomeViewController: UIViewController, UICollectionViewDelegate {
                 return section
             }
             
-            // SECTION 1 - Medium horizontal cards
+
             if section == 1 {
                 let itemSize = NSCollectionLayoutSize(
                     widthDimension: .fractionalWidth(1.0),
@@ -161,14 +160,13 @@ class HomeViewController: UIViewController, UICollectionViewDelegate {
                 )
                 
                 let section = NSCollectionLayoutSection(group: group)
-//                section.orthogonalScrollingBehavior = .groupPagingCentered
-//                section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 30, trailing: 0)
+
                 section.boundarySupplementaryItems = [headerItem]
                 
                 return section
             }
             
-            // SECTION 3 - Real Explore (bigger vertical cards)
+
             if section == 3 {
                 let itemSize = NSCollectionLayoutSize(
                     widthDimension: .fractionalWidth(0.5),

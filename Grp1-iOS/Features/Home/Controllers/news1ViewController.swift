@@ -8,7 +8,9 @@ class news1ViewController: UIViewController, UICollectionViewDataSource {
     @IBOutlet weak var headlineLabel: UILabel!
     @IBOutlet weak var floatingButton: UIButton!
     @IBOutlet weak var collectionView: UICollectionView!
-    
+    private var didSetupJargons = false
+
+    var selectedJargon: String?
     @IBOutlet weak var optionsButton: UIBarButtonItem!
     @IBOutlet weak var glassView: UIView!
     //    @IBOutlet weak var collectionView: UICollectionView!
@@ -33,7 +35,7 @@ class news1ViewController: UIViewController, UICollectionViewDataSource {
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         collectionView.delegate = self
         // --- Your original overview text ---
         overviewTextLabel.numberOfLines = 0
@@ -61,19 +63,23 @@ class news1ViewController: UIViewController, UICollectionViewDataSource {
         }
         print("QA count:", qaHistory.count)
         
+        
+        
+        
+        
         setupCollectionView()
         setupGlassEffect()
         setupOptionsMenu()
         
+
     }
     
-//    private func setupUI() {
-//        guard let article = article else { return }
-//        
-//        if let image = UIImage(named: article.imageName) {
-//            topImageView.image = image
-//        }
-//    }
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+//        setupJargons()
+    }
+    
+    
     
     private func setupUI() {
         guard let article = article else { return }
@@ -293,6 +299,10 @@ class news1ViewController: UIViewController, UICollectionViewDataSource {
             floatingButton.tintColor = color.withAlphaComponent(0.80)
             
         }
+        
+        setupJargons()
+
+        
     }
     
     // your original gradient function
@@ -574,6 +584,153 @@ class news1ViewController: UIViewController, UICollectionViewDataSource {
             }
         }
     }
+    
+    
+  
+    func setupJargons() {
+        guard !didSetupJargons else { return }
+        didSetupJargons = true
+
+        guard let jargons = article?.jargons else { return }
+
+        glassView.layoutIfNeeded()   // 🔑 ensure correct size
+
+        glassView.isUserInteractionEnabled = true
+        glassView.subviews
+            .filter { $0 is UIButton }
+            .forEach { $0.removeFromSuperview() }
+
+        let buttonSize: CGFloat = 90
+        let padding: CGFloat = 12
+        let maxAttempts = 50
+
+        let maxX = glassView.bounds.width - buttonSize - padding
+        let maxY = glassView.bounds.height - buttonSize - padding
+
+        // ❗ Safety check
+        guard maxX > padding, maxY > padding else { return }
+
+        var placedFrames: [CGRect] = []
+
+        for word in jargons {
+            let button = UIButton(type: .system)
+            button.setTitle(word, for: .normal)
+            button.setTitleColor(.white, for: .normal)
+            button.backgroundColor = AppTheme.shared.dominantColor ?? .systemBlue
+            button.layer.cornerRadius = buttonSize / 2
+            button.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: .semibold)
+            button.titleLabel?.numberOfLines = 2
+            button.titleLabel?.textAlignment = .center
+
+            button.accessibilityIdentifier = word
+            button.addTarget(self, action: #selector(jargonTapped(_:)), for: .touchUpInside)
+
+            button.layer.shadowColor = UIColor.black.cgColor
+            button.layer.shadowOpacity = 0.25
+            button.layer.shadowRadius = 6
+            button.layer.shadowOffset = CGSize(width: 0, height: 4)
+
+            var placed = false
+
+            for _ in 0..<maxAttempts {
+                let randomX = CGFloat.random(in: padding...maxX)
+                let randomY = CGFloat.random(in: padding...maxY)
+
+                let frame = CGRect(
+                    x: randomX,
+                    y: randomY,
+                    width: buttonSize,
+                    height: buttonSize
+                )
+
+                let overlaps = placedFrames.contains {
+                    $0.insetBy(dx: -10, dy: -10).intersects(frame)
+                }
+
+                if !overlaps {
+                    button.frame = frame
+                    placedFrames.append(frame)
+                    placed = true
+                    break
+                }
+            }
+
+            // ❌ NO FALLBACK THAT BREAKS BOUNDS
+            if !placed { continue }
+
+//            addTwinkleEffect(to: button)
+            
+            glassView.addSubview(button)
+            glassView.bringSubviewToFront(button)
+            addFloatingMotion(to: button, in: glassView)
+            addTwinkleEffect(to: button)
+        }
+    }
+    
+    @objc func jargonTapped(_ sender: UIButton) {
+        guard let word = sender.accessibilityIdentifier else { return }
+
+        print("Jargon tapped:", word) // DEBUG — you WILL see this now
+
+        UIImpactFeedbackGenerator(style: .light).impactOccurred()
+
+        selectedJargon = word
+        performSegue(withIdentifier: "showJargonDetail", sender: self)
+    }
+    
+    private func addTwinkleEffect(to view: UIView) {
+        let scale = CABasicAnimation(keyPath: "transform.scale")
+        scale.fromValue = 1.0
+        scale.toValue = 1.05
+        scale.duration = 1.3
+        scale.autoreverses = true
+        scale.repeatCount = .infinity
+        scale.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
+
+        view.layer.add(scale, forKey: "twinkle")
+    }
+    
+    
+    private func addFloatingMotion(to button: UIButton, in container: UIView) {
+
+        let maxOffset: CGFloat = 15   // small movement only
+
+        func animate() {
+            let dx = CGFloat.random(in: -maxOffset...maxOffset)
+            let dy = CGFloat.random(in: -maxOffset...maxOffset)
+
+            // Calculate safe position (never outside glassView)
+            var newCenter = CGPoint(
+                x: button.center.x + dx,
+                y: button.center.y + dy
+            )
+
+            let halfSize = button.bounds.width / 2
+            let minX = halfSize
+            let maxX = container.bounds.width - halfSize
+            let minY = halfSize
+            let maxY = container.bounds.height - halfSize
+
+            newCenter.x = min(max(newCenter.x, minX), maxX)
+            newCenter.y = min(max(newCenter.y, minY), maxY)
+
+            UIView.animate(
+                withDuration: Double.random(in: 2.8...4.2),
+                delay: 0,
+                options: [.curveEaseInOut, .allowUserInteraction],
+                animations: {
+                    button.center = newCenter
+                },
+                completion: { _ in
+                    animate() // loop forever
+                }
+            )
+        }
+
+        animate()
+    }
+    
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "toChat" {
 
@@ -590,6 +747,11 @@ class news1ViewController: UIViewController, UICollectionViewDataSource {
                 }
             }
         }
+        if segue.identifier == "showJargonDetail" {
+                if let vc = segue.destination as? JargonDetailViewController {
+                    vc.jargonWord = selectedJargon
+                }
+            }
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -691,45 +853,90 @@ extension news1ViewController: UICollectionViewDelegate {
 
 
 
-
-
-//func applyDominantColorToButton(_ color: UIColor) {
+//private var didSetupJargons = false
 //
-//    floatingButton.backgroundColor = .clear
-//    floatingButton.layer.cornerRadius = floatingButton.bounds.height / 2
-//    floatingButton.layer.masksToBounds = true
+//func setupJargons() {
+//    guard !didSetupJargons else { return }
+//    didSetupJargons = true
 //
-//    // REMOVE old layers
-//    floatingButton.subviews.forEach { sub in
-//        if sub is UIVisualEffectView || sub.tag == 999 { sub.removeFromSuperview() }
+//    guard let jargons = article?.jargons else { return }
+//
+//    jargonsContainerView.subviews.forEach { $0.removeFromSuperview() }
+//
+//    let buttonSize: CGFloat = 90
+//    let padding: CGFloat = 12
+//    let maxAttempts = 40
+//
+//    var placedFrames: [CGRect] = []
+//
+//    for word in jargons {
+//        let button = UIButton(type: .system)
+//        button.setTitle(word, for: .normal)
+//        button.setTitleColor(.white, for: .normal)
+//
+//        button.backgroundColor = AppTheme.shared.dominantColor ?? .systemBlue
+//        button.layer.cornerRadius = buttonSize / 2
+//        button.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: .semibold)
+//        button.titleLabel?.numberOfLines = 2
+//        button.titleLabel?.textAlignment = .center
+//        
+//        button.accessibilityIdentifier = word
+//
+//        button.addTarget(self, action: #selector(jargonTapped(_:)), for: .touchUpInside)
+//
+//        // Shadow = clickable hint
+//        button.layer.shadowColor = UIColor.black.cgColor
+//        button.layer.shadowOpacity = 0.25
+//        button.layer.shadowRadius = 6
+//        button.layer.shadowOffset = CGSize(width: 0, height: 4)
+//
+//        var placed = false
+//
+//        for _ in 0..<maxAttempts {
+//            let maxX = jargonsContainerView.bounds.width - buttonSize - padding
+//            let maxY = jargonsContainerView.bounds.height - buttonSize - padding
+//
+//            let randomX = CGFloat.random(in: padding...max(padding, maxX))
+//            let randomY = CGFloat.random(in: padding...max(padding, maxY))
+//
+//            let frame = CGRect(
+//                x: randomX,
+//                y: randomY,
+//                width: buttonSize,
+//                height: buttonSize
+//            )
+//
+//            // 🔴 Overlap check
+//            let overlaps = placedFrames.contains {
+//                $0.insetBy(dx: -8, dy: -8).intersects(frame)
+//            }
+//
+//            if !overlaps {
+//                button.frame = frame
+//                placedFrames.append(frame)
+//                placed = true
+//                break
+//            }
+//        }
+//
+//        // Fallback (just in case space is tight)
+//        if !placed {
+//            let y = CGFloat(placedFrames.count) * (buttonSize + padding)
+//            button.frame = CGRect(
+//                x: padding,
+//                y: y,
+//                width: buttonSize,
+//                height: buttonSize
+//            )
+//        }
+//        
+//        
+//        addTwinkleEffect(to: button)
+//        print("Adding jargon:", word)
+//        print("✅ Adding button for: \(word) at frame: \(button.frame)")
+//        jargonsContainerView.addSubview(button)
+//        jargonsContainerView.bringSubviewToFront(button)
 //    }
-//
-//    // --- Blur Layer (glassy look) ---
-//    let blurEffect = UIBlurEffect(style: .systemUltraThinMaterialLight)
-//    let blurView = UIVisualEffectView(effect: blurEffect)
-//    blurView.frame = floatingButton.bounds
-//    blurView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-//    blurView.layer.cornerRadius = floatingButton.layer.cornerRadius
-//    blurView.layer.masksToBounds = true
-//    blurView.tag = 999
-//    floatingButton.insertSubview(blurView, at: 0)
-//
-//    // --- Tint layer with dominant color (light + glossy) ---
-//    let tintLayer = UIView(frame: floatingButton.bounds)
-//    tintLayer.backgroundColor = color.withAlphaComponent(0.48)  // VERY light tint
-//    tintLayer.layer.cornerRadius = floatingButton.layer.cornerRadius
-//    tintLayer.isUserInteractionEnabled = false
-//    tintLayer.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-//    tintLayer.tag = 999
-//    floatingButton.insertSubview(tintLayer, aboveSubview: blurView)
-//
-//    // Make sure button text + image stay visible
-//    floatingButton.titleLabel?.textColor = .white
-//    floatingButton.tintColor = .white
-//    floatingButton.titleLabel?.layer.zPosition = 10
-//    floatingButton.imageView?.layer.zPosition = 10
-//
-//    // optional glossy border
-//    floatingButton.layer.borderWidth = 1
-//    floatingButton.layer.borderColor = UIColor.white.withAlphaComponent(0.3).cgColor
 //}
+//
+//
