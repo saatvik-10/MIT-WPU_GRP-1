@@ -19,7 +19,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="feY-SO-TRv">
-                                <rect key="frame" x="0.0" y="-33" width="430" height="965"/>
+                                <rect key="frame" x="0.0" y="-50" width="430" height="982"/>
                                 <color key="backgroundColor" systemColor="systemGray6Color"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="SjN-mx-edl">
                                     <size key="itemSize" width="210" height="203"/>
@@ -45,7 +45,7 @@
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="XiW-qS-PcS"/>
                         <constraints>
-                            <constraint firstItem="feY-SO-TRv" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" constant="-33" id="aoD-So-khX"/>
+                            <constraint firstItem="feY-SO-TRv" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" constant="-50" id="aoD-So-khX"/>
                             <constraint firstItem="feY-SO-TRv" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="dTa-7l-bZc"/>
                             <constraint firstAttribute="trailing" secondItem="feY-SO-TRv" secondAttribute="trailing" id="pDA-BN-iGF"/>
                             <constraint firstAttribute="bottom" secondItem="feY-SO-TRv" secondAttribute="bottom" id="zIf-R1-rV4"/>
@@ -649,7 +649,7 @@ Overall sentiment remains positive, and dips are expected to attract fresh buyin
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="systemGray6Color">
-            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.94901960780000005" green="0.94901960780000005" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemMintColor">
             <color red="0.0" green="0.78039215689999997" blue="0.74509803919999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
