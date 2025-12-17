@@ -10,271 +10,253 @@ class threadsViewController: UIViewController {
 
     @IBOutlet weak var collectionView: UICollectionView!
 
-    let threadsStore = ThreadsDataStore.shared
+    private let threadsStore = ThreadsDataStore.shared
 
-    private var forYouThreads: [ThreadPost] = []
-    private var followingThreads: [ThreadPost] = []
+        private var forYouThreads: [ThreadPost] = []
+        private var followingThreads: [ThreadPost] = []
 
-    private var selectedSegment: ThreadsSegment = .forYou
+        private var selectedSegment: ThreadsSegment = .forYou
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
+        override func viewDidLoad() {
+            super.viewDidLoad()
 
-        forYouThreads = threadsStore.getAllThreads()
-        followingThreads = threadsStore.getAllThreads()  // mock for now
+//            forYouThreads = threadsStore.getAllThreads()
+//            followingThreads = threadsStore.getFollowingThreads()
+            reloadData()
+            setupCollectionView()
 
-        setupCollectionView()
+            let bg = UIColor(white: 250/255, alpha: 1)
+            view.backgroundColor = bg
+            collectionView.backgroundColor = bg
+        }
+     
+    private func reloadData() {
+           forYouThreads = threadsStore.getAllThreads()
+           followingThreads = threadsStore.getFollowingThreads()
+       }
+    
+        private func setupCollectionView() {
+            collectionView.delegate = self
+            collectionView.dataSource = self
 
-        let bg = UIColor(white: 250 / 255, alpha: 1)
-        view.backgroundColor = bg
-        collectionView.backgroundColor = bg
-    }
-
-    private func setupCollectionView() {
-        collectionView.delegate = self
-        collectionView.dataSource = self
-
-        // Feed cell
-        let cellNib = UINib(nibName: "collectionViewCell", bundle: nil)
-        collectionView.register(
-            cellNib,
-            forCellWithReuseIdentifier: "collectionViewCell"
-        )
-        
-        collectionView.register(
-                    UINib(nibName: "MyThreadsGridCollectionViewCell", bundle: nil),
-                    forCellWithReuseIdentifier: "MyThreadsGridCollectionViewCell"
-                )
-        // Header
-        let headerNib = UINib(
-            nibName: "ThreadsHeaderCollectionReusableView",
-            bundle: nil
-        )
-        collectionView.register(
-            headerNib,
-            forSupplementaryViewOfKind: UICollectionView
-                .elementKindSectionHeader,
-            withReuseIdentifier: "ThreadsHeaderCollectionReusableView"
-        )
-        // My Threads profile header
-        let profileHeaderNib = UINib(
-            nibName: "MyThreadsProfileHeaderCollectionReusableView",
-            bundle: nil
-        )
-        collectionView.register(
-            profileHeaderNib,
-            forSupplementaryViewOfKind: UICollectionView
-                .elementKindSectionHeader,
-            withReuseIdentifier: "MyThreadsProfileHeaderCollectionReusableView"
-        )
-        if let layout = collectionView.collectionViewLayout
-            as? UICollectionViewFlowLayout
-        {
-            layout.scrollDirection = .vertical
-            layout.minimumLineSpacing = 20
-            //change1
-            layout.minimumInteritemSpacing = 12
-            layout.sectionInset = UIEdgeInsets(
-                top: 12,
-                left: 16,   //0
-                bottom: 24,   //20
-                right: 16    //16
+            // Feed cell
+            collectionView.register(
+                UINib(nibName: "collectionViewCell", bundle: nil),
+                forCellWithReuseIdentifier: "collectionViewCell"
             )
 
-            // CRITICAL FIX
-            layout.estimatedItemSize = .zero
-            // layout.headerReferenceSize = CGSize(width: view.frame.width, height: 100)
+            // Grid cell
+            collectionView.register(
+                UINib(nibName: "MyThreadsGridCollectionViewCell", bundle: nil),
+                forCellWithReuseIdentifier: "MyThreadsGridCollectionViewCell"
+            )
+
+            // Threads header
+            collectionView.register(
+                UINib(nibName: "ThreadsHeaderCollectionReusableView", bundle: nil),
+                forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+                withReuseIdentifier: "ThreadsHeaderCollectionReusableView"
+            )
+
+            // Profile header
+            collectionView.register(
+                UINib(nibName: "MyThreadsProfileHeaderCollectionReusableView", bundle: nil),
+                forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+                withReuseIdentifier: "MyThreadsProfileHeaderCollectionReusableView"
+            )
+
+            if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
+                layout.scrollDirection = .vertical
+                layout.minimumLineSpacing = 20
+                layout.minimumInteritemSpacing = 4
+                layout.sectionInset = UIEdgeInsets(top: 12, left: 16, bottom: 24, right: 16)
+                layout.estimatedItemSize = .zero
+            }
         }
-    }
 
-    // MARK: - Segment Change
-    func didChangeSegment(index: Int) {
-        switch index {
-        case 0:
-            selectedSegment = .forYou
-        case 1:
-            selectedSegment = .following
-        case 2:
-            selectedSegment = .myThreads
-        default:
-            selectedSegment = .forYou
+        // MARK: - Segment Change
+        func didChangeSegment(index: Int) {
+            switch index {
+            case 0: selectedSegment = .forYou
+            case 1: selectedSegment = .following
+            case 2: selectedSegment = .myThreads
+            default: break
+            }
+
+            reloadData()
+            collectionView.setContentOffset(.zero, animated: false)
+            collectionView.reloadData()
         }
 
-        collectionView.setContentOffset(.zero, animated: false)
-        collectionView.reloadData()
-    }
-
-    // MARK: - Popover
-//    private func presentThreadOptions(
-//        from sourceView: UIView,
-//        for post: ThreadPost
-//    ) {
-//        let vc = ThreadsOptionViewController()
-//        vc.modalPresentationStyle = .popover
+//        // MARK: - Popover (RESTORED)
+//        private func presentThreadOptions(from sourceView: UIView) {
+//            let optionsVC = ThreadsOptionViewController()
+//            optionsVC.modalPresentationStyle = .popover
+//            optionsVC.preferredContentSize = CGSize(width: 260, height: 220)
 //
-//        guard let popover = vc.popoverPresentationController else { return }
-//        popover.sourceView = sourceView
-//        popover.sourceRect = sourceView.bounds
-//        popover.permittedArrowDirections = [.up, .down]
-//        popover.backgroundColor = .clear
-//        popover.delegate = self
+//            guard let popover = optionsVC.popoverPresentationController else { return }
+//            popover.sourceView = sourceView
+//            popover.sourceRect = sourceView.bounds
+//            popover.permittedArrowDirections = [.up, .down]
+//            popover.backgroundColor = .clear
+//            popover.delegate = self
 //
-//        present(vc, animated: true)
-//    }
-    private func presentThreadOptions(from sourceView: UIView) {
-            let vc = ThreadsOptionViewController()
-            vc.modalPresentationStyle = .popover
-
-            guard let popover = vc.popoverPresentationController else { return }
-            popover.sourceView = sourceView
-            popover.sourceRect = sourceView.bounds
-            popover.permittedArrowDirections = [.up, .down]
-            popover.backgroundColor = .clear
-            popover.delegate = self
-
-            present(vc, animated: true)
-        }
-}
-
-// MARK: - CollectionView DataSource
-extension threadsViewController: UICollectionViewDataSource {
-
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return selectedSegment == .myThreads ? 2 : 1
-    }
-    func collectionView(
-        _ collectionView: UICollectionView,
-        numberOfItemsInSection section: Int
-    ) -> Int {
-
-        if selectedSegment == .myThreads {
-            return section == 1 ? forYouThreads.count : 0
-        }
-
-        switch selectedSegment {
-        case .forYou:
-            return forYouThreads.count
-        case .following:
-            return followingThreads.count
-        case .myThreads:
-            return 0
-        }
+//            present(optionsVC, animated: true)
+//        }
     }
 
-    func collectionView(
-           _ collectionView: UICollectionView,
-           cellForItemAt indexPath: IndexPath
-       ) -> UICollectionViewCell {
+    // MARK: - DataSource
+    extension threadsViewController: UICollectionViewDataSource {
 
-           // MY THREADS GRID
-           if selectedSegment == .myThreads {
-               let cell = collectionView.dequeueReusableCell(
-                   withReuseIdentifier: "MyThreadsGridCollectionViewCell",
-                   for: indexPath
-               ) as! MyThreadsGridCollectionViewCell
+        func numberOfSections(in collectionView: UICollectionView) -> Int {
+            return selectedSegment == .myThreads ? 2 : 1
+        }
 
-               let post = forYouThreads[indexPath.item]
-               cell.configure(imageName: post.imageName)
-               return cell
-           }
+        func collectionView(
+            _ collectionView: UICollectionView,
+            numberOfItemsInSection section: Int
+        ) -> Int {
 
-           // FEED CELL (UNCHANGED)
-           let cell = collectionView.dequeueReusableCell(
-               withReuseIdentifier: "collectionViewCell",
-               for: indexPath
-           ) as! collectionViewCell
+            if selectedSegment == .myThreads {
+                return section == 1 ? forYouThreads.count : 0
+            }
 
-           let post = selectedSegment == .forYou
-               ? forYouThreads[indexPath.item]
-               : followingThreads[indexPath.item]
+            switch selectedSegment {
+            case .forYou:
+                return forYouThreads.count
+            case .following:
+                return followingThreads.count
+            case .myThreads:
+                return 0
+            }
+        }
 
-           cell.configure(with: post)
+        func collectionView(
+            _ collectionView: UICollectionView,
+            cellForItemAt indexPath: IndexPath
+        ) -> UICollectionViewCell {
 
-           cell.onMoreTapped = { [weak self, weak cell] in
-               guard let button = cell?.moreButton else { return }
-               self?.presentThreadOptions(from: button)
-           }
+            // GRID (My Threads)
+            if selectedSegment == .myThreads && indexPath.section == 1 {
+                let cell = collectionView.dequeueReusableCell(
+                    withReuseIdentifier: "MyThreadsGridCollectionViewCell",
+                    for: indexPath
+                ) as! MyThreadsGridCollectionViewCell
 
-           return cell
-       }
+                let post = forYouThreads[indexPath.item]
+                cell.configure(imageName: post.imageName)
+                return cell
+            }
 
-       // MARK: - Headers
-       func collectionView(
-           _ collectionView: UICollectionView,
-           viewForSupplementaryElementOfKind kind: String,
-           at indexPath: IndexPath
-       ) -> UICollectionReusableView {
+            // FEED (For You / Following)
+            let cell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: "collectionViewCell",
+                for: indexPath
+            ) as! collectionViewCell
 
-           if indexPath.section == 0 {
-               let header = collectionView.dequeueReusableSupplementaryView(
-                   ofKind: kind,
-                   withReuseIdentifier: "ThreadsHeaderCollectionReusableView",
-                   for: indexPath
-               ) as! ThreadsHeaderCollectionReusableView
+            let post = selectedSegment == .forYou
+                ? forYouThreads[indexPath.item]
+                : followingThreads[indexPath.item]
 
-               header.onSegmentChanged = { [weak self] index in
-                   self?.didChangeSegment(index: index)
-               }
+            cell.configure(with: post)
+            
+            //LIKE
+            cell.onLikeTapped = { [weak self] in
+                        guard let self else { return }
 
-               return header
-           }
+                        threadsStore.toggleLike(for: post.id)
+                        self.reloadData()
+                        self.collectionView.reloadItems(at: [indexPath])
+                    }
+            // POPOVER
+//            cell.onMoreTapped = { [weak self, weak cell] in
+//                guard let button = cell?.moreButton else { return }
+//                self?.presentThreadOptions(from: button)
+//            }
 
-           let profileHeader = collectionView.dequeueReusableSupplementaryView(
-               ofKind: kind,
-               withReuseIdentifier: "MyThreadsProfileHeaderCollectionReusableView",
-               for: indexPath
-           ) as! MyThreadsProfileHeaderCollectionReusableView
+            return cell
+        }
 
-           profileHeader.configure(
-               userName: "Anandita Babar",
-               profileImage: "beach_1",
-               posts: 5,
-               followers: 345,
-               following: 45
-           )
+        // MARK: - Headers
+        func collectionView(
+            _ collectionView: UICollectionView,
+            viewForSupplementaryElementOfKind kind: String,
+            at indexPath: IndexPath
+        ) -> UICollectionReusableView {
 
-           return profileHeader
-       }
-   }
-// MARK: - Layout
-extension threadsViewController: UICollectionViewDelegateFlowLayout {
+            // Main Threads header (always section 0)
+            if indexPath.section == 0 {
+                let header = collectionView.dequeueReusableSupplementaryView(
+                    ofKind: kind,
+                    withReuseIdentifier: "ThreadsHeaderCollectionReusableView",
+                    for: indexPath
+                ) as! ThreadsHeaderCollectionReusableView
 
-    func collectionView(
-        _ collectionView: UICollectionView,
-        layout collectionViewLayout: UICollectionViewLayout,
-        sizeForItemAt indexPath: IndexPath
-    ) -> CGSize {
-
-        if selectedSegment == .myThreads {
-                    let width = (collectionView.frame.width - 16*2 - 12) / 2
-                    return CGSize(width: width, height: width)
+                header.onSegmentChanged = { [weak self] index in
+                    self?.didChangeSegment(index: index)
                 }
 
-                // FEED CELL — DO NOT TOUCH
-                return CGSize(width: collectionView.frame.width, height: 520)
+                return header
             }
-    
-    func collectionView(
+
+            // Profile header (My Threads only)
+            let profileHeader = collectionView.dequeueReusableSupplementaryView(
+                ofKind: kind,
+                withReuseIdentifier: "MyThreadsProfileHeaderCollectionReusableView",
+                for: indexPath
+            ) as! MyThreadsProfileHeaderCollectionReusableView
+
+            profileHeader.configure(
+                userName: "Anandita Babar",
+                profileImage: "beach_1",
+                posts: 5,
+                followers: 345,
+                following: 45
+            )
+
+            return profileHeader
+        }
+    }
+
+    // MARK: - Layout
+    extension threadsViewController: UICollectionViewDelegateFlowLayout {
+
+        func collectionView(
             _ collectionView: UICollectionView,
             layout collectionViewLayout: UICollectionViewLayout,
             referenceSizeForHeaderInSection section: Int
         ) -> CGSize {
 
-            if section == 0 {
-                return CGSize(width: collectionView.frame.width, height: 100)
+            if selectedSegment == .myThreads && section == 1 {
+                return CGSize(width: collectionView.frame.width, height: 120)
             }
 
-            // Profile header
-            return CGSize(width: collectionView.frame.width, height: 140)
+            return CGSize(width: collectionView.frame.width, height: 100)
         }
 
-}
+        func collectionView(
+            _ collectionView: UICollectionView,
+            layout collectionViewLayout: UICollectionViewLayout,
+            sizeForItemAt indexPath: IndexPath
+        ) -> CGSize {
 
-// MARK: - Popover Delegate
-extension threadsViewController: UIPopoverPresentationControllerDelegate {
-    func adaptivePresentationStyle(
-        for controller: UIPresentationController
-    ) -> UIModalPresentationStyle {
-        return .none
+            // Grid — 3 columns
+            if selectedSegment == .myThreads {
+                let spacing: CGFloat = 4
+                let width = (collectionView.frame.width - 16*2 - spacing*2) / 3
+                return CGSize(width: width, height: width * 1.4)
+            }
+
+            // Feed — unchanged
+            return CGSize(width: collectionView.frame.width, height: 520)
+        }
+    
+
+//    // MARK: - Popover Delegate
+//    extension threadsViewController: UIPopoverPresentationControllerDelegate {
+//        func adaptivePresentationStyle(
+//            for controller: UIPresentationController
+//        ) -> UIModalPresentationStyle {
+//            return .none
+//        }
     }
-}
