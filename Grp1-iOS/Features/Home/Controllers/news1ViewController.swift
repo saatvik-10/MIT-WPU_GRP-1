@@ -63,8 +63,6 @@ class news1ViewController: UIViewController, UICollectionViewDataSource {
 //        setupJargons()
     }
     
-    
-    
     private func setupUI() {
         guard let article = article else { return }
 
@@ -324,7 +322,6 @@ class news1ViewController: UIViewController, UICollectionViewDataSource {
                 let generator = UINotificationFeedbackGenerator()
                 generator.notificationOccurred(.success)
 
-                // 👉 Optional: toast
                 self.showToast(message: "We’ll show more stories like this.")
                 
                 print("Recommend more articles like: \(article.title)")
@@ -349,13 +346,16 @@ class news1ViewController: UIViewController, UICollectionViewDataSource {
                 let customActivity = ShareToFriendsActivity()
                 customActivity.article = article
 
-                let activityVC = UIActivityViewController(
-                    activityItems: [article.title],
-                    applicationActivities: [customActivity]
-                )
-                activityVC.popoverPresentationController?.barButtonItem = self.optionsButton
+                if let pdfURL = createPDFOfScreen() {
 
-                self.present(activityVC, animated: true)
+                    let activityVC = UIActivityViewController(
+                        activityItems: [pdfURL, article.title],
+                        applicationActivities: [customActivity]
+                    )
+
+                    activityVC.popoverPresentationController?.barButtonItem = self.optionsButton
+                    present(activityVC, animated: true)
+                }
             }
             let menu = UIMenu(
                 title: "",
@@ -363,6 +363,25 @@ class news1ViewController: UIViewController, UICollectionViewDataSource {
             )
 
             optionsButton.menu = menu
+    }
+    
+    func createPDFOfScreen() -> URL? {
+
+        let pdfRenderer = UIGraphicsPDFRenderer(bounds: view.bounds)
+
+        let fileName = "Article.pdf"
+        let fileURL = FileManager.default.temporaryDirectory.appendingPathComponent(fileName)
+
+        do {
+            try pdfRenderer.writePDF(to: fileURL) { context in
+                context.beginPage()
+                view.drawHierarchy(in: view.bounds, afterScreenUpdates: true)
+            }
+            return fileURL
+        } catch {
+            print("Failed to create PDF:", error)
+            return nil
+        }
     }
     
     private func setupGlassEffect() {

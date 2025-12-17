@@ -8,6 +8,7 @@ class TodaysPickCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var newsImageView: UIImageView!
     @IBOutlet weak var sourceLabel: UILabel!
     
+
     private var gradientLayer: CAGradientLayer?
 
     override func awakeFromNib() {
