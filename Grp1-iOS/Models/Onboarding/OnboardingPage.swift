@@ -11,6 +11,10 @@ struct OnboardingPage {
     let options: [(title: String, subtitle: String)]
 }
 
+struct DomainModel {
+    let title : String
+    let icon : String?
+}
 
 
 

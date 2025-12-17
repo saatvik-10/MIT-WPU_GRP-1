@@ -7,12 +7,16 @@ class OnboardingContentViewController: UIViewController {
     @IBOutlet weak var intermediateButton: UIButton!
     @IBOutlet weak var advancedButton: UIButton!
 
+    @IBOutlet weak var nextButton: UIButton!
     // callback to parent (page controller)
     var onOptionSelected: ((String) -> Void)?
+    var onNextTapped: (() -> Void)?
+    var selectedButton : UIButton?
 
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
+        disableNextButton()
     }
 
     // MARK: - UI Setup
@@ -91,9 +95,42 @@ class OnboardingContentViewController: UIViewController {
     // MARK: - Actions
     @IBAction func optionTapped(_ sender: UIButton) {
         // prefer configuration.title (works with UIButton.Configuration)
-        guard let selected = sender.configuration?.title else { return }
-        print("Selected Option: \(selected)")
-        onOptionSelected?(selected)
+        [beginnerButton, intermediateButton, advancedButton].forEach { button in
+                button?.layer.borderColor = UIColor.secondaryLabel.cgColor
+                button?.backgroundColor = .clear
+            }
+
+            // 2️⃣ Highlight selected button
+            sender.layer.borderColor = UIColor.systemBlue.cgColor
+            sender.backgroundColor = UIColor.systemBlue.withAlphaComponent(0.08)
+
+            // 3️⃣ Store selected button ✅ (THIS WAS MISSING)
+            selectedButton = sender
+
+            // 4️⃣ Enable Next button
+            enableNextButton()
+
+            // 5️⃣ Get selected text correctly
+            guard let selectedText = sender.titleLabel?.text else { return }
+            onOptionSelected?(selectedText)
     }
+    
+    func updateNextButtonState() {
+        let isSelected = selectedButton != nil
+        nextButton.isEnabled = isSelected
+        nextButton.alpha = isSelected ? 1.0 : 0.5
+    }
+    func enableNextButton() {
+            nextButton.isEnabled = true
+            nextButton.alpha = 1.0
+    }
+    func disableNextButton() {
+            nextButton.isEnabled = false
+            nextButton.alpha = 0.5
+    }
+    @IBAction func nextTapped(_ sender: UIButton) {
+            onNextTapped?()
+        }
+    
 }
 
