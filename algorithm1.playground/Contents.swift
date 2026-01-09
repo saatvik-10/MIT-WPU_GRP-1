@@ -15,13 +15,26 @@ let userTags = [
     "hdfc bank",
     "interest rate",
     "rbi",
-    "technology"
+    "technology",
+    "digital banking",
+    "fintech",
+    "inflation",
+    "economy",
+    "credit growth",
+    "regulation",
+    "monetary policy",
+    "financial sector"
 ]
 
-let newsHeadline = "HDFC Bank shares climb after central bank policy update"
+let newsHeadline = "Stock market gains as RBI balances inflation control and growth"
 let newsBody = """
-The lender gained over 2% after the central bank kept policy rates unchanged,
-boosting sentiment in the broader equity market.
+Indian stock market indices closed higher after the RBI struck a cautious tone
+on inflation while maintaining its current interest rate framework. The central
+bank emphasized the need to support economic growth without compromising price stability.
+
+Banking stocks, including HDFC Bank, benefited from expectations of stable lending
+conditions and improved credit growth. Analysts noted that consistent monetary policy
+and predictable regulation are positive signals for the broader economy.
 """
 
 // MARK: - Text Processing

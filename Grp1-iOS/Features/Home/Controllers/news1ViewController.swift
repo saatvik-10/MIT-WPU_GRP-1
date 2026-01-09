@@ -476,6 +476,7 @@ class news1ViewController: UIViewController, UICollectionViewDataSource {
         guard let word = sender.accessibilityIdentifier else { return }
         UIImpactFeedbackGenerator(style: .light).impactOccurred()
         selectedJargon = word
+        selectedWord.word = word
         performSegue(withIdentifier: "showJargonDetail", sender: self)
     }
     
@@ -522,6 +523,7 @@ class news1ViewController: UIViewController, UICollectionViewDataSource {
             if let nav = segue.destination as? UINavigationController {
                 if let chatVC = nav.topViewController as? HomeChatDetailViewController {
                     chatVC.articleID = self.article?.id
+                    
                 }
             }
         }
@@ -584,3 +586,11 @@ extension news1ViewController: UICollectionViewDelegate {
         }
     }
 }
+
+//class selectedWord {
+//    static var word: String?
+//}
+//
+//
+//selectedWord.selectedJargon = word
+//Type 'selectedWord' has no member 'selectedJargon'
