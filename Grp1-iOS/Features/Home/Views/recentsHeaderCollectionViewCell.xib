@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="24412" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24405"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="gTV-IL-0wX" customClass="recentsHeaderCollectionViewCell" customModule="Grp1_iOS" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="450" height="170"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="450" height="170"/>
+                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Recents" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2wE-DQ-pp9">
+                        <rect key="frame" x="20" y="20" width="64.666666666666671" height="21"/>
+                        <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kJS-Nt-hSa">
+                        <rect key="frame" x="382.33333333333331" y="20" width="47.666666666666686" height="25.666666666666671"/>
+                        <state key="normal" title="Button"/>
+                        <buttonConfiguration key="configuration" style="gray" title="Clear">
+                            <fontDescription key="titleFontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="10"/>
+                            <color key="baseForegroundColor" systemColor="tintColor"/>
+                        </buttonConfiguration>
+                        <connections>
+                            <action selector="clearButtonTapped:" destination="gTV-IL-0wX" eventType="touchUpInside" id="0v6-s8-0Tg"/>
+                        </connections>
+                    </button>
+                </subviews>
+            </view>
+            <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
+            <constraints>
+                <constraint firstItem="2wE-DQ-pp9" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="20" id="L2o-UC-fde"/>
+                <constraint firstItem="kJS-Nt-hSa" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="20" id="SYm-3C-Abp"/>
+                <constraint firstItem="2wE-DQ-pp9" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="20" id="c8J-Si-RWx"/>
+                <constraint firstAttribute="trailing" secondItem="kJS-Nt-hSa" secondAttribute="trailing" constant="20" id="i6o-zV-AqV"/>
+            </constraints>
+            <size key="customSize" width="450" height="170"/>
+            <connections>
+                <outlet property="clearButton" destination="kJS-Nt-hSa" id="89H-UQ-Ohm"/>
+                <outlet property="titleLabel" destination="2wE-DQ-pp9" id="tvn-oa-IVA"/>
+            </connections>
+            <point key="canvasLocation" x="244.27480916030532" y="83.802816901408448"/>
+        </collectionViewCell>
+    </objects>
+    <resources>
+        <systemColor name="tintColor">
+            <color red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+    </resources>
+</document>
