@@ -200,7 +200,7 @@
             </objects>
             <point key="canvasLocation" x="3975.0000000000005" y="-544.14225941422592"/>
         </scene>
-        <!--Profile View Controller-->
+        <!--Profile-->
         <scene sceneID="s0d-6b-0kx">
             <objects>
                 <viewController id="Y6W-OH-hqX" customClass="ProfileViewController" customModule="Grp1_iOS" customModuleProvider="target" sceneMemberID="viewController">
@@ -230,7 +230,7 @@
                                 </cells>
                             </collectionView>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="HGH-As-bCT">
-                                <rect key="frame" x="15" y="140" width="410" height="75"/>
+                                <rect key="frame" x="15" y="170" width="410" height="75"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="4pS-DP-7Zk">
                                         <rect key="frame" x="0.0" y="0.0" width="410" height="75"/>
@@ -254,13 +254,13 @@
                                                         <subviews>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0ts-zp-YTi">
                                                                 <rect key="frame" x="0.0" y="0.0" width="320" height="37.666666666666664"/>
-                                                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="22"/>
+                                                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="26"/>
                                                                 <nil key="textColor"/>
                                                                 <nil key="highlightedColor"/>
                                                             </label>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xnd-aI-eDD">
                                                                 <rect key="frame" x="0.0" y="37.666666666666657" width="320" height="37.333333333333343"/>
-                                                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="14"/>
+                                                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
                                                                 <nil key="textColor"/>
                                                                 <nil key="highlightedColor"/>
                                                             </label>
@@ -284,7 +284,7 @@
                         <viewLayoutGuide key="safeArea" id="KPI-lN-nos"/>
                         <color key="backgroundColor" systemColor="systemGray6Color"/>
                         <constraints>
-                            <constraint firstItem="HGH-As-bCT" firstAttribute="top" secondItem="HpH-US-doE" secondAttribute="top" constant="140" id="6OR-Bg-KA4"/>
+                            <constraint firstItem="HGH-As-bCT" firstAttribute="top" secondItem="HpH-US-doE" secondAttribute="top" constant="170" id="6OR-Bg-KA4"/>
                             <constraint firstAttribute="bottomMargin" secondItem="pmo-Hj-OFl" secondAttribute="bottom" constant="-68" id="DGR-bR-Q3A"/>
                             <constraint firstItem="KPI-lN-nos" firstAttribute="trailing" secondItem="pmo-Hj-OFl" secondAttribute="trailing" id="O3F-HD-zgX"/>
                             <constraint firstItem="KPI-lN-nos" firstAttribute="trailing" secondItem="HGH-As-bCT" secondAttribute="trailing" constant="15" id="PAF-Lc-DYA"/>
@@ -293,7 +293,7 @@
                             <constraint firstItem="pmo-Hj-OFl" firstAttribute="top" secondItem="KPI-lN-nos" secondAttribute="top" constant="150" id="tpK-hT-DwK"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="jxp-Nc-DO8"/>
+                    <navigationItem key="navigationItem" title="Profile" id="jxp-Nc-DO8"/>
                     <connections>
                         <outlet property="collectionView" destination="pmo-Hj-OFl" id="tcK-wS-HPF"/>
                         <outlet property="profileBtn" destination="GXO-1C-imX" id="qUG-F6-pDJ"/>
