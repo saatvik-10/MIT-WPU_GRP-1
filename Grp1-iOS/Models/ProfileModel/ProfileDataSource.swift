@@ -44,15 +44,18 @@ struct Bookmarks {
     static let mockBookmarks: [BookmarkItem] = [
         BookmarkItem(
             icon: UIImage(systemName: "folder")!,
+            id: "1",
             title: "Swift",
         ),
         BookmarkItem(
             icon: UIImage(systemName: "folder")!,
-            title: "Blockchain",
+            id: "2",
+            title: "Storyboard",
         ),
         BookmarkItem(
             icon: UIImage(systemName: "folder")!,
-            title: "Web Development",
+            id: "3",
+            title: "iOS",
         )
     ]
 }
