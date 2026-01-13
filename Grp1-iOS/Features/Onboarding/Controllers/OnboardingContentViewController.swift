@@ -11,8 +11,8 @@ class OnboardingContentViewController: UIViewController {
     // callback to parent (page controller)
     var onOptionSelected: ((String) -> Void)?
     var onNextTapped: (() -> Void)?
+    
     var selectedButton : UIButton?
-
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
@@ -33,6 +33,7 @@ class OnboardingContentViewController: UIViewController {
                     button?.contentHorizontalAlignment = .left
                     button?.titleLabel?.numberOfLines = 0
                     button?.layer.borderWidth = 0.5
+                    button?.backgroundColor = .white
                     button?.layer.borderColor = UIColor.secondaryLabel.cgColor
                 }
     }
@@ -94,25 +95,17 @@ class OnboardingContentViewController: UIViewController {
 
     // MARK: - Actions
     @IBAction func optionTapped(_ sender: UIButton) {
-        // prefer configuration.title (works with UIButton.Configuration)
-        [beginnerButton, intermediateButton, advancedButton].forEach { button in
-                button?.layer.borderColor = UIColor.secondaryLabel.cgColor
-                button?.backgroundColor = .clear
-            }
+        // Reset everything first
+        resetAllOptionButtons()
 
-            // 2️⃣ Highlight selected button
-            sender.layer.borderColor = UIColor.systemBlue.cgColor
-            sender.backgroundColor = UIColor.systemBlue.withAlphaComponent(0.08)
+        // Apply selected style
+        applySelectedStyle(to: sender)
 
-            // 3️⃣ Store selected button ✅ (THIS WAS MISSING)
-            selectedButton = sender
+        selectedButton = sender
+        enableNextButton()
 
-            // 4️⃣ Enable Next button
-            enableNextButton()
-
-            // 5️⃣ Get selected text correctly
-            guard let selectedText = sender.titleLabel?.text else { return }
-            onOptionSelected?(selectedText)
+        guard let selectedText = sender.titleLabel?.text else { return }
+        onOptionSelected?(selectedText)
     }
     
     func updateNextButtonState() {
@@ -127,6 +120,21 @@ class OnboardingContentViewController: UIViewController {
     func disableNextButton() {
             nextButton.isEnabled = false
             nextButton.alpha = 0.5
+    }
+    func resetAllOptionButtons() {
+        let buttons = [beginnerButton, intermediateButton, advancedButton]
+
+        buttons.forEach { button in
+            button?.layer.borderColor = UIColor.secondaryLabel.cgColor
+            button?.layer.borderWidth = 1
+            button?.backgroundColor = UIColor.white
+        }
+    }
+
+    func applySelectedStyle(to button: UIButton) {
+        button.layer.borderColor = UIColor.systemBlue.cgColor
+        button.layer.borderWidth = 2
+        button.backgroundColor = UIColor.systemBlue.withAlphaComponent(0.08)
     }
     @IBAction func nextTapped(_ sender: UIButton) {
             onNextTapped?()
