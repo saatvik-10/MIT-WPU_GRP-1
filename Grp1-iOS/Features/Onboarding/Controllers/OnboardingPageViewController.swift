@@ -55,6 +55,11 @@ class OnboardingPageViewController: UIPageViewController {
         step2.onNextTapped = { [weak self] in
             self?.goToNextPage()
         }
+        
+        step2.onBackTapped = { [weak self] in
+            self?.goToPreviousPage()
+        }
+
 
         controllers = [step1, step2]
         setViewControllers([controllers[0]],
@@ -76,6 +81,20 @@ class OnboardingPageViewController: UIPageViewController {
         } else {
             print("Onboarding finished!")
         }
+    }
+    
+    func goToPreviousPage() {
+        let previousIndex = currentIndex - 1
+
+        guard previousIndex >= 0 else { return }
+
+        currentIndex = previousIndex
+
+        setViewControllers(
+            [controllers[currentIndex]],
+            direction: .reverse,
+            animated: true
+        )
     }
 
 }
