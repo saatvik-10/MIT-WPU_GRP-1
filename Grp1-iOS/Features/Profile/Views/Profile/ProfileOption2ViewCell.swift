@@ -36,7 +36,7 @@ class ProfileOption2ViewCell: UICollectionViewCell {
         } else {
             let chevronImage = UIImage(
                 systemName: "chevron.right",
-                withConfiguration: UIImage.SymbolConfiguration(scale: .small)
+                withConfiguration: UIImage.SymbolConfiguration(scale: .medium)
             )
             config.image = chevronImage
             config.imagePlacement = .trailing

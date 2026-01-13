@@ -22,6 +22,7 @@
                         <state key="normal" title="Button"/>
                         <buttonConfiguration key="configuration" style="gray" imagePlacement="trailing" title="Button">
                             <imageReference key="image" image="chevron.right" catalog="system" symbolScale="small"/>
+                            <fontDescription key="titleFontDescription" style="UICTFontTextStyleTitle2"/>
                             <color key="baseBackgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         </buttonConfiguration>
                     </button>
