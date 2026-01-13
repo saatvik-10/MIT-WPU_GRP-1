@@ -1,9 +1,18 @@
+//
+//  news2ViewController.swift
+//  Grp1-iOS
+//
+//  Created by SDC-USER on 13/01/26.
+//
+
 import UIKit
 
-class news1ViewController: UIViewController, UICollectionViewDataSource {
+class news2ViewController: UIViewController, UICollectionViewDataSource {
+
     
     
     
+    @IBOutlet weak var QuizButton: UIButton!
     @IBOutlet weak var dateLabel: UILabel!
     @IBOutlet weak var headlineLabel: UILabel!
     @IBOutlet weak var floatingButton: UIButton!
@@ -141,14 +150,14 @@ class news1ViewController: UIViewController, UICollectionViewDataSource {
         return 2
     }
     
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    @objc func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if section == 0 {
             return relatedNews.count
         }
         return qaHistory.count
     }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    @objc(collectionView:cellForItemAtIndexPath:) func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         if indexPath.section == 0 {
             // More Like This
@@ -215,20 +224,15 @@ class news1ViewController: UIViewController, UICollectionViewDataSource {
             gradientApplied = true
 //            applyDominantColorToButton(color)
             floatingButton.tintColor = color.withAlphaComponent(0.80)
-            
-            
+            QuizButton.tintColor = color.withAlphaComponent(0.80)
         }
-        
         setupJargons()
-
-        
     }
     
 
     func createGradientImage(color: UIColor, size: CGSize) -> UIImage? {
         let gradientLayer = CAGradientLayer()
         gradientLayer.frame = CGRect(origin: .zero, size: size)
-        
         gradientLayer.colors = [
             UIColor.clear.cgColor,                         // 0-clear
             color.withAlphaComponent(0.60).cgColor,        // 45-soft tint
@@ -254,13 +258,11 @@ class news1ViewController: UIViewController, UICollectionViewDataSource {
         gradientLayer.render(in: UIGraphicsGetCurrentContext()!)
         let gradientImage = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
-        
         return gradientImage
     }
     
     func dominantColor(from image: UIImage) -> UIColor? {
         guard let inputImage = CIImage(image: image) else { return nil }
-        
         let extent = inputImage.extent
         let context = CIContext(options: [.workingColorSpace: kCFNull!])
         
@@ -295,10 +297,8 @@ class news1ViewController: UIViewController, UICollectionViewDataSource {
     class ShareToFriendsActivity: UIActivity {
         
         var article: NewsArticle?
-        
         override var activityTitle: String? { "Share to Friends" }
         override var activityImage: UIImage? { UIImage(systemName: "person.2.fill") }
-        
         override class var activityCategory: UIActivity.Category {
             return .action
         }
@@ -313,7 +313,6 @@ class news1ViewController: UIViewController, UICollectionViewDataSource {
         }
     }
     
-    
     private func setupOptionsMenu() {
             let recommendAction = UIAction(
                 title: "Recommend article more",
@@ -322,9 +321,7 @@ class news1ViewController: UIViewController, UICollectionViewDataSource {
                 guard let self = self, let article = self.article else { return }
                 let generator = UINotificationFeedbackGenerator()
                 generator.notificationOccurred(.success)
-
                 self.showToast(message: "We’ll show more stories like this.")
-                
                 print("Recommend more articles like: \(article.title)")
             }
             let saveAction = UIAction(
@@ -572,9 +569,26 @@ class news1ViewController: UIViewController, UICollectionViewDataSource {
                     }, completion: nil)
             }
     }
+    
+    
+    
+    @IBAction func startQuizTapped(_ sender: Any) {
+        
+        guard let article = article else {
+               print("❌ Article is nil")
+               return
+           }
+
+           // ✅ Now Swift knows this is Int
+           QuizContext.shared.selectedArticleId = article.id
+    }
+    
+    
+    
+    
 }
 
-extension news1ViewController: UICollectionViewDelegate {
+extension news2ViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if indexPath.section == 0 {
             let selected = relatedNews[indexPath.row]
@@ -587,11 +601,3 @@ extension news1ViewController: UICollectionViewDelegate {
         }
     }
 }
-
-//class selectedWord {
-//    static var word: String?
-//}
-//
-//
-//selectedWord.selectedJargon = word
-//Type 'selectedWord' has no member 'selectedJargon'
