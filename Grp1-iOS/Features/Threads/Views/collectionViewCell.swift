@@ -89,12 +89,12 @@ class collectionViewCell: UICollectionViewCell {
             userNameLabel.lineBreakMode = .byTruncatingTail
 
             // Time Ago
-            timeAgoLabel.font = UIFont.systemFont(ofSize: 15)
+            timeAgoLabel.font = UIFont.systemFont(ofSize: 16)
             timeAgoLabel.textColor = .secondaryLabel
 
             // Title
             titleLabel.numberOfLines = 0
-            titleLabel.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
+          //  titleLabel.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
 
             // Thread Image
             threadImg.contentMode = .scaleAspectFill
@@ -104,7 +104,7 @@ class collectionViewCell: UICollectionViewCell {
 
             // Description Text
             descriptionLabel.numberOfLines = 0
-            descriptionLabel.font = UIFont.systemFont(ofSize: 15)
+            //descriptionLabel.font = UIFont.systemFont(ofSize: 15)
 
             // Buttons Row
            // likesButton.tintColor = .systemBlue

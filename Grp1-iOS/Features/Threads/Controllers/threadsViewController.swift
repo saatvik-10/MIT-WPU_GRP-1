@@ -10,6 +10,22 @@ class threadsViewController: UIViewController {
 
     @IBOutlet weak var collectionView: UICollectionView!
 
+    @IBOutlet weak var segmentControl: UISegmentedControl!
+    
+    
+    @IBAction func segmentChanged(_ sender: UISegmentedControl) {
+        didChangeSegment(index: sender.selectedSegmentIndex)
+    }
+    
+    
+    @IBAction func didTapSearchButton(_ sender: UIBarButtonItem) {
+        print("Search tapped")
+    }
+    
+    @IBAction func didTapPlusButton(_ sender: UIBarButtonItem) {
+        performSegue(withIdentifier: "showCreatePost", sender: nil)
+    }
+    
     private let threadsStore = ThreadsDataStore.shared
 
         private var forYouThreads: [ThreadPost] = []
@@ -18,12 +34,18 @@ class threadsViewController: UIViewController {
         private var selectedSegment: ThreadsSegment = .forYou
 
         override func viewDidLoad() {
+            
             super.viewDidLoad()
-
+            
+            collectionView.delegate = self
+            collectionView.dataSource = self
+            segmentControl.selectedSegmentIndex = 0
 //            forYouThreads = threadsStore.getAllThreads()
 //            followingThreads = threadsStore.getFollowingThreads()
-            reloadData()
+            //navigationItem.title = "Threads"
             setupCollectionView()
+            reloadData()
+            
 
             let bg = UIColor(white: 250/255, alpha: 1)
             view.backgroundColor = bg
@@ -51,12 +73,12 @@ class threadsViewController: UIViewController {
                 forCellWithReuseIdentifier: "MyThreadsGridCollectionViewCell"
             )
 
-            // Threads header
-            collectionView.register(
-                UINib(nibName: "ThreadsHeaderCollectionReusableView", bundle: nil),
-                forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
-                withReuseIdentifier: "ThreadsHeaderCollectionReusableView"
-            )
+//            // Threads header
+//            collectionView.register(
+//                UINib(nibName: "ThreadsHeaderCollectionReusableView", bundle: nil),
+//                forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+//                withReuseIdentifier: "ThreadsHeaderCollectionReusableView"
+//            )
 
             // Profile header
             collectionView.register(
@@ -185,19 +207,19 @@ class threadsViewController: UIViewController {
         ) -> UICollectionReusableView {
 
             // Main Threads header (always section 0)
-            if indexPath.section == 0 {
-                let header = collectionView.dequeueReusableSupplementaryView(
-                    ofKind: kind,
-                    withReuseIdentifier: "ThreadsHeaderCollectionReusableView",
-                    for: indexPath
-                ) as! ThreadsHeaderCollectionReusableView
-
-                header.onSegmentChanged = { [weak self] index in
-                    self?.didChangeSegment(index: index)
-                }
-
-                return header
-            }
+//            if indexPath.section == 0 {
+//                let header = collectionView.dequeueReusableSupplementaryView(
+//                    ofKind: kind,
+//                    withReuseIdentifier: "ThreadsHeaderCollectionReusableView",
+//                    for: indexPath
+//                ) as! ThreadsHeaderCollectionReusableView
+//
+//                header.onSegmentChanged = { [weak self] index in
+//                    self?.didChangeSegment(index: index)
+//                }
+//
+//                return header
+//            }
 
             // Profile header (My Threads only)
             let profileHeader = collectionView.dequeueReusableSupplementaryView(
@@ -226,7 +248,9 @@ class threadsViewController: UIViewController {
             layout collectionViewLayout: UICollectionViewLayout,
             referenceSizeForHeaderInSection section: Int
         ) -> CGSize {
-
+            if section == 0 {
+                return .zero
+            }
             if selectedSegment == .myThreads && section == 1 {
                 return CGSize(width: collectionView.frame.width, height: 120)
             }
@@ -260,3 +284,31 @@ class threadsViewController: UIViewController {
 //            return .none
 //        }
     }
+
+extension threadsViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView,
+                            didSelectItemAt indexPath: IndexPath) {
+
+            let selectedThread: ThreadPost
+
+            switch selectedSegment {
+
+            case .forYou:
+                selectedThread = forYouThreads[indexPath.item]
+
+            case .following:
+                selectedThread = followingThreads[indexPath.item]
+
+            case .myThreads:
+                // Only allow tap on grid items (section 1)
+                guard indexPath.section == 1 else { return }
+                selectedThread = forYouThreads[indexPath.item]
+            }
+
+            let detailVC = ThreadDetailViewController()
+            detailVC.thread = selectedThread
+
+            navigationController?.pushViewController(detailVC, animated: true)
+        }
+
+}
