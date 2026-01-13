@@ -21,10 +21,8 @@ class TodaysPickCollectionViewCell: UICollectionViewCell {
         newsImageView.contentMode = .scaleAspectFill
         newsImageView.clipsToBounds = true
 
-        pickLabel.font = UIFont.systemFont(ofSize: 15, weight: .semibold)
         pickLabel.textColor = UIColor.white.withAlphaComponent(0.85)
         
-        sourceLabel.font = UIFont.systemFont(ofSize: 12, weight: .semibold)
         sourceLabel.textColor = UIColor.white.withAlphaComponent(0.85)
 
         headlineLabel.numberOfLines = 2
