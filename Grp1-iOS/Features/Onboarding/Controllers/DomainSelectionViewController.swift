@@ -11,7 +11,10 @@ class DomainSelectionViewController: UIViewController {
     
     @IBOutlet weak var stepLabel: UILabel!
     var onNextTapped: (() -> Void)?
+    var onBackTapped: (() -> Void)?
     @IBOutlet weak var collectionView: UICollectionView!
+    
+    @IBOutlet weak var nextButton: UIButton!
     var domains: [DomainModel] = [
         DomainModel(title: "Stocks", icon: "chart.bar"),
         DomainModel(title: "Mutual Funds", icon: "building.columns"),
@@ -27,6 +30,7 @@ class DomainSelectionViewController: UIViewController {
         // Do any additional setup after loading the view.
         stepLabel.layer.masksToBounds = true
         stepLabel.layer.cornerRadius = 12
+        updateNextButtonState()
     }
     func setupCollectionView() {
         collectionView.delegate = self
@@ -34,6 +38,17 @@ class DomainSelectionViewController: UIViewController {
 
         collectionView.allowsMultipleSelection = true
     }
+    func updateNextButtonState() {
+        let hasSelection = !(collectionView.indexPathsForSelectedItems?.isEmpty ?? true)
+        nextButton.isEnabled = hasSelection
+        nextButton.alpha = hasSelection ? 1.0 : 0.5
+        
+    }
+    
+    @IBAction func backTapped(_ sender: UIButton) {
+        onBackTapped?()
+    }
+    
 
 }
 
@@ -64,18 +79,30 @@ extension DomainSelectionViewController: UICollectionViewDelegateFlowLayout {
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
 
         let width = (collectionView.bounds.width - 12) / 2
-        return CGSize(width: width, height: 90)
+        return CGSize(width: width, height: 120)
     }
 
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return 12
+        return 16
     }
 
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return 8
+        return 12
+    }
+}
+extension DomainSelectionViewController: UICollectionViewDelegate {
+
+    func collectionView(_ collectionView: UICollectionView,
+                        didSelectItemAt indexPath: IndexPath) {
+        updateNextButtonState()
+    }
+
+    func collectionView(_ collectionView: UICollectionView,
+                        didDeselectItemAt indexPath: IndexPath) {
+        updateNextButtonState()
     }
 }
