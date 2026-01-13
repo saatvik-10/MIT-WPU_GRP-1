@@ -32,15 +32,12 @@ class ExploreCollectionViewCell: UICollectionViewCell {
         newsImageView.clipsToBounds = true
         
       
-        pickLabel.font = UIFont.systemFont(ofSize: 10, weight: .semibold)
-        pickLabel.textColor = .systemGray
+
 
         headlineLabel.numberOfLines = 2
-        headlineLabel.font = UIFont.systemFont(ofSize: 16, weight: .bold)
         headlineLabel.textColor = .black
         
-        timeLabel.font = UIFont.systemFont(ofSize: 13, weight: .semibold)
-        timeLabel.textColor = .systemGray
+
 //        headlineLabel.layer.shadowColor = UIColor.black.cgColor
 //        headlineLabel.layer.shadowOpacity = 0.6
 //        headlineLabel.layer.shadowRadius = 4
