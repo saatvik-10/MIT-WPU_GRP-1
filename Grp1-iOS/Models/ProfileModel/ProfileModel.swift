@@ -71,6 +71,7 @@ struct UserProfile {
 
 struct BookmarkItem {
     let icon: UIImage
+    let id: String
     let title: String
 }
 
