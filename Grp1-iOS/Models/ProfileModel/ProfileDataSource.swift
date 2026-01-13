@@ -45,17 +45,17 @@ struct Bookmarks {
         BookmarkItem(
             icon: UIImage(systemName: "folder")!,
             id: "1",
-            title: "Swift",
+            title: "Stocks",
         ),
         BookmarkItem(
             icon: UIImage(systemName: "folder")!,
             id: "2",
-            title: "Storyboard",
+            title: "Crypto",
         ),
         BookmarkItem(
             icon: UIImage(systemName: "folder")!,
             id: "3",
-            title: "iOS",
+            title: "Gold",
         )
     ]
 }
