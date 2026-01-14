@@ -274,6 +274,83 @@ class QuizStore {
                 "5G Networks"
             ],
             correctIndex: 2
+        ),
+        QuizQuestion(
+            articleId: 2,
+            question: "Which technology is driving recent AI growth?",
+            options: [
+                "Blockchain",
+                "Quantum Computing",
+                "Generative AI",
+                "5G Networks"
+            ],
+            correctIndex: 2
+        ),
+        QuizQuestion(
+            articleId: 3,
+            question: "Which technology is driving recent AI growth?",
+            options: [
+                "Blockchain",
+                "Quantum Computing",
+                "Generative AI",
+                "5G Networks"
+            ],
+            correctIndex: 2
+        ),
+        QuizQuestion(
+            articleId: 3,
+            question: "Which technology is driving recent AI growth?",
+            options: [
+                "Blockchain",
+                "Quantum Computing",
+                "Generative AI",
+                "5G Networks"
+            ],
+            correctIndex: 2
+        ),
+        QuizQuestion(
+            articleId: 4,
+            question: "Which technology is driving recent AI growth?",
+            options: [
+                "Blockchain",
+                "Quantum Computing",
+                "Generative AI",
+                "5G Networks"
+            ],
+            correctIndex: 2
+        ),
+        QuizQuestion(
+            articleId: 4,
+            question: "Which technology is driving recent AI growth?",
+            options: [
+                "Blockchain",
+                "Quantum Computing",
+                "Generative AI",
+                "5G Networks"
+            ],
+            correctIndex: 2
+        ),
+        QuizQuestion(
+            articleId: 5,
+            question: "Which technology is driving recent AI growth?",
+            options: [
+                "Blockchain",
+                "Quantum Computing",
+                "Generative AI",
+                "5G Networks"
+            ],
+            correctIndex: 2
+        ),
+        QuizQuestion(
+            articleId: 5,
+            question: "Which technology is driving recent AI growth?",
+            options: [
+                "Blockchain",
+                "Quantum Computing",
+                "Generative AI",
+                "5G Networks"
+            ],
+            correctIndex: 2
         )
     ]
 
