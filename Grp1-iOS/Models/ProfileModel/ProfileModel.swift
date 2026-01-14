@@ -1,4 +1,3 @@
-import Foundation
 import UIKit
 
 enum UserLevel: String {
@@ -18,22 +17,60 @@ enum UserLevel: String {
     }
 }
 
-struct ProfileOption {
-    let title: String
-    let isDestructive: Bool
+struct ProgressSectionModel {
+    let progress: Double
+    let levelText: String
+    let completionText: String
+}
+
+struct InterestsSectionModel {
+    let interests: [String]
+}
+
+struct BookmarksSectionModel {
+    let totalBookmarks: Int
+    let totalFolders: Int
+}
+
+enum ProfileSection {
+    case progress(ProgressSectionModel)
+    case interests(InterestsSectionModel)
+    case bookmarks(BookmarksSectionModel)
+    case achievements
+    case about
+    case logout
+}
+
+extension ProfileSection {
+
+    var title: String {
+        switch self {
+        case .progress: return "Progress"
+        case .interests: return "Interests"
+        case .bookmarks: return "Bookmarks"
+        case .achievements: return "Achievements"
+        case .about: return "About Us"
+        case .logout: return "Logout"
+        }
+    }
+
+    var isDestructive: Bool {
+        if case .logout = self { return true }
+        return false
+    }
 }
 
 enum InterestType {
     case domain
     case company
-
+    
     var title: String {
         switch self {
         case .domain: return "Add New Domain"
         case .company: return "Add New Company"
         }
     }
-
+    
     var searchPlaceholder: String {
         switch self {
         case .domain: return "Search Domains"

@@ -1,12 +1,41 @@
 import UIKit
+//struct ProfileDataSource {
+//    static let items: [ProfileOption] = [
+//        ProfileOption(title: "Progress", isDestructive: false),
+//        ProfileOption(title: "Interests", isDestructive: false),
+//        ProfileOption(title: "Bookmarks", isDestructive: false),
+//        ProfileOption(title: "About Us", isDestructive: false),
+//        ProfileOption(title: "Logout", isDestructive: true)
+//    ]
+//}
+
 struct ProfileDataSource {
-    static let items: [ProfileOption] = [
-        ProfileOption(title: "Progress", isDestructive: false),
-        ProfileOption(title: "Interests", isDestructive: false),
-        ProfileOption(title: "Bookmarks", isDestructive: false),
-        ProfileOption(title: "Achievements", isDestructive: false),
-        ProfileOption(title: "About Us", isDestructive: false),
-        ProfileOption(title: "Logout", isDestructive: true)
+    static let progressSection = ProgressSectionModel(
+        progress: ProgressMockData.overallProgress.progressPercentage,
+        levelText: ProgressMockData.overallProgress.levelNumber,
+        completionText: ProgressMockData.overallProgress.quizCompletionNumber
+    )
+    
+    static let interestsSection = InterestsSectionModel(
+        interests: Array(
+            (InterestsDataSource.domains.map { $0.title }
+             + InterestsDataSource.companies.map { $0.title })
+            .prefix(4)
+        )
+    )
+    
+    static let bookmarksSection = BookmarksSectionModel(
+        totalBookmarks: Bookmarks.mockBookmarks.count,
+        totalFolders: Bookmarks.mockBookmarks.count
+    )
+    
+    static let sections: [ProfileSection] = [
+        .progress(progressSection),
+        .interests(interestsSection),
+        .bookmarks(bookmarksSection),
+        .achievements,
+        .about,
+        .logout
     ]
 }
 
@@ -45,17 +74,17 @@ struct Bookmarks {
         BookmarkItem(
             icon: UIImage(systemName: "folder")!,
             id: "1",
-            title: "Stocks",
+            title: "Stocks"
         ),
         BookmarkItem(
             icon: UIImage(systemName: "folder")!,
             id: "2",
-            title: "Crypto",
+            title: "Crypto"
         ),
         BookmarkItem(
             icon: UIImage(systemName: "folder")!,
             id: "3",
-            title: "Gold",
+            title: "Gold"
         )
     ]
 }
