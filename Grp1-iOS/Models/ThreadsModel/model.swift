@@ -23,7 +23,7 @@ class ThreadsDataStore {
             tags: ["Crypto", "JP Morgan"],
             imageName: "img(f1",
             description: """
-JP Morgan Chase has told staff moving into its new headquarters in New York that they must share their biometric data to access the multibillion-dollar building...
+JP Morgan Chase has told staff moving into its new headquarters in New York that they must share 
 """,
             likes: 702,
             comments: 41,
@@ -82,3 +82,4 @@ Nifty and Sensex continue to touch new highs but analysts warn that valuation ma
             }
         }
 }
+

@@ -22,7 +22,7 @@ class HeaderView: UICollectionReusableView {
             arrowImageView.tintColor = .systemGray
         
         headerLabel.font = UIFont.systemFont(ofSize: 22, weight: .bold)
-        headerLabel.textColor = .label
+        headerLabel.textColor = .label       // auto adjusts for dark/light mode
     }
     
     private func setupTapGesture() {

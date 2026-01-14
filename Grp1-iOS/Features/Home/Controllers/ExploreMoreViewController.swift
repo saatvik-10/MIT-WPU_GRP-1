@@ -14,6 +14,7 @@ class ExploreMoreViewController: UIViewController, UICollectionViewDelegate {
     @IBOutlet weak var collectionView: UICollectionView!
     let newsStore = NewsDataStore.shared
 
+        // Only 3 sections now
         var exploreTrending: [NewsArticle] = []
         var exploreList: [NewsArticle] = []
         var exploreGrid: [NewsArticle] = []
@@ -24,6 +25,8 @@ class ExploreMoreViewController: UIViewController, UICollectionViewDelegate {
             view.backgroundColor = .systemBackground
 
             registerCells()
+
+            // Load data
             exploreTrending = newsStore.getAllNews().reversed()
             exploreList = newsStore.getAllNews().shuffled()
             exploreGrid = newsStore.getAllNews().shuffled()
@@ -32,6 +35,8 @@ class ExploreMoreViewController: UIViewController, UICollectionViewDelegate {
             collectionView.delegate = self
             collectionView.dataSource = self
         }
+
+        // MARK: - Select item → open article
         func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
 
             var selected: NewsArticle?
@@ -60,9 +65,20 @@ extension ExploreMoreViewController {
 
     func registerCells() {
 
-        collectionView.register(UINib(nibName: "TrendingCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "trending_cell")
-        collectionView.register(UINib(nibName: "ExploreCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "explore_cell")
-        collectionView.register(UINib(nibName: "RealExploreCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "realexplore_cell")
+        collectionView.register(
+            UINib(nibName: "TrendingCollectionViewCell", bundle: nil),
+            forCellWithReuseIdentifier: "trending_cell"
+        )
+
+        collectionView.register(
+            UINib(nibName: "ExploreCollectionViewCell", bundle: nil),
+            forCellWithReuseIdentifier: "explore_cell"
+        )
+
+        collectionView.register(
+            UINib(nibName: "RealExploreCollectionViewCell", bundle: nil),
+            forCellWithReuseIdentifier: "realexplore_cell"
+        )
     }
 }
 
@@ -85,16 +101,20 @@ extension ExploreMoreViewController: UICollectionViewDataSource {
         }
     }
 
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    func collectionView(_ collectionView: UICollectionView,
+                        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
 
         switch indexPath.section {
 
         // SECTION 0 → Trending Collection
         case 0:
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "trending_cell", for: indexPath) as! TrendingCollectionViewCell
+            let cell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: "trending_cell",
+                for: indexPath
+            ) as! TrendingCollectionViewCell
+
             cell.configureCell(with: exploreTrending[indexPath.row])
-            
-            
+
             cell.onArticleLensTapped = { [weak self] in
                 guard let self = self else { return }
                 let popup = ArticleLensPopupViewController(nibName: "ArticleLensPopupViewController", bundle: nil)
@@ -109,9 +129,12 @@ extension ExploreMoreViewController: UICollectionViewDataSource {
 
             return cell
 
-
+        // SECTION 1 → Explore List (vertical list style)
         case 1:
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "explore_cell", for: indexPath) as! ExploreCollectionViewCell
+            let cell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: "explore_cell",
+                for: indexPath
+            ) as! ExploreCollectionViewCell
 
             cell.configureCell(with: exploreList[indexPath.row])
 
@@ -119,7 +142,6 @@ extension ExploreMoreViewController: UICollectionViewDataSource {
                 guard let self = self else { return }
                 let popup = ArticleLensPopupViewController(nibName: "ArticleLensPopupViewController", bundle: nil)
                 popup.modalPresentationStyle = .overFullScreen
-                
                 popup.modalTransitionStyle = .crossDissolve
                 self.present(popup, animated: true)
             }
@@ -130,16 +152,17 @@ extension ExploreMoreViewController: UICollectionViewDataSource {
 
             return cell
 
+        // SECTION 2 → Grid Style Explore
         default:
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "realexplore_cell", for: indexPath) as! RealExploreCollectionViewCell
+            let cell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: "realexplore_cell",
+                for: indexPath
+            ) as! RealExploreCollectionViewCell
 
             cell.configureCell(with: exploreGrid[indexPath.row])
             return cell
-            
         }
     }
-    
-    
 }
 
 
@@ -153,28 +176,64 @@ extension ExploreMoreViewController {
 
             switch section {
 
+            // SECTION 0 — Medium Trending Cards
             case 0:
-                let item = NSCollectionLayoutItem(layoutSize: .init(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1.0)))
+                let item = NSCollectionLayoutItem(
+                    layoutSize: .init(
+                        widthDimension: .fractionalWidth(1.0),
+                        heightDimension: .fractionalHeight(1.0)
+                    )
+                )
                 item.contentInsets = .init(top: 0, leading: 10, bottom: 15, trailing: 10)
 
-                let group = NSCollectionLayoutGroup.horizontal(layoutSize: .init(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(320)), subitems: [item])
+                let group = NSCollectionLayoutGroup.horizontal(
+                    layoutSize: .init(
+                        widthDimension: .fractionalWidth(1.0),
+                        heightDimension: .estimated(320)
+                    ),
+                    subitems: [item]
+                )
 
                 return NSCollectionLayoutSection(group: group)
 
+            // SECTION 1 — Vertical list
             case 1:
-                let item = NSCollectionLayoutItem(layoutSize: .init(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1.0)))
+                let item = NSCollectionLayoutItem(
+                    layoutSize: .init(
+                        widthDimension: .fractionalWidth(1.0),
+                        heightDimension: .fractionalHeight(1.0)
+                    )
+                )
                 item.contentInsets = .init(top: 0, leading: 10, bottom: 10, trailing: 10)
 
-                let group = NSCollectionLayoutGroup.horizontal(layoutSize: .init(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(170)), subitems: [item])
+                let group = NSCollectionLayoutGroup.horizontal(
+                    layoutSize: .init(
+                        widthDimension: .fractionalWidth(1.0),
+                        heightDimension: .estimated(170)
+                    ),
+                    subitems: [item]
+                )
 
                 return NSCollectionLayoutSection(group: group)
 
+            // SECTION 2 — Grid Explore
             default:
-                let item = NSCollectionLayoutItem(layoutSize: .init(widthDimension: .fractionalWidth(0.5), heightDimension: .fractionalHeight(1.0)))
+                let item = NSCollectionLayoutItem(
+                    layoutSize: .init(
+                        widthDimension: .fractionalWidth(0.5),
+                        heightDimension: .fractionalHeight(1.0)
+                    )
+                )
 
                 item.contentInsets = .init(top: 0, leading: 10, bottom: 10, trailing: 10)
 
-                let group = NSCollectionLayoutGroup.horizontal(layoutSize: .init(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(250)), subitems: [item])
+                let group = NSCollectionLayoutGroup.horizontal(
+                    layoutSize: .init(
+                        widthDimension: .fractionalWidth(1.0),
+                        heightDimension: .estimated(250)
+                    ),
+                    subitems: [item]
+                )
 
                 let section = NSCollectionLayoutSection(group: group)
 //                section.orthogonalScrollingBehavior = .groupPagingCentered

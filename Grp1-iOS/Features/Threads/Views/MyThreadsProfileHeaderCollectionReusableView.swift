@@ -17,7 +17,7 @@ class MyThreadsProfileHeaderCollectionReusableView: UICollectionReusableView {
     @IBOutlet weak var postsCountLabel: UILabel!
     @IBOutlet weak var followersCountLabel: UILabel!
     
-    @IBOutlet weak var gridTitleLabel: UILabel!
+   // @IBOutlet weak var gridTitleLabel: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -36,20 +36,20 @@ class MyThreadsProfileHeaderCollectionReusableView: UICollectionReusableView {
             //profileImageView.layer.cornerRadius = profileImageView.frame.width / 2
             profileImageView.clipsToBounds = true
             
-        userNameLabel.font = .systemFont(ofSize: 18, weight: .medium)
+       // userNameLabel.font = .systemFont(ofSize: 18, weight: .medium)
         userNameLabel.textColor = .black
         
             [postsCountLabel, followersCountLabel, followingCountLabel].forEach {
-                $0?.font = .systemFont(ofSize: 15, weight: .medium)
+                //$0?.font = .systemFont(ofSize: 15, weight: .medium)
                 $0?.textColor = .black
                 $0?.numberOfLines = 0
                 $0?.textAlignment = .left
             }
-        gridTitleLabel.text = "Posts"
-                gridTitleLabel.font = .systemFont(ofSize: 18, weight: .semibold)
-                gridTitleLabel.textColor = .darkGray
-                gridTitleLabel.textAlignment = .center
-        }
+//        gridTitleLabel.text = "Posts"
+//                gridTitleLabel.font = .systemFont(ofSize: 18, weight: .semibold)
+//                gridTitleLabel.textColor = .darkGray
+//                gridTitleLabel.textAlignment = .center
+     }
         
         func configure(
             userName: String,
