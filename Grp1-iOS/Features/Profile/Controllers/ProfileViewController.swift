@@ -102,7 +102,7 @@ extension ProfileViewController:
         
         cell.delegate = self
         
-        cell.configure(title: item.title, subTitle: item.subTitle, isDestructive: item.isDestructive)
+        cell.configure(title: item.title, isDestructive: item.isDestructive)
         return cell
     }
 }
@@ -115,8 +115,7 @@ extension ProfileViewController {
 
         switch item.title {
         case "Progress":
-            print("TODO: Progress Tapped")
-//            performSegue(withIdentifier: "progressSegue", sender: self)
+        performSegue(withIdentifier: "progressSegue", sender: self)
             
         case "Interests":
             performSegue(withIdentifier: "interestsSegue", sender: self)

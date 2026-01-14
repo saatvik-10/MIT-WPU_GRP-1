@@ -8,30 +8,88 @@
 import UIKit
 
 class BookmarkViewController: UIViewController {
-
+    
     
     @IBOutlet weak var collectionView: UICollectionView!
-
-        // MARK: - Data Source
+    
+    // MARK: - Data Source
     private var items: [BookmarkItem] = Bookmarks.mockBookmarks
-
-        override func viewDidLoad() {
-            super.viewDidLoad()
-
-            title = "Bookmarks"
-            setupCollectionView()
-            collectionView.setCollectionViewLayout(generateLayout(), animated: false)
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        title = "Bookmarks"
+        setupCollectionView()
+        collectionView.setCollectionViewLayout(generateLayout(), animated: false)
+    }
+    
+    private func setupCollectionView() {
+        collectionView.dataSource = self
+        collectionView.delegate = self
+        
+        collectionView.register(
+            UINib(nibName: "BookmarkViewCell", bundle: nil),
+            forCellWithReuseIdentifier: "BookmarkViewCell"
+        )
+    }
+    
+    @IBAction func addBookmarkTapped(_ sender: UIBarButtonItem) {
+        showCreateBookmarkAlert()
+    }
+    
+    private func showCreateBookmarkAlert() {
+        let alert = UIAlertController(
+            title: "New Bookmark",
+            message: "Enter a name for this folder",
+            preferredStyle: .alert
+        )
+        
+        alert.addTextField { textField in
+            textField.placeholder = "Folder name"
+            textField.autocapitalizationType = .words
         }
         
-        private func setupCollectionView() {
-            collectionView.dataSource = self
-            collectionView.delegate = self
-
-            collectionView.register(
-                UINib(nibName: "BookmarkViewCell", bundle: nil),
-                forCellWithReuseIdentifier: "BookmarkViewCell"
-            )
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
+        
+        let saveAction = UIAlertAction(title: "Save", style: .default) { [weak self] _ in
+            guard
+                let self = self,
+                let name = alert.textFields?.first?.text,
+                !name.trimmingCharacters(in: .whitespaces).isEmpty
+            else { return }
+            
+            self.createBookmarkFolder(named: name)
         }
+        
+        saveAction.isEnabled = false
+        
+        alert.addAction(cancelAction)
+        alert.addAction(saveAction)
+        
+        NotificationCenter.default.addObserver(
+            forName: UITextField.textDidChangeNotification,
+            object: alert.textFields?.first,
+            queue: .main
+        ) { _ in
+            let text = alert.textFields?.first?.text ?? ""
+            saveAction.isEnabled = !text.trimmingCharacters(in: .whitespaces).isEmpty
+        }
+        
+        present(alert, animated: true)
+    }
+    
+    private func createBookmarkFolder(named name: String) {
+        let newItem = BookmarkItem(
+            icon: UIImage(systemName: "folder")!,
+            id: UUID().uuidString,
+            title: name
+        )
+        
+        items.append(newItem)
+        
+        let indexPath = IndexPath(item: items.count - 1, section: 0)
+        collectionView.insertItems(at: [indexPath])
+    }
 }
 
 private func generateLayout() -> UICollectionViewLayout {
@@ -40,7 +98,7 @@ private func generateLayout() -> UICollectionViewLayout {
         heightDimension: .absolute(70)
     )
     let item = NSCollectionLayoutItem(layoutSize: itemSize)
-
+    
     let groupSize = NSCollectionLayoutSize(
         widthDimension: .fractionalWidth(1.0),
         heightDimension: .estimated(500)
@@ -49,7 +107,7 @@ private func generateLayout() -> UICollectionViewLayout {
         layoutSize: groupSize,
         subitems: [item]
     )
-
+    
     let section = NSCollectionLayoutSection(group: group)
     section.interGroupSpacing = 12
     section.contentInsets = NSDirectionalEdgeInsets(
@@ -58,29 +116,29 @@ private func generateLayout() -> UICollectionViewLayout {
         bottom: 20,
         trailing: 20
     )
-
+    
     return UICollectionViewCompositionalLayout(section: section)
 }
 
 
 extension BookmarkViewController: UICollectionViewDataSource, UICollectionViewDelegate {
-
+    
     func collectionView(_ collectionView: UICollectionView,
                         numberOfItemsInSection section: Int) -> Int {
         return items.count
     }
-
+    
     func collectionView(_ collectionView: UICollectionView,
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-
+        
         let cell = collectionView.dequeueReusableCell(
             withReuseIdentifier: "BookmarkViewCell",
             for: indexPath
         ) as! BookmarkViewCell
-
+        
         cell.configure(items[indexPath.row])
         cell.delegate = self
-
+        
         return cell
     }
 }
@@ -88,7 +146,7 @@ extension BookmarkViewController: UICollectionViewDataSource, UICollectionViewDe
 extension BookmarkViewController: BookmarkCellDelegate {
     func didTapBookmark(in cell: BookmarkViewCell) {
         guard let indexPath = collectionView.indexPath(for: cell) else { return }
-
+        
         print("Bookmark tapped → \(items[indexPath.row].title)")
     }
 }

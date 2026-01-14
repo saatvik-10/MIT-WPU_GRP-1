@@ -9,11 +9,49 @@ class NewsDataStore {
         
         NewsArticle(
             id: 1,
+            title: "Tech Giants Report Strong Quarterly Results it is very good news",
+            description: "IT sector sees renewed interest as major players beat earnings estimates.",
+            imageName: "India-Brefing-Investing-in-India’s-IT-Sector",
+            category: "Technology",
+            date: "16 Hours Ago",
+            source: "Reuters",
+            
+            overview: [
+                "Major technology firms posted significantly better-than-expected quarterly earnings, signaling renewed industry strength after months of global macroeconomic uncertainty.",
+                "Robust demand for cloud services, AI infrastructure, and enterprise computing contributed heavily to revenue growth, exceeding analyst projections across multiple business segments.",
+                "Market analysts believe these results may trigger increased investor confidence, potentially fueling further rallies in tech stocks that have already seen notable upward momentum.",
+                "Executives across the sector emphasized continued investment in artificial intelligence, automation, and next-generation hardware as long-term drivers of sustained profitability."
+            ],
+            
+            keyTakeaways: [
+                "Top technology companies exceeded revenue and profit expectations, signaling strong recovery momentum in the global tech sector.",
+                "Improved cloud adoption and enterprise demand contributed significantly to the positive earnings performance.",
+                "Market sentiment around IT stocks strengthened as investors reacted to the better-than-expected financial results.",
+                "Analysts predict sustained growth as digital transformation accelerates across industries."
+            ],
+            
+            jargons: [
+                "Quarterly Earnings",
+                "Tech Valuation",
+                "Market Sentiment"
+            ],
+            
+            qaHistory: [
+                ArticleQA(
+                    question: "How will strong earnings impact tech stocks?",
+                    answer: "Better-than-expected earnings usually attract institutional investors and support price growth.",
+                    createdAt: Date()
+                )
+            ]
+        ),
+        
+        NewsArticle(
+            id: 4,
             title: "RBI Maintains Status Quo on Interest Rates",
             description: "The RBI kept repo rate unchanged as inflation stabilizes. Markets reacted positively.",
             imageName: "urban_4",
             category: "Economy",
-            date: "Today",
+            date: "2 Hours Ago",
             source: "Economic Times",
             
             // NEW FIELDS
@@ -55,9 +93,9 @@ class NewsDataStore {
             id: 2,
             title: "To de-Indianise US companies, top pollster Mark Mitchell plans to start consultancy",
             description: "Markets closed near the highs backed by strong buying across sectors.",
-            imageName: "urban_6",
+            imageName: "Screenshot 2025-12-17 at 10.44.49 AM",
             category: "Markets",
-            date: "Today",
+            date: "5 Hours Ago",
             source: "Moneycontrol",
             
             overview: [
@@ -96,7 +134,7 @@ class NewsDataStore {
             description: "Weak dollar and geopolitical tensions push gold prices higher.",
             imageName: "urban_8",
             category: "Commodities",
-            date: "Yesterday",
+            date: "18 Hours Ago",
             source: "Business Standard",
             
             overview: [
@@ -198,3 +236,4 @@ class NewsDataStore {
     }
    
 }
+

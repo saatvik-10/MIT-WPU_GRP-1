@@ -45,8 +45,13 @@ extension AddInterestViewController: UITableViewDataSource, UITableViewDelegate 
         let item = isSearching ? filteredItems[indexPath.row] : sourceItems[indexPath.row]
         
         var config = cell.defaultContentConfiguration()
+        
         config.text = item.title
+        config.textProperties.font = UIFont.preferredFont(forTextStyle: .title3)
+        
         config.secondaryText = item.subtitle
+        config.secondaryTextProperties.font = UIFont.preferredFont(forTextStyle: .caption1)
+        config.secondaryTextProperties.color = .secondaryLabel
         
         if let iconName = item.icon {
             config.image = UIImage(systemName: iconName)

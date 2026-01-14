@@ -23,7 +23,6 @@ class DomainViewCell: UICollectionViewCell {
         contentView.backgroundColor = .white
             if let iconName = model.icon {
                 domainImageView.image = UIImage(systemName: iconName)
-                domainImageView.tintColor = .black
                 domainImageView.isHidden = false
             } else {
                 domainImageView.isHidden = true
