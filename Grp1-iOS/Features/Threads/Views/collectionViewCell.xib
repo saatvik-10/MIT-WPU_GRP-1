@@ -4,6 +4,7 @@
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24504"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -78,6 +79,13 @@
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nND-xP-2fn">
+                        <rect key="frame" x="0.0" y="539" width="402" height="1"/>
+                        <color key="backgroundColor" systemColor="systemGray5Color"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="1" id="LTl-WY-IpU"/>
+                        </constraints>
+                    </view>
                 </subviews>
             </view>
             <viewLayoutGuide key="safeArea" id="jIT-79-cu8"/>
@@ -92,6 +100,7 @@
                 <constraint firstAttribute="height" constant="540" id="Fg6-3G-0pD"/>
                 <constraint firstItem="vba-so-vnV" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="14" id="Fzx-id-K1t"/>
                 <constraint firstItem="wpK-uS-fAf" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="15" id="G3j-3M-fcs"/>
+                <constraint firstItem="nND-xP-2fn" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="GaZ-zr-CZ0"/>
                 <constraint firstItem="vba-so-vnV" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="16" id="HEH-SU-zA4"/>
                 <constraint firstAttribute="trailing" secondItem="6x1-HQ-YcS" secondAttribute="trailing" constant="24" id="JHS-Te-37D"/>
                 <constraint firstItem="E2J-fR-weR" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="24" id="JXB-FG-2vX"/>
@@ -100,9 +109,11 @@
                 <constraint firstAttribute="bottom" secondItem="IyF-Hf-0qc" secondAttribute="bottom" constant="15.67" id="Pno-NT-0dK"/>
                 <constraint firstAttribute="trailing" secondItem="y3t-OW-3A3" secondAttribute="trailing" constant="65" id="WKf-TI-oTe"/>
                 <constraint firstItem="IyF-Hf-0qc" firstAttribute="leading" secondItem="E2J-fR-weR" secondAttribute="trailing" constant="28" id="Wry-aY-ENa"/>
+                <constraint firstAttribute="bottom" secondItem="nND-xP-2fn" secondAttribute="bottom" id="X3A-Ho-Z5R"/>
                 <constraint firstAttribute="width" constant="402" id="XUC-uD-Fgn"/>
                 <constraint firstItem="Y16-RK-fsR" firstAttribute="leading" secondItem="IyF-Hf-0qc" secondAttribute="trailing" constant="28" id="aFb-dj-Ygf"/>
                 <constraint firstItem="4eF-cw-GzW" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="20" id="hzv-Bz-Afy"/>
+                <constraint firstAttribute="trailing" secondItem="nND-xP-2fn" secondAttribute="trailing" id="mcl-eZ-XxD"/>
                 <constraint firstItem="Y16-RK-fsR" firstAttribute="bottom" secondItem="gTV-IL-0wX" secondAttribute="bottom" constant="-16" id="nmf-hh-y0I"/>
                 <constraint firstAttribute="trailing" secondItem="uZE-e7-gQi" secondAttribute="trailing" constant="24" id="qtw-46-x33"/>
                 <constraint firstItem="cgw-iW-Vr4" firstAttribute="top" secondItem="uZE-e7-gQi" secondAttribute="bottom" constant="16" id="uSx-Xh-Xtd"/>
@@ -113,6 +124,7 @@
             <connections>
                 <outlet property="commentsButton" destination="IyF-Hf-0qc" id="tOI-lf-mow"/>
                 <outlet property="descriptionLabel" destination="6x1-HQ-YcS" id="Wyo-VF-2mI"/>
+                <outlet property="dividerView" destination="nND-xP-2fn" id="hN9-VN-Rp1"/>
                 <outlet property="likesButton" destination="E2J-fR-weR" id="y8j-AM-IzQ"/>
                 <outlet property="moreButton" destination="wpK-uS-fAf" id="cfc-Je-KvO"/>
                 <outlet property="profileImg" destination="vba-so-vnV" id="sFn-YC-Py1"/>
@@ -131,5 +143,8 @@
         <image name="message" catalog="system" width="128" height="106"/>
         <image name="square.and.arrow.up" catalog="system" width="110" height="128"/>
         <image name="suit.heart" catalog="system" width="128" height="107"/>
+        <systemColor name="systemGray5Color">
+            <color red="0.8980392157" green="0.8980392157" blue="0.91764705879999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
     </resources>
 </document>

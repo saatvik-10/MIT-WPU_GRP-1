@@ -26,13 +26,14 @@ class collectionViewCell: UICollectionViewCell {
    
     @IBOutlet weak var sharesButton: UIButton!
     
-//    @IBAction func moreButtonTapped(_ sender: UIButton) {
+    //    @IBAction func moreButtonTapped(_ sender: UIButton) {
 //        onMoreTapped?()
 //    }
-    
    @IBAction func likeButtonTapped(_ sender: UIButton) {
            onLikeTapped?()
        }
+    
+    @IBOutlet weak var dividerView: UIView!
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -118,6 +119,69 @@ class collectionViewCell: UICollectionViewCell {
            // moreButton.setImage(UIImage(systemName: "ellipsis"), for: .normal)
             moreButton.tintColor = .secondaryLabel
         }
+    
+    func applyStyle(isCard: Bool) {
+
+            if isCard {
+                // CARD (For You / Following)
+                contentView.backgroundColor = .white
+                contentView.layer.cornerRadius = 16
+
+                layer.cornerRadius = 16
+                layer.shadowOpacity = 0.08
+            } else {
+                // FLAT (My Threads)
+                contentView.backgroundColor = .clear
+                contentView.layer.cornerRadius = 0
+
+                layer.cornerRadius = 0
+                layer.shadowOpacity = 0
+            }
+        dividerView.isHidden = isCard
+        }
+    
+        // MARK: - Configure Cell
+        func configure(with post: ThreadPost) {
+
+            userNameLabel.text = post.userName
+            timeAgoLabel.text = post.timeAgo
+            titleLabel.text = post.title
+            descriptionLabel.text = post.description
+
+            // Profile
+            profileImg.image = UIImage(named: post.userProfileImage)
+                ?? UIImage(systemName: "person.circle.fill")
+
+            // Thread Image
+            if post.imageName.isEmpty {
+                threadImg.isHidden = true
+            } else {
+                threadImg.isHidden = false
+                threadImg.image = UIImage(named: post.imageName)
+            }
+
+            //LIKE
+//            likesButton.setTitle("\(post.likes)", for: .normal)
+//            let heartName = post.isLiked ? "heart.fill" : "heart"
+//            likesButton.setImage(UIImage(systemName: heartName), for: .normal)
+//            likesButton.tintColor = post.isLiked ? .systemRed : .systemBlue
+            // Likes count (ALWAYS blue)
+            likesButton.setTitle("\(post.likes)", for: .normal)
+            likesButton.setTitleColor(.systemBlue, for: .normal)
+
+            // Heart icon (red only when liked)
+            let heartName = post.isLiked ? "heart.fill" : "heart"
+            let heartImage = UIImage(systemName: heartName)?
+                .withRenderingMode(.alwaysTemplate)
+
+            likesButton.setImage(heartImage, for: .normal)
+            likesButton.tintColor = post.isLiked ? .systemRed : .systemBlue
+
+            //COMMENT N SHARE
+            commentsButton.setTitle("\(post.comments)", for: .normal)
+            sharesButton.setTitle("\(post.shares)", for: .normal)
+        }
+    
     private func setupMoreMenu() {
 
         let followAction = UIAction(
@@ -170,46 +234,4 @@ class collectionViewCell: UICollectionViewCell {
 
         moreButton.showsMenuAsPrimaryAction = true
     }
-
-        // MARK: - Configure Cell
-        func configure(with post: ThreadPost) {
-
-            userNameLabel.text = post.userName
-            timeAgoLabel.text = post.timeAgo
-            titleLabel.text = post.title
-            descriptionLabel.text = post.description
-
-            // Profile
-            profileImg.image = UIImage(named: post.userProfileImage)
-                ?? UIImage(systemName: "person.circle.fill")
-
-            // Thread Image
-            if post.imageName.isEmpty {
-                threadImg.isHidden = true
-            } else {
-                threadImg.isHidden = false
-                threadImg.image = UIImage(named: post.imageName)
-            }
-
-            //LIKE
-//            likesButton.setTitle("\(post.likes)", for: .normal)
-//            let heartName = post.isLiked ? "heart.fill" : "heart"
-//            likesButton.setImage(UIImage(systemName: heartName), for: .normal)
-//            likesButton.tintColor = post.isLiked ? .systemRed : .systemBlue
-            // Likes count (ALWAYS blue)
-            likesButton.setTitle("\(post.likes)", for: .normal)
-            likesButton.setTitleColor(.systemBlue, for: .normal)
-
-            // Heart icon (red only when liked)
-            let heartName = post.isLiked ? "heart.fill" : "heart"
-            let heartImage = UIImage(systemName: heartName)?
-                .withRenderingMode(.alwaysTemplate)
-
-            likesButton.setImage(heartImage, for: .normal)
-            likesButton.tintColor = post.isLiked ? .systemRed : .systemBlue
-
-            //COMMENT N SHARE
-            commentsButton.setTitle("\(post.comments)", for: .normal)
-            sharesButton.setTitle("\(post.shares)", for: .normal)
-        }
-    }
+}

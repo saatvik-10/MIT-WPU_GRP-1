@@ -13,7 +13,7 @@ class CreatePostViewController: UIViewController,UITextViewDelegate, UITextField
     var draft: Draft?
      
 
-    @IBOutlet weak var scrollView: UIScrollView!
+    //@IBOutlet weak var scrollView: UIScrollView!
 
     @IBOutlet weak var contentView: UIView!
     
@@ -57,8 +57,8 @@ class CreatePostViewController: UIViewController,UITextViewDelegate, UITextField
     
     func setupUI(){
         bodyTextView.delegate = self
-        bodyTextView.isScrollEnabled = false
-        bodyTextView.isScrollEnabled = false
+        bodyTextView.isScrollEnabled = true
+        
         
     }
     
