@@ -7,14 +7,16 @@ class OnboardingContentViewController: UIViewController {
     @IBOutlet weak var intermediateButton: UIButton!
     @IBOutlet weak var advancedButton: UIButton!
 
+    @IBOutlet weak var nextButton: UIButton!
     // callback to parent (page controller)
     var onOptionSelected: ((String) -> Void)?
     var onNextTapped: (() -> Void)?
-    
+
     var selectedButton : UIButton?
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
+        disableNextButton()
     }
 
     // MARK: - UI Setup
@@ -35,7 +37,7 @@ class OnboardingContentViewController: UIViewController {
                     button?.layer.borderColor = UIColor.secondaryLabel.cgColor
                 }
     }
-    
+
     func setButtonText(
         button: UIButton,
         title: String,
@@ -107,7 +109,7 @@ class OnboardingContentViewController: UIViewController {
         guard let selectedText = sender.titleLabel?.text else { return }
         onOptionSelected?(selectedText)
     }
-    
+
     func updateNextButtonState() {
         let isSelected = selectedButton != nil
         nextButton.isEnabled = isSelected
@@ -139,6 +141,5 @@ class OnboardingContentViewController: UIViewController {
     @IBAction func nextTapped(_ sender: UIButton) {
             onNextTapped?()
         }
-    
-}
 
+}

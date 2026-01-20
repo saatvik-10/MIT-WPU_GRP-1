@@ -16,12 +16,12 @@ class DomainSelectionViewController: UIViewController {
     
     @IBOutlet weak var nextButton: UIButton!
     var domains: [DomainModel] = [
-        DomainModel(title: "Stocks", icon: "chart.bar"),
-        DomainModel(title: "Mutual Funds", icon: "building.columns"),
-        DomainModel(title: "Crypto", icon: "bitcoinsign.circle"),
-        DomainModel(title: "Macroeconomy", icon: "globe"),
-        DomainModel(title: "Banking", icon: "creditcard"),
-        DomainModel(title: "Commodities", icon: "cube.box")
+        DomainModel(icon: "chart.bar", title: "Stocks"),
+        DomainModel(icon: "building.columns", title: "Mutual Funds"),
+        DomainModel(icon: "bitcoinsign.circle", title: "Crypto"),
+        DomainModel(icon: "globe", title: "Macroeconomy"),
+        DomainModel(icon: "creditcard", title: "Banking"),
+        DomainModel(icon: "cube.box", title: "Commodities")
     ]
 
     override func viewDidLoad() {
