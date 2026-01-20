@@ -8,23 +8,40 @@
 import UIKit
 
 class InterestsViewCell: UICollectionViewCell {
-
-    @IBOutlet var interestLabels: [UILabel]!
-
+    
+    @IBOutlet weak var interestsLabel: UILabel!
+    
+    @IBOutlet weak var badgeStackView: UIStackView!
+    
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
+        contentView.layer.cornerRadius = 12
+        contentView.clipsToBounds = true
     }
     
     func configure(interests: [String]) {
-        for (index, label) in interestLabels.enumerated() {
-            if index < interests.count {
-                label.text = interests[index]
-                label.isHidden = false
-            } else {
-                label.isHidden = true
-            }
+        badgeStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
+        
+        let itemsToShow = interests.suffix(4)
+        
+        for title in itemsToShow {
+            let badge = UILabel()
+
+            badge.text = "\(title)"
+            badge.font = .systemFont(ofSize: 12, weight: .medium)
+            badge.textColor = .systemBlue
+            badge.textAlignment = .center
+            badge.backgroundColor = UIColor.systemBlue.withAlphaComponent(0.05)
+            badge.layer.cornerRadius = 6
+            badge.layer.borderWidth = 1
+            badge.layer.borderColor = UIColor.systemBlue.withAlphaComponent(0.2).cgColor
+            badge.layer.masksToBounds = true
+            badge.translatesAutoresizingMaskIntoConstraints = false
+            badge.heightAnchor.constraint(equalToConstant: 30).isActive = true
+            
+            badgeStackView.addArrangedSubview(badge)
         }
     }
-
 }
