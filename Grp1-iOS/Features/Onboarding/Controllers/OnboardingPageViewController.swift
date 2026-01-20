@@ -21,14 +21,14 @@ class OnboardingPageViewController: UIPageViewController {
     }
     func loadPageData(){
         pagesData = [
-                OnboardingPage(
-                    title: "What’s your investment level?",
-                    options: [
-                        (title: "Beginner",subtitle: "Just starting my Financial Journey"),
-                        (title: "Intermediate",subtitle: "I have some experience"),
-                        (title: "Advanced",subtitle: "I understand markets")
-                    ]
-                )
+                    OnboardingPage(
+                        title: "Select your investment experience level",
+                        options: [
+                            (title: "Beginner",subtitle: "Just starting my Financial Journey"),
+                            (title: "Intermediate",subtitle: "I have some experience"),
+                            (title: "Advanced",subtitle: "I understand markets")
+                        ]
+                    )
         ]
     }
     
@@ -59,9 +59,18 @@ class OnboardingPageViewController: UIPageViewController {
         step2.onBackTapped = { [weak self] in
             self?.goToPreviousPage()
         }
+        
+        let step3 = onboardingStoryboard.instantiateViewController(
+            withIdentifier: "InterestCollectionViewController"
+        ) as! InterestCollectionViewController
+        
+        step3.onBackTapped = { [weak self] in
+            self?.goToPreviousPage()
+        }
+        
+        
 
-
-        controllers = [step1, step2]
+        controllers = [step1, step2,step3]
         setViewControllers([controllers[0]],
                            direction: .forward,
                            animated: false)
