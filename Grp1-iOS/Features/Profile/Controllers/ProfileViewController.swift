@@ -45,7 +45,7 @@ class ProfileViewController: UIViewController, ProfileOptionCellDelegate {
     func generateLayout() -> UICollectionViewLayout {
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
-            heightDimension: .estimated(75)
+            heightDimension: .estimated(100)
         )
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
         
@@ -53,6 +53,7 @@ class ProfileViewController: UIViewController, ProfileOptionCellDelegate {
             widthDimension: .fractionalWidth(1.0),
             heightDimension: .estimated(100)
         )
+        
         let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
         
         let section = NSCollectionLayoutSection(group: group)
