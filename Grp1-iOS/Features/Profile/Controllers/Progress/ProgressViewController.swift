@@ -59,7 +59,7 @@ class ProgressViewController: UIViewController {
     private func configureOverallProgress(_ data: OverallProgress) {
         overallPercentageLabel.text = "\(Int(data.progressPercentage * 100))%"
         completionLabel.text = data.quizCompletionNumber
-        levelLabel.text = data.levelNumber
+        levelLabel.text = "Level \(data.levelNumber)"
         
         linearProgressView.progress = Float(data.progressPercentage)
     }
