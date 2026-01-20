@@ -302,8 +302,20 @@ extension SearchViewController: UICollectionViewDataSource, UICollectionViewDele
         return header
     }
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let article = articles[indexPath.item]
-        print("Tapped:", article.title)
+        let article = isSearching
+               ? filteredArticles[indexPath.item]
+               : articles[indexPath.item]
+
+        performSegue(withIdentifier: "searchResult", sender: article)
+    }
+    
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "searchResult",
+           let vc = segue.destination as? news1ViewController,
+           let article = sender as? NewsArticle {
+            vc.article = article
+        }
     }
     
     func updateHeaderUI() {

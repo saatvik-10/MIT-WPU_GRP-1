@@ -72,11 +72,15 @@ class HomeViewController: UIViewController, UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
             
-            var selectedArticle: NewsArticle?
+        var selectedArticle: NewsArticle?
 
             if indexPath.section == 0 {
                 selectedArticle = todaysPick[indexPath.row]
-            } else if indexPath.section == 1 {
+                performSegue(withIdentifier: "showArticleDetail2", sender: selectedArticle)
+                return
+            }
+
+            if indexPath.section == 1 {
                 selectedArticle = trendingNews[indexPath.row]
             } else if indexPath.section == 2 {
                 selectedArticle = marketHighlights[indexPath.row]
@@ -84,17 +88,24 @@ class HomeViewController: UIViewController, UICollectionViewDelegate {
                 selectedArticle = marketHighlights[indexPath.row]
             }
 
+            // 🔵 ALL OTHER SECTIONS → news1ViewController
             performSegue(withIdentifier: "showArticleDetail", sender: selectedArticle)
         }
 
-        override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-            if segue.identifier == "showArticleDetail" {
-                if let destinationVC = segue.destination as? news1ViewController,
-                   let article = sender as? NewsArticle {
-                    destinationVC.article = article
-                }
-            }
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+
+        if segue.identifier == "showArticleDetail",
+           let destinationVC = segue.destination as? news1ViewController,
+           let article = sender as? NewsArticle {
+            destinationVC.article = article
         }
+
+        if segue.identifier == "showArticleDetail2",
+           let destinationVC = segue.destination as? news2ViewController,
+           let article = sender as? NewsArticle {
+            destinationVC.article = article
+        }
+    }
     
     func generateLayout()->UICollectionViewLayout {
         let layout = UICollectionViewCompositionalLayout { section, _ in
