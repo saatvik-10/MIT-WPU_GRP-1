@@ -9,41 +9,29 @@ class ProfileOption2ViewCell: UICollectionViewCell {
     
     weak var delegate: ProfileOptionCellDelegate?
     
-//    @IBOutlet weak var optionBtnSubtitle: UILabel!
-    @IBOutlet weak var optionButton: UIButton!
+    @IBOutlet weak var textLabel: UILabel!
+    
+    @IBOutlet weak var chevronImage: UIImageView!
     
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        optionButton.removeTarget(nil, action: nil, for: .allEvents)
-        optionButton.addTarget(self, action: #selector(optionButtonTapped), for: .touchUpInside)
-    }
-
-    @objc func optionButtonTapped() {
-        delegate?.didTapOption(for: self)
+        contentView.backgroundColor = .white
+        contentView.layer.cornerRadius = 12
+        contentView.layer.masksToBounds = true
     }
     
-    // MARK: - Configure Function (Dynamically sets the button content)
     func configure(title: String, isDestructive: Bool) {
-        var config = optionButton.configuration ?? .plain()
-        
-        config.title = title
-
-        config.baseForegroundColor = isDestructive ? .systemRed : .label
+        textLabel.text = title
+        textLabel.font = .preferredFont(forTextStyle: .title2)
         
         if isDestructive {
-            config.image = nil
+            textLabel.textColor = .systemRed
+            textLabel.textAlignment = .center
+            chevronImage.isHidden = true
         } else {
-            let chevronImage = UIImage(
-                systemName: "chevron.right",
-                withConfiguration: UIImage.SymbolConfiguration(scale: .medium)
-            )
-            config.image = chevronImage
-            config.imagePlacement = .trailing
-            config.imagePadding = 8
+            textLabel.textColor = .label
+            chevronImage.isHidden = false
         }
-
-        optionButton.configuration = config
-        optionButton.isUserInteractionEnabled = true
     }
 }
