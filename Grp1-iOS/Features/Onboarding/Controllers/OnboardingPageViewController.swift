@@ -20,14 +20,14 @@ class OnboardingPageViewController: UIPageViewController {
     }
     func loadPageData(){
         pagesData = [
-                OnboardingPage(
-                    title: "What’s your investment level?",
-                    options: [
-                        (title: "Beginner",subtitle: "Just starting my Financial Journey"),
-                        (title: "Intermediate",subtitle: "I have some experience"),
-                        (title: "Advanced",subtitle: "I understand markets")
-                    ]
-                )
+                    OnboardingPage(
+                        title: "Select your investment experience level",
+                        options: [
+                            (title: "Beginner",subtitle: "Just starting my Financial Journey"),
+                            (title: "Intermediate",subtitle: "I have some experience"),
+                            (title: "Advanced",subtitle: "I understand markets")
+                        ]
+                    )
         ]
     }
     
@@ -54,6 +54,25 @@ class OnboardingPageViewController: UIPageViewController {
         if let first = controllers.first {
             setViewControllers([first], direction: .forward, animated: false)
         }
+        
+        step2.onBackTapped = { [weak self] in
+            self?.goToPreviousPage()
+        }
+        
+        let step3 = onboardingStoryboard.instantiateViewController(
+            withIdentifier: "InterestCollectionViewController"
+        ) as! InterestCollectionViewController
+        
+        step3.onBackTapped = { [weak self] in
+            self?.goToPreviousPage()
+        }
+        
+        
+
+        controllers = [step1, step2,step3]
+        setViewControllers([controllers[0]],
+                           direction: .forward,
+                           animated: false)
     }
     
     func goToNextPage(){
@@ -66,5 +85,20 @@ class OnboardingPageViewController: UIPageViewController {
                     print("Onboarding finished!")
                 }
         }
+    
+    
+    func goToPreviousPage() {
+        let previousIndex = currentIndex - 1
+
+        guard previousIndex >= 0 else { return }
+
+        currentIndex = previousIndex
+
+        setViewControllers(
+            [controllers[currentIndex]],
+            direction: .reverse,
+            animated: true
+        )
+    }
 
 }

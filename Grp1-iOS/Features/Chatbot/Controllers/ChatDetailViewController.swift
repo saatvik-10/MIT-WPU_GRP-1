@@ -45,11 +45,7 @@ class ChatDetailViewController: MessagesViewController {
         // navigation title
         title = chatTitle ?? "Chat"
         
-        // Configure navigation bar
-        navigationController?.navigationBar.prefersLargeTitles = false
-        navigationItem.largeTitleDisplayMode = .never
-        
-        let smallFont = UIFont.systemFont(ofSize: 16, weight: .semibold)
+        let smallFont = UIFont.systemFont(ofSize: 17, weight: .semibold)
             navigationController?.navigationBar.titleTextAttributes = [
                 .font : smallFont
             ]
@@ -59,8 +55,8 @@ class ChatDetailViewController: MessagesViewController {
         messagesCollectionView.messagesLayoutDelegate = self
         messagesCollectionView.messagesDisplayDelegate = self
         
-        // IMPORTANT: Configure the collection view
-        messagesCollectionView.backgroundColor = .systemBackground
+        // Configure the collection view
+        messagesCollectionView.backgroundColor = .systemGray6
         
         // Dismiss keyboard when tapping on messages
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
@@ -177,6 +173,8 @@ class ChatDetailViewController: MessagesViewController {
             )
             
             
+            
+            
             messages = [m1, m2, m3, m4, m5, m6, m7]
             botReplyIndex = 4 // Updated to continue from m7
         }
@@ -278,12 +276,12 @@ extension ChatDetailViewController: MessagesLayoutDelegate, MessagesDisplayDeleg
     
     
     // Configure message style
-    func messageStyle(for message: MessageType,
-                      at indexPath: IndexPath,
-                      in messagesCollectionView: MessagesCollectionView) -> MessageStyle {
-        let corner: MessageStyle.TailCorner = message.sender.senderId == currentUser.senderId ? .bottomRight : .bottomLeft
-        return .bubbleTail(corner, .curved)
-    }
+//    func messageStyle(for message: MessageType,
+//                      at indexPath: IndexPath,
+//                      in messagesCollectionView: MessagesCollectionView) -> MessageStyle {
+//        let corner: MessageStyle.TailCorner = message.sender.senderId == currentUser.senderId ? .bottomRight : .bottomLeft
+//        return .bubbleTail(corner, .curved)
+//    }
     
     // MARK: - Layout Delegate Methods
     
@@ -295,6 +293,13 @@ extension ChatDetailViewController: MessagesLayoutDelegate, MessagesDisplayDeleg
     // Height for bottom label
     func messageBottomLabelHeight(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CGFloat {
         return 0
+    }
+    private func avatarSize(
+        for message: MessageType,
+        at indexPath: IndexPath,
+        in messagesCollectionView: MessagesCollectionView
+    ) -> CGSize {
+        return .zero
     }
 }
 
