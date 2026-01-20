@@ -31,19 +31,33 @@ class ArticleLensPopupViewController: UIViewController {
     private func animateIn() {
         let generator = UINotificationFeedbackGenerator()
         generator.notificationOccurred(.success)
-        UIView.animate(withDuration: 0.35, delay: 0, usingSpringWithDamping: 0.85, initialSpringVelocity: 0.7, options: .curveEaseOut, animations: {
+        UIView.animate(
+            withDuration: 0.35,
+            delay: 0,
+            usingSpringWithDamping: 0.85,
+            initialSpringVelocity: 0.7,
+            options: .curveEaseOut,
+            animations: {
                 self.view.backgroundColor = UIColor.black.withAlphaComponent(0.35)
                 self.containerView.transform = .identity
-            }, completion: nil)
+            },
+            completion: nil
+        )
     }
 
     private func animateOut(completion: (() -> Void)? = nil) {
         let generator = UINotificationFeedbackGenerator()
         generator.notificationOccurred(.success)
-        UIView.animate(withDuration: 0.28, delay: 0, options: .curveEaseIn, animations: {
+        UIView.animate(
+            withDuration: 0.28,
+            delay: 0,
+            options: .curveEaseIn,
+            animations: {
                 self.view.backgroundColor = UIColor.black.withAlphaComponent(0.0)
                 self.containerView.transform = CGAffineTransform(translationX: 0, y: 600)
-            }, completion: { _ in completion?() })
+            },
+            completion: { _ in completion?() }
+        )
     }
 
     @IBAction func dismissPopup(_ sender: Any) {

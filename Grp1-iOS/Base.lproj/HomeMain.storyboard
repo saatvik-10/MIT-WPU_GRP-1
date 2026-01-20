@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="24412" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="sUp-R7-HvU">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="24506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="sUp-R7-HvU">
     <device id="retina6_7" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24405"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24504"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -1276,7 +1276,7 @@ Overall sentiment remains positive, and dips are expected to attract fresh buyin
         <!--Threads-->
         <scene sceneID="9pj-K6-QpY">
             <objects>
-                <viewControllerPlaceholder storyboardIdentifier="Threads" storyboardName="threadsMain" referencedIdentifier="Threads" id="81e-K4-QUO" sceneMemberID="viewController">
+                <viewControllerPlaceholder storyboardName="threadsMain" referencedIdentifier="threadNavigationController" id="81e-K4-QUO" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Item" id="Mqm-dK-hJ1"/>
                 </viewControllerPlaceholder>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gaW-LS-pdn" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

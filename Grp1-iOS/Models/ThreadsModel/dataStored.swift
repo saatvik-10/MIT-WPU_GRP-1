@@ -3,7 +3,7 @@
 //  Grp1-iOS
 //
 //  Created by SDC-USER on 28/11/25.
-//import Foundation
+import Foundation
 
 struct ThreadPost {
     let id: Int
@@ -21,3 +21,12 @@ struct ThreadPost {
     var isLiked: Bool 
 }
 
+
+struct Draft {
+    let id: UUID
+    var title: String?
+    var topic: String?
+    var body: String?
+    var imageName: String?
+    var lastUpdated: Date
+}

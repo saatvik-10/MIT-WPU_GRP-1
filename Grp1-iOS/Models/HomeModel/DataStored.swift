@@ -7,7 +7,6 @@ class NewsDataStore {
     
     private var newsArticles: [NewsArticle] = [
         
-        
         NewsArticle(
             id: 1,
             title: "Tech Giants Report Strong Quarterly Results it is very good news",
@@ -50,7 +49,7 @@ class NewsDataStore {
             id: 4,
             title: "RBI Maintains Status Quo on Interest Rates",
             description: "The RBI kept repo rate unchanged as inflation stabilizes. Markets reacted positively.",
-            imageName: "rbi-1722414243",
+            imageName: "urban_4",
             category: "Economy",
             date: "2 Hours Ago",
             source: "Economic Times",
@@ -133,7 +132,7 @@ class NewsDataStore {
             id: 3,
             title: "Gold Prices Hit 3-Month High",
             description: "Weak dollar and geopolitical tensions push gold prices higher.",
-            imageName: "Screenshot 2025-12-17 at 10.09.02 AM",
+            imageName: "urban_8",
             category: "Commodities",
             date: "18 Hours Ago",
             source: "Business Standard",
@@ -164,9 +163,46 @@ class NewsDataStore {
                     createdAt: Date()
                 )
             ]
+        ),
+        
+        
+        NewsArticle(
+            id: 4,
+            title: "Tech Giants Report Strong Quarterly Results it is very good news",
+            description: "IT sector sees renewed interest as major players beat earnings estimates.",
+            imageName: "urban_2",
+            category: "Technology",
+            date: "Yesterday",
+            source: "Reuters",
+            
+            overview: [
+                "Major technology firms posted significantly better-than-expected quarterly earnings, signaling renewed industry strength after months of global macroeconomic uncertainty.",
+                "Robust demand for cloud services, AI infrastructure, and enterprise computing contributed heavily to revenue growth, exceeding analyst projections across multiple business segments.",
+                "Market analysts believe these results may trigger increased investor confidence, potentially fueling further rallies in tech stocks that have already seen notable upward momentum.",
+                "Executives across the sector emphasized continued investment in artificial intelligence, automation, and next-generation hardware as long-term drivers of sustained profitability."
+            ],
+            
+            keyTakeaways: [
+                "Top technology companies exceeded revenue and profit expectations, signaling strong recovery momentum in the global tech sector.",
+                "Improved cloud adoption and enterprise demand contributed significantly to the positive earnings performance.",
+                "Market sentiment around IT stocks strengthened as investors reacted to the better-than-expected financial results.",
+                "Analysts predict sustained growth as digital transformation accelerates across industries."
+            ],
+            
+            jargons: [
+                "Quarterly Earnings",
+                "Tech Valuation",
+                "Market Sentiment"
+            ],
+            
+            qaHistory: [
+                ArticleQA(
+                    question: "How will strong earnings impact tech stocks?",
+                    answer: "Better-than-expected earnings usually attract institutional investors and support price growth.",
+                    createdAt: Date()
+                )
+            ]
         )
-        
-        
     ]
     
     // Existing methods
