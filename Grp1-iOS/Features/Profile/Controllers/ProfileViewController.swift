@@ -123,10 +123,6 @@ extension ProfileViewController {
         case "Bookmarks":
             performSegue(withIdentifier: "bookmarksSegue", sender: self)
 
-        case "Achievements":
-            print("TODO: Achievements Tapped")
-//            performSegue(withIdentifier: "achievementsSegue", sender: self)
-
         case "About us":
             print("TODO: About us Tapped")
 //            performSegue(withIdentifier: "aboutUsSegue", sender: self)
