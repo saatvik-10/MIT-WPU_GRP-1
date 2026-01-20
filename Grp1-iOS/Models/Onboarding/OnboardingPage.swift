@@ -20,5 +20,8 @@ struct OnboardingInterestModel {
 }
 
 
-
+struct DomainModel {
+    let icon : String?
+    let title : String
+}
 
