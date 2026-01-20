@@ -9,7 +9,7 @@ class ProfileOption2ViewCell: UICollectionViewCell {
     
     weak var delegate: ProfileOptionCellDelegate?
     
-    @IBOutlet weak var optionBtnSubtitle: UILabel!
+//    @IBOutlet weak var optionBtnSubtitle: UILabel!
     @IBOutlet weak var optionButton: UIButton!
     
     override func awakeFromNib() {
