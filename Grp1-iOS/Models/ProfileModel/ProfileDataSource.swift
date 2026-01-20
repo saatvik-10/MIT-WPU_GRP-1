@@ -4,7 +4,6 @@ struct ProfileDataSource {
         ProfileOption(title: "Progress", isDestructive: false),
         ProfileOption(title: "Interests", isDestructive: false),
         ProfileOption(title: "Bookmarks", isDestructive: false),
-        ProfileOption(title: "Achievements", isDestructive: false),
         ProfileOption(title: "About Us", isDestructive: false),
         ProfileOption(title: "Logout", isDestructive: true)
     ]
