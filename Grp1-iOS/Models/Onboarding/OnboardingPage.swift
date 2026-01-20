@@ -18,7 +18,7 @@ struct DomainModel {
 
 
 struct OnboardingInterestModel {
-    let icon : String
+    let icon : String?
     let title : String
     let subtitle : String
 }
