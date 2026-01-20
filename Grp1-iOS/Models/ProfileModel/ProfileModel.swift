@@ -18,9 +18,9 @@ enum UserLevel: String {
 }
 
 struct ProgressSectionModel {
-    let progress: Double
-    let levelText: String
-    let completionText: String
+    let progressPercentage: Double
+    let progressLevel: Int
+    let requirementNextLevel: String
 }
 
 struct InterestsSectionModel {
@@ -36,24 +36,22 @@ enum ProfileSection {
     case progress(ProgressSectionModel)
     case interests(InterestsSectionModel)
     case bookmarks(BookmarksSectionModel)
-    case achievements
     case about
     case logout
 }
 
 extension ProfileSection {
-
+    
     var title: String {
         switch self {
         case .progress: return "Progress"
         case .interests: return "Interests"
         case .bookmarks: return "Bookmarks"
-        case .achievements: return "Achievements"
         case .about: return "About Us"
         case .logout: return "Logout"
         }
     }
-
+    
     var isDestructive: Bool {
         if case .logout = self { return true }
         return false
@@ -115,7 +113,7 @@ struct BookmarkItem {
 struct OverallProgress {
     let progressPercentage: Double
     let quizCompletionNumber: String
-    let levelNumber: String
+    let levelNumber: Int
 }
 
 struct ProgressStats {

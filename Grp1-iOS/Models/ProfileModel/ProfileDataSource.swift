@@ -11,9 +11,9 @@ import UIKit
 
 struct ProfileDataSource {
     static let progressSection = ProgressSectionModel(
-        progress: ProgressMockData.overallProgress.progressPercentage,
-        levelText: ProgressMockData.overallProgress.levelNumber,
-        completionText: ProgressMockData.overallProgress.quizCompletionNumber
+        progressPercentage: ProgressSectionMockData.mockProgress.progressPercentage,
+        progressLevel: ProgressSectionMockData.mockProgress.progressLevel,
+        requirementNextLevel: ProgressSectionMockData.mockProgress.requirementNextLevel
     )
     
     static let interestsSection = InterestsSectionModel(
@@ -33,7 +33,6 @@ struct ProfileDataSource {
         .progress(progressSection),
         .interests(interestsSection),
         .bookmarks(bookmarksSection),
-        .achievements,
         .about,
         .logout
     ]
@@ -69,6 +68,14 @@ struct User {
     )
 }
 
+struct ProgressSectionMockData {
+    static let mockProgress = ProgressSectionModel(
+        progressPercentage: 0.775,
+        progressLevel: 5,
+        requirementNextLevel: ""
+    )
+}
+
 struct Bookmarks {
     static let mockBookmarks: [BookmarkItem] = [
         BookmarkItem(
@@ -93,7 +100,7 @@ struct ProgressMockData {
     static let overallProgress = OverallProgress(
         progressPercentage: 0.775,
         quizCompletionNumber: "2/3 Completed",
-        levelNumber: "Level 5"
+        levelNumber: 5
     )
     
     static let stats = ProgressStats(
