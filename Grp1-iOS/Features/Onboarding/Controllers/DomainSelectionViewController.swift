@@ -49,7 +49,10 @@ class DomainSelectionViewController: UIViewController {
         onBackTapped?()
     }
     
-
+    @IBAction func nextTapped(_ sender: UIButton) {
+        onNextTapped?()
+    }
+    
 }
 
 extension DomainSelectionViewController: UICollectionViewDataSource {
