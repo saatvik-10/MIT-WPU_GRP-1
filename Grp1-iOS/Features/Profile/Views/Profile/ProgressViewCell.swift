@@ -9,9 +9,9 @@ import UIKit
 
 class ProgressViewCell: UICollectionViewCell {
     
-    @IBOutlet weak var progressPercent: UILabel!
-    @IBOutlet weak var progressLabel: UILabel!
-    @IBOutlet weak var progress: UIProgressView!
+    @IBOutlet weak var requirementNextLevel: UILabel!
+    @IBOutlet weak var progressLevel: UILabel!
+    @IBOutlet weak var progressPercentage: UIProgressView!
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -19,16 +19,17 @@ class ProgressViewCell: UICollectionViewCell {
         contentView.layer.cornerRadius = 16
         contentView.clipsToBounds = true
         
-        progress.progress = 0
-        progress.layer.cornerRadius = 4
-        progress.clipsToBounds = true
+        progressPercentage.progress = 0
+        progressPercentage.layer.cornerRadius = 4
+        progressPercentage.clipsToBounds = true
     }
     
-    func configure(title: String, progressValue: Float) {
-        progressLabel.text = title
-        progress.setProgress(progressValue, animated: true)
+    func configure(level: Int, progressValue: Float) {
+        progressLevel.text = "Level \(level)"
         
-        let percentage = Int(progressValue * 100)
-        progressPercent.text = "\(percentage)% completed"
+        progressPercentage.setProgress(progressValue, animated: true)
+        
+        let remainingPercent = Int((1.0 - progressValue) * 100)
+        requirementNextLevel.text = "\(remainingPercent)% to Level \(level + 1)"
     }
 }
