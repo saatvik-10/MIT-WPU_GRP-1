@@ -8,11 +8,15 @@
 import UIKit
 
 class BookmarksViewCell: UICollectionViewCell {
-
+    
     @IBOutlet weak var bookmarksDetail: UILabel!
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
+        contentView.layer.cornerRadius = 16
+        contentView.clipsToBounds = true
     }
-
+    
+    func configure(folders: Int, bookmarks: Int) {
+        bookmarksDetail.text = "\(folders) Folders  • \(bookmarks) Bookmarks"
+    }
 }
