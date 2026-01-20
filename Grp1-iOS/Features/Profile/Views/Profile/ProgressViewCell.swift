@@ -22,6 +22,9 @@ class ProgressViewCell: UICollectionViewCell {
         progressPercentage.progress = 0
         progressPercentage.layer.cornerRadius = 4
         progressPercentage.clipsToBounds = true
+        
+        progressPercentage.translatesAutoresizingMaskIntoConstraints = false
+        progressPercentage.heightAnchor.constraint(equalToConstant: 8).isActive = true
     }
     
     func configure(level: Int, progressValue: Float) {
