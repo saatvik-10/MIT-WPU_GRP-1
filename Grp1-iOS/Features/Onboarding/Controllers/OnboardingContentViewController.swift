@@ -43,13 +43,15 @@ class OnboardingContentViewController: UIViewController {
         title: String,
         subtitle: String
     ) {
+        let titleFont = UIFont.preferredFont(forTextStyle: .title2)
+        let subtitleFont = UIFont.preferredFont(forTextStyle: .subheadline)
         let titleAttributes: [NSAttributedString.Key: Any] = [
-            .font: UIFont.systemFont(ofSize: 20, weight: .semibold),
+            .font : titleFont,
             .foregroundColor: button.tintColor ?? UIColor.label
         ]
 
         let subtitleAttributes: [NSAttributedString.Key: Any] = [
-            .font: UIFont.systemFont(ofSize: 16, weight: .regular),
+            .font : subtitleFont,
             .foregroundColor: UIColor.secondaryLabel
         ]
 
