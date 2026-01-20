@@ -8,7 +8,9 @@ class DomainCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var checkMarkView: UIImageView!
     let selectedBorderWidth: CGFloat = 2
     let unselectedBorderWidth: CGFloat = 1
-
+    
+    
+    let config = UIImage.SymbolConfiguration(weight: .light)
 
     override var isSelected: Bool {
         didSet {
@@ -112,7 +114,7 @@ class DomainCollectionViewCell: UICollectionViewCell {
         domainName.text = model.title
 
         if let iconName = model.icon {
-            domainIconView.image = UIImage(systemName: iconName)
+            domainIconView.image = UIImage(systemName: iconName,withConfiguration: config)
             domainIconView.tintColor = .label
             domainIconView.isHidden = false
         } else {
