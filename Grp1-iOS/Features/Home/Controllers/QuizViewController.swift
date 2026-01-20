@@ -25,6 +25,7 @@ class QuizViewController: UIViewController {
     private var currentQuestionIndex = 0
     override func viewDidLoad() {
         super.viewDidLoad()
+        isModalInPresentation = true
         view.backgroundColor = AppTheme.shared.dominantColor.withAlphaComponent(0.1)
 
         
@@ -70,7 +71,6 @@ class QuizViewController: UIViewController {
         let isLastQuestion = currentQuestionIndex == quizQuestions.count - 1
 
         if isLastQuestion {
-            // 🔴 LAST QUESTION
             continueButton.isEnabled = false
             continueButton.alpha = 0.0
             continueButton.isHidden = true
@@ -79,7 +79,6 @@ class QuizViewController: UIViewController {
             endQuizButton.alpha = 0.5
             endQuizButton.isEnabled = false
         } else {
-            // 🟢 NORMAL QUESTIONS
             continueButton.isHidden = false
             continueButton.isEnabled = false
             continueButton.alpha = 0.5
@@ -128,9 +127,13 @@ class QuizViewController: UIViewController {
 
             if sender.tag == question.correctIndex {
                 sender.backgroundColor = .systemGreen
+                let generator = UINotificationFeedbackGenerator()
+                generator.notificationOccurred(.success)
                 score += 1
             } else {
                 sender.backgroundColor = .systemRed
+                let generator = UINotificationFeedbackGenerator()
+                generator.notificationOccurred(.error)
             }
 
             optionButton1.isEnabled = false

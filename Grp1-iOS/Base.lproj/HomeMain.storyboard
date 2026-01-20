@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="24506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="sUp-R7-HvU">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="24412" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="sUp-R7-HvU">
     <device id="retina6_7" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24504"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24405"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -736,7 +736,13 @@ Overall sentiment remains positive, and dips are expected to attract fresh buyin
                             <constraint firstItem="W1Y-Ur-8PQ" firstAttribute="bottom" secondItem="PH8-T7-5CV" secondAttribute="bottom" constant="45" id="jgZ-Bp-X8X"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="IgM-LV-Vyx"/>
+                    <navigationItem key="navigationItem" id="IgM-LV-Vyx">
+                        <barButtonItem key="rightBarButtonItem" image="xmark" catalog="system" id="g51-H1-aeZ">
+                            <connections>
+                                <action selector="quitTapped:" destination="PnM-LS-zjX" id="hBU-7h-PxW"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="actionButton" destination="F4H-u6-vHW" id="RnG-OO-GmT"/>
                         <outlet property="glassView" destination="PH8-T7-5CV" id="HST-ZF-0T2"/>
@@ -978,7 +984,7 @@ Overall sentiment remains positive, and dips are expected to attract fresh buyin
                                 </constraints>
                             </imageView>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="eurosign" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="wUC-NH-aRS">
-                                <rect key="frame" x="188" y="255.6666666666666" width="37" height="32.666666666666771"/>
+                                <rect key="frame" x="188" y="255.66666666666671" width="37" height="32.6666666666666"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="36" id="GyM-yn-VoV"/>
                                     <constraint firstAttribute="width" constant="37" id="pas-At-G4t"/>
@@ -1273,7 +1279,7 @@ Overall sentiment remains positive, and dips are expected to attract fresh buyin
             </objects>
             <point key="canvasLocation" x="1639.5348837209301" y="1692.4892703862663"/>
         </scene>
-        <!--Threads-->
+        <!--threadNavigationController-->
         <scene sceneID="9pj-K6-QpY">
             <objects>
                 <viewControllerPlaceholder storyboardName="threadsMain" referencedIdentifier="threadNavigationController" id="81e-K4-QUO" sceneMemberID="viewController">
@@ -1596,22 +1602,22 @@ Overall sentiment remains positive, and dips are expected to attract fresh buyin
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="systemBlueColor">
-            <color red="0.0" green="0.53333333333333333" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemGray6Color">
-            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.94901960780000005" green="0.94901960780000005" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemGrayColor">
-            <color red="0.55686274509803924" green="0.55686274509803924" blue="0.57647058823529407" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.5568627451" green="0.5568627451" blue="0.57647058819999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemMintColor">
-            <color red="0.0" green="0.78431372549019607" blue="0.70196078431372544" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.0" green="0.78039215689999997" blue="0.74509803919999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemPinkColor">
-            <color red="1" green="0.17647058823529413" blue="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="1" green="0.1764705882" blue="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemRedColor">
-            <color red="1" green="0.2196078431372549" blue="0.23529411764705882" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="1" green="0.23137254900000001" blue="0.18823529410000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemYellowColor">
             <color red="1" green="0.80000000000000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
