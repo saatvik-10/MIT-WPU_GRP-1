@@ -26,6 +26,7 @@ struct NewsArticle {
     /// All questions & answers asked for this article
     var qaHistory: [ArticleQA] = []
 }
+
 class selectedWord {
     static var word: String?
 }
@@ -262,7 +263,6 @@ class QuizStore {
             ],
             correctIndex: 3
         ),
-
         // 🔹 Quiz for article ID = 202
         QuizQuestion(
             articleId: 2,

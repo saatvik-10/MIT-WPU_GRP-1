@@ -1,14 +1,14 @@
 import Foundation
 import NaturalLanguage
 
-// MARK: - Configuration
+// MARK: - Configuration (UNCHANGED)
 struct MatchConfig {
     let minConfidence: Double = 0.45
     let exactMatchBoost: Double = 1.0
     let semanticFloor: Double = 0.0
 }
 
-// MARK: - Sample Data
+// MARK: - User Tags (UNCHANGED)
 let userTags = [
     "banking",
     "stock market",
@@ -26,24 +26,34 @@ let userTags = [
     "financial sector"
 ]
 
-let newsHeadline = "Tech Giants Report Strong Quarterly Results it is very good news"
+// MARK: - TAG WEIGHTS (NEW – IMPLEMENTATION ONLY)
+let tagWeights: [String: Double] = [
+    "banking": 10,
+    "stock market": 13,
+    "hdfc bank": 8,
+    "interest rate": 20,
+    "rbi": 18,
+    "technology": 7,
+    "digital banking": 6,
+    "fintech": 3,
+    "inflation": 11,
+    "economy": 4,
+    "credit growth": 6,
+    "regulation": 8,
+    "monetary policy": 13,
+    "financial sector": 9
+]
+
+// MARK: - News Data (UNCHANGED)
+let newsHeadline = "Retail inflation remains muted at 1.3% in December"
 
 let newsBody = """
-Major technology firms posted significantly better-than-expected quarterly earnings, signaling renewed industry strength after months of global macroeconomic uncertainty.Robust demand for cloud services, AI infrastructure, and enterprise computing contributed heavily to revenue growth, exceeding analyst projections across multiple business segmentsMarket analysts believe these results may trigger increased investor confidence, potentially fueling further rallies in tech stocks that have already seen notable upward momentum.Executives across the sector emphasized continued investment in artificial intelligence, automation, and next-generation hardware as long-term drivers of sustained profitability.
+NEW DELHI: India’s benchmark inflation rate stayed on the lower side of RBI’s target band of 4% plus or minus 2% for the fourth consecutive month in December 2025. The 1.3% retail inflation value, as measured by the annual growth in Consumer Price Index (CPI), is mostly a result of easing but persisting deflation in food prices, which is more than compensating for inflationary tailwinds from sources such as precious metals.
+The latest inflation reading also means that quarterly inflation in the period ending December 2025, was 0.76%, the lowest ever in the current series and the second consecutive quarter when it stayed below the lower end of RBI’s target band. To be sure, the December quarter inflation print is slightly higher than the 0.6% projected by RBI in its December Monetary Policy Committee (MPC) resolution. Headline inflation has stayed below RBI’s actual target of 4%  for four consecutive quarters now.
 """
 
-
-
-
-//Indian stock market indices closed higher after the RBI struck a cautious tone
-//on inflation while maintaining its current interest rate framework. The central
-//bank emphasized the need to support economic growth without compromising price stability.
 //
-//Banking stocks, including HDFC Bank, benefited from expectations of stable lending
-//conditions and improved credit growth. Analysts noted that consistent monetary policy
-//and predictable regulation are positive signals for the broader economy.
-
-// MARK: - Text Cleaning
+// MARK: - Text Cleaning (UNCHANGED)
 func cleanText(_ text: String) -> String {
     text.lowercased()
         .replacingOccurrences(
@@ -53,7 +63,7 @@ func cleanText(_ text: String) -> String {
         )
 }
 
-// MARK: - Phrase Extraction
+// MARK: - Phrase Extraction (UNCHANGED)
 func extractPhrases(from text: String) -> [String] {
     let tagger = NLTagger(tagSchemes: [.lexicalClass])
     tagger.string = text
@@ -85,7 +95,7 @@ func extractPhrases(from text: String) -> [String] {
     return phrases
 }
 
-// MARK: - Simple Stemmer
+// MARK: - Simple Stemmer (UNCHANGED)
 func root(_ word: String) -> String {
     let suffixes = ["ing", "ed", "s", "es", "ly"]
     for suffix in suffixes {
@@ -96,8 +106,7 @@ func root(_ word: String) -> String {
     return word
 }
 
-
-// MARK: - Matching Engine
+// MARK: - Matching Engine (100% UNCHANGED)
 func matchUserTagsWithArticle(
     userTags: [String],
     headline: String,
@@ -132,7 +141,6 @@ func matchUserTagsWithArticle(
             for phrase in phrases {
                 let phraseWords = phrase.split(separator: " ").map(String.init)
 
-                // Exact phrase shortcut
                 if phrase.contains(tagWord) {
                     bestScore = config.exactMatchBoost
                     break
@@ -141,13 +149,11 @@ func matchUserTagsWithArticle(
                 for phraseWord in phraseWords {
                     let phraseRoot = root(phraseWord)
 
-                    // Root or exact match
                     if tagWord == phraseWord || tagRoot == phraseRoot {
                         bestScore = config.exactMatchBoost
                         break
                     }
 
-                    // Semantic similarity
                     let distance = embedding.distance(
                         between: tagWord,
                         and: phraseWord
@@ -181,6 +187,17 @@ func matchUserTagsWithArticle(
     return (matchedTags, matchedTags.count)
 }
 
+// MARK: - ARTICLE SCORE (NEW – SIMPLE SUM)
+func calculateArticleScore(
+    matchedTags: [String],
+    tagWeights: [String: Double]
+) -> Double {
+
+    matchedTags.reduce(0.0) { score, tag in
+        score + (tagWeights[tag] ?? 0.0)
+    }
+}
+
 // MARK: - Run
 let result = matchUserTagsWithArticle(
     userTags: userTags,
@@ -193,3 +210,10 @@ print("\nMatched Tags:")
 result.matchedTags.forEach { print(" • \($0)") }
 
 print("\nTotal Matches: \(result.matchCount)")
+
+let articleScore = calculateArticleScore(
+    matchedTags: result.matchedTags,
+    tagWeights: tagWeights
+)
+
+print("\nArticle Score:", articleScore)
