@@ -28,11 +28,11 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="252" verticalHuggingPriority="251" image="chevron.right" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="28e-Yd-mxp">
-                                <rect key="frame" x="291" y="21" width="10" height="19"/>
+                                <rect key="frame" x="291" y="21" width="10" height="20.666666666666664"/>
                                 <color key="tintColor" systemColor="labelColor"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="10" id="Ia3-CO-d44"/>
-                                    <constraint firstAttribute="height" constant="22.670000000000002" id="WIu-re-CmD"/>
+                                    <constraint firstAttribute="height" constant="24.333333333333336" id="WIu-re-CmD"/>
                                 </constraints>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JR6-af-K7P">
@@ -44,7 +44,7 @@
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="JR6-af-K7P" firstAttribute="top" secondItem="28e-Yd-mxp" secondAttribute="bottom" constant="10.33" id="7iw-aW-jkD"/>
+                            <constraint firstItem="JR6-af-K7P" firstAttribute="top" secondItem="28e-Yd-mxp" secondAttribute="bottom" constant="8.6666666666666643" id="7iw-aW-jkD"/>
                             <constraint firstItem="oGg-yX-6Bt" firstAttribute="leading" secondItem="pAj-CF-Tvl" secondAttribute="leading" constant="12" id="DSx-rz-wzU"/>
                             <constraint firstAttribute="trailing" secondItem="JR6-af-K7P" secondAttribute="trailing" constant="12" id="HrY-jw-izc"/>
                             <constraint firstItem="oGg-yX-6Bt" firstAttribute="top" secondItem="pAj-CF-Tvl" secondAttribute="top" constant="17" id="JH4-Px-7Av"/>
