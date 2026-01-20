@@ -23,7 +23,13 @@ class ChatListViewController: UIViewController, ChatDetailViewControllerDelegate
         ChatPreview(id: UUID(), title: "What is repo rate?", timestamp: Date()),
         ChatPreview(id: UUID(), title: "Why does RBI increase the repo rate?", timestamp: Date()),
         ChatPreview(id: UUID(), title: "Explain the Indian Economy?", timestamp: Date()),
-        ChatPreview(id: UUID(), title: "What is FII?", timestamp: Date())
+        ChatPreview(id: UUID(), title: "Why do stock markets fall when interest rates rise?", timestamp: Date()),
+        ChatPreview(id: UUID(), title: "What is market capitalization?", timestamp: Date()),
+        ChatPreview(id: UUID(), title: "How does RBI control money supply", timestamp: Date()),
+        ChatPreview(id: UUID(), title: "How does fiscal policy differ from monetary policy?", timestamp: Date()),
+        ChatPreview(id: UUID(), title: "How does crude oil price affect inflation?", timestamp: Date()),
+        ChatPreview(id: UUID(), title: "What is NAV in mutual funds?", timestamp: Date())
+        
     ]
     
     var filteredChats: [ChatPreview] = []
@@ -107,7 +113,7 @@ extension ChatListViewController: UITableViewDataSource {
         var config = cell.defaultContentConfiguration()
         config.text = chat.title
         config.secondaryText = chat.timestamp.formatted(date: .numeric, time: .shortened)
-        config.textProperties.font = .systemFont(ofSize: 16,weight: .medium)
+        config.textProperties.font = .systemFont(ofSize: 18,weight: .medium)
         config.secondaryTextProperties.color = .gray
 
         cell.contentConfiguration = config
