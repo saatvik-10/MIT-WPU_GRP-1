@@ -7,7 +7,6 @@ class OnboardingContentViewController: UIViewController {
     @IBOutlet weak var intermediateButton: UIButton!
     @IBOutlet weak var advancedButton: UIButton!
 
-    @IBOutlet weak var nextButton: UIButton!
     // callback to parent (page controller)
     var onOptionSelected: ((String) -> Void)?
     var onNextTapped: (() -> Void)?
@@ -16,7 +15,6 @@ class OnboardingContentViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
-        disableNextButton()
     }
 
     // MARK: - UI Setup

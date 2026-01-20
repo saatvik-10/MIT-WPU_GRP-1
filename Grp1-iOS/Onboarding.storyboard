@@ -2,18 +2,17 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="24506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="92O-KG-e7c">
     <device id="retina6_9" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24504"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24405"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
-        <capability name="collection view cell content view" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
         <!--Onboarding Page View Controller-->
         <scene sceneID="D2N-Ko-fz0">
             <objects>
-                <pageViewController storyboardIdentifier="OnboardingPageViewController" autoresizesArchivedViewToFullSize="NO" useStoryboardIdentifierAsRestorationIdentifier="YES" transitionStyle="scroll" navigationOrientation="horizontal" spineLocation="none" id="92O-KG-e7c" customClass="OnboardingPageViewController" customModule="Grp1_iOS" sceneMemberID="viewController"/>
+                <pageViewController autoresizesArchivedViewToFullSize="NO" transitionStyle="scroll" navigationOrientation="horizontal" spineLocation="none" id="92O-KG-e7c" customClass="OnboardingPageViewController" customModule="Grp1_iOS" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="m8U-29-dZe" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-746" y="92"/>
@@ -73,9 +72,6 @@
                                         <buttonConfiguration key="configuration" style="plain" title="Button">
                                             <fontDescription key="titleFontDescription" style="UICTFontTextStyleTitle1"/>
                                         </buttonConfiguration>
-                                        <connections>
-                                            <action selector="optionTapped:" destination="cc7-Lh-gDL" eventType="touchUpInside" id="AYy-nO-HIb"/>
-                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lN1-hB-2oG" customClass="OnboardingButton" customModule="Grp1_iOS" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="120" width="405" height="100"/>
@@ -87,9 +83,6 @@
                                         <buttonConfiguration key="configuration" style="plain" title="Button">
                                             <fontDescription key="titleFontDescription" style="UICTFontTextStyleTitle1"/>
                                         </buttonConfiguration>
-                                        <connections>
-                                            <action selector="optionTapped:" destination="cc7-Lh-gDL" eventType="touchUpInside" id="WZ5-gd-Kpb"/>
-                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Dsh-wb-Snq" customClass="OnboardingButton" customModule="Grp1_iOS" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="240" width="405" height="100"/>
@@ -101,9 +94,6 @@
                                         <buttonConfiguration key="configuration" style="plain" title="Button">
                                             <fontDescription key="titleFontDescription" style="UICTFontTextStyleTitle1"/>
                                         </buttonConfiguration>
-                                        <connections>
-                                            <action selector="optionTapped:" destination="cc7-Lh-gDL" eventType="touchUpInside" id="paa-OZ-RYD"/>
-                                        </connections>
                                     </button>
                                 </subviews>
                             </stackView>
@@ -112,9 +102,6 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="filled" title="Next"/>
-                                <connections>
-                                    <action selector="nextTapped:" destination="cc7-Lh-gDL" eventType="touchUpInside" id="Iar-9Z-99w"/>
-                                </connections>
                             </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="zA6-Eq-4Sd"/>
@@ -140,7 +127,6 @@
                         <outlet property="advancedButton" destination="Dsh-wb-Snq" id="a29-ap-UGy"/>
                         <outlet property="beginnerButton" destination="CGX-eZ-o1L" id="zbc-yd-vmc"/>
                         <outlet property="intermediateButton" destination="lN1-hB-2oG" id="41C-vo-E8r"/>
-                        <outlet property="nextButton" destination="QNG-g6-vln" id="A6A-Cy-ANg"/>
                         <outlet property="stepHeaderLabel" destination="isO-Zj-hS9" id="Kxb-5d-0ab"/>
                     </connections>
                 </viewController>

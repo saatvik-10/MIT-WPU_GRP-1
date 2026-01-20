@@ -10,8 +10,7 @@ import UIKit
 class OnboardingPageViewController: UIPageViewController {
     
     var pagesData: [OnboardingPage] = []
-    var controllers : [UIViewController] = []
-    var currentIndex : Int = 0
+    var controllers : [OnboardingContentViewController] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,24 +35,24 @@ class OnboardingPageViewController: UIPageViewController {
 
         let onboardingStoryboard = UIStoryboard(name: "Onboarding", bundle: nil)
 
-        // STEP 1 — Investment Level
-        let step1 = onboardingStoryboard.instantiateViewController(
-            withIdentifier: "OnboardingContentViewController"
-        ) as! OnboardingContentViewController
+        controllers = pagesData.map { page in
+            let vc = onboardingStoryboard.instantiateViewController(
+                withIdentifier: "OnboardingContentViewController"
+            ) as! OnboardingContentViewController
+            
+            vc.loadViewIfNeeded()
 
-        step1.loadViewIfNeeded()
-        step1.configure(with: pagesData[0])
-        step1.onNextTapped = { [weak self] in
-            self?.goToNextPage()
+            vc.configure(with: page)
+
+            vc.onOptionSelected = { selected in
+                print("Selected \(selected)")
+            }
+
+            return vc
         }
 
-        // STEP 2 — Domain Selection
-        let step2 = onboardingStoryboard.instantiateViewController(
-            withIdentifier: "DomainSelectionViewController"
-        ) as! DomainSelectionViewController
-
-        step2.onNextTapped = { [weak self] in
-            self?.goToNextPage()
+        if let first = controllers.first {
+            setViewControllers([first], direction: .forward, animated: false)
         }
         
         step2.onBackTapped = { [weak self] in
@@ -75,22 +74,18 @@ class OnboardingPageViewController: UIPageViewController {
                            direction: .forward,
                            animated: false)
     }
-
     
-    func goToNextPage() {
-        let nextIndex = currentIndex + 1
+    func goToNextPage(){
+        guard let currentVC = viewControllers?.first,
+              let index = controllers.firstIndex(of: currentVC as! OnboardingContentViewController) else { return }
 
-        if nextIndex < controllers.count {
-            currentIndex = nextIndex
-            setViewControllers(
-                [controllers[currentIndex]],
-                direction: .forward,
-                animated: true
-            )
-        } else {
-            print("Onboarding finished!")
+                if index + 1 < controllers.count {
+                    setViewControllers([controllers[index + 1]], direction: .forward, animated: true)
+                } else {
+                    print("Onboarding finished!")
+                }
         }
-    }
+    
     
     func goToPreviousPage() {
         let previousIndex = currentIndex - 1

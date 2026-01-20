@@ -24,11 +24,10 @@ class ProfileOption2ViewCell: UICollectionViewCell {
     }
     
     // MARK: - Configure Function (Dynamically sets the button content)
-    func configure(title: String, subTitle: String, isDestructive: Bool) {
+    func configure(title: String, isDestructive: Bool) {
         var config = optionButton.configuration ?? .plain()
         
         config.title = title
-        optionBtnSubtitle.text = subTitle
 
         config.baseForegroundColor = isDestructive ? .systemRed : .label
         
@@ -37,7 +36,7 @@ class ProfileOption2ViewCell: UICollectionViewCell {
         } else {
             let chevronImage = UIImage(
                 systemName: "chevron.right",
-                withConfiguration: UIImage.SymbolConfiguration(scale: .small)
+                withConfiguration: UIImage.SymbolConfiguration(scale: .medium)
             )
             config.image = chevronImage
             config.imagePlacement = .trailing

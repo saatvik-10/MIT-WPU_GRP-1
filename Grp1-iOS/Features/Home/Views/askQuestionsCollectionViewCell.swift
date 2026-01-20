@@ -19,18 +19,11 @@ class askQuestionsCollectionViewCell: UICollectionViewCell {
             contentView.backgroundColor = UIColor.systemBackground
             contentView.layer.cornerRadius = 20
             contentView.layer.masksToBounds = true
-            
-            // TEXT STYLING
-            questionLabel.font = UIFont.systemFont(ofSize: 16, weight: .bold)
-            questionLabel.textColor = .black
             questionLabel.numberOfLines = 0
             
-            answerLabel.font = UIFont.systemFont(ofSize: 14, weight: .medium)
-            answerLabel.textColor = .darkGray
             answerLabel.numberOfLines = 0
             
-            timeLabel.font = UIFont.systemFont(ofSize: 12, weight: .medium)
-            timeLabel.textColor = .gray
+
         }
 
         func configureCell(with qa: ArticleQA) {

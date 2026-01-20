@@ -20,7 +20,6 @@ enum UserLevel: String {
 
 struct ProfileOption {
     let title: String
-    let subTitle: String
     let isDestructive: Bool
 }
 
@@ -72,5 +71,24 @@ struct UserProfile {
 
 struct BookmarkItem {
     let icon: UIImage
+    let id: String
     let title: String
+}
+
+struct OverallProgress {
+    let progressPercentage: Double
+    let quizCompletionNumber: String
+    let levelNumber: String
+}
+
+struct ProgressStats {
+    let dayStreak: Int
+    let totalXP: Int
+    let accuracyPercentage: Int
+}
+
+struct Quiz {
+    let title: String
+    let date: String
+    let accuracy: Int
 }

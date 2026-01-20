@@ -9,6 +9,7 @@ import UIKit
 
 class collectionViewCell: UICollectionViewCell {
     var onMoreTapped: (() -> Void)?
+    var onLikeTapped: (() -> Void)?
     
     @IBOutlet weak var profileImg: UIImageView!
     @IBOutlet weak var userNameLabel: UILabel!
@@ -24,14 +25,21 @@ class collectionViewCell: UICollectionViewCell {
     @IBOutlet weak var commentsButton: UIButton!
    
     @IBOutlet weak var sharesButton: UIButton!
-    @IBAction func moreButtonTapped(_ sender: UIButton) {
-        onMoreTapped?()
-    }
+    
+    //    @IBAction func moreButtonTapped(_ sender: UIButton) {
+//        onMoreTapped?()
+//    }
+   @IBAction func likeButtonTapped(_ sender: UIButton) {
+           onLikeTapped?()
+       }
+    
+    @IBOutlet weak var dividerView: UIView!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
         setupUI()
-        
+        setupMoreMenu()
     }
     override func layoutSubviews() {
             super.layoutSubviews()
@@ -82,12 +90,12 @@ class collectionViewCell: UICollectionViewCell {
             userNameLabel.lineBreakMode = .byTruncatingTail
 
             // Time Ago
-            timeAgoLabel.font = UIFont.systemFont(ofSize: 15)
+            timeAgoLabel.font = UIFont.systemFont(ofSize: 16)
             timeAgoLabel.textColor = .secondaryLabel
 
             // Title
             titleLabel.numberOfLines = 0
-            titleLabel.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
+          //  titleLabel.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
 
             // Thread Image
             threadImg.contentMode = .scaleAspectFill
@@ -97,10 +105,13 @@ class collectionViewCell: UICollectionViewCell {
 
             // Description Text
             descriptionLabel.numberOfLines = 0
-            descriptionLabel.font = UIFont.systemFont(ofSize: 15)
+            //descriptionLabel.font = UIFont.systemFont(ofSize: 15)
 
             // Buttons Row
-            likesButton.tintColor = .systemBlue
+           // likesButton.tintColor = .systemBlue
+            var config = UIButton.Configuration.plain()
+            config.imagePadding = 6
+            likesButton.configuration = config
             commentsButton.tintColor = .systemBlue
             sharesButton.tintColor = .systemBlue
 
@@ -108,7 +119,27 @@ class collectionViewCell: UICollectionViewCell {
            // moreButton.setImage(UIImage(systemName: "ellipsis"), for: .normal)
             moreButton.tintColor = .secondaryLabel
         }
+    
+    func applyStyle(isCard: Bool) {
 
+            if isCard {
+                // CARD (For You / Following)
+                contentView.backgroundColor = .white
+                contentView.layer.cornerRadius = 16
+
+                layer.cornerRadius = 16
+                layer.shadowOpacity = 0.08
+            } else {
+                // FLAT (My Threads)
+                contentView.backgroundColor = .clear
+                contentView.layer.cornerRadius = 0
+
+                layer.cornerRadius = 0
+                layer.shadowOpacity = 0
+            }
+        dividerView.isHidden = isCard
+        }
+    
         // MARK: - Configure Cell
         func configure(with post: ThreadPost) {
 
@@ -129,9 +160,78 @@ class collectionViewCell: UICollectionViewCell {
                 threadImg.image = UIImage(named: post.imageName)
             }
 
-            // Buttons numbers
+            //LIKE
+//            likesButton.setTitle("\(post.likes)", for: .normal)
+//            let heartName = post.isLiked ? "heart.fill" : "heart"
+//            likesButton.setImage(UIImage(systemName: heartName), for: .normal)
+//            likesButton.tintColor = post.isLiked ? .systemRed : .systemBlue
+            // Likes count (ALWAYS blue)
             likesButton.setTitle("\(post.likes)", for: .normal)
+            likesButton.setTitleColor(.systemBlue, for: .normal)
+
+            // Heart icon (red only when liked)
+            let heartName = post.isLiked ? "heart.fill" : "heart"
+            let heartImage = UIImage(systemName: heartName)?
+                .withRenderingMode(.alwaysTemplate)
+
+            likesButton.setImage(heartImage, for: .normal)
+            likesButton.tintColor = post.isLiked ? .systemRed : .systemBlue
+
+            //COMMENT N SHARE
             commentsButton.setTitle("\(post.comments)", for: .normal)
             sharesButton.setTitle("\(post.shares)", for: .normal)
         }
+    
+    private func setupMoreMenu() {
+
+        let followAction = UIAction(
+            title: "Follow",
+            image: UIImage(systemName: "person.badge.plus")
+        ) { _ in
+            // follow logic later
+        }
+
+        let bookmarkAction = UIAction(
+            title: "Bookmark",
+            image: UIImage(systemName: "bookmark")
+        ) { _ in
+            // bookmark logic later
+        }
+
+        let reportAction = UIAction(
+            title: "Report this user",
+            image: UIImage(systemName: "flag"),
+            attributes: .destructive
+        ) { _ in
+            // report logic later
+        }
+
+        let blockAction = UIAction(
+            title: "Block user",
+            image: UIImage(systemName: "hand.raised"),
+            attributes: .destructive
+        ) { _ in
+            // block logic later
+        }
+
+        let notInterestedAction = UIAction(
+            title: "Not interested in this post",
+            image: UIImage(systemName: "exclamationmark.triangle")
+        ) { _ in
+            // not interested logic later
+        }
+
+        moreButton.menu = UIMenu(
+            title: "",
+            children: [
+                followAction,
+                bookmarkAction,
+                reportAction,
+                blockAction,
+                notInterestedAction
+            ]
+        )
+
+        moreButton.showsMenuAsPrimaryAction = true
     }
+}

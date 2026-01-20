@@ -18,12 +18,12 @@ protocol ChatDetailViewControllerDelegate: AnyObject {
 
 class ChatDetailViewController: MessagesViewController {
 
-    var delegate : ChatDetailViewControllerDelegate?
+    weak var delegate : ChatDetailViewControllerDelegate?
     // You can set this from previous screen
     var chatTitle: String?
     var isNewChat : Bool = false
 
-    // Declaring variable for differentiating
+    // current user & bot
     let currentUser = Sender(senderId: "self", displayName: "")
     let botSender   = Sender(senderId: "bot",  displayName: "")
 
@@ -31,7 +31,7 @@ class ChatDetailViewController: MessagesViewController {
     var messages: [Message] = []
     
     // Store selected message index for menu actions
-    var selectedMessageIndex: Int = 0
+    private var selectedMessageIndex: Int = 0
 
     // mock bot replies
     let mockBotReplies = MockBotReplies.replies
@@ -50,7 +50,7 @@ class ChatDetailViewController: MessagesViewController {
                 .font : smallFont
             ]
 
-        // MessageKit setup
+        // MessageKit setup - ORDER MATTERS!
         messagesCollectionView.messagesDataSource = self
         messagesCollectionView.messagesLayoutDelegate = self
         messagesCollectionView.messagesDisplayDelegate = self
@@ -62,8 +62,14 @@ class ChatDetailViewController: MessagesViewController {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         messagesCollectionView.addGestureRecognizer(tapGesture)
         
-        // Configure input bar
+        // Configure input bar - CRITICAL FOR KEYBOARD
         configureMessageInputBar()
+        
+        // Configure avatar
+        if let layout = messagesCollectionView.collectionViewLayout as? MessagesCollectionViewFlowLayout {
+            layout.setMessageIncomingAvatarSize(.zero)
+            layout.setMessageOutgoingAvatarSize(.zero)
+        }
 
         // initial dummy conversation
         loadDummyMessages()
@@ -102,7 +108,7 @@ class ChatDetailViewController: MessagesViewController {
         messageInputBar.inputTextView.backgroundColor = .systemBackground
     }
     
-    @objc func dismissKeyboard() {
+    @objc private func dismissKeyboard() {
         messageInputBar.inputTextView.resignFirstResponder()
     }
     
@@ -119,7 +125,7 @@ class ChatDetailViewController: MessagesViewController {
         }
     }
 
-     func loadDummyMessages() {
+    private func loadDummyMessages() {
         // some starting messages (user + bot)
         if isNewChat {
             messages = []
@@ -175,7 +181,7 @@ class ChatDetailViewController: MessagesViewController {
         messagesCollectionView.reloadData()
     }
 
-     func sendNextBotReply() {
+    private func sendNextBotReply() {
         guard botReplyIndex < mockBotReplies.count else { return }
         
         let text = mockBotReplies[botReplyIndex]
@@ -195,7 +201,7 @@ class ChatDetailViewController: MessagesViewController {
     
     // MARK: - Menu Actions
     
-    @objc  func copyMessageAction() {
+    @objc private func copyMessageAction() {
         guard selectedMessageIndex < messages.count else { return }
         let message = messages[selectedMessageIndex]
         
@@ -205,7 +211,7 @@ class ChatDetailViewController: MessagesViewController {
         }
     }
     
-    func chatBotShowToast(message: String) {
+    private func chatBotShowToast(message: String) {
         let alert = UIAlertController(title: nil, message: message, preferredStyle: .alert)
         present(alert, animated: true)
         DispatchQueue.main.asyncAfter(deadline: .now() ) {
@@ -247,7 +253,7 @@ extension ChatDetailViewController: MessagesDataSource {
 
 extension ChatDetailViewController: MessagesLayoutDelegate, MessagesDisplayDelegate {
 
-    //different bubble colors
+    // optional: different bubble colors
     func backgroundColor(for message: MessageType,
                          at indexPath: IndexPath,
                          in messagesCollectionView: MessagesCollectionView) -> UIColor {

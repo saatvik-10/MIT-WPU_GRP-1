@@ -298,6 +298,7 @@ class news1ViewController: UIViewController, UICollectionViewDataSource {
 //            applyDominantColorToButton(color)
             floatingButton.tintColor = color.withAlphaComponent(0.80)
             
+            
         }
         
         setupJargons()
@@ -675,6 +676,7 @@ class news1ViewController: UIViewController, UICollectionViewDataSource {
         UIImpactFeedbackGenerator(style: .light).impactOccurred()
 
         selectedJargon = word
+        selectedWord.word = word
         performSegue(withIdentifier: "showJargonDetail", sender: self)
     }
     
@@ -739,10 +741,7 @@ class news1ViewController: UIViewController, UICollectionViewDataSource {
 
                 // 2. First VC inside nav is ChatDetailViewController
                 if let chatVC = nav.topViewController as? HomeChatDetailViewController {
-
-                    // 3. Pass dominant color
-                    chatVC.dominantColor = self.dominantColor
-                    chatVC.articleID = self.article?.id   // ✅ THIS IS KEY
+                    chatVC.articleID = self.article?.id
                     
                 }
             }
@@ -839,104 +838,10 @@ extension news1ViewController: UICollectionViewDelegate {
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//private var didSetupJargons = false
-//
-//func setupJargons() {
-//    guard !didSetupJargons else { return }
-//    didSetupJargons = true
-//
-//    guard let jargons = article?.jargons else { return }
-//
-//    jargonsContainerView.subviews.forEach { $0.removeFromSuperview() }
-//
-//    let buttonSize: CGFloat = 90
-//    let padding: CGFloat = 12
-//    let maxAttempts = 40
-//
-//    var placedFrames: [CGRect] = []
-//
-//    for word in jargons {
-//        let button = UIButton(type: .system)
-//        button.setTitle(word, for: .normal)
-//        button.setTitleColor(.white, for: .normal)
-//
-//        button.backgroundColor = AppTheme.shared.dominantColor ?? .systemBlue
-//        button.layer.cornerRadius = buttonSize / 2
-//        button.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: .semibold)
-//        button.titleLabel?.numberOfLines = 2
-//        button.titleLabel?.textAlignment = .center
-//        
-//        button.accessibilityIdentifier = word
-//
-//        button.addTarget(self, action: #selector(jargonTapped(_:)), for: .touchUpInside)
-//
-//        // Shadow = clickable hint
-//        button.layer.shadowColor = UIColor.black.cgColor
-//        button.layer.shadowOpacity = 0.25
-//        button.layer.shadowRadius = 6
-//        button.layer.shadowOffset = CGSize(width: 0, height: 4)
-//
-//        var placed = false
-//
-//        for _ in 0..<maxAttempts {
-//            let maxX = jargonsContainerView.bounds.width - buttonSize - padding
-//            let maxY = jargonsContainerView.bounds.height - buttonSize - padding
-//
-//            let randomX = CGFloat.random(in: padding...max(padding, maxX))
-//            let randomY = CGFloat.random(in: padding...max(padding, maxY))
-//
-//            let frame = CGRect(
-//                x: randomX,
-//                y: randomY,
-//                width: buttonSize,
-//                height: buttonSize
-//            )
-//
-//            // 🔴 Overlap check
-//            let overlaps = placedFrames.contains {
-//                $0.insetBy(dx: -8, dy: -8).intersects(frame)
-//            }
-//
-//            if !overlaps {
-//                button.frame = frame
-//                placedFrames.append(frame)
-//                placed = true
-//                break
-//            }
-//        }
-//
-//        // Fallback (just in case space is tight)
-//        if !placed {
-//            let y = CGFloat(placedFrames.count) * (buttonSize + padding)
-//            button.frame = CGRect(
-//                x: padding,
-//                y: y,
-//                width: buttonSize,
-//                height: buttonSize
-//            )
-//        }
-//        
-//        
-//        addTwinkleEffect(to: button)
-//        print("Adding jargon:", word)
-//        print("✅ Adding button for: \(word) at frame: \(button.frame)")
-//        jargonsContainerView.addSubview(button)
-//        jargonsContainerView.bringSubviewToFront(button)
-//    }
+//class selectedWord {
+//    static var word: String?
 //}
 //
 //
+//selectedWord.selectedJargon = word
+//Type 'selectedWord' has no member 'selectedJargon'

@@ -32,14 +32,11 @@ class moreLikeThisCollectionViewCell: UICollectionViewCell {
         newsImageView.clipsToBounds = true
         
         // LABELS STYLE
-        pickLabel.font = UIFont.systemFont(ofSize: 10, weight: .semibold)
         pickLabel.textColor = .systemGray
 
         headlineLabel.numberOfLines = 2
-        headlineLabel.font = UIFont.systemFont(ofSize: 16, weight: .bold)
         headlineLabel.textColor = .black
         
-        timeLabel.font = UIFont.systemFont(ofSize: 11, weight: .semibold)
         timeLabel.textColor = .systemGray
         
 
