@@ -12,7 +12,7 @@ class DraftsViewController: UIViewController
 
 
     @IBOutlet weak var collectionView: UICollectionView!
-    private let drafts = ThreadsDataStore.shared.getAllThreads()
+    private let drafts = ThreadsDataStore.shared.getMyThreads()
 
         override func viewDidLoad() {
             super.viewDidLoad()
@@ -20,13 +20,13 @@ class DraftsViewController: UIViewController
             collectionView.dataSource = self
             collectionView.delegate = self
 
-            // Register cell
+          
             collectionView.register(
                 UINib(nibName: "DraftCollectionViewCell", bundle: nil),
                 forCellWithReuseIdentifier: "DraftCollectionViewCell"
             )
 
-            // 🔴 IMPORTANT: disable self-sizing
+            
             if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
                 layout.estimatedItemSize = .zero
                 layout.scrollDirection = .vertical
@@ -39,7 +39,7 @@ class DraftsViewController: UIViewController
         }
     }
 
-    // MARK: - DataSource
+    
     extension DraftsViewController: UICollectionViewDataSource {
 
         func collectionView(_ collectionView: UICollectionView,
@@ -57,12 +57,12 @@ class DraftsViewController: UIViewController
 
             let draft = drafts[indexPath.item]
             cell.configure(imageName: draft.imageName)
-
+            
             return cell
         }
     }
 
-    // MARK: - FlowLayout
+    
     extension DraftsViewController: UICollectionViewDelegateFlowLayout {
 
         func collectionView(_ collectionView: UICollectionView,
