@@ -40,10 +40,10 @@ struct ProfileDataSource {
 
 struct InterestsDataSource {
     static let domains: [InterestModel] = [
-        InterestModel(title: "Stocks", subtitle: nil, icon: "chart.bar"),
+        InterestModel(title: "Stocks", subtitle: nil, icon: "chart.line.uptrend.xyaxis"),
         InterestModel(title: "Crypto", subtitle: nil, icon: "bitcoinsign.circle"),
         InterestModel(title: "Macroeconomy", subtitle: nil, icon: "globe"),
-        InterestModel(title: "Banking", subtitle: nil, icon: "indianrupeesign.bank.building"),
+        InterestModel(title: "Banking", subtitle: nil, icon: "creditcard"),
         InterestModel(title: "Commodities", subtitle: nil, icon: "shippingbox"),
         InterestModel(title: "Mutual Funds", subtitle: nil, icon: "building.columns")
     ]
