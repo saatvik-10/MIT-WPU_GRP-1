@@ -55,6 +55,17 @@ struct InterestsDataSource {
         InterestModel(title: "Reliance", subtitle: "RIL", icon: nil),
         InterestModel(title: "Suzlon", subtitle: "SUZ", icon: nil)
     ]
+    
+    static let preferences: [InterestModel] = [
+        InterestModel(title: "Indian Economy", subtitle: "Consumption,inflation , growth", icon: "indianrupeesign.gauge.chart.lefthalf.righthalf"),
+        InterestModel(title: "Personal Finance", subtitle: "Exports, Imports and Trade Balance", icon: "figure.wave"),
+        InterestModel(title: "Government and Policy", subtitle: "Public Spending and Reforms", icon: "newspaper"),
+        InterestModel(title: "Stock Markets", subtitle: "Shares ,Indices and Market Cycles", icon: "chart.line.uptrend.xyaxis"),
+        InterestModel(title: "Real Estate Economics", subtitle: "Housing Interest rates, demand", icon: "building.2"),
+        InterestModel(title: "Global Economy", subtitle: "Exports, Imports and Trade Balance", icon: "globe.central.south.asia.fill"),
+        InterestModel(title: "Banking and credit", subtitle: "Loans , Interest rates and Moneyflow", icon: "banknote"),
+        InterestModel(title: "Crypto", subtitle: "Bitcoin, Web3 and Digital Assets", icon: "bitcoinsign.circle"),
+    ]
 }
 
 struct User {
