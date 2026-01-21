@@ -35,6 +35,7 @@ extension InterestsViewController {
         segmented.removeAllSegments()
         segmented.insertSegment(withTitle: "Domains", at: 0, animated: false)
         segmented.insertSegment(withTitle: "Companies", at: 1, animated: false)
+        segmented.insertSegment(withTitle: "Preferences", at: 2, animated: false)
         segmented.selectedSegmentIndex = 0
         segmented.addTarget(self, action: #selector(segmentChanged), for: .valueChanged)
     }
