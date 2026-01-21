@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		193215FA2EED5E40005C7C0E /* MessageKit in Frameworks */ = {isa = PBXBuildFile; productRef = 193215F92EED5E40005C7C0E /* MessageKit */; };
+		913158082EE2DCCA007A7588 /* MessageKit in Frameworks */ = {isa = PBXBuildFile; productRef = 913158072EE2DCCA007A7588 /* MessageKit */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,7 +40,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				193215FA2EED5E40005C7C0E /* MessageKit in Frameworks */,
+				913158082EE2DCCA007A7588 /* MessageKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -83,7 +83,7 @@
 			);
 			name = "Grp1-iOS";
 			packageProductDependencies = (
-				193215F92EED5E40005C7C0E /* MessageKit */,
+				913158072EE2DCCA007A7588 /* MessageKit */,
 			);
 			productName = "Grp1-iOS";
 			productReference = 1906A2082ED58640002425A7 /* Grp1-iOS.app */;
@@ -114,7 +114,7 @@
 			mainGroup = 1906A1FF2ED58640002425A7;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				193215F82EED5E40005C7C0E /* XCRemoteSwiftPackageReference "MessageKit" */,
+				913158062EE2DCCA007A7588 /* XCRemoteSwiftPackageReference "MessageKit" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 1906A2092ED58640002425A7 /* Products */;
@@ -354,7 +354,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		193215F82EED5E40005C7C0E /* XCRemoteSwiftPackageReference "MessageKit" */ = {
+		913158062EE2DCCA007A7588 /* XCRemoteSwiftPackageReference "MessageKit" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/MessageKit/MessageKit";
 			requirement = {
@@ -365,9 +365,9 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		193215F92EED5E40005C7C0E /* MessageKit */ = {
+		913158072EE2DCCA007A7588 /* MessageKit */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 193215F82EED5E40005C7C0E /* XCRemoteSwiftPackageReference "MessageKit" */;
+			package = 913158062EE2DCCA007A7588 /* XCRemoteSwiftPackageReference "MessageKit" */;
 			productName = MessageKit;
 		};
 /* End XCSwiftPackageProductDependency section */
