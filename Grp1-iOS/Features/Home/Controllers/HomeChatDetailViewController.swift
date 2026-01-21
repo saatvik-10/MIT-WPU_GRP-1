@@ -17,30 +17,26 @@ protocol HomeChatDetailViewControllerDelegate: AnyObject {
 
 
 class HomeChatDetailViewController: MessagesViewController {
-    var articleID: Int?   // 👈 which article this chat belongs to
+    var articleID: Int?
     var dominantColor: UIColor?
     private var lastQuestion: String?
     private var lastAnswer: String?
     weak var delegate : HomeChatDetailViewControllerDelegate?
-    // You can set this from previous screen
+
     var chatTitle: String?
     var isNewChat : Bool = false
 
-    // current user & bot
     let currentUser = Sender(senderId: "self", displayName: "")
     let botSender   = Sender(senderId: "bot",  displayName: "")
 
-    // all messages shown in chat
+
     var messages: [Message] = []
-    
-    // Store selected message index for menu actions
+ 
     private var selectedMessageIndex: Int = 0
 
-    // mock bot replies
     let mockBotReplies = MockBotReplies.replies
     var botReplyIndex = 0
 
-    // MARK: - Lifecycle
 
     
     
@@ -56,11 +52,9 @@ class HomeChatDetailViewController: MessagesViewController {
         view.backgroundColor = .systemBackground
         messagesCollectionView.backgroundColor = .systemBackground
         messageInputBar.backgroundView.backgroundColor = .systemBackground
-        
-        // navigation title
+
         title = chatTitle ?? "Chat"
-        
-        // Configure navigation bar
+
         navigationController?.navigationBar.prefersLargeTitles = false
         navigationItem.largeTitleDisplayMode = .never
         
@@ -69,35 +63,29 @@ class HomeChatDetailViewController: MessagesViewController {
                 .font : smallFont
             ]
 
-        // MessageKit setup - ORDER MATTERS!
+
         messagesCollectionView.messagesDataSource = self
         messagesCollectionView.messagesLayoutDelegate = self
         messagesCollectionView.messagesDisplayDelegate = self
         
-        // IMPORTANT: Configure the collection view
         messagesCollectionView.backgroundColor = dominantColor
-        
-        // Dismiss keyboard when tapping on messages
+ 
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         messagesCollectionView.addGestureRecognizer(tapGesture)
         
-        // Configure input bar - CRITICAL FOR KEYBOARD
         configureMessageInputBar()
         
-        // Configure avatar
         if let layout = messagesCollectionView.collectionViewLayout as? MessagesCollectionViewFlowLayout {
             layout.setMessageIncomingAvatarSize(.zero)
             layout.setMessageOutgoingAvatarSize(.zero)
         }
 
-        // initial dummy conversation
         loadDummyMessages()
     }
     
     private func configureMessageInputBar() {
         messageInputBar.delegate = self
         
-        // Input text view configuration
         messageInputBar.inputTextView.placeholder = "Type a message..."
         messageInputBar.inputTextView.placeholderTextColor = UIColor.systemGray3
         messageInputBar.inputTextView.textContainerInset = UIEdgeInsets(top: 8, left: 12, bottom: 8, right: 12)
@@ -108,21 +96,17 @@ class HomeChatDetailViewController: MessagesViewController {
         messageInputBar.inputTextView.layer.masksToBounds = true
         messageInputBar.inputTextView.scrollIndicatorInsets = UIEdgeInsets(top: 8, left: 0, bottom: 8, right: 0)
         
-        // CRITICAL: Enable user interaction
         messageInputBar.inputTextView.isUserInteractionEnabled = true
         messageInputBar.inputTextView.isEditable = true
         messageInputBar.inputTextView.isScrollEnabled = true
         
-        // Send button configuration
         messageInputBar.sendButton.setImage(UIImage(systemName: "paperplane.fill"), for: .normal)
         messageInputBar.sendButton.setTitle("", for: .normal)  // Remove text
         messageInputBar.sendButton.tintColor = .systemBlue
         
-        // Set message input bar padding
         messageInputBar.padding = UIEdgeInsets(top: 6, left: 12, bottom: 6, right: 12)
         messageInputBar.middleContentViewPadding = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 8)
         
-        // Background color
         messageInputBar.backgroundView.backgroundColor = .systemBackground
         messageInputBar.inputTextView.backgroundColor = .systemBackground
     }
@@ -133,19 +117,18 @@ class HomeChatDetailViewController: MessagesViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        // Scroll to bottom when view appears
+
         if !messages.isEmpty {
             messagesCollectionView.scrollToLastItem(animated: false)
         }
         
-        // IMPORTANT: Open keyboard after view appears for better animation
         DispatchQueue.main.asyncAfter(deadline: .now() ) {
             self.messageInputBar.inputTextView.becomeFirstResponder()
         }
     }
 
     private func loadDummyMessages() {
-        // some starting messages (user + bot)
+
         if isNewChat {
             messages = []
             botReplyIndex = 0
@@ -160,7 +143,7 @@ class HomeChatDetailViewController: MessagesViewController {
             
             
             messages = [m1]
-            botReplyIndex = 1 // Updated to continue from m7
+            botReplyIndex = 1
         }
         messagesCollectionView.reloadData()
     }
@@ -184,7 +167,7 @@ class HomeChatDetailViewController: MessagesViewController {
         }
     }
     
-    // MARK: - Menu Actions
+
     
     
     @IBAction func doneTapped(_ sender: Any) {
@@ -200,29 +183,26 @@ class HomeChatDetailViewController: MessagesViewController {
                 let answer = lastAnswer
             else { return }
 
-            // 1️⃣ SAVE TO DATA STORE
+
             NewsDataStore.shared.addQA(
                 for: articleID,
                 question: question,
                 answer: answer
             )
 
-            // 2️⃣ HAPTIC FEEDBACK
             let generator = UINotificationFeedbackGenerator()
             generator.notificationOccurred(.success)
 
-            // 3️⃣ SMALL SUCCESS ANIMATION (fade)
             UIView.animate(withDuration: 0.2, animations: {
                 self.view.alpha = 0.95
             }) { _ in
-                // 4️⃣ CLOSE MODAL
+   
                 self.dismiss(animated: true)
             }
     }
     
 }
 
-// MARK: - MessagesDataSource
 
 extension HomeChatDetailViewController: MessagesDataSource {
 
@@ -239,23 +219,19 @@ extension HomeChatDetailViewController: MessagesDataSource {
         return messages.count
     }
     
-    // Required: Top label - REMOVED to hide timestamp
     func messageTopLabelAttributedText(for message: MessageType, at indexPath: IndexPath) -> NSAttributedString? {
         return nil
     }
     
-    // Required: Bottom label
     func messageBottomLabelAttributedText(for message: MessageType, at indexPath: IndexPath) -> NSAttributedString? {
         return nil
     }
 }
 
 
-// MARK: - MessagesLayoutDelegate & MessagesDisplayDelegate
 
 extension HomeChatDetailViewController: MessagesLayoutDelegate, MessagesDisplayDelegate {
 
-    // optional: different bubble colors
     func backgroundColor(for message: MessageType,
                          at indexPath: IndexPath,
                          in messagesCollectionView: MessagesCollectionView) -> UIColor {
@@ -276,8 +252,6 @@ extension HomeChatDetailViewController: MessagesLayoutDelegate, MessagesDisplayD
         }
     }
     
-    
-    // Configure message style
     func messageStyle(for message: MessageType,
                       at indexPath: IndexPath,
                       in messagesCollectionView: MessagesCollectionView) -> MessageStyle {
@@ -285,21 +259,18 @@ extension HomeChatDetailViewController: MessagesLayoutDelegate, MessagesDisplayD
         return .bubbleTail(corner, .curved)
     }
     
-    // MARK: - Layout Delegate Methods
+
     
-    // Height for top label - SET TO 0 to hide timestamp
     func messageTopLabelHeight(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CGFloat {
         return 16
     }
     
-    // Height for bottom label
     func messageBottomLabelHeight(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CGFloat {
         return 0
     }
 }
 
 
-// MARK: - InputBarAccessoryViewDelegate
 
 extension HomeChatDetailViewController: InputBarAccessoryViewDelegate {
     func inputBar(_ inputBar: InputBarAccessoryView, didPressSendButtonWith text: String) {
@@ -307,7 +278,7 @@ extension HomeChatDetailViewController: InputBarAccessoryViewDelegate {
         guard !trimmed.isEmpty else { return }
         lastQuestion = trimmed
 
-        // user message
+
         if isNewChat {
             delegate?.chatDetail(self, didCreateNewChatWithFirstQuestion: trimmed)
             isNewChat = false
@@ -330,15 +301,15 @@ extension HomeChatDetailViewController: InputBarAccessoryViewDelegate {
         )
         messages.append(newMessage)
         
-        // clear text field first
+     
         inputBar.inputTextView.text = ""
         inputBar.invalidatePlugins()
         
-        // Insert new section
+   
         messagesCollectionView.insertSections([messages.count - 1])
         messagesCollectionView.scrollToLastItem(animated: true)
 
-        // bot reply
+  
         sendNextBotReply()
     }
 }

@@ -44,7 +44,6 @@ extension ShareBottomSheetViewController: UITableViewDataSource, UITableViewDele
 }
 
 extension UIApplication {
-    /// The key window for the current active scene
     var keyWindowInConnectedScenes: UIWindow? {
         return connectedScenes
             .compactMap { $0 as? UIWindowScene }
@@ -54,7 +53,6 @@ extension UIApplication {
 }
 
 extension UIViewController {
-    /// Safely find the top-most presented view controller
     func topMostViewController() -> UIViewController {
         if let presented = self.presentedViewController {
             return presented.topMostViewController()

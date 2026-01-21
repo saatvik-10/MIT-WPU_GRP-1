@@ -27,7 +27,6 @@ class TodaysPickCollectionViewCell: UICollectionViewCell {
         headlineLabel.font = UIFont.systemFont(ofSize: 25, weight: .bold)
         headlineLabel.textColor = .white
         
-        // LABEL SHADOW FOR BETTER VISIBILITY
         headlineLabel.layer.shadowColor = UIColor.black.cgColor
         headlineLabel.layer.shadowOpacity = 0.6
         headlineLabel.layer.shadowRadius = 4
@@ -35,7 +34,6 @@ class TodaysPickCollectionViewCell: UICollectionViewCell {
     }
     
     
-    // MARK: - Dominant Color
     func dominantColor(from image: UIImage) -> UIColor? {
         guard let inputImage = CIImage(image: image) else { return nil }
         
@@ -64,7 +62,6 @@ class TodaysPickCollectionViewCell: UICollectionViewCell {
     }
     
     
-    // MARK: - Apply Gradient
     private func applyGradient(using color: UIColor) {
         
         gradientLayer?.removeFromSuperlayer()
@@ -83,21 +80,18 @@ class TodaysPickCollectionViewCell: UICollectionViewCell {
         gradient.startPoint = CGPoint(x: 0.5, y: 0)
         gradient.endPoint   = CGPoint(x: 0.5, y: 1)
         
-        // BELOW LABELS BUT ABOVE IMAGE
         contentView.layer.insertSublayer(gradient, above: newsImageView.layer)
         
         self.gradientLayer = gradient
     }
     
     
-    // MARK: - Layout Subviews
     override func layoutSubviews() {
         super.layoutSubviews()
         gradientLayer?.frame = contentView.bounds
     }
     
     
-    // MARK: - Configure Cell
     func configureCell(with article: NewsArticle) {
         
         newsImageView.image = UIImage(named: article.imageName)

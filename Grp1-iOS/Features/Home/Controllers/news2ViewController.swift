@@ -160,14 +160,12 @@ class news2ViewController: UIViewController, UICollectionViewDataSource {
     @objc(collectionView:cellForItemAtIndexPath:) func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         if indexPath.section == 0 {
-            // More Like This
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "realexplore_cell", for: indexPath) as! moreLikeThisCollectionViewCell
             
             cell.configureCell(with: relatedNews[indexPath.row])
             return cell
         }
         
-        // Questions Asked
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ask_cell", for: indexPath) as! askQuestionsCollectionViewCell
         
         let qa = qaHistory[indexPath.row]
@@ -234,12 +232,12 @@ class news2ViewController: UIViewController, UICollectionViewDataSource {
         let gradientLayer = CAGradientLayer()
         gradientLayer.frame = CGRect(origin: .zero, size: size)
         gradientLayer.colors = [
-            UIColor.clear.cgColor,                         // 0-clear
-            color.withAlphaComponent(0.60).cgColor,        // 45-soft tint
-            color.withAlphaComponent(1.0).cgColor,        // 60-extended soft
-            color.withAlphaComponent(1.0).cgColor,        // 80-strong tint
-            color.withAlphaComponent(0.9).cgColor,        // 90-extend strong tint
-            UIColor.systemGray6.cgColor                  // 100-fade to white
+            UIColor.clear.cgColor,                         // clear
+            color.withAlphaComponent(0.60).cgColor,        // soft tint
+            color.withAlphaComponent(1.0).cgColor,        // extended soft
+            color.withAlphaComponent(1.0).cgColor,        // strong tint
+            color.withAlphaComponent(0.9).cgColor,        // extend strong tint
+            UIColor.systemGray6.cgColor                  // fade to white
         ]
         
         gradientLayer.locations = [
@@ -399,7 +397,7 @@ class news2ViewController: UIViewController, UICollectionViewDataSource {
         blurView.backgroundColor = UIColor.white.withAlphaComponent(0.95)
         
         
-        for subview in glassView.subviews where !(subview is UIVisualEffectView) {     // Bring Buttons on top
+        for subview in glassView.subviews where !(subview is UIVisualEffectView) {
             subview.layer.zPosition = 1
         }
     }
@@ -575,16 +573,12 @@ class news2ViewController: UIViewController, UICollectionViewDataSource {
     @IBAction func startQuizTapped(_ sender: Any) {
         
         guard let article = article else {
-               print("❌ Article is nil")
+               print("Article is nil")
                return
            }
 
-           // ✅ Now Swift knows this is Int
            QuizContext.shared.selectedArticleId = article.id
     }
-    
-    
-    
     
 }
 

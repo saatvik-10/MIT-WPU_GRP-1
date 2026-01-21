@@ -56,7 +56,6 @@ class HomeViewController: UIViewController, UICollectionViewDelegate {
         let section = 0
         let lastIndex = todaysPick.count - 1
 
-        // Move to next
         if currentIndex < lastIndex {
             currentIndex += 1
         } else {
@@ -88,7 +87,6 @@ class HomeViewController: UIViewController, UICollectionViewDelegate {
                 selectedArticle = marketHighlights[indexPath.row]
             }
 
-            // 🔵 ALL OTHER SECTIONS → news1ViewController
             performSegue(withIdentifier: "showArticleDetail", sender: selectedArticle)
         }
 
@@ -189,7 +187,7 @@ class HomeViewController: UIViewController, UICollectionViewDelegate {
                 
                 let groupSize = NSCollectionLayoutSize(
                     widthDimension: .fractionalWidth(0.9),
-                    heightDimension: .estimated(250)  // adjust height
+                    heightDimension: .estimated(250)  // important Height
                 )
                 
                 let group = NSCollectionLayoutGroup.horizontal(
@@ -204,7 +202,7 @@ class HomeViewController: UIViewController, UICollectionViewDelegate {
                 return section
             }
             
-            // SECTION 2 - Vertical List
+
             let itemSize = NSCollectionLayoutSize(
                 widthDimension: .fractionalWidth(1.0),
                 heightDimension: .fractionalHeight(1.0)
@@ -274,7 +272,7 @@ extension HomeViewController: UICollectionViewDataSource {
         case 0: return todaysPick.count
         case 1: return 1
         case 2: return marketHighlights.count
-        case 3: return marketHighlights.count   // real explore section
+        case 3: return marketHighlights.count
         default: return 0
         }
     }
@@ -301,7 +299,7 @@ extension HomeViewController: UICollectionViewDataSource {
                     self.present(popupVC, animated: true)
                 }
             cell.onRecommendTapped = { [weak self] in
-                    self?.showToast(message: "Recommendation sent!")   // << toast works here
+                    self?.showToast(message: "Recommendation sent!")
                 }
 
             return cell
@@ -317,7 +315,7 @@ extension HomeViewController: UICollectionViewDataSource {
                     self.present(popupVC, animated: true)
                 }
             cell.onRecommendTapped = { [weak self] in
-                    self?.showToast(message: "Recommendation sent!")   // << toast works here
+                    self?.showToast(message: "Recommendation sent!")
                 }
             return cell
         }
@@ -342,7 +340,7 @@ extension HomeViewController: UICollectionViewDataSource {
         if indexPath.section == 0 {
             headerView.headerLabel.text = " "
             headerView.arrowImageView.isHidden = true
-            headerView.headerLabel.font = UIFont.systemFont(ofSize: 34, weight: .bold)  // << Bigger title
+            headerView.headerLabel.font = UIFont.systemFont(ofSize: 34, weight: .bold)
             headerView.headerLabel.textColor = .black
         }
         else if indexPath.section == 1 {
