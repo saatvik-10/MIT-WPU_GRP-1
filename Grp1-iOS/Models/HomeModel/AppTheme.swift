@@ -12,5 +12,5 @@ class AppTheme {
     
     private init() {}
     
-    var dominantColor: UIColor = .systemBackground  // default value
+    var dominantColor: UIColor = .systemBackground  
 }

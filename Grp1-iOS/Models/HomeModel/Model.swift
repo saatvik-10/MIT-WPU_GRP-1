@@ -1,7 +1,6 @@
 import Foundation
 import UIKit
 
-/// One question–answer pair asked about an article
 struct ArticleQA {
     let question: String
     let answer: String
@@ -17,13 +16,11 @@ struct NewsArticle {
     let date: String
     let source: String
     
-    /// NEW FIELDS
-    let overview: [String]                // summary
-    let keyTakeaways: [String]          // main points
-    let jargons: [String]               // technical words
+    let overview: [String]
+    let keyTakeaways: [String]
+    let jargons: [String]
     var selectedJargon: String? = ""
 
-    /// All questions & answers asked for this article
     var qaHistory: [ArticleQA] = []
 }
 
@@ -40,8 +37,8 @@ struct JargonPage {
 struct JargonQuiz {
     let jargonWord: String
     let question: String
-    let options: [String]      // exactly 4
-    let correctIndex: Int      // 0–3
+    let options: [String]
+    let correctIndex: Int
 }
 
 struct JargonQuizStore {
@@ -204,7 +201,6 @@ struct JargonQuizStore {
 
 var allPages: [JargonPage] = [
 
-    // Commodity Inflation
     JargonPage(
         jargonWord: "Commodity Inflation",
         title: "Definition",
@@ -216,7 +212,6 @@ var allPages: [JargonPage] = [
         content: "Market sentiment can be observed during major economic announcements or global events. For example, if inflation data comes in lower than expected, investors may feel optimistic about economic stability and future growth. This positive sentiment can lead to increased buying of stocks, pushing market indices higher. On the other hand, news of a recession, geopolitical conflict, or banking crisis can create fear among investors. As a result, many may sell stocks and move their money into safer assets such as gold or government bonds. These reactions show how market sentiment, driven by perception and emotion, can significantly influence market behavior."
     ),
 
-    // Repo Rate
     JargonPage(
         jargonWord: "Repo Rate",
         title: "Definition",
@@ -334,7 +329,7 @@ var allPages: [JargonPage] = [
 
 
 struct QuizQuestion {
-    let articleId: Int   // 👈 Int link
+    let articleId: Int
     let question: String
     let options: [String]
     let correctIndex: Int
@@ -349,7 +344,7 @@ class QuizStore {
 
     private let quizzes: [QuizQuestion] = [
 
-        // 🔹 Quiz for article ID = 101
+      
         QuizQuestion(
             articleId: 1,
             question: "What was the main reason for the market rally?",
@@ -397,7 +392,7 @@ class QuizStore {
             ],
             correctIndex: 3
         ),
-        // 🔹 Quiz for article ID = 202
+        
         QuizQuestion(
             articleId: 2,
             question: "Which technology is driving recent AI growth?",

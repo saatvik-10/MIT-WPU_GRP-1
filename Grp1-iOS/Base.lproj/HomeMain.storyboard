@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="24412" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="sUp-R7-HvU">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="24506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="sUp-R7-HvU">
     <device id="retina6_7" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24405"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24504"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -60,7 +60,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3812.0930232558139" y="136.48068669527899"/>
+            <point key="canvasLocation" x="3447" y="136"/>
         </scene>
         <!--News1 View Controller-->
         <scene sceneID="ewj-fG-YOx">
@@ -255,14 +255,14 @@ Overall sentiment remains positive, and dips are expected to attract fresh buyin
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="cJN-hG-ZE6" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4746.9767441860467" y="136.48068669527899"/>
+            <point key="canvasLocation" x="4755" y="136"/>
         </scene>
         <!--Ask Question-->
         <scene sceneID="Rxl-uJ-g1z">
             <objects>
                 <viewController id="zua-AY-Mfj" customClass="HomeChatDetailViewController" customModule="Grp1_iOS" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="UpF-yT-9H2">
-                        <rect key="frame" x="0.0" y="0.0" width="430" height="932"/>
+                        <rect key="frame" x="0.0" y="0.0" width="430" height="873"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <viewLayoutGuide key="safeArea" id="leh-V6-Grb"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -282,7 +282,7 @@ Overall sentiment remains positive, and dips are expected to attract fresh buyin
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="NzD-8Y-Rd3" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="7042.3255813953492" y="151.93133047210301"/>
+            <point key="canvasLocation" x="7196" y="152"/>
         </scene>
         <!--Explore More-->
         <scene sceneID="GSM-uE-AVd">
@@ -338,7 +338,7 @@ Overall sentiment remains positive, and dips are expected to attract fresh buyin
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="IbA-zV-pdP" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="5007.9069767441861" y="-670.17167381974252"/>
+            <point key="canvasLocation" x="4755" y="-697"/>
         </scene>
         <!--Search-->
         <scene sceneID="tcE-Hl-pRp">
@@ -405,7 +405,7 @@ Overall sentiment remains positive, and dips are expected to attract fresh buyin
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="St0-F0-j6n" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="6634.8837209302328" y="-670.17167381974252"/>
+            <point key="canvasLocation" x="6095" y="-697"/>
         </scene>
         <!--Home-->
         <scene sceneID="3fo-9t-zx9">
@@ -424,7 +424,7 @@ Overall sentiment remains positive, and dips are expected to attract fresh buyin
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Kt5-lQ-wK1" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2885.5813953488373" y="136.48068669527899"/>
+            <point key="canvasLocation" x="2499" y="136"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="LDq-3J-EDQ">
@@ -433,7 +433,7 @@ Overall sentiment remains positive, and dips are expected to attract fresh buyin
                     <toolbarItems/>
                     <navigationItem key="navigationItem" id="aML-ib-zZ8"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="0O8-DG-dhA">
-                        <rect key="frame" x="0.0" y="118" width="430" height="54"/>
+                        <rect key="frame" x="0.0" y="20" width="430" height="54"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
@@ -443,7 +443,7 @@ Overall sentiment remains positive, and dips are expected to attract fresh buyin
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="GVr-dz-gIU" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="5906.5116279069771" y="151.93133047210301"/>
+            <point key="canvasLocation" x="6096" y="152"/>
         </scene>
         <!--Jargon Detail View Controller-->
         <scene sceneID="Xhq-vF-EAz">
@@ -644,7 +644,7 @@ Overall sentiment remains positive, and dips are expected to attract fresh buyin
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="JLg-9T-xrd" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="6805.1162790697672" y="911.58798283261808"/>
+            <point key="canvasLocation" x="6883" y="973"/>
         </scene>
         <!--Jargon Defination View Controller-->
         <scene sceneID="VsL-Ac-Zqg">
@@ -753,7 +753,7 @@ Overall sentiment remains positive, and dips are expected to attract fresh buyin
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="V9h-gW-N7j" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="7827.9069767441861" y="911.58798283261808"/>
+            <point key="canvasLocation" x="7867" y="973"/>
         </scene>
         <!--Quiz-->
         <scene sceneID="dTU-Ok-4Zn">
@@ -897,7 +897,7 @@ Overall sentiment remains positive, and dips are expected to attract fresh buyin
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Mzu-8y-4fc" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="8825.5813953488378" y="911.58798283261808"/>
+            <point key="canvasLocation" x="8824" y="973"/>
         </scene>
         <!--ProfileMain-->
         <scene sceneID="1QB-ZY-edR">
@@ -908,7 +908,7 @@ Overall sentiment remains positive, and dips are expected to attract fresh buyin
                 </viewControllerPlaceholder>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="jqH-7g-P35" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2198" y="539"/>
+            <point key="canvasLocation" x="1845" y="547"/>
         </scene>
         <!--Quiz Result View Controller-->
         <scene sceneID="Jka-Tt-kms">
@@ -1277,7 +1277,7 @@ Overall sentiment remains positive, and dips are expected to attract fresh buyin
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="MNJ-xC-egu" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1639.5348837209301" y="1692.4892703862663"/>
+            <point key="canvasLocation" x="1573" y="1692"/>
         </scene>
         <!--threadNavigationController-->
         <scene sceneID="9pj-K6-QpY">
@@ -1287,7 +1287,7 @@ Overall sentiment remains positive, and dips are expected to attract fresh buyin
                 </viewControllerPlaceholder>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gaW-LS-pdn" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2008" y="572"/>
+            <point key="canvasLocation" x="987" y="547"/>
         </scene>
         <!--ChatBotMain-->
         <scene sceneID="Xt9-cS-kKk">
@@ -1297,7 +1297,7 @@ Overall sentiment remains positive, and dips are expected to attract fresh buyin
                 </viewControllerPlaceholder>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hpq-6q-htf" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1803" y="547"/>
+            <point key="canvasLocation" x="1397" y="552"/>
         </scene>
         <!--Item-->
         <scene sceneID="wzl-QK-vZj">
@@ -1319,7 +1319,7 @@ Overall sentiment remains positive, and dips are expected to attract fresh buyin
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="aWM-vg-YaB" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1984" y="136"/>
+            <point key="canvasLocation" x="1397" y="136"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="BaF-pO-5J2">
@@ -1337,7 +1337,7 @@ Overall sentiment remains positive, and dips are expected to attract fresh buyin
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mse-qr-J0Z" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="5906.5116279069771" y="911.58798283261808"/>
+            <point key="canvasLocation" x="5912" y="973"/>
         </scene>
         <!--News2 View Controller-->
         <scene sceneID="wSQ-bs-FwK">
@@ -1545,7 +1545,7 @@ Overall sentiment remains positive, and dips are expected to attract fresh buyin
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9OD-oY-rce" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3812" y="975"/>
+            <point key="canvasLocation" x="3447" y="974"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="SEZ-Cf-qfV">
@@ -1567,9 +1567,9 @@ Overall sentiment remains positive, and dips are expected to attract fresh buyin
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="neQ-sD-S1T"/>
-        <segue reference="Zyn-wo-F6R"/>
-        <segue reference="NU8-u0-eeh"/>
+        <segue reference="VeV-ul-P58"/>
+        <segue reference="pHB-98-V88"/>
+        <segue reference="weS-b8-hd6"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="bitcoinsign" catalog="system" width="87" height="128"/>
