@@ -21,7 +21,7 @@ class threadsViewController: UIViewController {
     
     
     
-    //LIFECYCLE
+    
     override func viewDidLoad() {
         
         super.viewDidLoad()
@@ -39,7 +39,7 @@ class threadsViewController: UIViewController {
         
     }
     
-    //ACTIONS
+    
     @IBAction func segmentChanged(_ sender: UISegmentedControl) {
         switch sender.selectedSegmentIndex {
         case 0: selectedSegment = .forYou
@@ -66,14 +66,14 @@ class threadsViewController: UIViewController {
         collectionView.delegate = self
         collectionView.dataSource = self
         
-        // Feed cell
+      
         collectionView.register(
             UINib(nibName: "collectionViewCell", bundle: nil),
             forCellWithReuseIdentifier: "collectionViewCell"
         )
         
         
-        // Profile header
+      
         collectionView.register(
             UINib(nibName: "MyThreadsProfileHeaderCollectionReusableView", bundle: nil),
             forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
@@ -91,17 +91,16 @@ class threadsViewController: UIViewController {
     
     
     private func reloadData() {
-        forYouThreads = threadsStore.getAllThreads()
-        followingThreads = threadsStore.getFollowingThreads()
+//        forYouThreads = threadsStore.getAllThreads()
+//        followingThreads = threadsStore.getFollowingThreads()
+         forYouThreads = threadsStore.getForYouThreads()
+            followingThreads = threadsStore.getFollowingThreads()
     }
+   
     
 }
     
 
-
-   
-
-    // MARK: - DataSource
     extension threadsViewController: UICollectionViewDataSource {
 
         func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -111,7 +110,7 @@ class threadsViewController: UIViewController {
                case .following:
                    return followingThreads.count
                case .myThreads:
-                   return forYouThreads.count
+                   return threadsStore.getMyThreads().count
                }
            }
 
@@ -132,10 +131,12 @@ class threadsViewController: UIViewController {
                case .following:
                    post = followingThreads[indexPath.item]
                case .myThreads:
-                   post = forYouThreads[indexPath.item]
+                   post = threadsStore.getMyThreads()[indexPath.item]
                }
 
-               cell.configure(with: post)
+               let isFollowing = threadsStore.isFollowing(userName: post.userName)
+               let isOwnPost = post.userName == threadsStore.currentUserName
+               cell.configure(with: post, isFollowing: isFollowing, isOwnPost: isOwnPost)
                cell.applyStyle(isCard: selectedSegment != .myThreads)
                
                cell.onLikeTapped = { [weak self] in
@@ -144,11 +145,21 @@ class threadsViewController: UIViewController {
                    self.reloadData()
                    self.collectionView.reloadItems(at: [indexPath])
                }
+               
+               cell.onFollowTapped = { [weak self] in
+                   guard let self else { return }
 
+                   self.threadsStore.toggleFollow(userName: post.userName)
+
+                   self.reloadData()
+                   self.collectionView.reloadData()
+                   
+                   
+               }
                return cell
            }
 
-           // MARK: - Profile Header
+           
            func collectionView(
                _ collectionView: UICollectionView,
                viewForSupplementaryElementOfKind kind: String,
@@ -175,7 +186,7 @@ class threadsViewController: UIViewController {
 
     
 
-    // MARK: - Layout
+    
     extension threadsViewController: UICollectionViewDelegateFlowLayout {
 
         func collectionView(
@@ -201,7 +212,7 @@ class threadsViewController: UIViewController {
                              height: 520)           }
     }
 
-       //DELEGATE
+     
 extension threadsViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
 
