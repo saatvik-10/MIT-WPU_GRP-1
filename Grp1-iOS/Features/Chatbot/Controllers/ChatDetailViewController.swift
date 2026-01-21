@@ -19,7 +19,6 @@ protocol ChatDetailViewControllerDelegate: AnyObject {
 class ChatDetailViewController: MessagesViewController {
 
     weak var delegate : ChatDetailViewControllerDelegate?
-    // You can set this from previous screen
     var chatTitle: String?
     var isNewChat : Bool = false
 
@@ -30,59 +29,50 @@ class ChatDetailViewController: MessagesViewController {
     // all messages shown in chat
     var messages: [Message] = []
     
-    // Store selected message index for menu actions
-    private var selectedMessageIndex: Int = 0
+    
+    var selectedMessageIndex: Int = 0
 
-    // mock bot replies
+    
     let mockBotReplies = MockBotReplies.replies
     var botReplyIndex = 0
 
-    // MARK: - Lifecycle
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // navigation title
         title = chatTitle ?? "Chat"
         
-        // Configure navigation bar
-        navigationController?.navigationBar.prefersLargeTitles = false
-        navigationItem.largeTitleDisplayMode = .never
-        
-        let smallFont = UIFont.systemFont(ofSize: 16, weight: .semibold)
+        let smallFont = UIFont.systemFont(ofSize: 17, weight: .semibold)
             navigationController?.navigationBar.titleTextAttributes = [
                 .font : smallFont
             ]
 
-        // MessageKit setup - ORDER MATTERS!
         messagesCollectionView.messagesDataSource = self
         messagesCollectionView.messagesLayoutDelegate = self
         messagesCollectionView.messagesDisplayDelegate = self
         
-        // IMPORTANT: Configure the collection view
-        messagesCollectionView.backgroundColor = .systemBackground
+        messagesCollectionView.backgroundColor = .systemGray6
         
-        // Dismiss keyboard when tapping on messages
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         messagesCollectionView.addGestureRecognizer(tapGesture)
         
-        // Configure input bar - CRITICAL FOR KEYBOARD
         configureMessageInputBar()
         
-        // Configure avatar
+        
         if let layout = messagesCollectionView.collectionViewLayout as? MessagesCollectionViewFlowLayout {
             layout.setMessageIncomingAvatarSize(.zero)
             layout.setMessageOutgoingAvatarSize(.zero)
         }
 
-        // initial dummy conversation
+        
         loadDummyMessages()
     }
     
     private func configureMessageInputBar() {
         messageInputBar.delegate = self
         
-        // Input text view configuration
+        
         messageInputBar.inputTextView.placeholder = "Type a message..."
         messageInputBar.inputTextView.placeholderTextColor = UIColor.systemGray3
         messageInputBar.inputTextView.textContainerInset = UIEdgeInsets(top: 8, left: 12, bottom: 8, right: 12)
@@ -93,21 +83,21 @@ class ChatDetailViewController: MessagesViewController {
         messageInputBar.inputTextView.layer.masksToBounds = true
         messageInputBar.inputTextView.scrollIndicatorInsets = UIEdgeInsets(top: 8, left: 0, bottom: 8, right: 0)
         
-        // CRITICAL: Enable user interaction
+        
         messageInputBar.inputTextView.isUserInteractionEnabled = true
         messageInputBar.inputTextView.isEditable = true
         messageInputBar.inputTextView.isScrollEnabled = true
         
-        // Send button configuration
+        
         messageInputBar.sendButton.setImage(UIImage(systemName: "paperplane.fill"), for: .normal)
         messageInputBar.sendButton.setTitle("", for: .normal)  // Remove text
         messageInputBar.sendButton.tintColor = .systemBlue
         
-        // Set message input bar padding
+        
         messageInputBar.padding = UIEdgeInsets(top: 6, left: 12, bottom: 6, right: 12)
         messageInputBar.middleContentViewPadding = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 8)
         
-        // Background color
+        
         messageInputBar.backgroundView.backgroundColor = .systemBackground
         messageInputBar.inputTextView.backgroundColor = .systemBackground
     }
@@ -118,19 +108,19 @@ class ChatDetailViewController: MessagesViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        // Scroll to bottom when view appears
+        
         if !messages.isEmpty {
             messagesCollectionView.scrollToLastItem(animated: false)
         }
         
-        // IMPORTANT: Open keyboard after view appears for better animation
+        
         DispatchQueue.main.asyncAfter(deadline: .now() ) {
             self.messageInputBar.inputTextView.becomeFirstResponder()
         }
     }
 
     private func loadDummyMessages() {
-        // some starting messages (user + bot)
+        
         if isNewChat {
             messages = []
             botReplyIndex = 0
@@ -177,8 +167,10 @@ class ChatDetailViewController: MessagesViewController {
             )
             
             
+            
+            
             messages = [m1, m2, m3, m4, m5, m6, m7]
-            botReplyIndex = 4 // Updated to continue from m7
+            botReplyIndex = 4
         }
         messagesCollectionView.reloadData()
     }
@@ -239,12 +231,12 @@ extension ChatDetailViewController: MessagesDataSource {
         return messages.count
     }
     
-    // Required: Top label - REMOVED to hide timestamp
+    
     func messageTopLabelAttributedText(for message: MessageType, at indexPath: IndexPath) -> NSAttributedString? {
         return nil
     }
     
-    // Required: Bottom label
+    
     func messageBottomLabelAttributedText(for message: MessageType, at indexPath: IndexPath) -> NSAttributedString? {
         return nil
     }
@@ -255,7 +247,7 @@ extension ChatDetailViewController: MessagesDataSource {
 
 extension ChatDetailViewController: MessagesLayoutDelegate, MessagesDisplayDelegate {
 
-    // optional: different bubble colors
+    
     func backgroundColor(for message: MessageType,
                          at indexPath: IndexPath,
                          in messagesCollectionView: MessagesCollectionView) -> UIColor {
@@ -278,23 +270,30 @@ extension ChatDetailViewController: MessagesLayoutDelegate, MessagesDisplayDeleg
     
     
     // Configure message style
-    func messageStyle(for message: MessageType,
-                      at indexPath: IndexPath,
-                      in messagesCollectionView: MessagesCollectionView) -> MessageStyle {
-        let corner: MessageStyle.TailCorner = message.sender.senderId == currentUser.senderId ? .bottomRight : .bottomLeft
-        return .bubbleTail(corner, .curved)
-    }
+//    func messageStyle(for message: MessageType,
+//                      at indexPath: IndexPath,
+//                      in messagesCollectionView: MessagesCollectionView) -> MessageStyle {
+//        let corner: MessageStyle.TailCorner = message.sender.senderId == currentUser.senderId ? .bottomRight : .bottomLeft
+//        return .bubbleTail(corner, .curved)
+//    }
     
     // MARK: - Layout Delegate Methods
     
-    // Height for top label - SET TO 0 to hide timestamp
+    
     func messageTopLabelHeight(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CGFloat {
         return 16
     }
     
-    // Height for bottom label
+    
     func messageBottomLabelHeight(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CGFloat {
         return 0
+    }
+    private func avatarSize(
+        for message: MessageType,
+        at indexPath: IndexPath,
+        in messagesCollectionView: MessagesCollectionView
+    ) -> CGSize {
+        return .zero
     }
 }
 
@@ -329,15 +328,15 @@ extension ChatDetailViewController: InputBarAccessoryViewDelegate {
         )
         messages.append(newMessage)
         
-        // clear text field first
+        
         inputBar.inputTextView.text = ""
         inputBar.invalidatePlugins()
         
-        // Insert new section
+        
         messagesCollectionView.insertSections([messages.count - 1])
         messagesCollectionView.scrollToLastItem(animated: true)
 
-        // bot reply
+        
         sendNextBotReply()
     }
 }

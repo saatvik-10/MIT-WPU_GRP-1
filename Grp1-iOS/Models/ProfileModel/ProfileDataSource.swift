@@ -1,11 +1,40 @@
 import UIKit
+//struct ProfileDataSource {
+//    static let items: [ProfileOption] = [
+//        ProfileOption(title: "Progress", isDestructive: false),
+//        ProfileOption(title: "Interests", isDestructive: false),
+//        ProfileOption(title: "Bookmarks", isDestructive: false),
+//        ProfileOption(title: "About Us", isDestructive: false),
+//        ProfileOption(title: "Logout", isDestructive: true)
+//    ]
+//}
+
 struct ProfileDataSource {
-    static let items: [ProfileOption] = [
-        ProfileOption(title: "Progress", isDestructive: false),
-        ProfileOption(title: "Interests", isDestructive: false),
-        ProfileOption(title: "Bookmarks", isDestructive: false),
-        ProfileOption(title: "About Us", isDestructive: false),
-        ProfileOption(title: "Logout", isDestructive: true)
+    static let progressSection = ProgressSectionModel(
+        progressPercentage: ProgressSectionMockData.mockProgress.progressPercentage,
+        progressLevel: ProgressSectionMockData.mockProgress.progressLevel,
+        requirementNextLevel: ProgressSectionMockData.mockProgress.requirementNextLevel
+    )
+    
+    static let interestsSection = InterestsSectionModel(
+        interests: Array(
+            (InterestsDataSource.domains.map { $0.title }
+             + InterestsDataSource.companies.map { $0.title })
+            .prefix(4)
+        )
+    )
+    
+    static let bookmarksSection = BookmarksSectionModel(
+        totalBookmarks: Bookmarks.mockBookmarks.count,
+        totalFolders: Bookmarks.mockBookmarks.count
+    )
+    
+    static let sections: [ProfileSection] = [
+        .progress(progressSection),
+        .interests(interestsSection),
+        .bookmarks(bookmarksSection),
+        .about,
+        .logout
     ]
 }
 
@@ -39,22 +68,30 @@ struct User {
     )
 }
 
+struct ProgressSectionMockData {
+    static let mockProgress = ProgressSectionModel(
+        progressPercentage: 0.775,
+        progressLevel: 5,
+        requirementNextLevel: ""
+    )
+}
+
 struct Bookmarks {
     static let mockBookmarks: [BookmarkItem] = [
         BookmarkItem(
             icon: UIImage(systemName: "folder")!,
             id: "1",
-            title: "Stocks",
+            title: "Stocks"
         ),
         BookmarkItem(
             icon: UIImage(systemName: "folder")!,
             id: "2",
-            title: "Crypto",
+            title: "Crypto"
         ),
         BookmarkItem(
             icon: UIImage(systemName: "folder")!,
             id: "3",
-            title: "Gold",
+            title: "Gold"
         )
     ]
 }
@@ -63,7 +100,7 @@ struct ProgressMockData {
     static let overallProgress = OverallProgress(
         progressPercentage: 0.775,
         quizCompletionNumber: "2/3 Completed",
-        levelNumber: "Level 5"
+        levelNumber: 5
     )
     
     static let stats = ProgressStats(

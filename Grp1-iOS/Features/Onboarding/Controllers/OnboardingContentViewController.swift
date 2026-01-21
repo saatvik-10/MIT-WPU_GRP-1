@@ -7,12 +7,16 @@ class OnboardingContentViewController: UIViewController {
     @IBOutlet weak var intermediateButton: UIButton!
     @IBOutlet weak var advancedButton: UIButton!
 
+    @IBOutlet weak var nextButton: UIButton!
     // callback to parent (page controller)
     var onOptionSelected: ((String) -> Void)?
+    var onNextTapped: (() -> Void)?
 
+    var selectedButton : UIButton?
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
+        disableNextButton()
     }
 
     // MARK: - UI Setup
@@ -29,22 +33,25 @@ class OnboardingContentViewController: UIViewController {
                     button?.contentHorizontalAlignment = .left
                     button?.titleLabel?.numberOfLines = 0
                     button?.layer.borderWidth = 0.5
+                    button?.backgroundColor = .white
                     button?.layer.borderColor = UIColor.secondaryLabel.cgColor
                 }
     }
-    
+
     func setButtonText(
         button: UIButton,
         title: String,
         subtitle: String
     ) {
+        let titleFont = UIFont.preferredFont(forTextStyle: .title2)
+        let subtitleFont = UIFont.preferredFont(forTextStyle: .subheadline)
         let titleAttributes: [NSAttributedString.Key: Any] = [
-            .font: UIFont.systemFont(ofSize: 20, weight: .semibold),
+            .font : titleFont,
             .foregroundColor: button.tintColor ?? UIColor.label
         ]
 
         let subtitleAttributes: [NSAttributedString.Key: Any] = [
-            .font: UIFont.systemFont(ofSize: 16, weight: .regular),
+            .font : subtitleFont,
             .foregroundColor: UIColor.secondaryLabel
         ]
 
@@ -90,10 +97,49 @@ class OnboardingContentViewController: UIViewController {
 
     // MARK: - Actions
     @IBAction func optionTapped(_ sender: UIButton) {
-        // prefer configuration.title (works with UIButton.Configuration)
-        guard let selected = sender.configuration?.title else { return }
-        print("Selected Option: \(selected)")
-        onOptionSelected?(selected)
-    }
-}
+        // Reset everything first
+        resetAllOptionButtons()
 
+        // Apply selected style
+        applySelectedStyle(to: sender)
+
+        selectedButton = sender
+        enableNextButton()
+
+        guard let selectedText = sender.titleLabel?.text else { return }
+        onOptionSelected?(selectedText)
+    }
+
+    func updateNextButtonState() {
+        let isSelected = selectedButton != nil
+        nextButton.isEnabled = isSelected
+        nextButton.alpha = isSelected ? 1.0 : 0.5
+    }
+    func enableNextButton() {
+            nextButton.isEnabled = true
+            nextButton.alpha = 1.0
+    }
+    func disableNextButton() {
+            nextButton.isEnabled = false
+            nextButton.alpha = 0.5
+    }
+    func resetAllOptionButtons() {
+        let buttons = [beginnerButton, intermediateButton, advancedButton]
+
+        buttons.forEach { button in
+            button?.layer.borderColor = UIColor.secondaryLabel.cgColor
+            button?.layer.borderWidth = 1
+            button?.backgroundColor = UIColor.white
+        }
+    }
+
+    func applySelectedStyle(to button: UIButton) {
+        button.layer.borderColor = UIColor.systemBlue.cgColor
+        button.layer.borderWidth = 2
+        button.backgroundColor = UIColor.systemBlue.withAlphaComponent(0.08)
+    }
+    @IBAction func nextTapped(_ sender: UIButton) {
+            onNextTapped?()
+        }
+
+}
