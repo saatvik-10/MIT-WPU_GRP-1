@@ -14,7 +14,7 @@ class ExploreMoreViewController: UIViewController, UICollectionViewDelegate {
     @IBOutlet weak var collectionView: UICollectionView!
     let newsStore = NewsDataStore.shared
 
-        // Only 3 sections now
+
         var exploreTrending: [NewsArticle] = []
         var exploreList: [NewsArticle] = []
         var exploreGrid: [NewsArticle] = []
@@ -26,7 +26,6 @@ class ExploreMoreViewController: UIViewController, UICollectionViewDelegate {
 
             registerCells()
 
-            // Load data
             exploreTrending = newsStore.getAllNews().reversed()
             exploreList = newsStore.getAllNews().shuffled()
             exploreGrid = newsStore.getAllNews().shuffled()
@@ -36,7 +35,7 @@ class ExploreMoreViewController: UIViewController, UICollectionViewDelegate {
             collectionView.dataSource = self
         }
 
-        // MARK: - Select item → open article
+
         func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
 
             var selected: NewsArticle?
@@ -87,7 +86,7 @@ extension ExploreMoreViewController {
 extension ExploreMoreViewController: UICollectionViewDataSource {
 
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 3   // ONLY 3 SECTIONS NOW
+        return 3
     }
 
     func collectionView(_ collectionView: UICollectionView,
@@ -106,7 +105,7 @@ extension ExploreMoreViewController: UICollectionViewDataSource {
 
         switch indexPath.section {
 
-        // SECTION 0 → Trending Collection
+
         case 0:
             let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: "trending_cell",
@@ -129,7 +128,7 @@ extension ExploreMoreViewController: UICollectionViewDataSource {
 
             return cell
 
-        // SECTION 1 → Explore List (vertical list style)
+
         case 1:
             let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: "explore_cell",
@@ -152,7 +151,7 @@ extension ExploreMoreViewController: UICollectionViewDataSource {
 
             return cell
 
-        // SECTION 2 → Grid Style Explore
+
         default:
             let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: "realexplore_cell",
@@ -176,7 +175,7 @@ extension ExploreMoreViewController {
 
             switch section {
 
-            // SECTION 0 — Medium Trending Cards
+
             case 0:
                 let item = NSCollectionLayoutItem(
                     layoutSize: .init(
@@ -196,7 +195,6 @@ extension ExploreMoreViewController {
 
                 return NSCollectionLayoutSection(group: group)
 
-            // SECTION 1 — Vertical list
             case 1:
                 let item = NSCollectionLayoutItem(
                     layoutSize: .init(
@@ -216,7 +214,6 @@ extension ExploreMoreViewController {
 
                 return NSCollectionLayoutSection(group: group)
 
-            // SECTION 2 — Grid Explore
             default:
                 let item = NSCollectionLayoutItem(
                     layoutSize: .init(

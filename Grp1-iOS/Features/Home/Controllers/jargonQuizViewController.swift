@@ -18,7 +18,7 @@ class jargonQuizViewController: UIViewController {
     @IBOutlet weak var questionLabel: UILabel!
     @IBOutlet weak var quizView: UIView!
     
-    var jargonWord: String!   // received from segue
+    var jargonWord: String!
        var quiz: JargonQuiz!
 
 
@@ -27,12 +27,13 @@ class jargonQuizViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        isModalInPresentation = true
         view.backgroundColor = AppTheme.shared.dominantColor.withAlphaComponent(0.1)
 
         setupGlassEffect()
         guard let word = jargonWord,
               let quiz = JargonQuizStore.quiz(for: word) else {
-            assertionFailure("❌ No quiz found or jargonWord missing")
+            assertionFailure("No quiz found or jargonWord missing")
             return
         }
 
@@ -42,7 +43,7 @@ class jargonQuizViewController: UIViewController {
     
     private func setupUI() {
         guard let quiz = quiz else {
-            assertionFailure("❌ quiz not set before presenting jargonQuizViewController")
+            assertionFailure("quiz not set before presenting jargonQuizViewController")
             return
         }
 
@@ -62,7 +63,6 @@ class jargonQuizViewController: UIViewController {
     }
 
         @IBAction func optionTapped(_ sender: UIButton) {
-            // Button press feedback
                 UIView.animate(withDuration: 0.15, animations: {
                     sender.transform = CGAffineTransform(scaleX: 0.97, y: 0.97)
                 }) { _ in
@@ -141,7 +141,6 @@ class jargonQuizViewController: UIViewController {
 
         quizView.layer.addSublayer(emitter)
 
-        // ⏱ Stop & remove after 1.5 seconds
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
             emitter.birthRate = 0
             emitter.removeFromSuperlayer()
@@ -167,7 +166,6 @@ class jargonQuizViewController: UIViewController {
             congratsLabel.textColor = .systemRed
         }
 
-        // Optional fade-in (feels premium)
         greetingLabel.alpha = 0
         congratsLabel.alpha = 0
 
@@ -251,25 +249,20 @@ class jargonQuizViewController: UIViewController {
 
     private func setupGlassEffect() {
 
-        // 🔹 Remove old blur if already added
         quizView.subviews
             .filter { $0 is UIVisualEffectView }
             .forEach { $0.removeFromSuperview() }
 
-        // 🔹 Create blur
         let blurEffect = UIBlurEffect(style: .systemUltraThinMaterial)
         let blurView = UIVisualEffectView(effect: blurEffect)
 
         blurView.frame = quizView.bounds
         blurView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
 
-        // 🔑 MOST IMPORTANT LINE (allows taps to pass through)
         blurView.isUserInteractionEnabled = false
 
-        // 🔹 Insert blur at the BACK (not addSubview)
         quizView.insertSubview(blurView, at: 0)
 
-        // 🔹 Glass styling
         quizView.layer.cornerRadius = 22
         quizView.layer.masksToBounds = true
         quizView.layer.borderWidth = 1
@@ -278,7 +271,19 @@ class jargonQuizViewController: UIViewController {
     
 
     @IBAction func closetapped(_ sender: Any) {
-        dismiss(animated: true)
+        let alert = UIAlertController(
+            title: "Quit Quiz?",
+            message: "Do you really want to quit the quiz?",
+            preferredStyle: .alert
+        )
+
+        alert.addAction(UIAlertAction(title: "No", style: .cancel))
+
+        alert.addAction(UIAlertAction(title: "Yes", style: .destructive) { _ in
+            self.dismiss(animated: true)
+        })
+
+        present(alert, animated: true)
     }
     
 }

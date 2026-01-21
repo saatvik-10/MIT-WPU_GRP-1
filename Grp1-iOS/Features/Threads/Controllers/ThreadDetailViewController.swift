@@ -166,7 +166,15 @@ class ThreadDetailViewController: UIViewController {
         usernameLabel.text = thread.userName
         timeLabel.text = thread.timeAgo
         captionLabel.text = thread.description
-        postImageView.image = UIImage(named: thread.imageName)
+        //postImageView.image = UIImage(named: thread.imageName)
+        if let imageName = thread.imageName {
+            postImageView.isHidden = false
+            postImageView.image = UIImage(named: imageName)
+        } else {
+            postImageView.isHidden = true
+            postImageView.image = nil
+        }
+        
         profileImageView.image = UIImage(named: "beach_1")
         
         likeCountLabel.text = "\(thread.likes)"

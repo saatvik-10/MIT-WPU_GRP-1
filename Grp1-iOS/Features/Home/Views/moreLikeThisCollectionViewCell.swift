@@ -17,7 +17,6 @@ class moreLikeThisCollectionViewCell: UICollectionViewCell {
     private var gradientLayer: CAGradientLayer?
 
     override func awakeFromNib() {
-   // or any color
         super.awakeFromNib()
         self.backgroundColor = .clear
         contentView.backgroundColor = UIColor.systemBackground
@@ -31,7 +30,7 @@ class moreLikeThisCollectionViewCell: UICollectionViewCell {
         newsImageView.layer.masksToBounds = true
         newsImageView.clipsToBounds = true
         
-        // LABELS STYLE
+        
         pickLabel.textColor = .systemGray
 
         headlineLabel.numberOfLines = 2

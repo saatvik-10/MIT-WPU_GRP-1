@@ -27,8 +27,15 @@ class DraftCollectionViewCell: UICollectionViewCell {
                 draftImgView.clipsToBounds = true
             }
 
-            func configure(imageName: String) {
-                draftImgView.image = UIImage(named: imageName)
+            func configure(imageName: String?) {
+                if let imageName = imageName {
+                    draftImgView.isHidden = false
+                    draftImgView.image = UIImage(named: imageName)
+                } else {
+                    draftImgView.isHidden = true
+                    draftImgView.image = nil
+                }
+
             }
     }
 

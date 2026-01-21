@@ -13,17 +13,24 @@ class jargonDefinationViewController: UIViewController {
     @IBOutlet weak var actionButton: UIButton!
     @IBOutlet weak var pageNumberLabel: UILabel!
     private var currentIndex = 0
+    private var pages: [JargonPage] = []
     @IBOutlet weak var headingLabel: UILabel!
     @IBOutlet weak var glassView: UIView!
     @IBOutlet weak var jargonDefination: UILabel!
     override func viewDidLoad() {
         super.viewDidLoad()
+        isModalInPresentation = true
         view.backgroundColor = AppTheme.shared.dominantColor.withAlphaComponent(0.1)
         jargonWord = selectedWord.word
         title = selectedWord.word
         
         setupGlassEffect()
+        pages = allPages.filter { $0.jargonWord == jargonWord }
 
+            guard !pages.isEmpty else {
+                print("❌ No pages found for:", jargonWord ?? "")
+                return
+            }
 
                 currentIndex = 0
                 applyPage(index: currentIndex)
@@ -32,25 +39,25 @@ class jargonDefinationViewController: UIViewController {
     
     private func setupGlassEffect() {
 
-        // 🔹 Remove old blur if already added
+     
         glassView.subviews
             .filter { $0 is UIVisualEffectView }
             .forEach { $0.removeFromSuperview() }
 
-        // 🔹 Create blur
+       
         let blurEffect = UIBlurEffect(style: .systemUltraThinMaterial)
         let blurView = UIVisualEffectView(effect: blurEffect)
 
         blurView.frame = glassView.bounds
         blurView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
 
-        // 🔑 MOST IMPORTANT LINE (allows taps to pass through)
+
         blurView.isUserInteractionEnabled = false
 
-        // 🔹 Insert blur at the BACK (not addSubview)
+    
         glassView.insertSubview(blurView, at: 0)
 
-        // 🔹 Glass styling
+ 
         glassView.layer.cornerRadius = 22
         glassView.layer.masksToBounds = true
         glassView.layer.borderWidth = 1
@@ -58,7 +65,7 @@ class jargonDefinationViewController: UIViewController {
     }
     private func applyPage(index: Int) {
         guard index >= 0 && index < pages.count else {
-            print("❌ Index out of range:", index)
+            print("Index out of range:", index)
             return
         }
 
@@ -77,6 +84,23 @@ class jargonDefinationViewController: UIViewController {
     @IBAction func backTapped(_ sender: UIButton) {
         guard currentIndex > 0 else { return }
         animateChange(direction: -1)
+        
+    }
+    
+    @IBAction func quitTapped(_ sender: Any) {
+        let alert = UIAlertController(
+            title: "Quit Lesson",
+            message: "Do you re",
+            preferredStyle: .alert
+        )
+
+        alert.addAction(UIAlertAction(title: "No", style: .cancel))
+
+        alert.addAction(UIAlertAction(title: "Yes", style: .destructive) { _ in
+            self.dismiss(animated: true)
+        })
+
+        present(alert, animated: true)
         
     }
     
