@@ -44,7 +44,8 @@ struct InterestsDataSource {
         InterestModel(title: "Crypto", subtitle: nil, icon: "bitcoinsign.circle"),
         InterestModel(title: "Macroeconomy", subtitle: nil, icon: "globe"),
         InterestModel(title: "Banking", subtitle: nil, icon: "indianrupeesign.bank.building"),
-        InterestModel(title: "Commodities", subtitle: nil, icon: "shippingbox")
+        InterestModel(title: "Commodities", subtitle: nil, icon: "shippingbox"),
+        InterestModel(title: "Mutual Funds", subtitle: nil, icon: "building.columns")
     ]
     
     static let companies: [InterestModel] = [
