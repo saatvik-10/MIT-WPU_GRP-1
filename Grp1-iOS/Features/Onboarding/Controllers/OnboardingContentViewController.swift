@@ -29,7 +29,7 @@ class OnboardingContentViewController: UIViewController {
         let buttons = [beginnerButton, intermediateButton, advancedButton]
 
                 buttons.forEach { button in
-                    button?.layer.cornerRadius = 12
+                    button?.layer.cornerRadius = 16
                     button?.contentHorizontalAlignment = .left
                     button?.titleLabel?.numberOfLines = 0
                     button?.layer.borderWidth = 0.5
