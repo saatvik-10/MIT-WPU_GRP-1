@@ -10,7 +10,7 @@ final class ThreadsOptionViewController: UIViewController {
         setupUI()
         setupOptions()
 
-        // 🔑 REQUIRED FOR POPOVER
+      
         preferredContentSize = CGSize(width: 260, height: 240)
     }
 
@@ -31,7 +31,7 @@ final class ThreadsOptionViewController: UIViewController {
             containerView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
 
-        // 🔥 GLASS BLUR
+    
         let blur = UIBlurEffect(style: .systemMaterial)
         let blurView = UIVisualEffectView(effect: blur)
         blurView.frame = containerView.bounds

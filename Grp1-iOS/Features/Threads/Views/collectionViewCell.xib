@@ -30,7 +30,7 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Time" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="y3t-OW-3A3">
-                        <rect key="frame" x="299" y="21" width="38" height="21"/>
+                        <rect key="frame" x="302" y="21" width="38" height="21"/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
@@ -66,7 +66,7 @@
                         <buttonConfiguration key="configuration" style="plain" image="square.and.arrow.up" catalog="system" title=""/>
                     </button>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="top" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wpK-uS-fAf">
-                        <rect key="frame" x="342.33333333333331" y="15" width="47.666666666666686" height="35"/>
+                        <rect key="frame" x="344.33333333333331" y="15" width="47.666666666666686" height="35"/>
                         <state key="normal" title="Button"/>
                         <buttonConfiguration key="configuration" style="plain" image="ellipsis" catalog="system" title=""/>
                         <connections>
@@ -86,12 +86,18 @@
                             <constraint firstAttribute="height" constant="1" id="LTl-WY-IpU"/>
                         </constraints>
                     </view>
+                    <stackView opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="COK-PX-T74">
+                        <rect key="frame" x="78" y="50" width="226" height="24"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="24" id="5DM-h4-IZX"/>
+                        </constraints>
+                    </stackView>
                 </subviews>
             </view>
             <viewLayoutGuide key="safeArea" id="jIT-79-cu8"/>
             <constraints>
                 <constraint firstAttribute="width" secondItem="gTV-IL-0wX" secondAttribute="height" multiplier="67:90" id="5MY-0G-vzu"/>
-                <constraint firstAttribute="trailing" secondItem="wpK-uS-fAf" secondAttribute="trailing" constant="12" id="5q5-sE-0VQ"/>
+                <constraint firstAttribute="trailing" secondItem="wpK-uS-fAf" secondAttribute="trailing" constant="10" id="5q5-sE-0VQ"/>
                 <constraint firstItem="cgw-iW-Vr4" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="24" id="7ac-CV-bPR"/>
                 <constraint firstItem="6x1-HQ-YcS" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="24" id="8cE-wg-GrY"/>
                 <constraint firstItem="y3t-OW-3A3" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="21" id="9ob-dv-aMG"/>
@@ -107,15 +113,17 @@
                 <constraint firstItem="uZE-e7-gQi" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="82" id="KI5-yf-yaR"/>
                 <constraint firstItem="4eF-cw-GzW" firstAttribute="leading" secondItem="vba-so-vnV" secondAttribute="trailing" constant="12" id="POI-Rn-60b"/>
                 <constraint firstAttribute="bottom" secondItem="IyF-Hf-0qc" secondAttribute="bottom" constant="15.67" id="Pno-NT-0dK"/>
-                <constraint firstAttribute="trailing" secondItem="y3t-OW-3A3" secondAttribute="trailing" constant="65" id="WKf-TI-oTe"/>
+                <constraint firstAttribute="trailing" secondItem="y3t-OW-3A3" secondAttribute="trailing" constant="62" id="WKf-TI-oTe"/>
                 <constraint firstItem="IyF-Hf-0qc" firstAttribute="leading" secondItem="E2J-fR-weR" secondAttribute="trailing" constant="28" id="Wry-aY-ENa"/>
                 <constraint firstAttribute="bottom" secondItem="nND-xP-2fn" secondAttribute="bottom" id="X3A-Ho-Z5R"/>
                 <constraint firstAttribute="width" constant="402" id="XUC-uD-Fgn"/>
+                <constraint firstItem="COK-PX-T74" firstAttribute="top" secondItem="4eF-cw-GzW" secondAttribute="bottom" constant="6" id="Xqp-NY-Jjr"/>
                 <constraint firstItem="Y16-RK-fsR" firstAttribute="leading" secondItem="IyF-Hf-0qc" secondAttribute="trailing" constant="28" id="aFb-dj-Ygf"/>
                 <constraint firstItem="4eF-cw-GzW" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="20" id="hzv-Bz-Afy"/>
                 <constraint firstAttribute="trailing" secondItem="nND-xP-2fn" secondAttribute="trailing" id="mcl-eZ-XxD"/>
                 <constraint firstItem="Y16-RK-fsR" firstAttribute="bottom" secondItem="gTV-IL-0wX" secondAttribute="bottom" constant="-16" id="nmf-hh-y0I"/>
                 <constraint firstAttribute="trailing" secondItem="uZE-e7-gQi" secondAttribute="trailing" constant="24" id="qtw-46-x33"/>
+                <constraint firstItem="COK-PX-T74" firstAttribute="leading" secondItem="vba-so-vnV" secondAttribute="trailing" constant="9" id="sB2-eD-3xa"/>
                 <constraint firstItem="cgw-iW-Vr4" firstAttribute="top" secondItem="uZE-e7-gQi" secondAttribute="bottom" constant="16" id="uSx-Xh-Xtd"/>
                 <constraint firstAttribute="bottom" secondItem="E2J-fR-weR" secondAttribute="bottom" constant="15.67" id="uUN-Bx-ZhE"/>
                 <constraint firstItem="uZE-e7-gQi" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="24" id="xLU-zQ-6lY"/>
@@ -129,6 +137,7 @@
                 <outlet property="moreButton" destination="wpK-uS-fAf" id="cfc-Je-KvO"/>
                 <outlet property="profileImg" destination="vba-so-vnV" id="sFn-YC-Py1"/>
                 <outlet property="sharesButton" destination="Y16-RK-fsR" id="P0H-Yw-GCS"/>
+                <outlet property="tagsStackView" destination="COK-PX-T74" id="Elh-Ax-a2J"/>
                 <outlet property="threadImg" destination="cgw-iW-Vr4" id="VBH-am-wxA"/>
                 <outlet property="timeAgoLabel" destination="y3t-OW-3A3" id="jQk-Sx-n17"/>
                 <outlet property="titleLabel" destination="uZE-e7-gQi" id="a6l-W0-xvD"/>
