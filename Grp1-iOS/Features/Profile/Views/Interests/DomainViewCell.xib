@@ -29,30 +29,27 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="GDe-bJ-YSs">
-                                <rect key="frame" x="63" y="19" width="28" height="31"/>
+                                <rect key="frame" x="67" y="23" width="20" height="22"/>
                             </imageView>
                         </subviews>
                         <constraints>
                             <constraint firstItem="ruN-Yj-9NG" firstAttribute="leading" secondItem="ivg-oV-21t" secondAttribute="leading" id="CMt-j4-cHi"/>
                             <constraint firstItem="GDe-bJ-YSs" firstAttribute="centerX" secondItem="ruN-Yj-9NG" secondAttribute="centerX" id="FZJ-y4-8XQ"/>
-                            <constraint firstItem="GDe-bJ-YSs" firstAttribute="top" secondItem="ivg-oV-21t" secondAttribute="top" constant="19" id="LWj-gZ-yto"/>
+                            <constraint firstItem="GDe-bJ-YSs" firstAttribute="top" secondItem="ivg-oV-21t" secondAttribute="top" constant="23" id="LWj-gZ-yto"/>
                             <constraint firstAttribute="trailing" secondItem="ruN-Yj-9NG" secondAttribute="trailing" id="Scg-sQ-eaV"/>
-                            <constraint firstItem="GDe-bJ-YSs" firstAttribute="leading" secondItem="ivg-oV-21t" secondAttribute="leading" constant="63" id="Wy4-YC-tck"/>
+                            <constraint firstItem="GDe-bJ-YSs" firstAttribute="leading" secondItem="ivg-oV-21t" secondAttribute="leading" constant="67" id="Wy4-YC-tck"/>
                             <constraint firstAttribute="bottom" secondItem="ruN-Yj-9NG" secondAttribute="bottom" constant="13" id="ntl-Mz-k0b"/>
-                            <constraint firstItem="ruN-Yj-9NG" firstAttribute="top" secondItem="GDe-bJ-YSs" secondAttribute="bottom" constant="14" id="qUS-CW-B5G"/>
+                            <constraint firstItem="ruN-Yj-9NG" firstAttribute="top" secondItem="GDe-bJ-YSs" secondAttribute="bottom" constant="19" id="qUS-CW-B5G"/>
                         </constraints>
                     </view>
                 </subviews>
             </view>
             <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
             <constraints>
-                <constraint firstAttribute="trailing" secondItem="ivg-oV-21t" secondAttribute="trailing" id="Fej-TX-QlH"/>
                 <constraint firstItem="ivg-oV-21t" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="NDY-fA-ltP"/>
-                <constraint firstItem="ivg-oV-21t" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="WnH-5o-myb"/>
                 <constraint firstAttribute="bottom" secondItem="ivg-oV-21t" secondAttribute="bottom" id="Yqf-2y-Auj"/>
                 <constraint firstAttribute="trailing" secondItem="ivg-oV-21t" secondAttribute="trailing" id="aO5-zK-D1v"/>
                 <constraint firstItem="ivg-oV-21t" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="aZW-px-wKp"/>
-                <constraint firstItem="ivg-oV-21t" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="bAt-pL-kcs"/>
             </constraints>
             <size key="customSize" width="154" height="98"/>
             <connections>
