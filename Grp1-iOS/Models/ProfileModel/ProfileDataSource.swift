@@ -40,11 +40,12 @@ struct ProfileDataSource {
 
 struct InterestsDataSource {
     static let domains: [InterestModel] = [
-        InterestModel(title: "Stocks", subtitle: nil, icon: "chart.bar"),
+        InterestModel(title: "Stocks", subtitle: nil, icon: "chart.line.uptrend.xyaxis"),
         InterestModel(title: "Crypto", subtitle: nil, icon: "bitcoinsign.circle"),
         InterestModel(title: "Macroeconomy", subtitle: nil, icon: "globe"),
-        InterestModel(title: "Banking", subtitle: nil, icon: "indianrupeesign.bank.building"),
-        InterestModel(title: "Commodities", subtitle: nil, icon: "shippingbox")
+        InterestModel(title: "Banking", subtitle: nil, icon: "creditcard"),
+        InterestModel(title: "Commodities", subtitle: nil, icon: "shippingbox"),
+        InterestModel(title: "Mutual Funds", subtitle: nil, icon: "building.columns")
     ]
     
     static let companies: [InterestModel] = [
@@ -53,6 +54,17 @@ struct InterestsDataSource {
         InterestModel(title: "HDFC Bank", subtitle: "HDFC", icon: nil),
         InterestModel(title: "Reliance", subtitle: "RIL", icon: nil),
         InterestModel(title: "Suzlon", subtitle: "SUZ", icon: nil)
+    ]
+    
+    static let preferences: [InterestModel] = [
+        InterestModel(title: "Indian Economy", subtitle: "Consumption,inflation , growth", icon: "indianrupeesign.gauge.chart.lefthalf.righthalf"),
+        InterestModel(title: "Personal Finance", subtitle: "Exports, Imports and Trade Balance", icon: "figure.wave"),
+        InterestModel(title: "Government and Policy", subtitle: "Public Spending and Reforms", icon: "newspaper"),
+        InterestModel(title: "Stock Markets", subtitle: "Shares ,Indices and Market Cycles", icon: "chart.line.uptrend.xyaxis"),
+        InterestModel(title: "Real Estate Economics", subtitle: "Housing Interest rates, demand", icon: "building.2"),
+        InterestModel(title: "Global Economy", subtitle: "Exports, Imports and Trade Balance", icon: "globe.central.south.asia.fill"),
+        InterestModel(title: "Banking and credit", subtitle: "Loans , Interest rates and Moneyflow", icon: "banknote"),
+        InterestModel(title: "Crypto", subtitle: "Bitcoin, Web3 and Digital Assets", icon: "bitcoinsign.circle"),
     ]
 }
 

@@ -15,14 +15,7 @@ class DomainSelectionViewController: UIViewController {
     @IBOutlet weak var collectionView: UICollectionView!
     
     @IBOutlet weak var nextButton: UIButton!
-    var domains: [DomainModel] = [
-        DomainModel(icon: "chart.bar", title: "Stocks"),
-        DomainModel(icon: "building.columns", title: "Mutual Funds"),
-        DomainModel(icon: "bitcoinsign.circle", title: "Crypto"),
-        DomainModel(icon: "globe", title: "Macroeconomy"),
-        DomainModel(icon: "creditcard", title: "Banking"),
-        DomainModel(icon: "cube.box", title: "Commodities")
-    ]
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()

@@ -61,11 +61,13 @@ extension ProfileSection {
 enum InterestType {
     case domain
     case company
+    case preference
     
     var title: String {
         switch self {
         case .domain: return "Add New Domain"
         case .company: return "Add New Company"
+        case .preference: return "Add New Preferences"
         }
     }
     
@@ -73,6 +75,7 @@ enum InterestType {
         switch self {
         case .domain: return "Search Domains"
         case .company: return "Search Companies"
+        case .preference: return "Search Preferences"
         }
     }
 }
