@@ -48,7 +48,6 @@ NEW DELHI: India's benchmark inflation rate stayed on the lower side of RBI's ta
 The latest inflation reading also means that quarterly inflation in the period ending December 2025, was 0.76%, the lowest ever in the current series and the second consecutive quarter when it stayed below the lower end of RBI's target band. To be sure, the December quarter inflation print is slightly higher than the 0.6% projected by RBI in its December Monetary Policy Committee (MPC) resolution. Headline inflation has stayed below RBI's actual target of 4%  for four consecutive quarters now.
 """
 
-// MARK: - Enhanced Text Preprocessing
 
 func cleanText(_ text: String) -> String {
     let stopWords = Set(["the", "a", "an", "and", "or", "but", "in", "on", "at", "to", "for", "of", "with", "as", "by", "from", "is", "are", "was", "were", "be", "been", "being"])
@@ -66,7 +65,6 @@ func cleanText(_ text: String) -> String {
     return words.joined(separator: " ")
 }
 
-// MARK: - Smart Lemmatization using NLTagger
 
 func lemmatize(_ word: String) -> String {
     let tagger = NLTagger(tagSchemes: [.lemma])
@@ -101,7 +99,6 @@ func lemmatizePhrase(_ phrase: String) -> String {
     return lemmatizedWords.joined(separator: " ")
 }
 
-// MARK: - Enhanced Phrase Extraction with Multiple Strategies
 
 func extractPhrases(from text: String, maxPhraseLength: Int = 4) -> [String] {
     let tagger = NLTagger(tagSchemes: [.lexicalClass, .nameType, .lemma])
@@ -111,7 +108,6 @@ func extractPhrases(from text: String, maxPhraseLength: Int = 4) -> [String] {
     var nounPhraseBuffer: [String] = []
     var lemmaBuffer: [String] = []
     
-    // Strategy 1: Extract Named Entities (RBI, HDFC Bank, CPI, MPC, etc.)
     tagger.enumerateTags(
         in: text.startIndex..<text.endIndex,
         unit: .word,
@@ -125,7 +121,6 @@ func extractPhrases(from text: String, maxPhraseLength: Int = 4) -> [String] {
         return true
     }
     
-    // Strategy 2: Extract noun phrases with lemmatization
     tagger.enumerateTags(
         in: text.startIndex..<text.endIndex,
         unit: .word,
@@ -134,7 +129,6 @@ func extractPhrases(from text: String, maxPhraseLength: Int = 4) -> [String] {
     ) { tag, range in
         let word = String(text[range]).lowercased()
         
-        // Get lemma for this word
         let wordTagger = NLTagger(tagSchemes: [.lemma])
         wordTagger.string = word
         var lemma = word
@@ -155,7 +149,6 @@ func extractPhrases(from text: String, maxPhraseLength: Int = 4) -> [String] {
             }
         } else {
             if !nounPhraseBuffer.isEmpty {
-                // Generate n-grams from buffer (both original and lemmatized)
                 for length in 1...nounPhraseBuffer.count {
                     for start in 0...(nounPhraseBuffer.count - length) {
                         let originalNgram = nounPhraseBuffer[start..<(start + length)].joined(separator: " ")
@@ -172,7 +165,6 @@ func extractPhrases(from text: String, maxPhraseLength: Int = 4) -> [String] {
         return true
     }
     
-    // Handle remaining buffer
     if !nounPhraseBuffer.isEmpty {
         for length in 1...nounPhraseBuffer.count {
             for start in 0...(nounPhraseBuffer.count - length) {
@@ -185,7 +177,6 @@ func extractPhrases(from text: String, maxPhraseLength: Int = 4) -> [String] {
         }
     }
     
-    // Strategy 3: Add individual words (both original and lemmatized)
     let words = text.lowercased()
         .components(separatedBy: CharacterSet.alphanumerics.inverted)
         .filter { $0.count > 1 }
@@ -198,7 +189,6 @@ func extractPhrases(from text: String, maxPhraseLength: Int = 4) -> [String] {
     return Array(phrases)
 }
 
-// MARK: - Multi-Level Matching Algorithm
 
 func matchUserTagsWithArticle(
     userTags: [String],
@@ -208,14 +198,14 @@ func matchUserTagsWithArticle(
 ) -> (matchedTags: [String], matchCount: Int) {
     
     guard let embedding = NLEmbedding.wordEmbedding(for: .english) else {
-        print("❌ Failed to load embeddings")
+        print("Failed to load embeddings")
         return ([], 0)
     }
     
     let articleText = cleanText(headline + " " + body)
     let phrases = extractPhrases(from: articleText)
     
-    print("\n📄 Extracted Article Phrases (\(phrases.count) total):")
+    print("\nExtracted Article Phrases (\(phrases.count) total):")
     Array(phrases).sorted().prefix(25).forEach { print("   • \($0)") }
     if phrases.count > 25 {
         print("   ... and \(phrases.count - 25) more")
@@ -230,26 +220,23 @@ func matchUserTagsWithArticle(
         let tagWords = cleanedTag.split(separator: " ").map(String.init)
         let lemmatizedTagWords = lemmatizedTag.split(separator: " ").map(String.init)
         
-        // LEVEL 1: Exact phrase match (original or lemmatized)
         if phrases.contains(cleanedTag) || phrases.contains(lemmatizedTag) {
             matchedTags.append(tag)
-            print("✅ Tag: '\(tag)' → EXACT PHRASE MATCH (confidence: 1.00)")
+            print("Tag: '\(tag)' → EXACT PHRASE MATCH (confidence: 1.00)")
             continue
         }
         
-        // LEVEL 2: Substring match
         var foundPartialMatch = false
         for phrase in phrases {
             if phrase.contains(cleanedTag) || phrase.contains(lemmatizedTag) {
                 matchedTags.append(tag)
-                print("✅ Tag: '\(tag)' → PARTIAL MATCH in '\(phrase)' (confidence: 0.95)")
+                print("Tag: '\(tag)' → PARTIAL MATCH in '\(phrase)' (confidence: 0.95)")
                 foundPartialMatch = true
                 break
             }
         }
         if foundPartialMatch { continue }
         
-        // LEVEL 3: Word-by-word matching with lemmas and embeddings
         var tagWordScores: [Double] = []
         
         for (index, tagWord) in tagWords.enumerated() {
@@ -261,14 +248,12 @@ func matchUserTagsWithArticle(
                 let phraseWords = phrase.split(separator: " ").map(String.init)
                 
                 for phraseWord in phraseWords {
-                    // Check exact match (original or lemma)
                     if tagWord == phraseWord || tagLemma == phraseWord {
                         bestScore = config.exactMatchBoost
                         bestMatch = phraseWord
                         break
                     }
                     
-                    // Semantic similarity using embeddings
                     let distance = embedding.distance(between: tagWord, and: phraseWord)
                     let similarity = max(config.semanticFloor, 1.0 - distance)
                     
@@ -283,7 +268,7 @@ func matchUserTagsWithArticle(
             
             tagWordScores.append(bestScore)
             if bestScore > 0.5 {
-                print("   🔗 '\(tagWord)' → '\(bestMatch)' (score: \(String(format: "%.2f", bestScore)))")
+                print("'\(tagWord)' → '\(bestMatch)' (score: \(String(format: "%.2f", bestScore)))")
             }
         }
         
@@ -291,7 +276,7 @@ func matchUserTagsWithArticle(
         let bestDistance = tagWordScores.isEmpty ? 2.0 : (1.0 - (tagWordScores.max() ?? 0.0))
         
         print(
-            "📊 Tag: '\(tag)' → distance: \(String(format: "%.2f", bestDistance)), " +
+            "Tag: '\(tag)' → distance: \(String(format: "%.2f", bestDistance)), " +
             "confidence: \(String(format: "%.2f", confidence))"
         )
         
@@ -307,7 +292,6 @@ func matchUserTagsWithArticle(
     return (matchedTags, matchedTags.count)
 }
 
-// MARK: - Scoring Function
 
 func calculateArticleScore(
     matchedTags: [String],
@@ -318,9 +302,8 @@ func calculateArticleScore(
     }
 }
 
-// MARK: - Main Execution
 
-print("🚀 Starting Enhanced Tag Matching Algorithm\n")
+print("Starting Enhanced Tag Matching Algorithm\n")
 print(String(repeating: "=", count: 60))
 
 let result = matchUserTagsWithArticle(
@@ -330,7 +313,7 @@ let result = matchUserTagsWithArticle(
 )
 
 print("\n" + String(repeating: "=", count: 60))
-print("\n🎯 RESULTS:")
+print("\nRESULTS:")
 print("\nMatched Tags (\(result.matchCount) total):")
 result.matchedTags.forEach { tag in
     let weight = tagWeights[tag] ?? 0.0
@@ -342,5 +325,5 @@ let articleScore = calculateArticleScore(
     tagWeights: tagWeights
 )
 
-print("\n📈 Final Article Score: \(articleScore)")
+print("\nFinal Article Score: \(articleScore)")
 print("\n" + String(repeating: "=", count: 60))

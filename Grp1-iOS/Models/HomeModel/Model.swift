@@ -8,14 +8,13 @@ struct ArticleQA {
 }
 
 struct NewsArticle {
-    let id: Int                         //PK
+    let id: Int
     let title: String
     let description: String
     let imageName: String
     let category: String
     let date: String
     let source: String
-    
     let overview: [String]
     let keyTakeaways: [String]
     let jargons: [String]
