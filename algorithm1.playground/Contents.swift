@@ -1,14 +1,12 @@
 import Foundation
 import NaturalLanguage
 
-// MARK: - Configuration (UNCHANGED)
 struct MatchConfig {
     let minConfidence: Double = 0.45
     let exactMatchBoost: Double = 1.0
     let semanticFloor: Double = 0.0
 }
 
-// MARK: - User Tags (UNCHANGED)
 let userTags = [
     "banking",
     "stock market",
@@ -26,7 +24,6 @@ let userTags = [
     "financial sector"
 ]
 
-// MARK: - TAG WEIGHTS (NEW – IMPLEMENTATION ONLY)
 let tagWeights: [String: Double] = [
     "banking": 10,
     "stock market": 13,
@@ -44,7 +41,6 @@ let tagWeights: [String: Double] = [
     "financial sector": 9
 ]
 
-// MARK: - News Data (UNCHANGED)
 let newsHeadline = "Retail inflation remains muted at 1.3% in December"
 
 let newsBody = """
@@ -52,8 +48,6 @@ NEW DELHI: India’s benchmark inflation rate stayed on the lower side of RB
 The latest inflation reading also means that quarterly inflation in the period ending December 2025, was 0.76%, the lowest ever in the current series and the second consecutive quarter when it stayed below the lower end of RBI’s target band. To be sure, the December quarter inflation print is slightly higher than the 0.6% projected by RBI in its December Monetary Policy Committee (MPC) resolution. Headline inflation has stayed below RBI’s actual target of 4%  for four consecutive quarters now.
 """
 
-//
-// MARK: - Text Cleaning (UNCHANGED)
 func cleanText(_ text: String) -> String {
     text.lowercased()
         .replacingOccurrences(
@@ -63,7 +57,6 @@ func cleanText(_ text: String) -> String {
         )
 }
 
-// MARK: - Phrase Extraction (UNCHANGED)
 func extractPhrases(from text: String) -> [String] {
     let tagger = NLTagger(tagSchemes: [.lexicalClass])
     tagger.string = text
@@ -95,7 +88,6 @@ func extractPhrases(from text: String) -> [String] {
     return phrases
 }
 
-// MARK: - Simple Stemmer (UNCHANGED)
 func root(_ word: String) -> String {
     let suffixes = ["ing", "ed", "s", "es", "ly"]
     for suffix in suffixes {
@@ -106,7 +98,6 @@ func root(_ word: String) -> String {
     return word
 }
 
-// MARK: - Matching Engine (100% UNCHANGED)
 func matchUserTagsWithArticle(
     userTags: [String],
     headline: String,
@@ -187,7 +178,6 @@ func matchUserTagsWithArticle(
     return (matchedTags, matchedTags.count)
 }
 
-// MARK: - ARTICLE SCORE (NEW – SIMPLE SUM)
 func calculateArticleScore(
     matchedTags: [String],
     tagWeights: [String: Double]
@@ -198,14 +188,12 @@ func calculateArticleScore(
     }
 }
 
-// MARK: - Run
 let result = matchUserTagsWithArticle(
     userTags: userTags,
     headline: newsHeadline,
     body: newsBody
 )
 
-// MARK: - Output
 print("\nMatched Tags:")
 result.matchedTags.forEach { print(" • \($0)") }
 

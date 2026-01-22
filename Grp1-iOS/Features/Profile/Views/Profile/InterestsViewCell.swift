@@ -17,7 +17,7 @@ class InterestsViewCell: UICollectionViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
-        contentView.layer.cornerRadius = 12
+        contentView.layer.cornerRadius = 16
         contentView.clipsToBounds = true
     }
     

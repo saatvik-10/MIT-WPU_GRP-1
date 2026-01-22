@@ -17,7 +17,7 @@ class ProfileOption2ViewCell: UICollectionViewCell {
         super.awakeFromNib()
         
         contentView.backgroundColor = .white
-        contentView.layer.cornerRadius = 12
+        contentView.layer.cornerRadius = 16
         contentView.layer.masksToBounds = true
     }
     
