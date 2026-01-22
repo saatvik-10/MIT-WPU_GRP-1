@@ -124,8 +124,14 @@ extension ProfileViewController {
             performSegue(withIdentifier: "progressSegue", sender: self)
         } else if case .interests = sectionType {
             performSegue(withIdentifier: "interestsSegue", sender: self)
-        } else {
+        } else if case .bookmarks = sectionType  {
             performSegue(withIdentifier: "bookmarksSegue", sender: self)
+        } else if case .about = sectionType {
+            print("About us Tapped")
+//            performSegue(withIdentifier: "aboutSegue", sender: self)
+        } else {
+            print("Logout tapped")
+//            performSegue(withIdentifier: "logoutSegue", sender: self)
         }
     }
 }
