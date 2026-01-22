@@ -22,7 +22,6 @@ class RealExploreCollectionViewCell: UICollectionViewCell {
         newsImageView.layer.masksToBounds = true
         newsImageView.clipsToBounds = true
         
-        // LABELS STYLE
         pickLabel.textColor = .systemGray
         headlineLabel.numberOfLines = 2
         headlineLabel.textColor = .black

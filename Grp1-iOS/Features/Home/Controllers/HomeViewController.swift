@@ -56,7 +56,6 @@ class HomeViewController: UIViewController, UICollectionViewDelegate {
         let section = 0
         let lastIndex = todaysPick.count - 1
 
-        // Move to next
         if currentIndex < lastIndex {
             currentIndex += 1
         } else {
@@ -72,11 +71,15 @@ class HomeViewController: UIViewController, UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
             
-            var selectedArticle: NewsArticle?
+        var selectedArticle: NewsArticle?
 
             if indexPath.section == 0 {
                 selectedArticle = todaysPick[indexPath.row]
-            } else if indexPath.section == 1 {
+                performSegue(withIdentifier: "showArticleDetail2", sender: selectedArticle)
+                return
+            }
+
+            if indexPath.section == 1 {
                 selectedArticle = trendingNews[indexPath.row]
             } else if indexPath.section == 2 {
                 selectedArticle = marketHighlights[indexPath.row]
@@ -87,14 +90,20 @@ class HomeViewController: UIViewController, UICollectionViewDelegate {
             performSegue(withIdentifier: "showArticleDetail", sender: selectedArticle)
         }
 
-        override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-            if segue.identifier == "showArticleDetail" {
-                if let destinationVC = segue.destination as? news1ViewController,
-                   let article = sender as? NewsArticle {
-                    destinationVC.article = article
-                }
-            }
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+
+        if segue.identifier == "showArticleDetail",
+           let destinationVC = segue.destination as? news1ViewController,
+           let article = sender as? NewsArticle {
+            destinationVC.article = article
         }
+
+        if segue.identifier == "showArticleDetail2",
+           let destinationVC = segue.destination as? news2ViewController,
+           let article = sender as? NewsArticle {
+            destinationVC.article = article
+        }
+    }
     
     func generateLayout()->UICollectionViewLayout {
         let layout = UICollectionViewCompositionalLayout { section, _ in
@@ -178,7 +187,7 @@ class HomeViewController: UIViewController, UICollectionViewDelegate {
                 
                 let groupSize = NSCollectionLayoutSize(
                     widthDimension: .fractionalWidth(0.9),
-                    heightDimension: .estimated(250)  // adjust height
+                    heightDimension: .estimated(250)  // important Height
                 )
                 
                 let group = NSCollectionLayoutGroup.horizontal(
@@ -193,7 +202,7 @@ class HomeViewController: UIViewController, UICollectionViewDelegate {
                 return section
             }
             
-            // SECTION 2 - Vertical List
+
             let itemSize = NSCollectionLayoutSize(
                 widthDimension: .fractionalWidth(1.0),
                 heightDimension: .fractionalHeight(1.0)
@@ -263,7 +272,7 @@ extension HomeViewController: UICollectionViewDataSource {
         case 0: return todaysPick.count
         case 1: return 1
         case 2: return marketHighlights.count
-        case 3: return marketHighlights.count   // real explore section
+        case 3: return marketHighlights.count
         default: return 0
         }
     }
@@ -290,7 +299,7 @@ extension HomeViewController: UICollectionViewDataSource {
                     self.present(popupVC, animated: true)
                 }
             cell.onRecommendTapped = { [weak self] in
-                    self?.showToast(message: "Recommendation sent!")   // << toast works here
+                    self?.showToast(message: "Recommendation sent!")
                 }
 
             return cell
@@ -306,7 +315,7 @@ extension HomeViewController: UICollectionViewDataSource {
                     self.present(popupVC, animated: true)
                 }
             cell.onRecommendTapped = { [weak self] in
-                    self?.showToast(message: "Recommendation sent!")   // << toast works here
+                    self?.showToast(message: "Recommendation sent!")
                 }
             return cell
         }
@@ -331,7 +340,7 @@ extension HomeViewController: UICollectionViewDataSource {
         if indexPath.section == 0 {
             headerView.headerLabel.text = " "
             headerView.arrowImageView.isHidden = true
-            headerView.headerLabel.font = UIFont.systemFont(ofSize: 34, weight: .bold)  // << Bigger title
+            headerView.headerLabel.font = UIFont.systemFont(ofSize: 34, weight: .bold)
             headerView.headerLabel.textColor = .black
         }
         else if indexPath.section == 1 {

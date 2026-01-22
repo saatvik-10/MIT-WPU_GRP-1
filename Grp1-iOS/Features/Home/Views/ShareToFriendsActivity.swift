@@ -23,17 +23,14 @@ class ShareToFriendsActivity: UIActivity {
     override func perform() {
         print("Sharing to friends inside the app")
 
-        // 1. Get the key window’s root VC
         guard let root = UIApplication.shared.keyWindowInConnectedScenes?.rootViewController else {
-            print("❌ No key window / rootViewController found")
+            print("no rootViewController found")
             activityDidFinish(false)
             return
         }
 
-        // 2. Find the top-most VC to present from
         let topVC = root.topMostViewController()
 
-        // 3. Create bottom-sheet
         let sheetVC = ShareBottomSheetViewController(
             nibName: "ShareBottomSheetViewController",
             bundle: nil
@@ -41,7 +38,7 @@ class ShareToFriendsActivity: UIActivity {
         sheetVC.modalPresentationStyle = .overFullScreen
         sheetVC.modalTransitionStyle = .crossDissolve
 
-        // 4. Present
+        
         topVC.present(sheetVC, animated: true) { [weak self] in
             self?.activityDidFinish(true)
         }

@@ -29,13 +29,11 @@ class SearchViewController: UIViewController {
         collectionView.dataSource = self
             collectionView.delegate = self
 
-            // 🔹 Register cell
             collectionView.register(
                 UINib(nibName: "RealExploreCollectionViewCell", bundle: nil),
                 forCellWithReuseIdentifier: "realexplore_cell"
             )
 
-            // 🔹 Register HEADER XIB
             collectionView.register(
                 UINib(nibName: "recentsHeaderCollectionViewCell", bundle: nil),
                 forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
@@ -57,13 +55,11 @@ class SearchViewController: UIViewController {
             collectionView.dataSource = self
             collectionView.backgroundColor = .systemGray6
 
-            // Cell
             collectionView.register(
                 UINib(nibName: "RealExploreCollectionViewCell", bundle: nil),
                 forCellWithReuseIdentifier: "realexplore_cell"
             )
 
-            // Header (XIB)
             collectionView.register(
                 UINib(nibName: "RecentsHeaderView", bundle: nil),
                 forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
@@ -157,7 +153,6 @@ extension SearchViewController: UISearchBarDelegate {
     
     
 
-    // 🔹 When text changes
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
 
         let trimmed = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -176,13 +171,11 @@ extension SearchViewController: UISearchBarDelegate {
         collectionView.reloadData()
     }
 
-    // 🔹 When search is pressed
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
         print("Search tapped:", searchBar.text ?? "")
     }
 
-    // 🔹 Cancel tapped
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         searchBar.text = ""
         searchBar.resignFirstResponder()
@@ -192,12 +185,10 @@ extension SearchViewController: UISearchBarDelegate {
         collectionView.reloadData()
     }
 
-    // 🔹 Show cancel
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
         searchBar.setShowsCancelButton(true, animated: true)
     }
 
-    // 🔹 Hide cancel
     func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
         searchBar.setShowsCancelButton(false, animated: true)
     }
@@ -278,7 +269,6 @@ extension SearchViewController: UICollectionViewDataSource, UICollectionViewDele
         return cell
     }
 
-    // Header
     func collectionView(
         _ collectionView: UICollectionView,
         viewForSupplementaryElementOfKind kind: String,
@@ -302,17 +292,27 @@ extension SearchViewController: UICollectionViewDataSource, UICollectionViewDele
         return header
     }
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let article = articles[indexPath.item]
-        print("Tapped:", article.title)
+        let article = isSearching
+               ? filteredArticles[indexPath.item]
+               : articles[indexPath.item]
+
+        performSegue(withIdentifier: "searchResult", sender: article)
+    }
+    
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "searchResult",
+           let vc = segue.destination as? news1ViewController,
+           let article = sender as? NewsArticle {
+            vc.article = article
+        }
     }
     
     func updateHeaderUI() {
         guard let header = currentHeaderView else { return }
 
-        // Header title
         header.titleLabel.text = isSearching ? "Results" : "Recent Searches"
 
-        // ✅ Clear button logic (THIS IS THE KEY)
         let shouldEnableClear = !isSearching && (searchBar.text?.isEmpty ?? true)
 
         header.clearButton.isEnabled = shouldEnableClear

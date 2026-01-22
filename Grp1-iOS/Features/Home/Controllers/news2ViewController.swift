@@ -1,9 +1,18 @@
+//
+//  news2ViewController.swift
+//  Grp1-iOS
+//
+//  Created by SDC-USER on 13/01/26.
+//
+
 import UIKit
 
-class news1ViewController: UIViewController, UICollectionViewDataSource {
+class news2ViewController: UIViewController, UICollectionViewDataSource {
+
     
     
     
+    @IBOutlet weak var QuizButton: UIButton!
     @IBOutlet weak var dateLabel: UILabel!
     @IBOutlet weak var headlineLabel: UILabel!
     @IBOutlet weak var floatingButton: UIButton!
@@ -13,28 +22,25 @@ class news1ViewController: UIViewController, UICollectionViewDataSource {
     var selectedJargon: String?
     @IBOutlet weak var optionsButton: UIBarButtonItem!
     @IBOutlet weak var glassView: UIView!
-    //    @IBOutlet weak var collectionView: UICollectionView!
-    //    @IBOutlet weak var collectionView: UICollectionView!
+//    @IBOutlet weak var collectionView: UICollectionView!
+//    @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var overviewView: UIView!
     @IBOutlet weak var gradientImageView: UIImageView!
     @IBOutlet weak var topImageView: UIImageView!
     @IBOutlet weak var overviewTextLabel: UILabel!
     
-    var passedDominantColor: UIColor = .systemBackground
     let newsStore = NewsDataStore.shared
-    var relatedNews: [NewsArticle] = []     // for "More Like This"
-    var qaHistory: [ArticleQA] = []         // for "Questions Asked"
+    var relatedNews: [NewsArticle] = []
+    var qaHistory: [ArticleQA] = []
     
     var article: NewsArticle?
     
     private var gradientApplied = false
-    var extractedDominantColor: UIColor?
-    var dominantColor: UIColor?
 
     
+
     override func viewDidLoad() {
         super.viewDidLoad()
-
         collectionView.delegate = self
         overviewTextLabel.numberOfLines = 0
         if let points = article?.overview {
@@ -47,35 +53,24 @@ class news1ViewController: UIViewController, UICollectionViewDataSource {
         if article == nil {
             article = newsStore.getArticle(by: 1)
         }
-        
         setupUI()
-        
         relatedNews = newsStore.getAllNews().shuffled()
-        
         if let articleID = article?.id {
             qaHistory = newsStore.getQAHistory(for: articleID)
-        } else {
+        }
+        else {
             qaHistory = []
         }
         print("QA count:", qaHistory.count)
-        
-        
-        
-        
-        
         setupCollectionView()
         setupGlassEffect()
         setupOptionsMenu()
-        
-
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 //        setupJargons()
     }
-    
-    
     
     private func setupUI() {
         guard let article = article else { return }
@@ -87,63 +82,41 @@ class news1ViewController: UIViewController, UICollectionViewDataSource {
             topImageView.image = image
         }
     }
-    
-    // MARK: - Collection View Setup
+
     private func setupCollectionView() {
         collectionView.dataSource = self
         collectionView.backgroundColor = .clear
         
-        collectionView.register(
-            UINib(nibName: "moreLikeThisCollectionViewCell", bundle: nil),
-            forCellWithReuseIdentifier: "realexplore_cell"
+
+        collectionView.register(UINib(nibName: "moreLikeThisCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "realexplore_cell")
+        
+        collectionView.register(UINib(nibName: "askQuestionsCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "ask_cell"
         )
         
-        collectionView.register(
-            UINib(nibName: "askQuestionsCollectionViewCell", bundle: nil),
-            forCellWithReuseIdentifier: "ask_cell"
+        collectionView.register(UINib(nibName: "HeaderView", bundle: nil), forSupplementaryViewOfKind: "header", withReuseIdentifier: "header_cell"
         )
-        
-        collectionView.register(
-            UINib(nibName: "HeaderView", bundle: nil),
-            forSupplementaryViewOfKind: "header",
-            withReuseIdentifier: "header_cell"
-        )
-        
+    
         collectionView.setCollectionViewLayout(generateLayout(), animated: false)
     }
     
+
     private func generateLayout() -> UICollectionViewLayout {
         return UICollectionViewCompositionalLayout { sectionIndex, _ in
             
+
             if sectionIndex == 0 {
-                let itemSize = NSCollectionLayoutSize(
-                    widthDimension: .fractionalWidth(0.5),
-                    heightDimension: .fractionalHeight(1.0)
-                )
+                let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.5), heightDimension: .fractionalHeight(1.0))
                 
                 let item = NSCollectionLayoutItem(layoutSize: itemSize)
                 item.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 30, trailing: 10)
                 
-                let groupSize = NSCollectionLayoutSize(
-                    widthDimension: .fractionalWidth(0.9),
-                    heightDimension: .estimated(280)
-                )
+                let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.9), heightDimension: .estimated(280))
                 
-                let group = NSCollectionLayoutGroup.horizontal(
-                    layoutSize: groupSize,
-                    subitems: [item]
-                )
+                let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
                 
-                let headerSize = NSCollectionLayoutSize(
-                    widthDimension: .fractionalWidth(1.0),
-                    heightDimension: .absolute(40)
-                )
+                let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(40))
                 
-                let header = NSCollectionLayoutBoundarySupplementaryItem(
-                    layoutSize: headerSize,
-                    elementKind: "header",
-                    alignment: .top
-                )
+                let header = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerSize, elementKind: "header", alignment: .top)
                 
                 let section = NSCollectionLayoutSection(group: group)
                 section.orthogonalScrollingBehavior = .continuousGroupLeadingBoundary
@@ -152,34 +125,16 @@ class news1ViewController: UIViewController, UICollectionViewDataSource {
                 return section
             }
             
-            let itemSize = NSCollectionLayoutSize(
-                widthDimension: .fractionalWidth(0.98),
-                heightDimension: .fractionalHeight(1.0)
-            )
+
+            let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.98), heightDimension: .fractionalHeight(1.0))
             
             let item = NSCollectionLayoutItem(layoutSize: itemSize)
             item.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 8, bottom: 50, trailing: 2)
             
-            let groupSize = NSCollectionLayoutSize(
-                widthDimension: .fractionalWidth(0.95),
-                heightDimension: .estimated(220)
-            )
-            
-            let group = NSCollectionLayoutGroup.horizontal(
-                layoutSize: groupSize,
-                subitems: [item]
-            )
-            
-            let headerSize = NSCollectionLayoutSize(
-                widthDimension: .fractionalWidth(1.0),
-                heightDimension: .absolute(40)
-            )
-            
-            let header = NSCollectionLayoutBoundarySupplementaryItem(
-                layoutSize: headerSize,
-                elementKind: "header",
-                alignment: .top
-            )
+            let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.95), heightDimension: .estimated(220))
+            let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+            let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(40))
+            let header = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerSize, elementKind: "header", alignment: .top)
             
             let section = NSCollectionLayoutSection(group: group)
             section.orthogonalScrollingBehavior = .continuousGroupLeadingBoundary
@@ -189,51 +144,38 @@ class news1ViewController: UIViewController, UICollectionViewDataSource {
         }
     }
     
+
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 2
     }
     
-    func collectionView(_ collectionView: UICollectionView,
-                        numberOfItemsInSection section: Int) -> Int {
+    @objc func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if section == 0 {
             return relatedNews.count
         }
         return qaHistory.count
     }
     
-    func collectionView(_ collectionView: UICollectionView,
-                        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    @objc(collectionView:cellForItemAtIndexPath:) func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         if indexPath.section == 0 {
-            let cell = collectionView.dequeueReusableCell(
-                withReuseIdentifier: "realexplore_cell",
-                for: indexPath
-            ) as! moreLikeThisCollectionViewCell
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "realexplore_cell", for: indexPath) as! moreLikeThisCollectionViewCell
             
             cell.configureCell(with: relatedNews[indexPath.row])
             return cell
         }
         
-        let cell = collectionView.dequeueReusableCell(
-            withReuseIdentifier: "ask_cell",
-            for: indexPath
-        ) as! askQuestionsCollectionViewCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ask_cell", for: indexPath) as! askQuestionsCollectionViewCell
         
         let qa = qaHistory[indexPath.row]
         cell.configureCell(with: qa)
         return cell
     }
     
-    func collectionView(_ collectionView: UICollectionView,
-                        viewForSupplementaryElementOfKind kind: String,
-                        at indexPath: IndexPath) -> UICollectionReusableView {
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         
-        let headerView = collectionView.dequeueReusableSupplementaryView(
-            ofKind: "header",
-            withReuseIdentifier: "header_cell",
-            for: indexPath
-        ) as! HeaderView
+        let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: "header", withReuseIdentifier: "header_cell", for: indexPath) as! HeaderView
         
         if indexPath.section == 0 {
             headerView.headerLabel.text = "More Like This"
@@ -247,6 +189,7 @@ class news1ViewController: UIViewController, UICollectionViewDataSource {
         return headerView
     }
     
+
     
     func bulletPointList(strings: [String]) -> NSAttributedString {
         let paragraphStyle = NSMutableParagraphStyle()
@@ -273,45 +216,37 @@ class news1ViewController: UIViewController, UICollectionViewDataSource {
            let img = topImageView.image,
            let color = dominantColor(from: img) {
             
-            extractedDominantColor = color
-            let gradientImg = createGradientImage(
-                color: color,
-                size: gradientImageView.bounds.size
-            )
+            let gradientImg = createGradientImage(color: color, size: gradientImageView.bounds.size)
             AppTheme.shared.dominantColor = color
             gradientImageView.image = gradientImg
             gradientApplied = true
 //            applyDominantColorToButton(color)
             floatingButton.tintColor = color.withAlphaComponent(0.80)
-            
-            
+            QuizButton.tintColor = color.withAlphaComponent(0.80)
         }
-        
         setupJargons()
-
-        
     }
     
+
     func createGradientImage(color: UIColor, size: CGSize) -> UIImage? {
         let gradientLayer = CAGradientLayer()
         gradientLayer.frame = CGRect(origin: .zero, size: size)
-        
         gradientLayer.colors = [
             UIColor.clear.cgColor,                         // clear
             color.withAlphaComponent(0.60).cgColor,        // soft tint
             color.withAlphaComponent(1.0).cgColor,        // extended soft
             color.withAlphaComponent(1.0).cgColor,        // strong tint
-            color.withAlphaComponent(0.9).cgColor,
-            UIColor.systemGray6.cgColor                          // fade to white
+            color.withAlphaComponent(0.9).cgColor,        // extend strong tint
+            UIColor.systemGray6.cgColor                  // fade to white
         ]
         
         gradientLayer.locations = [
-            0.0,   // clear
-            0.25,  // soft begin
-            0.50,  // extend soft
-            0.65,  // strong begin
-            0.70,
-            1.0    // end white fade
+            0.0,   //clear
+            0.25,  //soft tint begin
+            0.50,  //extend soft tint
+            0.65,  //strong tint begin
+            0.70,  //
+            1.0    //end white fade
         ]
         
         gradientLayer.startPoint = CGPoint(x: 0.5, y: 0.0)
@@ -321,22 +256,17 @@ class news1ViewController: UIViewController, UICollectionViewDataSource {
         gradientLayer.render(in: UIGraphicsGetCurrentContext()!)
         let gradientImage = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
-        
         return gradientImage
     }
     
     func dominantColor(from image: UIImage) -> UIColor? {
         guard let inputImage = CIImage(image: image) else { return nil }
-        
         let extent = inputImage.extent
         let context = CIContext(options: [.workingColorSpace: kCFNull!])
         
         guard let filter = CIFilter(
             name: "CIAreaAverage",
-            parameters: [
-                kCIInputImageKey: inputImage,
-                kCIInputExtentKey: CIVector(cgRect: extent)
-            ]) else { return nil }
+            parameters: [kCIInputImageKey: inputImage, kCIInputExtentKey: CIVector(cgRect: extent)]) else { return nil }
         
         guard let outputImage = filter.outputImage else { return nil }
         
@@ -362,30 +292,11 @@ class news1ViewController: UIViewController, UICollectionViewDataSource {
     }
     
     
-    func showShareSheet() {
-        guard let article = article else { return }
-        
-        let customActivity = ShareToFriendsActivity()
-        customActivity.article = article
-        
-        let activityVC = UIActivityViewController(
-            activityItems: [article.title, UIImage(named: article.imageName) ?? UIImage()],
-            applicationActivities: [customActivity]
-        )
-        
-        activityVC.popoverPresentationController?.sourceView = self.view
-        
-        present(activityVC, animated: true)
-    }
-    
-    
     class ShareToFriendsActivity: UIActivity {
         
         var article: NewsArticle?
-        
         override var activityTitle: String? { "Share to Friends" }
         override var activityImage: UIImage? { UIImage(systemName: "person.2.fill") }
-        
         override class var activityCategory: UIActivity.Category {
             return .action
         }
@@ -400,40 +311,28 @@ class news1ViewController: UIViewController, UICollectionViewDataSource {
         }
     }
     
-    
     private func setupOptionsMenu() {
             let recommendAction = UIAction(
                 title: "Recommend article more",
                 image: UIImage(systemName: "hand.thumbsup")
             ) { [weak self] _ in
                 guard let self = self, let article = self.article else { return }
-
                 let generator = UINotificationFeedbackGenerator()
                 generator.notificationOccurred(.success)
-
-                self.animateRecommendationPulse()
-
-                self.showToast(message: "We’ll show you more stories like this.")
-                
+                self.showToast(message: "We’ll show more stories like this.")
                 print("Recommend more articles like: \(article.title)")
             }
-
             let saveAction = UIAction(
                 title: "Save article",
                 image: UIImage(systemName: "bookmark")
             ) { [weak self] _ in
                 guard let self = self, let article = self.article else { return }
-
                 let generator = UINotificationFeedbackGenerator()
                 generator.notificationOccurred(.success)
-
-                self.animateSaveBookmarkIcon()
-
-                self.showToast(message: "Article saved to your reading list.")
+                self.showToast(message: "Article saved to reading list.")
                 
                 print("Saved article: \(article.title)")
             }
-
             let shareAction = UIAction(
                 title: "Share article",
                 image: UIImage(systemName: "square.and.arrow.up")
@@ -443,16 +342,17 @@ class news1ViewController: UIViewController, UICollectionViewDataSource {
                 let customActivity = ShareToFriendsActivity()
                 customActivity.article = article
 
-                let activityVC = UIActivityViewController(
-                    activityItems: [article.title],
-                    applicationActivities: [customActivity]
-                )
+                if let pdfURL = createPDFOfScreen() {
 
-                activityVC.popoverPresentationController?.barButtonItem = self.optionsButton
+                    let activityVC = UIActivityViewController(
+                        activityItems: [pdfURL, article.title],
+                        applicationActivities: [customActivity]
+                    )
 
-                self.present(activityVC, animated: true)
+                    activityVC.popoverPresentationController?.barButtonItem = self.optionsButton
+                    present(activityVC, animated: true)
+                }
             }
-
             let menu = UIMenu(
                 title: "",
                 children: [recommendAction, saveAction, shareAction]
@@ -461,96 +361,46 @@ class news1ViewController: UIViewController, UICollectionViewDataSource {
             optionsButton.menu = menu
     }
     
+    func createPDFOfScreen() -> URL? {
+
+        let pdfRenderer = UIGraphicsPDFRenderer(bounds: view.bounds)
+
+        let fileName = "Article.pdf"
+        let fileURL = FileManager.default.temporaryDirectory.appendingPathComponent(fileName)
+
+        do {
+            try pdfRenderer.writePDF(to: fileURL) { context in
+                context.beginPage()
+                view.drawHierarchy(in: view.bounds, afterScreenUpdates: true)
+            }
+            return fileURL
+        } catch {
+            print("Failed to create PDF:", error)
+            return nil
+        }
+    }
+    
     private func setupGlassEffect() {
+        // Create blur
         let blurEffect = UIBlurEffect(style: .systemUltraThinMaterial)
         let blurView = UIVisualEffectView(effect: blurEffect)
         blurView.frame = glassView.bounds
         blurView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         
+        // Add blur first
         glassView.addSubview(blurView)
         blurView.layer.zPosition = 0
-        
         glassView.layer.cornerRadius = 22
         glassView.layer.masksToBounds = true
-        
         glassView.layer.borderWidth = 1
         glassView.layer.borderColor = UIColor.white.withAlphaComponent(0.95).cgColor
-        
         blurView.backgroundColor = UIColor.white.withAlphaComponent(0.95)
+        
         
         for subview in glassView.subviews where !(subview is UIVisualEffectView) {
             subview.layer.zPosition = 1
         }
     }
-    
-    private func animateRecommendationPulse() {
-        guard let glassView = self.glassView else { return }
-
-        let pulseView = UIView(frame: glassView.bounds)
-        pulseView.backgroundColor = UIColor.systemGreen.withAlphaComponent(0.22)
-        pulseView.layer.cornerRadius = glassView.layer.cornerRadius
-        pulseView.layer.masksToBounds = true
-        pulseView.alpha = 0
-        pulseView.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
-
-        glassView.addSubview(pulseView)
-        glassView.bringSubviewToFront(pulseView)
-
-        UIView.animate(withDuration: 0.18, animations: {
-            pulseView.alpha = 1
-            pulseView.transform = .identity
-        }) { _ in
-            UIView.animate(withDuration: 0.25, delay: 0.15, options: .curveEaseOut, animations: {
-                pulseView.alpha = 0
-                pulseView.transform = CGAffineTransform(scaleX: 1.08, y: 1.08)
-            }) { _ in
-                pulseView.removeFromSuperview()
-            }
-        }
-    }
-    
-    private func animateSaveBookmarkIcon() {
-        let anchorView: UIView = glassView ?? self.view
-
-        let iconSize: CGFloat = 28
-        let bookmark = UIImageView(image: UIImage(systemName: "bookmark.fill"))
-        bookmark.tintColor = .systemYellow
-        bookmark.alpha = 0
-        bookmark.transform = CGAffineTransform(scaleX: 0.4, y: 0.4)
-
-        anchorView.addSubview(bookmark)
-        bookmark.translatesAutoresizingMaskIntoConstraints = false
-
-        NSLayoutConstraint.activate([
-            bookmark.topAnchor.constraint(equalTo: anchorView.topAnchor, constant: 16),
-            bookmark.trailingAnchor.constraint(equalTo: anchorView.trailingAnchor, constant: -20),
-            bookmark.widthAnchor.constraint(equalToConstant: iconSize),
-            bookmark.heightAnchor.constraint(equalToConstant: iconSize)
-        ])
-
-        UIView.animate(withDuration: 0.3,
-                       delay: 0,
-                       usingSpringWithDamping: 0.7,
-                       initialSpringVelocity: 0.8,
-                       options: .curveEaseOut,
-                       animations: {
-            bookmark.alpha = 1
-            bookmark.transform = .identity
-            bookmark.transform = CGAffineTransform(translationX: 0, y: -4)
-        }) { _ in
-            UIView.animate(withDuration: 0.25,
-                           delay: 0.7,
-                           options: .curveEaseIn,
-                           animations: {
-                bookmark.alpha = 0
-                bookmark.transform = CGAffineTransform(translationX: 0, y: -12)
-            }) { _ in
-                bookmark.removeFromSuperview()
-            }
-        }
-    }
-    
-    
   
     func setupJargons() {
         guard !didSetupJargons else { return }
@@ -571,7 +421,6 @@ class news1ViewController: UIViewController, UICollectionViewDataSource {
 
         let maxX = glassView.bounds.width - buttonSize - padding
         let maxY = glassView.bounds.height - buttonSize - padding
-
         guard maxX > padding, maxY > padding else { return }
 
         var placedFrames: [CGRect] = []
@@ -599,18 +448,10 @@ class news1ViewController: UIViewController, UICollectionViewDataSource {
             for _ in 0..<maxAttempts {
                 let randomX = CGFloat.random(in: padding...maxX)
                 let randomY = CGFloat.random(in: padding...maxY)
-
-                let frame = CGRect(
-                    x: randomX,
-                    y: randomY,
-                    width: buttonSize,
-                    height: buttonSize
-                )
-
+                let frame = CGRect(x: randomX, y: randomY, width: buttonSize, height: buttonSize)
                 let overlaps = placedFrames.contains {
                     $0.insetBy(dx: -10, dy: -10).intersects(frame)
                 }
-
                 if !overlaps {
                     button.frame = frame
                     placedFrames.append(frame)
@@ -618,9 +459,7 @@ class news1ViewController: UIViewController, UICollectionViewDataSource {
                     break
                 }
             }
-
             if !placed { continue }
-
             
             glassView.addSubview(button)
             glassView.bringSubviewToFront(button)
@@ -631,11 +470,7 @@ class news1ViewController: UIViewController, UICollectionViewDataSource {
     
     @objc func jargonTapped(_ sender: UIButton) {
         guard let word = sender.accessibilityIdentifier else { return }
-
-        print("Jargon tapped:", word)
-
         UIImpactFeedbackGenerator(style: .light).impactOccurred()
-
         selectedJargon = word
         selectedWord.word = word
         performSegue(withIdentifier: "showJargonDetail", sender: self)
@@ -649,23 +484,16 @@ class news1ViewController: UIViewController, UICollectionViewDataSource {
         scale.autoreverses = true
         scale.repeatCount = .infinity
         scale.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
-
         view.layer.add(scale, forKey: "twinkle")
     }
     
     
     private func addFloatingMotion(to button: UIButton, in container: UIView) {
-
         let maxOffset: CGFloat = 15
-
         func animate() {
             let dx = CGFloat.random(in: -maxOffset...maxOffset)
             let dy = CGFloat.random(in: -maxOffset...maxOffset)
-
-            var newCenter = CGPoint(
-                x: button.center.x + dx,
-                y: button.center.y + dy
-            )
+            var newCenter = CGPoint(x: button.center.x + dx, y: button.center.y + dy)
 
             let halfSize = button.bounds.width / 2
             let minX = halfSize
@@ -676,28 +504,19 @@ class news1ViewController: UIViewController, UICollectionViewDataSource {
             newCenter.x = min(max(newCenter.x, minX), maxX)
             newCenter.y = min(max(newCenter.y, minY), maxY)
 
-            UIView.animate(
-                withDuration: Double.random(in: 2.8...4.2),
-                delay: 0,
-                options: [.curveEaseInOut, .allowUserInteraction],
-                animations: {
+            UIView.animate(withDuration: Double.random(in: 2.8...4.2), delay: 0, options: [.curveEaseInOut, .allowUserInteraction], animations: {
                     button.center = newCenter
-                },
-                completion: { _ in
+                },completion: { _ in
                     animate()
-                }
-            )
+                })
         }
-
         animate()
     }
     
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "toChat" {
-
             if let nav = segue.destination as? UINavigationController {
-
                 if let chatVC = nav.topViewController as? HomeChatDetailViewController {
                     chatVC.articleID = self.article?.id
                     
@@ -714,18 +533,14 @@ class news1ViewController: UIViewController, UICollectionViewDataSource {
         super.viewWillAppear(animated)
 
         guard let articleID = article?.id else { return }
-
         qaHistory = newsStore.getQAHistory(for: articleID)
-
         collectionView.reloadSections(IndexSet(integer: 1))
     }
     
     
     @IBAction func segmentChanged(_ sender: Any) {
         guard let article = article else { return }
-
             UIImpactFeedbackGenerator(style: .medium).impactOccurred()
-
             let newText: NSAttributedString
             let direction: CGFloat
 
@@ -736,7 +551,6 @@ class news1ViewController: UIViewController, UICollectionViewDataSource {
                 newText = bulletPointList(strings: article.keyTakeaways)
                 direction = 1
             }
-
             let card = overviewView!
             let originalX = card.frame.origin.x
             let width = card.frame.width
@@ -746,48 +560,38 @@ class news1ViewController: UIViewController, UICollectionViewDataSource {
                 card.alpha = 0
             }) { _ in
                 self.overviewTextLabel.attributedText = newText
-
                 card.frame.origin.x = originalX + direction * width
-
-                UIView.animate(
-                    withDuration: 0.32,
-                    delay: 0,
-                    usingSpringWithDamping: 0.82,
-                    initialSpringVelocity: 0.6,
-                    options: [.curveEaseOut],
-                    animations: {
+                UIView.animate(withDuration: 0.32, delay: 0, usingSpringWithDamping: 0.82, initialSpringVelocity: 0.6, options: [.curveEaseOut], animations: {
                         card.frame.origin.x = originalX
                         card.alpha = 1
-                    },
-                    completion: nil
-                )
+                    }, completion: nil)
             }
+    }
+    
+    
+    
+    @IBAction func startQuizTapped(_ sender: Any) {
         
+        guard let article = article else {
+               print("Article is nil")
+               return
+           }
+
+           QuizContext.shared.selectedArticleId = article.id
     }
     
 }
 
-extension news1ViewController: UICollectionViewDelegate {
+extension news2ViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-
         if indexPath.section == 0 {
             let selected = relatedNews[indexPath.row]
-
             let storyboard = UIStoryboard(name: "HomeMain", bundle: nil)
             if let vc = storyboard.instantiateViewController(withIdentifier: "news1ViewController") as? news1ViewController {
 
                 vc.article = selected
-
                 self.navigationController?.pushViewController(vc, animated: true)
             }
         }
     }
 }
-
-//class selectedWord {
-//    static var word: String?
-//}
-//
-//
-//selectedWord.selectedJargon = word
-//Type 'selectedWord' has no member 'selectedJargon'

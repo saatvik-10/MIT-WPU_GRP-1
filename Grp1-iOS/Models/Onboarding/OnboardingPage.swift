@@ -13,4 +13,15 @@ struct OnboardingPage {
 
 
 
+struct OnboardingInterestModel {
+    let icon : String?
+    let title : String
+    let subtitle : String
+}
+
+
+struct DomainModel {
+    let icon : String?
+    let title : String
+}
 

@@ -30,7 +30,6 @@ class askQuestionsCollectionViewCell: UICollectionViewCell {
             questionLabel.text = qa.question
             answerLabel.text = qa.answer
             
-            // Format date to time string (e.g. 12:45 PM)
             let formatter = DateFormatter()
             formatter.dateFormat = "h:mm a"
             timeLabel.text = formatter.string(from: qa.createdAt)
