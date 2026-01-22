@@ -35,25 +35,31 @@ class HomeViewController: UIViewController, UICollectionViewDelegate {
                     let fullText = html.extractTOIArticleBody()
                     print("📰 FULL ARTICLE (first item):")
                     print(fullText.prefix(50000))
-//                    let generator = ArticleSummaryGenerator()
-//
-//                    Task {
-//                        await generator.generateSummary(from: fullText)
-//
-//                        if let summary = generator.summary {
-//                            print("🧠 OVERVIEW:")
-//                            print(summary.overview)
-//
-//                            print("\n📌 KEY TAKEAWAYS:")
-//                            summary.keyTakeaways?.forEach {
-//                                print("• \($0)")
-//                            }
-//                        }
-//
-//                        if let error = generator.error {
-//                            print("❌ Error:", error)
-//                        }
-//                    }
+                    let generator = ArticleSummaryGenerator()
+
+                    Task {
+                        await generator.generateSummary(from: fullText)
+
+                        if let summary = generator.summary {
+                            print("🧠 OVERVIEW:")
+                            print(summary.overview)
+
+                            print("\n📌 KEY TAKEAWAYS:")
+                            summary.keyTakeaways?.forEach {
+                                print("• \($0)")
+                                
+                            }
+                            
+                            print("\n🧩 JARGONS:")
+                                summary.jargons?.forEach {
+                                    print("• \($0)")
+                                }
+                        }
+
+                        if let error = generator.error {
+                            print("❌ Error:", error)
+                        }
+                    }
                 }
             }
         
