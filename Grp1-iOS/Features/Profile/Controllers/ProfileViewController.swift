@@ -135,3 +135,21 @@ extension ProfileViewController {
         }
     }
 }
+
+extension ProfileSection {
+    
+    var title: String {
+        switch self {
+        case .progress: return "Progress"
+        case .interests: return "Interests"
+        case .bookmarks: return "Bookmarks"
+        case .about: return "About Us"
+        case .logout: return "Logout"
+        }
+    }
+    
+    var isDestructive: Bool {
+        if case .logout = self { return true }
+        return false
+    }
+}
