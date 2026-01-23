@@ -195,6 +195,9 @@ class NewsDataStore {
     func getQAHistory(for articleID: Int) -> [ArticleQA] {
         return newsArticles.first(where: { $0.id == articleID })?.qaHistory ?? []
     }
+    func addArticle(_ article: NewsArticle) {
+            newsArticles.insert(article, at: 0)
+        }
    
 }
 

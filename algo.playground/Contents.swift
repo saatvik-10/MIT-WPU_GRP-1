@@ -327,3 +327,98 @@ let articleScore = calculateArticleScore(
 
 print("\nFinal Article Score: \(articleScore)")
 print("\n" + String(repeating: "=", count: 60))
+
+
+
+
+
+
+//Starting Enhanced Tag Matching Algorithm
+//
+//============================================================
+//
+//Extracted Article Phrases (198 total):
+//   • 2025
+//   • 76
+//   • actual
+//   • actual target
+//   • also
+//   • annual
+//   • band
+//   • below
+//   • benchmark
+//   • benchmark inflation
+//   • benchmark inflation rate
+//   • benchmark inflation rate stay
+//   • benchmark inflation rate stayed
+//   • committee
+//   • compensate
+//   • compensate inflationary
+//   • compensate inflationary tailwind
+//   • compensate inflationary tailwind sources
+//   • compensating
+//   • compensating inflationary
+//   • compensating inflationary tailwinds
+//   • compensating inflationary tailwinds sources
+//   • consecutive
+//   • consecutive month
+//   • consecutive month december
+//   ... and 173 more
+//
+//Tag: 'banking' → distance: 1.00, confidence: 0.00
+//   ✗ Below threshold
+//
+//Tag: 'stock market' → distance: 0.88, confidence: 0.10
+//   ✗ Below threshold
+//
+//Tag: 'hdfc bank' → distance: 0.93, confidence: 0.04
+//   ✗ Below threshold
+//
+//'rate' → 'rate' (score: 1.00)
+//Tag: 'interest rate' → distance: 0.00, confidence: 0.50
+//   ✓ MATCHED
+//
+//Tag: 'rbi' → EXACT PHRASE MATCH (confidence: 1.00)
+//Tag: 'technology' → distance: 1.00, confidence: 0.00
+//   ✗ Below threshold
+//
+//Tag: 'digital banking' → distance: 1.00, confidence: 0.00
+//   ✗ Below threshold
+//
+//Tag: 'fintech' → distance: 1.00, confidence: 0.00
+//   ✗ Below threshold
+//
+//Tag: 'inflation' → EXACT PHRASE MATCH (confidence: 1.00)
+//Tag: 'economy' → distance: 0.94, confidence: 0.06
+//   ✗ Below threshold
+//
+//'growth' → 'growth' (score: 1.00)
+//Tag: 'credit growth' → distance: 0.00, confidence: 0.50
+//   ✓ MATCHED
+//
+//Tag: 'regulation' → distance: 1.00, confidence: 0.00
+//   ✗ Below threshold
+//
+//'monetary' → 'monetary' (score: 1.00)
+//'policy' → 'policy' (score: 1.00)
+//Tag: 'monetary policy' → distance: 0.00, confidence: 1.00
+//   ✓ MATCHED
+//
+//Tag: 'financial sector' → distance: 1.00, confidence: 0.00
+//   ✗ Below threshold
+//
+//
+//============================================================
+//
+//RESULTS:
+//
+//Matched Tags (5 total):
+//   • interest rate (weight: 20.0)
+//   • rbi (weight: 18.0)
+//   • inflation (weight: 11.0)
+//   • credit growth (weight: 6.0)
+//   • monetary policy (weight: 13.0)
+//
+//Final Article Score: 68.0
+//
+//============================================================

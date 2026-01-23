@@ -20,48 +20,78 @@ class HomeViewController: UIViewController, UICollectionViewDelegate {
             
 
                 guard let firstItem = items.first else {
-                    print("❌ No RSS items")
+                    print("No RSS items")
                     return
                 }
             
 
-                // TEMP TEST
                 ArticleContentService.shared.fetchArticleHTML(from: firstItem.link) { html in
                     guard let html = html else {
-                        print("❌ Failed to load article HTML")
+                        print("Failed to load article HTML")
                         return
                     }
 
                     let fullText = html.extractTOIArticleBody()
-                    print("📰 FULL ARTICLE (first item):")
+                    print("FULL ARTICLE (first item):")
                     print(fullText.prefix(50000))
                     let generator = ArticleSummaryGenerator()
+                    let shortener = HeadlineShortener()
 
                     Task {
                         await generator.generateSummary(from: fullText)
+                        let cleanTitle = await shortener.shortenIfNeeded(firstItem.title)
+                        print(cleanTitle)
+                        print("========================================================")
+                        guard
+                            let overview = generator.summary?.overview,
+                            let keyTakeaways = generator.summary?.keyTakeaways,
+                            let jargons = generator.summary?.jargons
+                        else {
+                            print("Summary not ready")
+                            return
+                        }
 
-                        if let summary = generator.summary {
-                            print("🧠 OVERVIEW:")
-                            print(summary.overview)
+                        let summary = ArticleSummary(
+                            overview: overview,
+                            keyTakeaways: keyTakeaways,
+                            jargons: jargons
+                        )
 
-                            print("\n📌 KEY TAKEAWAYS:")
-                            summary.keyTakeaways?.forEach {
-                                print("• \($0)")
-                                
+                        let scrapedArticle = ScrapedArticle(
+                            title: cleanTitle,
+                            bodyText: fullText,
+                            imageName: firstItem.imageURL,
+                            source: "Times of India",
+                            publishedDate: firstItem.pubDate
+                        )
+
+                        let article = NewsArticleAssembler.makeArticle(
+                            from: scrapedArticle,
+                            summary: summary
+                        )
+
+                        NewsDataStore.shared.addArticle(article)
+
+                        print("OVERVIEW:")
+                        summary.overview.forEach {
+                                print("• \($0)\n")
                             }
-                            
-                            print("\n🧩 JARGONS:")
-                                summary.jargons?.forEach {
-                                    print("• \($0)")
-                                }
-                        }
 
-                        if let error = generator.error {
-                            print("❌ Error:", error)
-                        }
+                            print("KEY TAKEAWAYS:")
+                        summary.keyTakeaways.forEach {
+                                print("• \($0)\n")
+                            }
+
+                            print("JARGONS:")
+                            summary.jargons.forEach {
+                                print("• \($0)")
+                            }
                     }
                 }
+            
             }
+        
+        
         
         
         
@@ -96,29 +126,6 @@ class HomeViewController: UIViewController, UICollectionViewDelegate {
         collectionView.dataSource = self
         collectionView.delegate = self
     }
-//    private func fetchFullArticle() {
-//
-//        guard let rssItem = rssItem else {
-//            print("❌ rssItem is nil – ArticleDetailVC was not configured")
-//            return
-//        }
-//
-//        guard !rssItem.link.isEmpty else {
-//            print("❌ RSS link is empty")
-//            return
-//        }
-//
-//        ArticleContentService.shared.fetchArticleHTML(from: rssItem.link) { html in
-//            guard let html = html else {
-//                print("❌ Failed to load article HTML")
-//                return
-//            }
-//
-//            let fullText = html.extractTOIArticleText()
-//            print("📰 Full Article:")
-//            print(fullText.prefix(500))
-//        }
-//    }
     
     
     func startAutoScroll() {
@@ -271,7 +278,7 @@ class HomeViewController: UIViewController, UICollectionViewDelegate {
                 
                 let groupSize = NSCollectionLayoutSize(
                     widthDimension: .fractionalWidth(0.9),
-                    heightDimension: .estimated(250)  // important Height
+                    heightDimension: .estimated(250)
                 )
                 
                 let group = NSCollectionLayoutGroup.horizontal(
