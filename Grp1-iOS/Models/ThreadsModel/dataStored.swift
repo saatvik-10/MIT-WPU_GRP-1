@@ -26,7 +26,7 @@ class ThreadsDataStore {
             timeAgo: "15h ago",
             title: "Is the global economy heading for a slowdown?",
             tags: ["Economy", "Global Markets"],
-            imageName: "img(f1)",
+            imageName: "urban_5",
             description: """
     Rising interest rates, slowing consumer demand, and geopolitical tensions are forcing economists to rethink growth projections for the next year.
     """,
