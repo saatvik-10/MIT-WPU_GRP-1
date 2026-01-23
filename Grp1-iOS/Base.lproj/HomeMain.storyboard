@@ -899,17 +899,6 @@ Overall sentiment remains positive, and dips are expected to attract fresh buyin
             </objects>
             <point key="canvasLocation" x="8824" y="973"/>
         </scene>
-        <!--ProfileMain-->
-        <scene sceneID="1QB-ZY-edR">
-            <objects>
-                <viewControllerPlaceholder storyboardIdentifier="ProfileMain" storyboardName="ProfileMain" referencedIdentifier="ProfileMain" id="U3H-kQ-Flq" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Item" id="FvS-a4-cwV"/>
-                    <navigationItem key="navigationItem" id="uxK-vs-L5b"/>
-                </viewControllerPlaceholder>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="jqH-7g-P35" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1845" y="547"/>
-        </scene>
         <!--Quiz Result View Controller-->
         <scene sceneID="Jka-Tt-kms">
             <objects>
@@ -1299,6 +1288,16 @@ Overall sentiment remains positive, and dips are expected to attract fresh buyin
             </objects>
             <point key="canvasLocation" x="1397" y="552"/>
         </scene>
+        <!--ProfileMain-->
+        <scene sceneID="2hg-yI-779">
+            <objects>
+                <viewControllerPlaceholder storyboardIdentifier="ProfileMain" storyboardName="ProfileMain" referencedIdentifier="ProfileMain" id="LBb-iU-qCg" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Item" id="Lhb-LD-Vem"/>
+                </viewControllerPlaceholder>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Xmp-X4-LVI" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1703" y="547"/>
+        </scene>
         <!--Item-->
         <scene sceneID="wzl-QK-vZj">
             <objects>
@@ -1313,8 +1312,8 @@ Overall sentiment remains positive, and dips are expected to attract fresh buyin
                     <connections>
                         <segue destination="8JV-RM-7Fr" kind="relationship" relationship="viewControllers" id="3cT-nc-E9T"/>
                         <segue destination="S9A-MC-iYs" kind="relationship" relationship="viewControllers" id="AB4-q7-b7n"/>
-                        <segue destination="U3H-kQ-Flq" kind="relationship" relationship="viewControllers" id="dCZ-xT-9HQ"/>
                         <segue destination="81e-K4-QUO" kind="relationship" relationship="viewControllers" id="C3f-8h-clQ"/>
+                        <segue destination="LBb-iU-qCg" kind="relationship" relationship="viewControllers" id="Nud-ig-JAj"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="aWM-vg-YaB" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -1602,22 +1601,22 @@ Overall sentiment remains positive, and dips are expected to attract fresh buyin
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="systemBlueColor">
-            <color red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.0" green="0.53333333333333333" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemGray6Color">
-            <color red="0.94901960780000005" green="0.94901960780000005" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemGrayColor">
-            <color red="0.5568627451" green="0.5568627451" blue="0.57647058819999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.55686274509803924" green="0.55686274509803924" blue="0.57647058823529407" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemMintColor">
-            <color red="0.0" green="0.78039215689999997" blue="0.74509803919999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.0" green="0.78431372549019607" blue="0.70196078431372544" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemPinkColor">
-            <color red="1" green="0.1764705882" blue="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="1" green="0.17647058823529413" blue="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemRedColor">
-            <color red="1" green="0.23137254900000001" blue="0.18823529410000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="1" green="0.2196078431372549" blue="0.23529411764705882" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemYellowColor">
             <color red="1" green="0.80000000000000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
