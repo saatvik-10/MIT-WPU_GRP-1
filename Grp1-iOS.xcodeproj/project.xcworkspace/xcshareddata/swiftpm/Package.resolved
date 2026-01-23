@@ -13,7 +13,7 @@
     {
       "identity" : "messagekit",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/MessageKit/Messagekit",
+      "location" : "https://github.com/MessageKit/MessageKit",
       "state" : {
         "revision" : "dc48356f830d40de5acc0e126a44257d0a1329b6",
         "version" : "5.0.0"

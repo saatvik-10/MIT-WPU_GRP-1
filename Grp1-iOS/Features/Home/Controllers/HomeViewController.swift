@@ -5,8 +5,67 @@ class HomeViewController: UIViewController, UICollectionViewDelegate {
     @IBOutlet weak var collectionView: UICollectionView!
     var autoScrollTimer: Timer?
         var currentIndex = 0
+    var rssItem: RSSItem?
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        RSSService.shared.fetchTOINews { items in
+
+            print("RSS fetched, items count:", items.count)
+
+                if let first = items.first {
+                    print("First title:", first.title)
+                    print("First image:", first.imageURL)
+                    print("First date:", first.pubDate)
+                }
+            
+
+                guard let firstItem = items.first else {
+                    print("❌ No RSS items")
+                    return
+                }
+            
+
+                // TEMP TEST
+                ArticleContentService.shared.fetchArticleHTML(from: firstItem.link) { html in
+                    guard let html = html else {
+                        print("❌ Failed to load article HTML")
+                        return
+                    }
+
+                    let fullText = html.extractTOIArticleBody()
+                    print("📰 FULL ARTICLE (first item):")
+                    print(fullText.prefix(50000))
+                    let generator = ArticleSummaryGenerator()
+
+                    Task {
+                        await generator.generateSummary(from: fullText)
+
+                        if let summary = generator.summary {
+                            print("🧠 OVERVIEW:")
+                            print(summary.overview)
+
+                            print("\n📌 KEY TAKEAWAYS:")
+                            summary.keyTakeaways?.forEach {
+                                print("• \($0)")
+                                
+                            }
+                            
+                            print("\n🧩 JARGONS:")
+                                summary.jargons?.forEach {
+                                    print("• \($0)")
+                                }
+                        }
+
+                        if let error = generator.error {
+                            print("❌ Error:", error)
+                        }
+                    }
+                }
+            }
+        
+        
+        
+//        fetchFullArticle()
         startAutoScroll()
     }
     override func viewWillDisappear(_ animated: Bool) {
@@ -37,6 +96,31 @@ class HomeViewController: UIViewController, UICollectionViewDelegate {
         collectionView.dataSource = self
         collectionView.delegate = self
     }
+//    private func fetchFullArticle() {
+//
+//        guard let rssItem = rssItem else {
+//            print("❌ rssItem is nil – ArticleDetailVC was not configured")
+//            return
+//        }
+//
+//        guard !rssItem.link.isEmpty else {
+//            print("❌ RSS link is empty")
+//            return
+//        }
+//
+//        ArticleContentService.shared.fetchArticleHTML(from: rssItem.link) { html in
+//            guard let html = html else {
+//                print("❌ Failed to load article HTML")
+//                return
+//            }
+//
+//            let fullText = html.extractTOIArticleText()
+//            print("📰 Full Article:")
+//            print(fullText.prefix(500))
+//        }
+//    }
+    
+    
     func startAutoScroll() {
         stopAutoScroll()
 
