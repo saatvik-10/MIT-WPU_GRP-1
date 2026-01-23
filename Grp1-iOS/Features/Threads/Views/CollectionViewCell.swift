@@ -100,7 +100,8 @@ class collectionViewCell: UICollectionViewCell {
         timeAgoLabel.textColor = .secondaryLabel
         
         
-        titleLabel.numberOfLines = 0
+        titleLabel.numberOfLines = 2
+        titleLabel.lineBreakMode = .byTruncatingTail
         //  titleLabel.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
         
         
@@ -110,7 +111,8 @@ class collectionViewCell: UICollectionViewCell {
         threadImg.clipsToBounds = true
         
         
-        descriptionLabel.numberOfLines = 0
+        descriptionLabel.numberOfLines = 3
+        descriptionLabel.lineBreakMode = .byTruncatingTail
         //descriptionLabel.font = UIFont.systemFont(ofSize: 15)
         
         
