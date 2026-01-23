@@ -40,33 +40,15 @@ enum ProfileSection {
     case logout
 }
 
-extension ProfileSection {
-    
-    var title: String {
-        switch self {
-        case .progress: return "Progress"
-        case .interests: return "Interests"
-        case .bookmarks: return "Bookmarks"
-        case .about: return "About Us"
-        case .logout: return "Logout"
-        }
-    }
-    
-    var isDestructive: Bool {
-        if case .logout = self { return true }
-        return false
-    }
-}
-
 enum InterestType {
     case domain
-    case company
+//    case company
     case preference
     
     var title: String {
         switch self {
         case .domain: return "Add New Domain"
-        case .company: return "Add New Company"
+//        case .company: return "Add New Company"
         case .preference: return "Add New Preferences"
         }
     }
@@ -74,7 +56,7 @@ enum InterestType {
     var searchPlaceholder: String {
         switch self {
         case .domain: return "Search Domains"
-        case .company: return "Search Companies"
+//        case .company: return "Search Companies"
         case .preference: return "Search Preferences"
         }
     }

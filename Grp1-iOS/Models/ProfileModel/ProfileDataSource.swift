@@ -18,9 +18,9 @@ struct ProfileDataSource {
     
     static let interestsSection = InterestsSectionModel(
         interests: Array(
-            (InterestsDataSource.domains.map { $0.title }
-             + InterestsDataSource.companies.map { $0.title })
-            .prefix(4)
+            (InterestsDataSource.domains.map { $0.title })
+            //             + InterestsDataSource.companies.map { $0.title })
+                .prefix(4)
         )
     )
     
@@ -43,18 +43,18 @@ struct InterestsDataSource {
         InterestModel(title: "Stocks", subtitle: nil, icon: "chart.line.uptrend.xyaxis"),
         InterestModel(title: "Crypto", subtitle: nil, icon: "bitcoinsign.circle"),
         InterestModel(title: "Macroeconomy", subtitle: nil, icon: "globe"),
-        InterestModel(title: "Banking", subtitle: nil, icon: "creditcard"),
+        InterestModel(title: "Banking", subtitle: nil, icon: "banknote"),
         InterestModel(title: "Commodities", subtitle: nil, icon: "shippingbox"),
         InterestModel(title: "Mutual Funds", subtitle: nil, icon: "building.columns")
     ]
     
-    static let companies: [InterestModel] = [
-        InterestModel(title: "Infosys", subtitle: "INFY", icon: nil),
-        InterestModel(title: "Tata", subtitle: "TATA", icon: nil),
-        InterestModel(title: "HDFC Bank", subtitle: "HDFC", icon: nil),
-        InterestModel(title: "Reliance", subtitle: "RIL", icon: nil),
-        InterestModel(title: "Suzlon", subtitle: "SUZ", icon: nil)
-    ]
+    //    static let companies: [InterestModel] = [
+    //        InterestModel(title: "Infosys", subtitle: "INFY", icon: nil),
+    //        InterestModel(title: "Tata", subtitle: "TATA", icon: nil),
+    //        InterestModel(title: "HDFC Bank", subtitle: "HDFC", icon: nil),
+    //        InterestModel(title: "Reliance", subtitle: "RIL", icon: nil),
+    //        InterestModel(title: "Suzlon", subtitle: "SUZ", icon: nil)
+    //    ]
     
     static let preferences: [InterestModel] = [
         InterestModel(title: "Indian Economy", subtitle: "Consumption,inflation , growth", icon: "indianrupeesign.gauge.chart.lefthalf.righthalf"),
