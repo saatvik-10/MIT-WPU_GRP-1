@@ -20,11 +20,30 @@ model User {
   password        String
   profileImageUrl String?
   phone           String
-  level           Level
+  level           Level    @default(Beginner)
   dob             String
   gender          Gender
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
+
+  profile UserProfile?
+
+  @@index([email])
+}
+
+model UserProfile {
+  id                 String   @id @default(cuid())
+
+  userId             String   @unique
+  user               User     @relation(fields: [userId], references: [id])
+
+  currentStreak      Int      @default(0)
+  totalQuizzesPlayes Int      @default(0)
+  averageAccuracy    Float    @default(0.0)
+  overallProgress    Float    @default(0.0)
+  quizLevel          Int      @default(0)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
 }
 
 enum Level {
