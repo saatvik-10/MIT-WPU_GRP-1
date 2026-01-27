@@ -12,3 +12,29 @@ generator client {
 datasource db {
   provider = "postgresql"
 }
+
+model User {
+  id              String   @id @default(cuid())
+  name            String
+  email           String   @unique
+  password        String
+  profileImageUrl String?
+  phone           String
+  level           Level
+  dob             String
+  gender          Gender
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+enum Level {
+  Beginner
+  Intermedate
+  Advance
+}
+
+enum Gender {
+  Male
+  Female
+  Others
+}
