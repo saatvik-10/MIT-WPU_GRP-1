@@ -1,11 +1,14 @@
 import type { Context } from 'hono';
 import { prisma } from '../../prisma';
 import { jwtAuth } from '../lib/jwt';
-import { hashPassword } from '../lib/hashPassword';
-import { userSignInSchema, userSignUpSchema } from '../validators/user.validator';
+import { comparePassword, hashPassword } from '../lib/hashPassword';
+import {
+  userSignInSchema,
+  userSignUpSchema,
+} from '../validators/user.validator';
 
 export class UserAuth {
-  async signup(ctx: Context) {
+  async signUp(ctx: Context) {
     const data = userSignUpSchema.safeParse(await ctx.req.json());
 
     if (!data.success) {
@@ -42,5 +45,33 @@ export class UserAuth {
       console.log(err);
       ctx.json('Server Err', 500);
     }
+  }
+
+  async signIn(ctx: Context) {
+    const data = userSignInSchema.safeParse(await ctx.req.json());
+
+    if (!data.success) {
+      return ctx.json('Invalid Input', 422);
+    }
+
+    let user = await prisma.user.findUnique({
+      where: {
+        email: data.data.email,
+      },
+    });
+
+    if (!user) {
+      return ctx.json('User with this email does not exist', 404);
+    }
+
+    const validUser = await comparePassword(data.data.password, user.password);
+
+    if (!validUser) {
+      return ctx.json('Email or password is wrong', 400);
+    }
+
+    await jwtAuth({ userId: user.id, ctx });
+
+    return ctx.json({ userId: user.id }, 200);
   }
 }
