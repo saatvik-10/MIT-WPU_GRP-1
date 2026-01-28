@@ -29,6 +29,7 @@ model User {
   profile   UserProfile?
   interests UserInterest[]
   bookmarks Bookmark[]
+  chatSessions ChatSession[]
 
   @@index([email])
 }
@@ -106,6 +107,30 @@ model Bookmark {
   @@index([folderId])
 }
 
+model ChatSession {
+  id String @id @default(cuid())
+
+  userId String
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  title String
+  domain String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  messages ChatMessage[]
+}
+
+model ChatMessage {
+  id String @id @default(cuid())
+  sessionId String
+  session ChatSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  role Role
+  content String
+  timeStamp DateTime @default(now())
+  @@index([sessionId])
+}
+
 enum Level {
   Beginner
   Intermediate
@@ -126,4 +151,9 @@ enum Type {
 enum BookmarkSource {
   Article
   Threads
+}
+
+enum Role {
+  User
+  Assistant
 }
