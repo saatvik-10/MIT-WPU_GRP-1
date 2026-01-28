@@ -1,6 +1,7 @@
 import type { Context } from 'hono';
 import { prisma } from '../../prisma';
-import { jwtAuth } from '../lib/jwt';
+import { getCookie } from 'hono/cookie';
+import { jwtAuth, jwtVerify } from '../lib/jwt';
 import { comparePassword, hashPassword } from '../lib/hashPassword';
 import {
   userSignInSchema,
@@ -73,5 +74,41 @@ export class UserAuth {
     await jwtAuth({ userId: user.id, ctx });
 
     return ctx.json({ userId: user.id }, 200);
+  }
+
+  async getMe(ctx: Context) {
+    try {
+      const token = getCookie(ctx, 'token');
+
+      if (!token) {
+        return ctx.json('Unauthorized', 401);
+      }
+
+      const userId = await jwtVerify(token, ctx);
+
+      const user = await prisma.user.findUnique({
+        where: {
+          id: userId.userId,
+        },
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          phone: true,
+          level: true,
+          dob: true,
+          gender: true,
+          profileImageUrl: true,
+        },
+      });
+
+      if (!user) {
+        return ctx.json('User not found', 404);
+      }
+
+      return ctx.json(user, 200);
+    } catch (err) {
+      return ctx.json('Unauthorized', 401);
+    }
   }
 }
