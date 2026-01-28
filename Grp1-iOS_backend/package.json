@@ -4,7 +4,7 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "dev:docker": "bunx prisma migrate dev && bun run index.ts"
+    "dev:docker": "bunx prisma migrate dev && bun run src/index.ts"
   },
   "devDependencies": {
     "@types/bcrypt": "^6.0.0",
