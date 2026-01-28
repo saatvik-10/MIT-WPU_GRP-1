@@ -34,6 +34,8 @@ model User {
   likes        ThreadLike[]
   comments     ThreadComment[]
   shares       ThreadShare[]
+  followers    Follow[]        @relation("UserFollowers")
+  following    Follow[]        @relation("UserFollowing")
 
   @@index([email])
 }
@@ -204,6 +206,22 @@ model ThreadShare {
 
   @@index([userId])
   @@index([threadId])
+}
+
+model Follow {
+  id String @id @default(cuid())
+
+  followerId  String
+  followingId String
+
+  follower  User @relation("UserFollowers", fields: [followerId], references: [id], onDelete: Cascade)
+  following User @relation("UserFollowing", fields: [followingId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@unique([followerId, followingId])
+  @@index([followerId])
+  @@index([followingId])
 }
 
 enum Level {
