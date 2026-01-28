@@ -20,7 +20,7 @@ model User {
   password        String
   profileImageUrl String?
   phone           String
-  level           Level    @default(Beginner)
+  level           Level    @default(BEGINNER)
   dob             String
   gender          Gender
   createdAt       DateTime @default(now())
@@ -225,28 +225,28 @@ model Follow {
 }
 
 enum Level {
-  Beginner
-  Intermediate
-  Advance
+  BEGINNER
+  INTERMEDIATE
+  ADVANCE
 }
 
 enum Gender {
-  Male
-  Female
-  Others
+  MALE
+  FEMALE
+  OTHERS
 }
 
 enum Type {
-  Domain
-  Preference
+  DOMAIN
+  PREFERENCE
 }
 
 enum BookmarkSource {
-  Article
-  Threads
+  ARTICLE
+  THREADS
 }
 
 enum Role {
-  User
-  Assistant
+  USER
+  ASSISTANT
 }
