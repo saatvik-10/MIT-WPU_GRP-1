@@ -11,10 +11,8 @@ app.use(logger());
 app.use(cors());
 
 app.notFound((c) => {
-  return c.json({ error: 'Not Found' }, 404);
+  return c.json({ err: 'Page Not Found' }, 404);
 });
-
-console.log(`Running on ${PORT}`);
 
 export default {
   PORT,
