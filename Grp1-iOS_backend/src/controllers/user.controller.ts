@@ -1,6 +1,6 @@
 import type { Context } from 'hono';
 import { prisma } from '../../prisma';
-import { getCookie } from 'hono/cookie';
+import { getCookie, deleteCookie } from 'hono/cookie';
 import { jwtAuth, jwtVerify } from '../lib/jwt';
 import { comparePassword, hashPassword } from '../lib/hashPassword';
 import {
@@ -109,6 +109,15 @@ export class UserAuth {
       return ctx.json(user, 200);
     } catch (err) {
       return ctx.json('Unauthorized', 401);
+    }
+  }
+
+  async signout(ctx: Context) {
+    try {
+      deleteCookie(ctx, 'token');
+      return ctx.json('User signed Out', 200);
+    } catch (err) {
+      return ctx.json('Server Error', 500);
     }
   }
 }
