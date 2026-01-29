@@ -226,19 +226,38 @@ model Follow {
 }
 
 model Article {
-  id            String   @id @default(cuid())
-  title         String
-  subTitle      String
-  description   String
-  link          String
-  imageUrl      String
-  categoryId    String
-  category      Interest @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  id          String @id @default(cuid())
+  title       String
+  subTitle    String
+  description String
+  link        String
+  imageUrl    String
+
+  categoryId String
+  category   Interest @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
   source        String
   publishedDate String
   createdAt     DateTime @default(now())
 
+  summaries ArticleSummary[]
+
   @@index([categoryId])
+}
+
+model ArticleSummary {
+  id String @id @default(cuid())
+
+  articleId String
+  article   Article @relation(fields: [articleId], references: [id], onDelete: Cascade)
+
+  title        String
+  overview     String[]
+  keyTakeaways String[]
+  jargons      String[]
+  createdAt    DateTime @default(now())
+
+  @@index([articleId])
 }
 
 enum Level {
