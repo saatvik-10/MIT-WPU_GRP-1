@@ -63,6 +63,7 @@ model Interest {
   subTitle  String?
   createdAt DateTime       @default(now())
   users     UserInterest[]
+  articles  Article[]
 
   @@index([name])
 }
@@ -222,6 +223,22 @@ model Follow {
   @@unique([followerId, followingId])
   @@index([followerId])
   @@index([followingId])
+}
+
+model Article {
+  id            String   @id @default(cuid())
+  title         String
+  subTitle      String
+  description   String
+  link          String
+  imageUrl      String
+  categoryId    String
+  category      Interest @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  source        String
+  publishedDate String
+  createdAt     DateTime @default(now())
+
+  @@index([categoryId])
 }
 
 enum Level {
