@@ -39,38 +39,44 @@ class collectionViewCell: UICollectionViewCell {
         onLikeTapped?()
     }
     
-    @IBOutlet weak var dividerView: UIView!
+   // @IBOutlet weak var dividerView: UIView!
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
+        
         setupUI()
         setupMoreMenu()
+        
+      
+        
     }
+
+    
     override func layoutSubviews() {
         super.layoutSubviews()
         profileImg.layer.cornerRadius = profileImg.frame.width / 2
         profileImg.clipsToBounds = true
     }
-    override func preferredLayoutAttributesFitting(
-        _ layoutAttributes: UICollectionViewLayoutAttributes
-    ) -> UICollectionViewLayoutAttributes {
-        
-        layoutIfNeeded()
-        
-        let size = contentView.systemLayoutSizeFitting(
-            CGSize(
-                width: layoutAttributes.frame.width,
-                height: UIView.layoutFittingCompressedSize.height
-            )
-        )
-        
-        var frame = layoutAttributes.frame
-        frame.size.height = ceil(size.height)
-        layoutAttributes.frame = frame
-        
-        return layoutAttributes
-    }
+  
+//    override func preferredLayoutAttributesFitting(
+//        _ layoutAttributes: UICollectionViewLayoutAttributes
+//    ) -> UICollectionViewLayoutAttributes {
+//        
+//        layoutIfNeeded()
+//        
+//        let size = contentView.systemLayoutSizeFitting(
+//            CGSize(
+//                width: layoutAttributes.frame.width,
+//                height: UIView.layoutFittingCompressedSize.height
+//            )
+//        )
+//        
+//        var frame = layoutAttributes.frame
+//        frame.size.height = ceil(size.height)
+//        layoutAttributes.frame = frame
+//        
+//        return layoutAttributes
+//    }
     private func setupUI() {
         
         contentView.backgroundColor = .white
@@ -110,7 +116,8 @@ class collectionViewCell: UICollectionViewCell {
         threadImg.clipsToBounds = true
         
         
-        descriptionLabel.numberOfLines = 0
+        //descriptionLabel.numberOfLines = 3
+//        descriptionLabel
         //descriptionLabel.font = UIFont.systemFont(ofSize: 15)
         
         
@@ -160,7 +167,7 @@ class collectionViewCell: UICollectionViewCell {
             layer.cornerRadius = 0
             layer.shadowOpacity = 0
         }
-        dividerView.isHidden = isCard
+       // dividerView.isHidden = isCard
     }
     
     
