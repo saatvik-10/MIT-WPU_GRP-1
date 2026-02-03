@@ -1,0 +1,252 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id              String   @id @default(cuid())
+  name            String
+  email           String   @unique
+  password        String
+  profileImageUrl String?
+  phone           String
+  level           Level    @default(BEGINNER)
+  dob             String
+  gender          Gender
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  profile      UserProfile?
+  interests    UserInterest[]
+  bookmarks    Bookmark[]
+  chatSessions ChatSession[]
+  thread       Thread[]
+  likes        ThreadLike[]
+  comments     ThreadComment[]
+  shares       ThreadShare[]
+  followers    Follow[]        @relation("UserFollowers")
+  following    Follow[]        @relation("UserFollowing")
+
+  @@index([email])
+}
+
+model UserProfile {
+  id String @id @default(cuid())
+
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  currentStreak      Int      @default(0)
+  totalQuizzesPlayes Int      @default(0)
+  averageAccuracy    Float    @default(0.0)
+  overallProgress    Float    @default(0.0)
+  quizLevel          Int      @default(0)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+}
+
+model Interest {
+  id        String         @id @default(cuid())
+  name      String         @unique
+  type      Type
+  iconName  String
+  subTitle  String?
+  createdAt DateTime       @default(now())
+  users     UserInterest[]
+
+  @@index([name])
+}
+
+model UserInterest {
+  id String @id @default(cuid())
+
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  interestId String
+  interest   Interest @relation(fields: [interestId], references: [id], onDelete: Cascade)
+
+  addedAt DateTime @default(now())
+
+  @@unique([userId, interestId])
+  @@index([userId])
+}
+
+model BookmarkFolder {
+  id        String   @id @default(cuid())
+  userId    String
+  name      String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  bookmarks Bookmark[]
+
+  @@unique([userId, name])
+  @@index([userId])
+}
+
+model Bookmark {
+  id     String @id @default(cuid())
+  userId String
+
+  user     User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  folderId String
+  folder   BookmarkFolder @relation(fields: [folderId], references: [id], onDelete: Cascade)
+
+  title       String
+  url         String
+  imageUrl    String
+  description String
+  sourceType  BookmarkSource
+  createdAt   DateTime       @default(now())
+
+  @@index([userId])
+  @@index([folderId])
+}
+
+model ChatSession {
+  id String @id @default(cuid())
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  title     String
+  domain    String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  messages ChatMessage[]
+}
+
+model ChatMessage {
+  id String @id @default(cuid())
+
+  sessionId String
+  session   ChatSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  role      Role
+
+  description String
+  timeStamp   DateTime @default(now())
+
+  @@index([sessionId])
+}
+
+model Thread {
+  id String @id @default(cuid())
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  title         String
+  description   String
+  tags          String[]
+  likesCount    Int      @default(0)
+  commentsCount Int      @default(0)
+  sharesCount   Int      @default(0)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  likes    ThreadLike[]
+  comments ThreadComment[]
+  shares   ThreadShare[]
+
+  @@index([userId])
+  @@index([createdAt])
+}
+
+model ThreadLike {
+  id String @id @default(cuid())
+
+  userId   String
+  user     User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  threadId String
+  thread   Thread @relation(fields: [threadId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@unique([userId, threadId])
+}
+
+model ThreadComment {
+  id String @id @default(cuid())
+
+  userId   String
+  user     User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  threadId String
+  thread   Thread @relation(fields: [threadId], references: [id], onDelete: Cascade)
+
+  parentCommentId String?
+  parentComment   ThreadComment?  @relation("CommentReplies", fields: [parentCommentId], references: [id])
+  replies         ThreadComment[] @relation("CommentReplies")
+
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([threadId])
+}
+
+model ThreadShare {
+  id String @id @default(cuid())
+
+  userId   String
+  user     User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  threadId String
+  thread   Thread @relation(fields: [threadId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([threadId])
+}
+
+model Follow {
+  id String @id @default(cuid())
+
+  followerId  String
+  followingId String
+
+  follower  User @relation("UserFollowers", fields: [followerId], references: [id], onDelete: Cascade)
+  following User @relation("UserFollowing", fields: [followingId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@unique([followerId, followingId])
+  @@index([followerId])
+  @@index([followingId])
+}
+
+enum Level {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCE
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  OTHERS
+}
+
+enum Type {
+  DOMAIN
+  PREFERENCE
+}
+
+enum BookmarkSource {
+  ARTICLE
+  THREADS
+}
+
+enum Role {
+  USER
+  ASSISTANT
+}
