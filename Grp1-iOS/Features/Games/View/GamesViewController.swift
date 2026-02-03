@@ -107,5 +107,9 @@ extension GamesViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let category = categories[indexPath.item]
         print("Tapped:", category.title)
+        performSegue(withIdentifier: "Wordle", sender: nil)
+        
     }
 }
+
+
