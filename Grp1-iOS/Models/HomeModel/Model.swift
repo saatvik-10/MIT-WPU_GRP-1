@@ -19,7 +19,6 @@ struct NewsArticle {
     let keyTakeaways: [String]
     let jargons: [String]
     var selectedJargon: String? = ""
-
     var qaHistory: [ArticleQA] = []
 }
 
