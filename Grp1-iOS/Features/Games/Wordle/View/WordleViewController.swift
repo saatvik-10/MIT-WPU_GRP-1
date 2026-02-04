@@ -41,7 +41,17 @@ class WordleViewController: UIViewController {
             hintLabel.transform = CGAffineTransform(translationX: 0, y: 20)
             buildGrid()
             setupKeyboard()
+            view.layer.insertSublayer(makeGradient(), at: 0)
         }
+    private func makeGradient() -> CAGradientLayer {
+        let g = CAGradientLayer()
+        g.colors = [
+                UIColor.systemBlue.withAlphaComponent(0.2).cgColor,
+                UIColor.systemTeal.withAlphaComponent(0.2).cgColor
+            ]
+        g.frame = view.bounds
+        return g
+    }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         tabBarController?.tabBar.isHidden = true
