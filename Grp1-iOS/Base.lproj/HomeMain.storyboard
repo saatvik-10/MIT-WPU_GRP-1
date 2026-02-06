@@ -1278,15 +1278,15 @@ Overall sentiment remains positive, and dips are expected to attract fresh buyin
             </objects>
             <point key="canvasLocation" x="987" y="547"/>
         </scene>
-        <!--ChatBotMain-->
-        <scene sceneID="Xt9-cS-kKk">
+        <!--Games-->
+        <scene sceneID="zJt-k9-4zL">
             <objects>
-                <viewControllerPlaceholder storyboardIdentifier="ChatBotMain" storyboardName="ChatBot" referencedIdentifier="ChatBotMain" id="S9A-MC-iYs" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Item" id="B32-JC-WXt"/>
+                <viewControllerPlaceholder storyboardIdentifier="Games" storyboardName="Games" referencedIdentifier="Games" id="OwX-AN-SRR" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Item" id="kio-AH-XI4"/>
                 </viewControllerPlaceholder>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="hpq-6q-htf" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="WgI-5T-1xo" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1397" y="552"/>
+            <point key="canvasLocation" x="1405" y="554"/>
         </scene>
         <!--ProfileMain-->
         <scene sceneID="2hg-yI-779">
@@ -1301,7 +1301,7 @@ Overall sentiment remains positive, and dips are expected to attract fresh buyin
         <!--Item-->
         <scene sceneID="wzl-QK-vZj">
             <objects>
-                <tabBarController storyboardIdentifier="HomeMain" automaticallyAdjustsScrollViewInsets="NO" id="sUp-R7-HvU" sceneMemberID="viewController">
+                <tabBarController automaticallyAdjustsScrollViewInsets="NO" id="sUp-R7-HvU" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Item" id="FOQ-02-iwi"/>
                     <toolbarItems/>
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="EMk-PS-eZe">
@@ -1311,9 +1311,9 @@ Overall sentiment remains positive, and dips are expected to attract fresh buyin
                     </tabBar>
                     <connections>
                         <segue destination="8JV-RM-7Fr" kind="relationship" relationship="viewControllers" id="3cT-nc-E9T"/>
-                        <segue destination="S9A-MC-iYs" kind="relationship" relationship="viewControllers" id="AB4-q7-b7n"/>
                         <segue destination="81e-K4-QUO" kind="relationship" relationship="viewControllers" id="C3f-8h-clQ"/>
                         <segue destination="LBb-iU-qCg" kind="relationship" relationship="viewControllers" id="Nud-ig-JAj"/>
+                        <segue destination="OwX-AN-SRR" kind="relationship" relationship="viewControllers" id="wsv-jk-HjV"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="aWM-vg-YaB" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
