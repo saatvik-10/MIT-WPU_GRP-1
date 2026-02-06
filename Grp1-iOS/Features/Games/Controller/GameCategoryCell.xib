@@ -23,8 +23,11 @@
                             <constraint firstAttribute="height" constant="90" id="W57-aY-SS4"/>
                         </constraints>
                     </imageView>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zZh-bA-x9Q">
-                        <rect key="frame" x="20" y="60.000000000000007" width="382" height="20.333333333333336"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zZh-bA-x9Q">
+                        <rect key="frame" x="20" y="293.66666666666669" width="200" height="20.333333333333314"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="200" id="AZ3-Jo-okx"/>
+                        </constraints>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
@@ -36,7 +39,7 @@
                 <constraint firstAttribute="trailing" secondItem="zZh-bA-x9Q" secondAttribute="trailing" constant="20" id="Dpg-6T-ObU"/>
                 <constraint firstAttribute="trailing" secondItem="Rk0-Fl-WoI" secondAttribute="trailing" id="HQU-gw-JfZ"/>
                 <constraint firstItem="zZh-bA-x9Q" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="20" id="IQq-6E-MKB"/>
-                <constraint firstItem="zZh-bA-x9Q" firstAttribute="top" secondItem="Rk0-Fl-WoI" secondAttribute="top" constant="60" id="JEF-Ca-1NQ"/>
+                <constraint firstAttribute="bottom" secondItem="zZh-bA-x9Q" secondAttribute="bottom" constant="20" id="Uhy-sr-cBQ"/>
                 <constraint firstItem="Rk0-Fl-WoI" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" symbolic="YES" id="tUy-Tm-eef"/>
             </constraints>
             <size key="customSize" width="422" height="334"/>
