@@ -228,7 +228,7 @@ model Follow {
 model Article {
   id          String @id @default(cuid())
   title       String
-  subTitle    String
+  // subTitle    String
   description String
   link        String
   imageUrl    String
@@ -236,9 +236,9 @@ model Article {
   categoryId String
   category   Interest @relation(fields: [categoryId], references: [id], onDelete: Cascade)
 
-  source        String
-  publishedDate String
-  createdAt     DateTime @default(now())
+  source    String
+  date      String
+  createdAt DateTime @default(now())
 
   summaries ArticleSummary[]
 
@@ -254,10 +254,68 @@ model ArticleSummary {
   title        String
   overview     String[]
   keyTakeaways String[]
-  jargons      String[]
   createdAt    DateTime @default(now())
 
+  quizzes ArticleSummaryQuiz[]
+  qnas    ArticleSummaryQnA[]
+  jargons Jargon[]
+
   @@index([articleId])
+}
+
+model ArticleSummaryQuiz {
+  id String @id @default(cuid())
+
+  summaryId String
+  summary   ArticleSummary @relation(fields: [summaryId], references: [id], onDelete: Cascade)
+
+  question     String
+  options      String[]
+  correctIndex Int
+  createdAt    DateTime @default(now())
+
+  @@index([summaryId])
+}
+
+model ArticleSummaryQnA {
+  id String @id @default(cuid())
+
+  summaryId String
+  summary   ArticleSummary @relation(fields: [summaryId], references: [id], onDelete: Cascade)
+
+  question  String
+  answer    String
+  createdAt DateTime @default(now())
+
+  @@index([summaryId])
+}
+
+model Jargon {
+  id String @id @default(cuid())
+
+  summaryId String
+  summary   ArticleSummary @relation(fields: [summaryId], references: [id], onDelete: Cascade)
+
+  jargonWord String
+  title      JargonPageType
+  content    String
+  createdAt  DateTime       @default(now())
+
+  quiz JargonQuiz?
+
+  @@index([summaryId])
+}
+
+model JargonQuiz {
+  id String @id @default(cuid())
+
+  jargonId String @unique
+  jargon   Jargon @relation(fields: [jargonId], references: [id], onDelete: Cascade)
+
+  question     String
+  options      String[]
+  correctIndex Int
+  createdAt    DateTime @default(now())
 }
 
 enum Level {
@@ -285,4 +343,9 @@ enum BookmarkSource {
 enum Role {
   USER
   ASSISTANT
+}
+
+enum JargonPageType {
+  DEFINITION
+  REAL_WORLD_EXAMPLE
 }
