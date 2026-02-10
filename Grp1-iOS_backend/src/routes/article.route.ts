@@ -3,11 +3,9 @@ import { proxyAuth } from '../proxy';
 
 const articleRoute = new Hono();
 
-articleRoute.get('articles', proxyAuth);
-articleRoute.get('article:id');
-articleRoute.get('explore');
-articleRoute.post('chat-question');
-articleRoute.post('jargon-quiz');
-articleRoute.post('summary-quiz');
+articleRoute.post('chat/question');
+articleRoute.post('quiz/jargon');
+articleRoute.post('quiz/summary');
+articleRoute.get('chat/questions/:articleUrl');
 
-export default articleRoute
+export default articleRoute;
