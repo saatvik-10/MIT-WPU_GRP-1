@@ -21,6 +21,7 @@ class collectionViewCell: UICollectionViewCell {
     
     @IBOutlet weak var tagsStackView: UIStackView!
     
+    @IBOutlet weak var nameMetaStack: UIStackView!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var threadImg: UIImageView!
     
@@ -35,6 +36,7 @@ class collectionViewCell: UICollectionViewCell {
     //    @IBAction func moreButtonTapped(_ sender: UIButton) {
     //        onMoreTapped?()
     //    }
+    private var widthConstraint: NSLayoutConstraint?
     @IBAction func likeButtonTapped(_ sender: UIButton) {
         onLikeTapped?()
     }
@@ -44,10 +46,23 @@ class collectionViewCell: UICollectionViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         
+        contentView.translatesAutoresizingMaskIntoConstraints = false
+        
+        widthConstraint = contentView.widthAnchor.constraint(equalToConstant: 180)
+        widthConstraint?.priority = UILayoutPriority(999)
+        widthConstraint?.isActive = true
+        
+        tagsStackView.setContentHuggingPriority(.required, for: .horizontal)
+               tagsStackView.setContentCompressionResistancePriority(.required, for: .horizontal)
+            //    nameMetaStack.alignment = .leading
+                nameMetaStack.distribution = .fill
+                nameMetaStack.setContentHuggingPriority(.required, for: .horizontal)
+        tagsStackView.isLayoutMarginsRelativeArrangement = true
+            
+              
         setupUI()
         setupMoreMenu()
         
-      
         
     }
 
@@ -58,6 +73,57 @@ class collectionViewCell: UICollectionViewCell {
         profileImg.clipsToBounds = true
     }
   
+    
+    override func preferredLayoutAttributesFitting(_ layoutAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes {
+      
+        var screenWidth: CGFloat = 0
+        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
+            screenWidth = windowScene.screen.bounds.width
+        } else {
+          
+            screenWidth = layoutAttributes.frame.width
+        }
+        
+       
+        let padding: CGFloat = 32
+        let availableWidth = screenWidth - padding
+   
+        let autoLayoutSize = contentView.systemLayoutSizeFitting(
+            CGSize(width: availableWidth, height: UIView.layoutFittingCompressedSize.height),
+            withHorizontalFittingPriority: .required, // Width is FIXED
+            verticalFittingPriority: .fittingSizeLevel // Height can GROW
+        )
+        
+   
+        let newFrame = CGRect(x: layoutAttributes.frame.origin.x,
+                              y: layoutAttributes.frame.origin.y,
+                              width: availableWidth,
+                              height: ceil(autoLayoutSize.height))
+        
+        layoutAttributes.frame = newFrame
+        return layoutAttributes
+    }
+    
+//    override func preferredLayoutAttributesFitting(
+//        _ layoutAttributes: UICollectionViewLayoutAttributes
+//    ) -> UICollectionViewLayoutAttributes {
+//
+//        let attributes = super.preferredLayoutAttributesFitting(layoutAttributes)
+//
+//        let targetSize = CGSize(
+//            width: layoutAttributes.size.width,
+//            height: UIView.layoutFittingCompressedSize.height
+//        )
+//
+//        let size = contentView.systemLayoutSizeFitting(
+//            targetSize,
+//            withHorizontalFittingPriority: .required,
+//            verticalFittingPriority: .fittingSizeLevel
+//        )
+//
+//        attributes.frame.size.height = ceil(size.height)
+//        return attributes
+//    }
 //    override func preferredLayoutAttributesFitting(
 //        _ layoutAttributes: UICollectionViewLayoutAttributes
 //    ) -> UICollectionViewLayoutAttributes {
@@ -77,6 +143,9 @@ class collectionViewCell: UICollectionViewCell {
 //        
 //        return layoutAttributes
 //    }
+    func updateWidth(_ width: CGFloat){
+        widthConstraint?.constant = width
+    }
     private func setupUI() {
         
         contentView.backgroundColor = .white
@@ -104,11 +173,13 @@ class collectionViewCell: UICollectionViewCell {
         
         timeAgoLabel.font = UIFont.systemFont(ofSize: 16)
         timeAgoLabel.textColor = .secondaryLabel
-        
+        timeAgoLabel.numberOfLines = 1
+        timeAgoLabel.lineBreakMode = .byTruncatingTail
         
         titleLabel.numberOfLines = 0
         //  titleLabel.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
         
+        descriptionLabel.numberOfLines = 0
         
         threadImg.contentMode = .scaleAspectFill
         threadImg.layer.cornerRadius = 12
@@ -116,14 +187,15 @@ class collectionViewCell: UICollectionViewCell {
         threadImg.clipsToBounds = true
         
         
-        //descriptionLabel.numberOfLines = 3
+        descriptionLabel.numberOfLines = 3
+        descriptionLabel.lineBreakMode = .byTruncatingTail
 //        descriptionLabel
         //descriptionLabel.font = UIFont.systemFont(ofSize: 15)
         
         
         // likesButton.tintColor = .systemBlue
         var config = UIButton.Configuration.plain()
-        config.imagePadding = 6
+        config.imagePadding = 1
         likesButton.configuration = config
         commentsButton.tintColor = .systemBlue
         sharesButton.tintColor = .systemBlue
@@ -131,6 +203,8 @@ class collectionViewCell: UICollectionViewCell {
         
         // moreButton.setImage(UIImage(systemName: "ellipsis"), for: .normal)
         moreButton.tintColor = .secondaryLabel
+        
+        
     }
     
     private func makeTagLabel(text: String) -> UILabel {
@@ -145,7 +219,8 @@ class collectionViewCell: UICollectionViewCell {
         
         label.setContentHuggingPriority(.required, for: .horizontal)
         label.setContentCompressionResistancePriority(.required, for: .horizontal)
-        
+        label.setContentHuggingPriority(.required, for: .vertical)
+        label.setContentCompressionResistancePriority(.required, for: .vertical)
         return label
     }
     
@@ -256,14 +331,32 @@ class collectionViewCell: UICollectionViewCell {
         ?? UIImage(systemName: "person.circle.fill")
         
       
-        if let imageName = post.imageName {
-            threadImg.isHidden = false
-            threadImg.image = UIImage(named: imageName)
-        } else {
-            threadImg.isHidden = true
-            threadImg.image = nil
-        }
+//        if let imageName = post.imageName {
+//            threadImg.isHidden = false
+//            threadImg.image = UIImage(named: imageName)
+//        } else {
+//            threadImg.isHidden = true
+//            threadImg.image = nil
+//        }
+//
         
+        if let path = post.imageName {
+            
+            // If imageName is actually a file path (saved from gallery)
+            if path.contains("/") {
+                let url = URL(fileURLWithPath: path)
+                threadImg.image = UIImage(contentsOfFile: url.path)
+            }
+            // Else fallback to asset images (your bundled images)
+            else {
+                threadImg.image = UIImage(named: path)
+            }
+            
+            threadImg.isHidden = false
+        } else {
+            threadImg.image = nil
+            threadImg.isHidden = true
+        }
        
         likesButton.setTitle("\(post.likes)", for: .normal)
         
@@ -290,6 +383,7 @@ class collectionViewCell: UICollectionViewCell {
         for tag in tags {
             let label = makeTagLabel(text: tag)
             tagsStackView.addArrangedSubview(label)
+            
         }
         
         

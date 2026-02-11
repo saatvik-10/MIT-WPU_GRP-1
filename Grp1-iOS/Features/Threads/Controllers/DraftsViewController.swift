@@ -12,11 +12,10 @@ class DraftsViewController: UIViewController
 
 
     @IBOutlet weak var collectionView: UICollectionView!
-    private let drafts = ThreadsDataStore.shared.getMyThreads()
-
+    
         override func viewDidLoad() {
             super.viewDidLoad()
-
+            
             collectionView.dataSource = self
             collectionView.delegate = self
 
@@ -31,32 +30,54 @@ class DraftsViewController: UIViewController
                 layout.estimatedItemSize = .zero
                 layout.scrollDirection = .vertical
             }
+            
+            collectionView.backgroundColor = .clear
         }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+      
+        print("DRAFTS COUNT:", ThreadsDataStore.shared.getDrafts().count)
+          collectionView.reloadData()
+    }
+    
         override func viewDidLayoutSubviews() {
             super.viewDidLayoutSubviews()
             collectionView.collectionViewLayout.invalidateLayout()
         }
-    }
+    
+   
+    
+    override func viewDidAppear(_ animated: Bool) {
+            super.viewDidAppear(animated)
+
+            // Frame check (critical)
+            print("COLLECTION VIEW FRAME:", collectionView.frame)
+        }
+    
+   
+}
 
     
     extension DraftsViewController: UICollectionViewDataSource {
 
         func collectionView(_ collectionView: UICollectionView,
                             numberOfItemsInSection section: Int) -> Int {
-            drafts.count
+            let count = ThreadsDataStore.shared.getDrafts().count
+                   print("NUMBER OF ITEMS:", count)
+                   return count
         }
 
         func collectionView(_ collectionView: UICollectionView,
                             cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-
+            
             let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: "DraftCollectionViewCell",
                 for: indexPath
             ) as! DraftCollectionViewCell
 
-            let draft = drafts[indexPath.item]
-            cell.configure(imageName: draft.imageName)
+            let draft = ThreadsDataStore.shared.getDrafts()[indexPath.item]
+            cell.configure(imagePath: draft.imageName)
             
             return cell
         }
@@ -101,25 +122,20 @@ extension DraftsViewController: UICollectionViewDelegate {
 
     func collectionView(_ collectionView: UICollectionView,
                           didSelectItemAt indexPath: IndexPath) {
+        
+        let draft = ThreadsDataStore.shared.getDrafts()[indexPath.item]
+  
 
-          let selectedDraft = drafts[indexPath.item]
+              let storyboard = UIStoryboard(name: "threadsMain", bundle: nil)
+              let createVC = storyboard.instantiateViewController(
+                  withIdentifier: "CreatePostViewController"
+              ) as! CreatePostViewController
 
-          let storyboard = UIStoryboard(name: "threadsMain", bundle: nil)
-          let createVC = storyboard.instantiateViewController(
-              withIdentifier: "CreatePostViewController"
-          ) as! CreatePostViewController
+              createVC.draft = draft
+              createVC.mode = .editDraft
 
-          createVC.draft = Draft(
-              id: UUID(),
-              title: selectedDraft.title,
-              topic: selectedDraft.tags.first,
-              body: selectedDraft.description,
-              imageName: selectedDraft.imageName,
-              lastUpdated: Date()
-          )
-
-          createVC.mode = .editDraft
-
-          navigationController?.pushViewController(createVC, animated: true)
-      }
+              navigationController?.pushViewController(createVC, animated: true)
+          }
 }
+
+

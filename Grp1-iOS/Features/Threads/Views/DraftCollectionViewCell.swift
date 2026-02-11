@@ -8,35 +8,31 @@
 import UIKit
 
 class DraftCollectionViewCell: UICollectionViewCell {
-
-//    @IBOutlet weak var containerView: UIView!
+    
     
     @IBOutlet weak var draftImgView: UIImageView!
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
+     
         contentView.layer.cornerRadius = 16
-                contentView.layer.masksToBounds = true
-
-                // Cell itself should not clip
-                clipsToBounds = false
-
-                // Image fills the card
-                draftImgView.contentMode = .scaleAspectFill
-                draftImgView.clipsToBounds = true
-            }
-
-            func configure(imageName: String?) {
-                if let imageName = imageName {
-                    draftImgView.isHidden = false
-                    draftImgView.image = UIImage(named: imageName)
-                } else {
-                    draftImgView.isHidden = true
-                    draftImgView.image = nil
-                }
-
-            }
+        contentView.layer.masksToBounds = true
+        clipsToBounds = false
+        
+        
+        draftImgView.contentMode = .scaleAspectFill
+        draftImgView.clipsToBounds = true
     }
-
-
+    
+    func configure(imagePath: String?) {
+            if let path = imagePath {
+                let url = URL(fileURLWithPath: path)
+                draftImgView.image = UIImage(contentsOfFile: url.path)
+                draftImgView.isHidden = false
+            } else {
+                draftImgView.image = nil
+                draftImgView.isHidden = false // show grey placeholder if you want
+                draftImgView.backgroundColor = .systemGray5
+            }
+        }
+} 

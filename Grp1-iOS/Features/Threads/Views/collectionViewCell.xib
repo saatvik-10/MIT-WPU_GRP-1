@@ -17,101 +17,119 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="gDM-87-AEI" userLabel="Root stack view">
-                        <rect key="frame" x="12" y="12" width="378" height="479"/>
+                        <rect key="frame" x="12" y="12" width="378" height="431"/>
                         <subviews>
-                            <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="8io-0j-0cC" userLabel="Header stack view">
-                                <rect key="frame" x="0.0" y="0.0" width="378" height="134.66666666666666"/>
+                            <stackView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="249" horizontalCompressionResistancePriority="749" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="8io-0j-0cC" userLabel="Header stack view">
+                                <rect key="frame" x="0.0" y="0.0" width="378" height="55"/>
                                 <subviews>
-                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="d3p-ab-CJZ">
-                                        <rect key="frame" x="0.0" y="47.333333333333343" width="40" height="40"/>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="1000" verticalHuggingPriority="1000" translatesAutoresizingMaskIntoConstraints="NO" id="d3p-ab-CJZ">
+                                        <rect key="frame" x="0.0" y="0.0" width="55" height="55"/>
                                         <constraints>
-                                            <constraint firstAttribute="width" constant="40" id="Z3z-BA-Yoi"/>
-                                            <constraint firstAttribute="height" constant="40" id="amS-qG-fQ8"/>
+                                            <constraint firstAttribute="height" constant="55" id="RLZ-tq-mU7"/>
+                                            <constraint firstAttribute="width" constant="55" id="Z3z-BA-Yoi"/>
                                         </constraints>
                                     </imageView>
-                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="4" translatesAutoresizingMaskIntoConstraints="NO" id="XBH-dw-Xtd" userLabel="Name meta stack">
-                                        <rect key="frame" x="50" y="22.999999999999993" width="328" height="88.333333333333314"/>
+                                    <stackView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="999" horizontalCompressionResistancePriority="999" axis="vertical" spacing="6" translatesAutoresizingMaskIntoConstraints="NO" id="XBH-dw-Xtd" userLabel="Name meta stack">
+                                        <rect key="frame" x="65" y="0.0" width="313" height="55"/>
                                         <subviews>
-                                            <stackView opaque="NO" contentMode="scaleToFill" spacing="6" translatesAutoresizingMaskIntoConstraints="NO" id="5l0-es-w0f" userLabel="Name Row Stack">
-                                                <rect key="frame" x="0.0" y="0.0" width="328" height="34.333333333333336"/>
+                                            <stackView opaque="NO" contentMode="scaleToFill" alignment="top" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="5l0-es-w0f" userLabel="Name Row Stack">
+                                                <rect key="frame" x="0.0" y="0.0" width="313" height="22"/>
                                                 <subviews>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="b8f-AE-eTI" userLabel="UserNameLabel">
-                                                        <rect key="frame" x="0.0" y="0.0" width="41.333333333333336" height="34.333333333333336"/>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="b8f-AE-eTI" userLabel="UserNameLabel">
+                                                        <rect key="frame" x="0.0" y="0.0" width="185" height="22"/>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                                        <nil key="textColor"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Oy4-di-p5c" userLabel="TimeAgoLabel">
+                                                        <rect key="frame" x="193" y="0.0" width="72" height="20.333333333333332"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="width" constant="72" id="hsv-Zi-gZh"/>
+                                                        </constraints>
                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                         <nil key="textColor"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Oy4-di-p5c" userLabel="TimeAgoLabel">
-                                                        <rect key="frame" x="47.333333333333329" y="0.0" width="41.333333333333329" height="34.333333333333336"/>
-                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                        <nil key="textColor"/>
-                                                        <nil key="highlightedColor"/>
-                                                    </label>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="r4d-Rr-pHF" userLabel="MoreButton">
-                                                        <rect key="frame" x="94.666666666666643" y="0.0" width="233.33333333333337" height="34.333333333333336"/>
+                                                    <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="1000" horizontalCompressionResistancePriority="1000" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="r4d-Rr-pHF" userLabel="MoreButton">
+                                                        <rect key="frame" x="273" y="0.0" width="40" height="22"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="22" id="7Ml-nD-sgN"/>
+                                                            <constraint firstAttribute="width" constant="40" id="moreButtonWidth"/>
+                                                        </constraints>
                                                         <state key="normal" title="Button"/>
-                                                        <buttonConfiguration key="configuration" style="plain" title="Button"/>
+                                                        <buttonConfiguration key="configuration" style="plain" image="ellipsis" catalog="system"/>
                                                     </button>
                                                 </subviews>
+                                                <constraints>
+                                                    <constraint firstItem="r4d-Rr-pHF" firstAttribute="leading" secondItem="Oy4-di-p5c" secondAttribute="trailing" constant="8" symbolic="YES" id="M6w-VU-ZE5"/>
+                                                </constraints>
                                             </stackView>
-                                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" alignment="center" spacing="6" translatesAutoresizingMaskIntoConstraints="NO" id="tsX-ue-l7i" userLabel="Tag Stack View">
-                                                <rect key="frame" x="0.0" y="38.333333333333329" width="328" height="50"/>
+                                            <stackView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="1000" verticalHuggingPriority="999" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" distribution="fillEqually" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="tsX-ue-l7i" userLabel="Tag Stack View">
+                                                <rect key="frame" x="0.0" y="28" width="313" height="27"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" priority="999" constant="24" id="tagStackMinHeight"/>
+                                                </constraints>
                                             </stackView>
                                         </subviews>
                                     </stackView>
                                 </subviews>
+                                <constraints>
+                                    <constraint firstItem="d3p-ab-CJZ" firstAttribute="top" secondItem="8io-0j-0cC" secondAttribute="top" id="7bT-1Z-Vi0"/>
+                                    <constraint firstItem="d3p-ab-CJZ" firstAttribute="leading" secondItem="8io-0j-0cC" secondAttribute="leading" id="Ghn-2X-w3h"/>
+                                </constraints>
                             </stackView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalCompressionResistancePriority="1000" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bgv-CE-RvK" userLabel="Title Label">
-                                <rect key="frame" x="0.0" y="146.66666666666666" width="378" height="20.333333333333343"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="248" verticalCompressionResistancePriority="1000" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bgv-CE-RvK" userLabel="Title Label">
+                                <rect key="frame" x="0.0" y="67" width="378" height="104.33333333333331"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleTitle1"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="249" verticalCompressionResistancePriority="749" translatesAutoresizingMaskIntoConstraints="NO" id="RhU-1E-ENG" userLabel="ThreadImage View">
-                                <rect key="frame" x="0.0" y="179" width="378" height="211.66666666666663"/>
+                                <rect key="frame" x="0.0" y="183.33333333333337" width="378" height="211.66666666666663"/>
                                 <constraints>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="378" id="EZP-l7-t6e"/>
                                     <constraint firstAttribute="height" secondItem="RhU-1E-ENG" secondAttribute="width" multiplier="0.56" id="KV7-CU-Sk5"/>
                                 </constraints>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="1000" text="Label" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RTb-xG-dPH" userLabel="DescriptionLabel">
-                                <rect key="frame" x="0.0" y="402.66666666666669" width="378" height="20.333333333333314"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <rect key="frame" x="0.0" y="407" width="378" height="24"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleTitle3"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" alignment="center" spacing="24" translatesAutoresizingMaskIntoConstraints="NO" id="QGZ-U3-Dcd" userLabel="Action Stack View">
-                                <rect key="frame" x="0.0" y="435" width="378" height="44"/>
-                                <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1xg-id-gcP" userLabel="LikeButton">
-                                        <rect key="frame" x="0.0" y="5" width="75" height="34.333333333333336"/>
-                                        <state key="normal" title="Button"/>
-                                        <buttonConfiguration key="configuration" style="plain" title="Button"/>
-                                        <connections>
-                                            <action selector="likeButtonTapped:" destination="QQ2-TW-q0V" eventType="touchUpInside" id="bNl-7Q-K7W"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lkQ-Mu-59q" userLabel="CommentButton">
-                                        <rect key="frame" x="151.66666666666666" y="5" width="75" height="34.333333333333336"/>
-                                        <state key="normal" title="Button"/>
-                                        <buttonConfiguration key="configuration" style="plain" title="Button"/>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mFm-5z-Rf1" userLabel="ShareButton">
-                                        <rect key="frame" x="303" y="5" width="75" height="34.333333333333336"/>
-                                        <state key="normal" title="Button"/>
-                                        <buttonConfiguration key="configuration" style="plain" title="Button"/>
-                                    </button>
-                                </subviews>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="44" id="NEU-FZ-1So"/>
-                                </constraints>
-                            </stackView>
+                        </subviews>
+                    </stackView>
+                    <stackView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="1000" distribution="fillProportionally" alignment="bottom" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="QGZ-U3-Dcd" userLabel="Action Stack View">
+                        <rect key="frame" x="0.0" y="458.66666666666669" width="302" height="34.333333333333314"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="249" horizontalCompressionResistancePriority="1000" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1xg-id-gcP" userLabel="LikeButton">
+                                <rect key="frame" x="0.0" y="0.0" width="118" height="34.333333333333336"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Button"/>
+                                <connections>
+                                    <action selector="likeButtonTapped:" destination="QQ2-TW-q0V" eventType="touchUpInside" id="bNl-7Q-K7W"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" horizontalCompressionResistancePriority="1000" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lkQ-Mu-59q" userLabel="CommentButton">
+                                <rect key="frame" x="126" y="0.0" width="82.666666666666686" height="34.333333333333336"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" image="message" catalog="system"/>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" horizontalCompressionResistancePriority="1000" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mFm-5z-Rf1" userLabel="ShareButton">
+                                <rect key="frame" x="216.66666666666666" y="0.0" width="85.333333333333343" height="34.333333333333336"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" image="square.and.arrow.up" catalog="system"/>
+                            </button>
                         </subviews>
                     </stackView>
                 </subviews>
                 <constraints>
+                    <constraint firstItem="QGZ-U3-Dcd" firstAttribute="leading" secondItem="Ka8-vI-yoS" secondAttribute="leading" id="Es6-hb-VJp"/>
                     <constraint firstItem="gDM-87-AEI" firstAttribute="leading" secondItem="Ka8-vI-yoS" secondAttribute="leading" constant="12" id="MjW-T8-aOJ"/>
-                    <constraint firstAttribute="bottom" secondItem="gDM-87-AEI" secondAttribute="bottom" constant="12" id="Oew-Qo-YCM"/>
+                    <constraint firstAttribute="bottom" secondItem="gDM-87-AEI" secondAttribute="bottom" constant="60" id="Oew-Qo-YCM"/>
                     <constraint firstAttribute="trailing" secondItem="gDM-87-AEI" secondAttribute="trailing" constant="12" id="eF3-Ec-EGm"/>
+                    <constraint firstAttribute="trailing" secondItem="QGZ-U3-Dcd" secondAttribute="trailing" constant="100" id="j31-yU-MML"/>
+                    <constraint firstAttribute="bottom" secondItem="QGZ-U3-Dcd" secondAttribute="bottom" constant="10" id="sb8-ko-AVt"/>
                     <constraint firstItem="gDM-87-AEI" firstAttribute="top" secondItem="Ka8-vI-yoS" secondAttribute="top" constant="12" id="wpw-rB-PtY"/>
                 </constraints>
             </collectionViewCellContentView>
@@ -121,6 +139,7 @@
                 <outlet property="descriptionLabel" destination="RTb-xG-dPH" id="BgW-L3-UYw"/>
                 <outlet property="likesButton" destination="1xg-id-gcP" id="f11-eB-DDd"/>
                 <outlet property="moreButton" destination="r4d-Rr-pHF" id="tSu-76-tuS"/>
+                <outlet property="nameMetaStack" destination="XBH-dw-Xtd" id="4Iy-fh-hJw"/>
                 <outlet property="profileImg" destination="d3p-ab-CJZ" id="4h9-sR-Xn2"/>
                 <outlet property="sharesButton" destination="mFm-5z-Rf1" id="OKQ-ca-WGJ"/>
                 <outlet property="tagsStackView" destination="tsX-ue-l7i" id="Q6M-vz-PA1"/>
@@ -132,4 +151,9 @@
             <point key="canvasLocation" x="572.72727272727275" y="-76.88284518828452"/>
         </collectionViewCell>
     </objects>
+    <resources>
+        <image name="ellipsis" catalog="system" width="128" height="37"/>
+        <image name="message" catalog="system" width="128" height="106"/>
+        <image name="square.and.arrow.up" catalog="system" width="110" height="128"/>
+    </resources>
 </document>
