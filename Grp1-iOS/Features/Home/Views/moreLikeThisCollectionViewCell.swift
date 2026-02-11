@@ -44,12 +44,12 @@ class moreLikeThisCollectionViewCell: UICollectionViewCell {
     
     func configureCell(with article: NewsArticle) {
         
-        newsImageView.image = UIImage(named: article.imageName)
+        newsImageView.setSmartImage(from: article.imageName)
         
         
         pickLabel.text = article.source
         headlineLabel.text = article.title
-        timeLabel.text = article.date
+        timeLabel.text = DateUtils.formattedArticleDate(from: article.date)
     }
 
 }

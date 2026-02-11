@@ -33,7 +33,6 @@ final class TOIRSSParser: NSObject, XMLParserDelegate {
         return items
     }
 
-    // MARK: - XMLParserDelegate
 
     func parser(
         _ parser: XMLParser,
@@ -49,7 +48,6 @@ final class TOIRSSParser: NSObject, XMLParserDelegate {
             currentItem = RSSItem()
         }
 
-        // Best image source
         if elementName == "enclosure",
            let url = attributeDict["url"] {
             currentItem?.imageURL = url
@@ -173,18 +171,15 @@ extension String {
 
             let lower = token.lowercased()
 
-            // ✅ START article body
             if lower.contains("data-articlebody") {
                 isInsideArticle = true
                 continue
             }
 
-            // 🛑 STOP when <p> tag appears
 //            if isInsideArticle && lower.hasPrefix("p") {
 //                break
 //            }
 
-            // 🛑 STOP script blocks
             if lower.hasPrefix("script") {
                 isInsideScript = true
                 continue
@@ -199,7 +194,6 @@ extension String {
                 continue
             }
 
-            // Extract visible text after >
             guard let textPart = token.split(separator: ">", maxSplits: 1).last else {
                 continue
             }
@@ -214,7 +208,6 @@ extension String {
             let wordCount = cleaned.split(separator: " ").count
             guard wordCount >= minWords else { continue }
 
-            // Filter junk
             guard cleaned.range(of: "[{};=<>]", options: .regularExpression) == nil else {
                 continue
             }

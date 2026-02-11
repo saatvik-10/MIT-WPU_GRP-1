@@ -20,10 +20,12 @@ final class ArticleSummaryGenerator {
 
     init() {
         let instructions = Instructions {
-            "You are a financial news analyst."
-            "Summarize the article accurately."
-            "Avoid speculation or opinions."
-            "Use clear, simple language."
+            "You are a senior financial markets analyst."
+            "Your task is to analyze financial and economic news articles."
+            "Use only finance, banking, macroeconomics, or market terminology."
+            "When extracting jargon, select only technical finance terms."
+            "Do NOT include environmental, political, or general English words."
+            "Avoid vague or generic terms."
         }
 
         self.session = LanguageModelSession(
@@ -32,10 +34,19 @@ final class ArticleSummaryGenerator {
     }
 
     func generateSummary(from articleText: String) async {
-
+        
         do {
             let prompt = Prompt {
-                "Summarize the following news article."
+                """
+                Summarize the following financial news article.
+
+                • Generate a concise overview.
+                • Extract 4–5 key takeaways.
+                • Identify 3-4 advanced financial or economic terms used in the article.
+                • Only include jargon that appears in the text.
+                • Avoid common or simple words.
+                """
+
                 articleText
             }
 

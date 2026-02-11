@@ -28,10 +28,11 @@ class ProfileOption2ViewCell: UICollectionViewCell {
         if isDestructive {
             textLabel.textColor = .systemRed
             textLabel.textAlignment = .center
-            chevronImage.isHidden = true
+            chevronImage.tintColor = .systemRed
+//            chevronImage.isHidden = true
         } else {
             textLabel.textColor = .label
-            chevronImage.isHidden = false
+//            chevronImage.tintColor = false
         }
     }
 }

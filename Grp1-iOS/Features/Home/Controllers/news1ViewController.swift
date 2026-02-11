@@ -81,11 +81,9 @@ class news1ViewController: UIViewController, UICollectionViewDataSource {
         guard let article = article else { return }
 
         headlineLabel.text = article.title
-        dateLabel.text = ("\(article.source) • \(article.date)")
+        dateLabel.text = ("\(article.source) • \(DateUtils.formattedArticleDate(from: article.date))")
 
-        if let image = UIImage(named: article.imageName) {
-            topImageView.image = image
-        }
+        topImageView.setSmartImage(from: article.imageName)
     }
     
     // MARK: - Collection View Setup
@@ -566,7 +564,7 @@ class news1ViewController: UIViewController, UICollectionViewDataSource {
             .forEach { $0.removeFromSuperview() }
 
         let buttonSize: CGFloat = 90
-        let padding: CGFloat = 12
+        let padding: CGFloat = 20
         let maxAttempts = 50
 
         let maxX = glassView.bounds.width - buttonSize - padding

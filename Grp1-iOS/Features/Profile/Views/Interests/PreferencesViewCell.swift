@@ -13,6 +13,8 @@ class PreferencesViewCell: UICollectionViewCell {
     @IBOutlet weak var interestLabel: UILabel!
     @IBOutlet weak var subtitleInterestLabel: UILabel!
     
+    var onDelete: (() -> Void)?
+    
     let config = UIImage.SymbolConfiguration(weight: .light)
     
     override func awakeFromNib() {
@@ -21,6 +23,9 @@ class PreferencesViewCell: UICollectionViewCell {
 
         contentView.layer.cornerRadius = 16
         contentView.backgroundColor = UIColor.white
+        
+        let interaction = UIContextMenuInteraction(delegate: self)
+        contentView.addInteraction(interaction)
     }
     
     func configure(_ model: InterestModel) {
@@ -33,6 +38,28 @@ class PreferencesViewCell: UICollectionViewCell {
             interestIconView.isHidden = false
         } else {
             interestIconView.isHidden = true
+        }
+    }
+}
+
+extension PreferencesViewCell: UIContextMenuInteractionDelegate {
+    
+    func contextMenuInteraction(
+        _ interaction: UIContextMenuInteraction,
+        configurationForMenuAtLocation location: CGPoint
+    ) -> UIContextMenuConfiguration? {
+        
+        UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { _ in
+            
+            let delete = UIAction(
+                title: "Delete",
+                image: UIImage(systemName: "trash"),
+                attributes: .destructive
+            ) { _ in
+                self.onDelete?()
+            }
+            
+            return UIMenu(title: "", children: [delete])
         }
     }
 }

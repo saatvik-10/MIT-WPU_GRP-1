@@ -90,7 +90,7 @@ class jargonDefinationViewController: UIViewController {
     @IBAction func quitTapped(_ sender: Any) {
         let alert = UIAlertController(
             title: "Quit Lesson",
-            message: "Do you re",
+            message: "Do you really want to Quit Lesson?",
             preferredStyle: .alert
         )
 

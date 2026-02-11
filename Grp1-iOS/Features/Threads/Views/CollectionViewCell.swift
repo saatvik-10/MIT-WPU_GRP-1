@@ -176,7 +176,8 @@ class collectionViewCell: UICollectionViewCell {
         timeAgoLabel.numberOfLines = 1
         timeAgoLabel.lineBreakMode = .byTruncatingTail
         
-        titleLabel.numberOfLines = 0
+        titleLabel.numberOfLines = 2
+        titleLabel.lineBreakMode = .byTruncatingTail
         //  titleLabel.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
         
         descriptionLabel.numberOfLines = 0
