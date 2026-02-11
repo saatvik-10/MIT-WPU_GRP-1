@@ -88,7 +88,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4765.909090909091" y="126.77824267782427"/>
+            <point key="canvasLocation" x="4676" y="136"/>
         </scene>
         <!--Create-->
         <scene sceneID="bgZ-l1-TJV">
@@ -181,11 +181,17 @@
                                 <rect key="frame" x="20" y="734.33333333333337" width="400" height="34.333333333333371"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="filled" title="POST"/>
+                                <connections>
+                                    <action selector="didTapPost:" destination="YER-wb-jA0" eventType="touchUpInside" id="cPQ-f0-qGu"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5KV-w5-k31">
                                 <rect key="frame" x="20" y="784.66666666666663" width="400" height="34.333333333333371"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" title="SAVE DRAFT"/>
+                                <connections>
+                                    <action selector="didTapSaveDraft:" destination="YER-wb-jA0" eventType="touchUpInside" id="9gs-cj-W07"/>
+                                </connections>
                             </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Waq-kg-D2D"/>
@@ -205,7 +211,8 @@
                     <navigationItem key="navigationItem" title="Create" id="Bf5-gW-f2x">
                         <barButtonItem key="rightBarButtonItem" title="Item" image="text.page" catalog="system" id="72U-J6-hnn">
                             <connections>
-                                <segue destination="xiv-mX-ufi" kind="show" id="Nre-cD-v4x"/>
+                                <action selector="didTapDrafts:" destination="YER-wb-jA0" id="ytm-dU-oCN"/>
+                                <segue destination="xiv-mX-ufi" kind="show" identifier="Drafts" id="Rw8-f2-3an"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -225,7 +232,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="yWz-r8-QAB" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="5860.909090909091" y="800.83682008368203"/>
+            <point key="canvasLocation" x="5731" y="646"/>
         </scene>
         <!--Drafts-->
         <scene sceneID="ek3-74-FP4">
@@ -245,7 +252,7 @@
                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 </collectionViewFlowLayout>
                                 <cells>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="DraftCollectionViewCell" id="Xqz-Gc-yJ2">
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="DraftCollectionViewCell" id="Xqz-Gc-yJ2" customClass="DraftCollectionViewCell" customModule="Grp1_iOS" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="nZr-Ng-kIA">
@@ -272,7 +279,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="N1J-OB-paE" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="6420" y="132"/>
+            <point key="canvasLocation" x="6750" y="158"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="XHZ-Qq-YoU">
@@ -294,7 +301,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="T8k-kr-sD2" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3850" y="131"/>
+            <point key="canvasLocation" x="3635" y="149"/>
         </scene>
     </scenes>
     <resources>

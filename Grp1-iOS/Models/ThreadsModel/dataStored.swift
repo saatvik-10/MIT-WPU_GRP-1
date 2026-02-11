@@ -8,14 +8,28 @@
 import Foundation
 
 class ThreadsDataStore {
-   
+    
+    
+    static let shared = ThreadsDataStore()
+    private init() {
+        drafts = [
+               Draft(
+                   id: UUID(),
+                   title: "Saved draft",
+                   topic: "iOS",
+                   body: "This is a preloaded draft",
+                   imageName: "rbi-1722414243",
+                   lastUpdated: Date(),
+               )
+           ]
+    }
+    
+    let currentUserName = "Anandita Babar"
+    
+    
     private var followedUsers: Set<String> = [
         "Ishan Magarde"
     ]
-    static let shared = ThreadsDataStore()
-    private init() {}
-    
-    let currentUserName = "Anandita Babar"
     
     private var threadPosts: [ThreadPost] = [
 
@@ -87,22 +101,21 @@ class ThreadsDataStore {
             isLiked: false
         ),
 
-        ThreadPost(
-            id: 5,
-            userName: "Aditya Mehra",
-            userProfileImage: "person.fill",
-            timeAgo: "8h ago",
-            title: "Common investing mistakes beginners make",
-            tags: ["Investing", "Wealth"],
-            imageName: "beach_8",
-            description: """
-    Chasing tips, timing the market, and ignoring risk management are some of the most common mistakes new investors make.
-    """,
-            likes: 411,
-            comments: 27,
-            shares: 9,
-            isLiked: false
-        ),
+                //
+                ThreadPost(
+                    id: 6,
+                    userName: "Anandita Babar",
+                    userProfileImage: "beach_1",
+                    timeAgo: "2d ago",
+                    title: "Building Threads UI",
+                    tags: ["iOS", "UIKit","Anandita"],
+                    imageName: "beach_9",
+                    description: "Lessons learnt while building Threads clone",
+                    likes: 120,
+                    comments: 14,
+                    shares: 3,
+                    isLiked: false
+                ),
 
         ThreadPost(
             id: 6,
@@ -173,7 +186,53 @@ class ThreadsDataStore {
         )
     ]
     
-  
+    private var drafts: [Draft] = []
+    
+    
+    func getDrafts() -> [Draft] {
+        drafts
+    }
+    
+    func saveDraft(
+            title: String?,
+            topic: String?,
+            body: String?,
+            imageName: String?
+        ) {
+            let draft = Draft(
+                id: UUID(),
+                title: title,
+                topic: topic,
+                body: body,
+                imageName: imageName,
+                lastUpdated: Date()
+            )
+
+            drafts.insert(draft, at: 0)
+            print("DRAFT COUNT:", drafts.count)
+        }
+    
+    func updateDraft(
+        id: UUID,
+        title: String?,
+        topic: String?,
+        body: String?,
+        imageName: String?
+    ) {
+        guard let index = drafts.firstIndex(where: { $0.id == id }) else { return }
+
+        drafts[index].title = title
+        drafts[index].topic = topic
+        drafts[index].body = body
+        drafts[index].imageName = imageName
+        drafts[index].lastUpdated = Date()
+    }
+
+    func deleteDraft(id: UUID) {
+            drafts.removeAll { $0.id == id }
+        }
+    
+    
     func getForYouThreads() -> [ThreadPost] {
 //        threadPosts.filter { $0.userName != currentUserName }
         threadPosts.filter {
@@ -198,7 +257,30 @@ class ThreadsDataStore {
         threadPosts.insert(thread, at: 0)
     }
     
-  
+
+    func postThreadFromCreate(
+        title: String,
+        body: String,
+        imageName: String?
+    ) {
+        let newThread = ThreadPost(
+            id: Int(Date().timeIntervalSince1970),
+            userName: currentUserName,
+            userProfileImage: "beach_1",
+            timeAgo: "Just now",
+            title: title,
+            tags: ["iOS"],
+            imageName: imageName,
+            description: body,
+            likes: 0,
+            comments: 0,
+            shares: 0,
+            isLiked: false
+        )
+
+        addNewThread(newThread)
+    }
+    
     func toggleLike(for threadID: Int) {
             guard let index = threadPosts.firstIndex(where: { $0.id == threadID }) else { return }
 
@@ -226,6 +308,8 @@ class ThreadsDataStore {
             followedUsers.insert(userName)
         }
     }
-
+   
+    
+   
 }
 
