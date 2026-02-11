@@ -44,7 +44,7 @@ export class UserAuth {
       return ctx.json(newUser.id, 201);
     } catch (err) {
       console.log(err);
-      ctx.json('Server Err', 500);
+      return ctx.json('Server Err', 500);
     }
   }
 
