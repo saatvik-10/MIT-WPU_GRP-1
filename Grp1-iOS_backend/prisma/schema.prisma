@@ -37,6 +37,7 @@ model User {
   followers    Follow[]        @relation("UserFollowers")
   following    Follow[]        @relation("UserFollowing")
   quizAttempts QuizAttempt[]
+  threadDrafts ThreadDrafts[]
 
   @@index([email])
 }
@@ -150,6 +151,7 @@ model Thread {
 
   title         String
   description   String
+  imageName     String
   tags          String[]
   likesCount    Int      @default(0)
   commentsCount Int      @default(0)
@@ -160,6 +162,25 @@ model Thread {
   likes    ThreadLike[]
   comments ThreadComment[]
   shares   ThreadShare[]
+  drafts   ThreadDrafts[]
+
+  @@index([userId])
+  @@index([createdAt])
+}
+
+model ThreadDrafts {
+  id          String   @id @default(cuid())
+  title       String
+  tags        String[]
+  description String
+  imageName   String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  userId   String
+  user     User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  threadId String
+  thread   Thread @relation(fields: [threadId], references: [id], onDelete: Cascade)
 
   @@index([userId])
   @@index([createdAt])
@@ -169,9 +190,9 @@ model ThreadLike {
   id String @id @default(cuid())
 
   userId   String
-  user     User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  threadId String
-  thread   Thread @relation(fields: [threadId], references: [id], onDelete: Cascade)
+  user     User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  threadId String? @unique
+  thread   Thread? @relation(fields: [threadId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
 
