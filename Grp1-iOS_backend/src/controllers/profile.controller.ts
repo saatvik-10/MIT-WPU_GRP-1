@@ -16,7 +16,6 @@ export class Profile {
         },
         select: {
           name: true,
-
           email: true,
           phone: true,
           dob: true,
