@@ -84,27 +84,7 @@ export class UserAuth {
         return ctx.json('Unauthorized', 401);
       }
 
-      const user = await prisma.user.findUnique({
-        where: {
-          id: userId,
-        },
-        select: {
-          id: true,
-          name: true,
-          email: true,
-          phone: true,
-          level: true,
-          dob: true,
-          gender: true,
-          profileImageUrl: true,
-        },
-      });
-
-      if (!user) {
-        return ctx.json('User not found', 404);
-      }
-
-      return ctx.json(user, 200);
+      return ctx.json({ userId }, 200);
     } catch (err) {
       return ctx.json('Unauthorized', 401);
     }
