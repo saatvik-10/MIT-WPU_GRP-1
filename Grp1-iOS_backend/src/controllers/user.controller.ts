@@ -78,17 +78,15 @@ export class UserAuth {
 
   async getMe(ctx: Context) {
     try {
-      const token = getCookie(ctx, 'token');
+      const userId = ctx.get('userId');
 
-      if (!token) {
+      if (!userId) {
         return ctx.json('Unauthorized', 401);
       }
 
-      const userId = await jwtVerify(token, ctx);
-
       const user = await prisma.user.findUnique({
         where: {
-          id: userId.userId,
+          id: userId,
         },
         select: {
           id: true,
