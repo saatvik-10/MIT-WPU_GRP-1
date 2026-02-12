@@ -250,14 +250,9 @@ model Follow {
 model ArticleSummaryQnA {
   id String @id @default(cuid())
 
-  articleUrl   String
-  articleTitle String
-
   question  String
   answer    String
   createdAt DateTime @default(now())
-
-  @@index([articleUrl])
 }
 
 model QuizAttempt {
