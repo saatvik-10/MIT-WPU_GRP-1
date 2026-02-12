@@ -1,10 +1,11 @@
 import { Hono } from 'hono';
-import { proxyAuth } from '../proxy';
+import { Articles } from '../controllers/article.controller';
 
 const articleRoute = new Hono();
+const controller = new Articles()
 
-articleRoute.post('chat/question');
-articleRoute.post('quiz/summary');
-articleRoute.get('chat/questions/:articleUrl');
+articleRoute.post('chat/question', controller.postChatQuestion);
+articleRoute.post('quiz/summary', controller.summaryQuiz);
+articleRoute.get('chat/questions', controller.allChatQuestions);
 
 export default articleRoute;

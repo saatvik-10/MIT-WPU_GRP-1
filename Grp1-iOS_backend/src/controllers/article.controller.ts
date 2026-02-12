@@ -24,20 +24,6 @@ export class Articles {
     }
   }
 
-  async getChatQuestion(ctx: Context) {
-    try {
-      const data = await prisma.articleSummaryQnA.findFirst({
-        orderBy: { createdAt: 'desc' },
-        take: 1,
-      });
-
-      return ctx.json(data, 200);
-    } catch (err) {
-      console.log(err);
-      return ctx.json('Err fetching qna', 500);
-    }
-  }
-
   async summaryQuiz(ctx: Context) {}
 
   async allChatQuestions(ctx: Context) {
