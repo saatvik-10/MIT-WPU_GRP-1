@@ -100,4 +100,80 @@ export class Profile {
       return ctx.json({ error: 'Error removing interest' }, 500);
     }
   }
+
+  async getAvailableInterests(ctx: Context) {
+    const type = ctx.req.query('type') as 'DOMAIN' | 'PREFERENCE' | undefined;
+
+    if (type && type !== 'DOMAIN' && type !== 'PREFERENCE') {
+      return ctx.json(
+        { error: 'Invalid type. Must be DOMAIN or PREFERENCE' },
+        400,
+      );
+    }
+
+    try {
+      const interests = await prisma.interest.findMany({
+        where: type ? { type } : {},
+        orderBy: {
+          name: 'asc',
+        },
+      });
+
+      return ctx.json(interests, 200);
+    } catch (err) {
+      console.log(err);
+      return ctx.json({ error: 'Error fetching available interests' }, 500);
+    }
+  }
+
+  async addUserInterest(ctx: Context) {
+    const userId = ctx.get('userId');
+    const { interestId } = await ctx.req.json();
+
+    if (!userId) {
+      return ctx.json({ error: 'Unauthorized' }, 401);
+    }
+
+    if (!interestId) {
+      return ctx.json({ error: 'Interest ID is required' }, 400);
+    }
+
+    try {
+      const interest = await prisma.interest.findUnique({
+        where: { id: interestId },
+      });
+
+      if (!interest) {
+        return ctx.json({ error: 'Interest not found' }, 404);
+      }
+
+      const existing = await prisma.userInterest.findUnique({
+        where: {
+          userId_interestId: {
+            userId,
+            interestId,
+          },
+        },
+      });
+
+      if (existing) {
+        return ctx.json({ error: 'Interest already added' }, 409);
+      }
+
+      const userInterest = await prisma.userInterest.create({
+        data: {
+          userId,
+          interestId,
+        },
+        include: {
+          interest: true,
+        },
+      });
+
+      return ctx.json(userInterest.interest, 201);
+    } catch (err) {
+      console.log(err);
+      return ctx.json({ error: 'Error adding interest' }, 500);
+    }
+  }
 }
