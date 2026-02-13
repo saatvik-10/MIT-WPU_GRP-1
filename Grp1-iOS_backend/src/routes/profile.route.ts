@@ -14,5 +14,11 @@ profileRoute.delete(
   proxyAuth,
   controller.deleteUserInterest,
 );
+profileRoute.get(
+  '/bookmarks/folders',
+  proxyAuth,
+  controller.getBookmarkFolders,
+);
+profileRoute.get('/bookmarks', proxyAuth, controller.getBookmarks);
 
 export default profileRoute;

@@ -176,4 +176,64 @@ export class Profile {
       return ctx.json({ error: 'Error adding interest' }, 500);
     }
   }
+
+  async getBookmarkFolders(ctx: Context) {
+    const userId = ctx.get('userId');
+
+    if (!userId) {
+      return ctx.json({ error: 'Unauthorized' }, 401);
+    }
+
+    try {
+      const bookmarkFolders = await prisma.bookmarkFolder.findMany({
+        where: {
+          userId,
+        },
+        include: {
+          _count: {
+            select: {
+              bookmarks: true,
+            },
+          },
+        },
+        orderBy: {
+          createdAt: 'desc',
+        },
+      });
+      return ctx.json(bookmarkFolders, 200);
+    } catch (err) {
+      console.log(err);
+      return ctx.json('Err fetching bookmark folders', 500);
+    }
+  }
+
+  async getBookmarks(ctx: Context) {
+    const userId = ctx.get('userId');
+    const folderId = ctx.req.query('folderId');
+
+    if (!userId) {
+      return ctx.json('Unauthorized', 401);
+    }
+
+    if (!folderId) {
+      return ctx.json('Folder ID is required', 400);
+    }
+
+    try {
+      const bookmarks = await prisma.bookmark.findMany({
+        where: {
+          userId,
+          folderId,
+        },
+        orderBy: {
+          createdAt: 'desc',
+        },
+      });
+
+      return ctx.json(bookmarks, 200);
+    } catch (err) {
+      console.log(err);
+      return ctx.json('Error fetching bookmarks', 500);
+    }
+  }
 }
