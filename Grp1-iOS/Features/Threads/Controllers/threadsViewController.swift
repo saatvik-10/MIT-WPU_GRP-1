@@ -36,6 +36,10 @@ class threadsViewController: UIViewController {
         //crosscheck below 2 line
        // collectionView.delegate = self
        // collectionView.dataSource = self
+        threadsStore.addComment(to: 1, text: "This helped a lot, thanks!")
+        threadsStore.addComment(to: 1, text: "Can you cover risks next?")
+        NotificationCenter.default.addObserver(self, selector: #selector(refreshFeed), name: .commentAdded, object: nil)
+        
         
     }
     
@@ -48,6 +52,10 @@ class threadsViewController: UIViewController {
     }
   
    
+    @objc private func refreshFeed() {
+        reloadData()
+        collectionView.reloadData()
+    }
     
     @IBAction func segmentChanged(_ sender: UISegmentedControl) {
         switch sender.selectedSegmentIndex {
@@ -63,7 +71,8 @@ class threadsViewController: UIViewController {
     }
     
     @IBAction func didTapSearchButton(_ sender: UIBarButtonItem) {
-        print("Search tapped")
+        let searchVC = ThreadsSearchViewController()
+           navigationController?.pushViewController(searchVC, animated: true)
     }
     
     @IBAction func didTapPlusButton(_ sender: UIBarButtonItem) {
@@ -135,14 +144,11 @@ class threadsViewController: UIViewController {
     extension threadsViewController: UICollectionViewDataSource {
 
         func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-               switch selectedSegment {
-               case .forYou:
-                   return forYouThreads.count
-               case .following:
-                   return followingThreads.count
-               case .myThreads:
-                   return threadsStore.getMyThreads().count
-               }
+            switch selectedSegment {
+                case .forYou: return threadsStore.getForYouThreads().count
+                case .following: return threadsStore.getFollowingThreads().count
+                case .myThreads: return threadsStore.getMyThreads().count
+                }
            }
 
            func collectionView(
@@ -161,12 +167,9 @@ class threadsViewController: UIViewController {
 
                let post: ThreadPost
                switch selectedSegment {
-               case .forYou:
-                   post = forYouThreads[indexPath.item]
-               case .following:
-                   post = followingThreads[indexPath.item]
-               case .myThreads:
-                   post = threadsStore.getMyThreads()[indexPath.item]
+               case .forYou: post = threadsStore.getForYouThreads()[indexPath.item]
+               case .following: post = threadsStore.getFollowingThreads()[indexPath.item]
+               case .myThreads: post = threadsStore.getMyThreads()[indexPath.item]
                }
 
                let isFollowing = threadsStore.isFollowing(userName: post.userName)
@@ -191,6 +194,33 @@ class threadsViewController: UIViewController {
                    
                    
                }
+               
+               cell.onCommentTapped = { [weak self] in
+                       guard let self else { return }
+
+                       let vc = CommentsViewController()
+                       vc.postID = post.id
+                      vc.modalPresentationStyle = .pageSheet
+                      // vc.modalPresentationStyle = .overFullScreen
+                      // vc.modalTransitionStyle = .crossDissolve
+                   if let screen = self.view.window?.windowScene?.screen {
+                       vc.preferredContentSize = CGSize(width: screen.bounds.width, height: 0)
+                   }
+                   if let sheet = vc.sheetPresentationController {
+                      //     sheet.detents = [.medium(), .large()]      // 👈 native bottom sheet
+                           sheet.prefersGrabberVisible = true         // small drag indicator
+                           sheet.preferredCornerRadius = 40           // rounded top corners
+                         sheet.largestUndimmedDetentIdentifier = .medium
+                       sheet.selectedDetentIdentifier = .medium
+                       
+                       sheet.widthFollowsPreferredContentSizeWhenEdgeAttached = true
+                           sheet.prefersEdgeAttachedInCompactHeight = true
+                       
+                       }
+
+                       self.present(vc, animated: true)
+                   }
+
                return cell
            }
 

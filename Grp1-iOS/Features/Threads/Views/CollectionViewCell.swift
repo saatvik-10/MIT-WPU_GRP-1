@@ -13,6 +13,7 @@ class collectionViewCell: UICollectionViewCell {
     var shouldShowFollowAction: Bool = true
     var onMoreTapped: (() -> Void)?
     var onLikeTapped: (() -> Void)?
+    var onCommentTapped: (() -> Void)?
     
     @IBOutlet weak var profileImg: UIImageView!
     @IBOutlet weak var userNameLabel: UILabel!
@@ -41,7 +42,10 @@ class collectionViewCell: UICollectionViewCell {
         onLikeTapped?()
     }
     
-   // @IBOutlet weak var dividerView: UIView!
+    @IBOutlet weak var dividerView: UIView!
+    @IBAction func commentButtonTapped(_ sender: UIButton) {
+        onCommentTapped?()
+    }
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -205,7 +209,7 @@ class collectionViewCell: UICollectionViewCell {
         // moreButton.setImage(UIImage(systemName: "ellipsis"), for: .normal)
         moreButton.tintColor = .secondaryLabel
         
-        
+        dividerView.backgroundColor = .systemGray5
     }
     
     private func makeTagLabel(text: String) -> UILabel {
@@ -225,25 +229,20 @@ class collectionViewCell: UICollectionViewCell {
         return label
     }
     
-    
     func applyStyle(isCard: Bool) {
-        
         if isCard {
-            
             contentView.backgroundColor = .white
             contentView.layer.cornerRadius = 16
-            
             layer.cornerRadius = 16
             layer.shadowOpacity = 0.08
+            dividerView.isHidden = true   // ← hide in card mode
         } else {
-            
             contentView.backgroundColor = .clear
             contentView.layer.cornerRadius = 0
-            
             layer.cornerRadius = 0
             layer.shadowOpacity = 0
+            dividerView.isHidden = false  // ← show in My Threads
         }
-       // dividerView.isHidden = isCard
     }
     
     
@@ -369,7 +368,7 @@ class collectionViewCell: UICollectionViewCell {
         likesButton.tintColor = post.isLiked ? .systemRed : .systemBlue
         
    
-        commentsButton.setTitle("\(post.comments)", for: .normal)
+        commentsButton.setTitle("\(post.comments.count)", for: .normal)
         sharesButton.setTitle("\(post.shares)", for: .normal)
         
         // TAGS
