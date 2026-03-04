@@ -1,7 +1,6 @@
 import type { Context } from 'hono';
 import { prisma } from '../../prisma';
-import { getCookie, deleteCookie } from 'hono/cookie';
-import { jwtAuth, jwtVerify } from '../lib/jwt';
+import { jwtAuth } from '../lib/jwt';
 import { comparePassword, hashPassword } from '../lib/hashPassword';
 import {
   userSignInSchema,
@@ -71,9 +70,9 @@ export class UserAuth {
       return ctx.json('Email or password is wrong', 400);
     }
 
-    await jwtAuth({ userId: user.id, ctx });
+    const token = await jwtAuth({ userId: user.id });
 
-    return ctx.json({ userId: user.id }, 200);
+    return ctx.json({ userId: user.id, token }, 200);
   }
 
   async getMe(ctx: Context) {
@@ -92,8 +91,7 @@ export class UserAuth {
 
   async signout(ctx: Context) {
     try {
-      deleteCookie(ctx, 'token');
-      return ctx.json('User signed Out', 200);
+      return ctx.json('User signed out. Please remove token on client.', 200);
     } catch (err) {
       return ctx.json('Server Error', 500);
     }
