@@ -71,6 +71,12 @@ class HomeViewController: UIViewController, UICollectionViewDelegate {
                         )
 
                         NewsDataStore.shared.addArticle(article)
+                        DispatchQueue.main.async {
+                            self.todaysPick = self.newsStore.getAllNews()
+                            self.trendingNews = self.newsStore.getAllNews().reversed()
+                            self.marketHighlights = self.newsStore.getAllNews().shuffled()
+                            self.collectionView.reloadData()
+                        }
 
                         print("OVERVIEW:")
                         summary.overview.forEach {
