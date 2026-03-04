@@ -39,6 +39,15 @@ class threadsViewController: UIViewController {
         
     }
     
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+
+        if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
+            layout.invalidateLayout()
+        }
+    }
+  
+   
     
     @IBAction func segmentChanged(_ sender: UISegmentedControl) {
         switch sender.selectedSegmentIndex {
@@ -80,13 +89,24 @@ class threadsViewController: UIViewController {
             withReuseIdentifier: "MyThreadsProfileHeaderCollectionReusableView"
         )
         
-        if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
-            layout.scrollDirection = .vertical
-            layout.minimumLineSpacing = 20
-            layout.minimumInteritemSpacing = 4
-            layout.sectionInset = UIEdgeInsets(top: 12, left: 16, bottom: 24, right: 16)
-            layout.estimatedItemSize = .zero
+//        if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
+//            layout.scrollDirection = .vertical
+//            layout.minimumLineSpacing = 20
+//            layout.minimumInteritemSpacing = 4
+//            layout.sectionInset = UIEdgeInsets(top: 12, left: 16, bottom: 24, right: 16)
+//            layout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
+//        }
+        guard let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout else {
+            return
         }
+       
+        layout.scrollDirection = .vertical
+        layout.minimumLineSpacing = 16    //20
+        layout.minimumInteritemSpacing = 12
+        layout.sectionInset = UIEdgeInsets(top: 12, left: 16, bottom: 24, right: 16)
+        layout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
+    
+
     }
     
     
@@ -97,9 +117,20 @@ class threadsViewController: UIViewController {
             followingThreads = threadsStore.getFollowingThreads()
     }
    
-    
+//    private func calculateItemWidth() -> CGFloat {
+//        guard let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout
+//        else {
+//            return 180
+//        }
+//        let totalHorizontalPadding = layout.sectionInset.left + layout.sectionInset.right + layout.minimumInteritemSpacing
+//        let availableWidth = collectionView.bounds.width - totalHorizontalPadding
+//        let itemWidth = floor(availableWidth / 2)
+//        
+//        return itemWidth
+//    }
 }
     
+
 
     extension threadsViewController: UICollectionViewDataSource {
 
@@ -118,11 +149,15 @@ class threadsViewController: UIViewController {
                _ collectionView: UICollectionView,
                cellForItemAt indexPath: IndexPath
            ) -> UICollectionViewCell {
-
+              
                let cell = collectionView.dequeueReusableCell(
-                   withReuseIdentifier: "collectionViewCell",
-                   for: indexPath
-               ) as! collectionViewCell
+                withReuseIdentifier: "collectionViewCell",
+                for: indexPath        )
+               as! collectionViewCell
+               
+              // let itemWidth = calculateItemWidth()
+             //  cell.updateWidth(itemWidth)
+               
 
                let post: ThreadPost
                switch selectedSegment {
@@ -188,29 +223,31 @@ class threadsViewController: UIViewController {
 
     
     extension threadsViewController: UICollectionViewDelegateFlowLayout {
+        
+//        func collectionView(
+//            _ collectionView: UICollectionView,
+//            layout collectionViewLayout: UICollectionViewLayout,
+//            sizeForItemAt indexPath: IndexPath
+//        ) -> CGSize {
+//           let itemWidth = calculateItemWidth()
+//            
+//            return CGSize(width: itemWidth, height: 10)
+//        }
 
         func collectionView(
-               _ collectionView: UICollectionView,
-               layout collectionViewLayout: UICollectionViewLayout,
-               referenceSizeForHeaderInSection section: Int
-           ) -> CGSize {
+            _ collectionView: UICollectionView,
+            layout collectionViewLayout: UICollectionViewLayout,
+            referenceSizeForHeaderInSection section: Int
+        ) -> CGSize {
 
-               if selectedSegment == .myThreads {
-                   return CGSize(width: collectionView.frame.width, height: 120)
-               }
+            guard selectedSegment == .myThreads else { return .zero }
 
-               return .zero
-           }
-
-           func collectionView(
-               _ collectionView: UICollectionView,
-               layout collectionViewLayout: UICollectionViewLayout,
-               sizeForItemAt indexPath: IndexPath
-           ) -> CGSize {
-
-               return CGSize(width: collectionView.frame.width - 32,
-                             height: 520)           }
-    }
+            return CGSize(
+                width: collectionView.bounds.width,
+                height: 120
+            )
+        }
+   }
 
      
 extension threadsViewController: UICollectionViewDelegate {
@@ -223,7 +260,7 @@ extension threadsViewController: UICollectionViewDelegate {
             case .following:
                 post = followingThreads[indexPath.item]
             case .myThreads:
-                post = forYouThreads[indexPath.item]
+                post =  threadsStore.getMyThreads()[indexPath.item]
             }
 
             let detailVC = ThreadDetailViewController()

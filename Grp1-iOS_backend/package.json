@@ -10,7 +10,7 @@
     "@types/bcrypt": "^6.0.0",
     "@types/bun": "latest",
     "@types/jsonwebtoken": "^9.0.10",
-    "prisma": "^7.3.0"
+    "prisma": "^7.4.0"
   },
   "peerDependencies": {
     "typescript": "^5"
@@ -18,11 +18,11 @@
   "dependencies": {
     "@hono/node-server": "^1.19.9",
     "@prisma/adapter-pg": "^7.3.0",
-    "@prisma/client": "^7.3.0",
-    "dotenv": "^17.2.3",
+    "@prisma/client": "^7.4.0",
     "@types/cookie-parser": "^1.4.10",
     "bcrypt": "^6.0.0",
     "cookie-parser": "^1.4.7",
+    "dotenv": "^17.2.3",
     "fast-xml-parser": "^5.3.3",
     "jsonwebtoken": "^9.0.3",
     "zod": "^4.3.6"

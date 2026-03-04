@@ -26,7 +26,7 @@ model User {
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 
-  profile      UserProfile?
+  progress     UserProgress?
   interests    UserInterest[]
   bookmarks    Bookmark[]
   chatSessions ChatSession[]
@@ -36,18 +36,21 @@ model User {
   shares       ThreadShare[]
   followers    Follow[]        @relation("UserFollowers")
   following    Follow[]        @relation("UserFollowing")
+  quizAttempts QuizAttempt[]
+  threadDrafts ThreadDrafts[]
 
   @@index([email])
 }
 
-model UserProfile {
+model UserProgress {
   id String @id @default(cuid())
 
   userId String @unique
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   currentStreak      Int      @default(0)
-  totalQuizzesPlayes Int      @default(0)
+  totalQuizzesPlayed Int      @default(0)
+  totalXP            Int      @default(0)
   averageAccuracy    Float    @default(0.0)
   overallProgress    Float    @default(0.0)
   quizLevel          Int      @default(0)
@@ -63,7 +66,6 @@ model Interest {
   subTitle  String?
   createdAt DateTime       @default(now())
   users     UserInterest[]
-  articles  Article[]
 
   @@index([name])
 }
@@ -149,6 +151,7 @@ model Thread {
 
   title         String
   description   String
+  imageName     String
   tags          String[]
   likesCount    Int      @default(0)
   commentsCount Int      @default(0)
@@ -159,6 +162,25 @@ model Thread {
   likes    ThreadLike[]
   comments ThreadComment[]
   shares   ThreadShare[]
+  drafts   ThreadDrafts[]
+
+  @@index([userId])
+  @@index([createdAt])
+}
+
+model ThreadDrafts {
+  id          String   @id @default(cuid())
+  title       String
+  tags        String[]
+  description String
+  imageName   String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  userId   String
+  user     User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  threadId String
+  thread   Thread @relation(fields: [threadId], references: [id], onDelete: Cascade)
 
   @@index([userId])
   @@index([createdAt])
@@ -168,9 +190,9 @@ model ThreadLike {
   id String @id @default(cuid())
 
   userId   String
-  user     User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  threadId String
-  thread   Thread @relation(fields: [threadId], references: [id], onDelete: Cascade)
+  user     User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  threadId String? @unique
+  thread   Thread? @relation(fields: [threadId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
 
@@ -225,39 +247,35 @@ model Follow {
   @@index([followingId])
 }
 
-model Article {
-  id          String @id @default(cuid())
-  title       String
-  subTitle    String
-  description String
-  link        String
-  imageUrl    String
-
-  categoryId String
-  category   Interest @relation(fields: [categoryId], references: [id], onDelete: Cascade)
-
-  source        String
-  publishedDate String
-  createdAt     DateTime @default(now())
-
-  summaries ArticleSummary[]
-
-  @@index([categoryId])
-}
-
-model ArticleSummary {
+model ArticleSummaryQnA {
   id String @id @default(cuid())
 
-  articleId String
-  article   Article @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  question  String
+  answer    String
+  createdAt DateTime @default(now())
+}
 
-  title        String
-  overview     String[]
-  keyTakeaways String[]
-  jargons      String[]
-  createdAt    DateTime @default(now())
+model QuizAttempt {
+  id String @id @default(cuid())
 
-  @@index([articleId])
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  articleUrl String
+  quizTitle  String
+  quizType   QuizType
+
+  score              Int
+  totalQuestions     Int
+  accuracyPercentage Float
+
+  xpEarned Int @default(0)
+
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([articleUrl])
+  @@index([createdAt])
 }
 
 enum Level {
@@ -285,4 +303,9 @@ enum BookmarkSource {
 enum Role {
   USER
   ASSISTANT
+}
+
+enum QuizType {
+  JARGON
+  SUMMARY
 }

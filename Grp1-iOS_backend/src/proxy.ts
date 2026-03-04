@@ -1,18 +1,22 @@
 import type { Context, Next } from 'hono';
-import { getCookie } from 'hono/cookie';
 import { jwtVerify } from './lib/jwt';
 
 export const proxyAuth = async (ctx: Context, next: Next) => {
-  const token = getCookie(ctx, 'token');
+  const authHeader = ctx.req.header('Authorization');
+  const token = authHeader?.startsWith('Bearer ')
+    ? authHeader.slice(7).trim()
+    : undefined;
 
   if (!token) {
     ctx.text('Not Authenticated', 401);
     return;
   }
 
-  const verified = await jwtVerify(token, ctx);
-
-  ctx.set('userId', verified.userId);
-
-  await next();
+  try {
+    const verified = await jwtVerify(token);
+    ctx.set('userId', verified.userId);
+    await next();
+  } catch {
+    ctx.text('Not Authenticated', 401);
+  }
 };
