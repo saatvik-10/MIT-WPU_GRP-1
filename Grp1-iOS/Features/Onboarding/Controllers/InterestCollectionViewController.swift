@@ -13,7 +13,7 @@ class InterestCollectionViewController: UIViewController {
     @IBOutlet weak var stepLabel: UILabel!
     var onBackTapped: (() -> Void)?
     
-    
+    var onFinishTapped: (() -> Void)?
     
     @IBOutlet weak var interestCollectionView: UICollectionView!
     
@@ -35,6 +35,11 @@ class InterestCollectionViewController: UIViewController {
     
     @IBAction func backButtonTapped(_ sender: UIButton) {
         onBackTapped?()
+    }
+    
+    
+    @IBAction func finishButtonTapped(_ sender: UIButton) {
+        onFinishTapped?()
     }
     
 
