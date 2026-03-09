@@ -29,7 +29,7 @@ model User {
   progress     UserProgress?
   interests    UserInterest[]
   bookmarks    Bookmark[]
-  chatSessions ChatSession[]
+  // chatSessions ChatSession[]
   thread       Thread[]
   likes        ThreadLike[]
   comments     ThreadComment[]
@@ -48,14 +48,14 @@ model UserProgress {
   userId String @unique
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  currentStreak      Int      @default(0)
-  totalQuizzesPlayed Int      @default(0)
-  totalXP            Int      @default(0)
-  averageAccuracy    Float    @default(0.0)
-  overallProgress    Float    @default(0.0)
-  quizLevel          Int      @default(0)
-  createdAt          DateTime @default(now())
-  updatedAt          DateTime @updatedAt
+  currentStreak   Int      @default(0)
+  // totalQuizzesPlayed Int      @default(0)
+  totalXP         Int      @default(0)
+  // averageAccuracy    Float    @default(0.0)
+  overallProgress Float    @default(0.0)
+  // quizLevel          Int      @default(0)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 }
 
 model Interest {
@@ -116,32 +116,32 @@ model Bookmark {
   @@index([folderId])
 }
 
-model ChatSession {
-  id String @id @default(cuid())
+// model ChatSession {
+//   id String @id @default(cuid())
 
-  userId String
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+//   userId String
+//   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  title     String
-  domain    String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+//   title     String
+//   domain    String?
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt
 
-  messages ChatMessage[]
-}
+//   messages ChatMessage[]
+// }
 
-model ChatMessage {
-  id String @id @default(cuid())
+// model ChatMessage {
+//   id String @id @default(cuid())
 
-  sessionId String
-  session   ChatSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
-  role      Role
+//   sessionId String
+//   session   ChatSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+//   role      Role
 
-  description String
-  timeStamp   DateTime @default(now())
+//   description String
+//   timeStamp   DateTime @default(now())
 
-  @@index([sessionId])
-}
+//   @@index([sessionId])
+// }
 
 model Thread {
   id String @id @default(cuid())
