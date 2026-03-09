@@ -26,10 +26,10 @@ model User {
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 
-  profile      UserProfile?
+  progress     UserProgress?
   interests    UserInterest[]
   bookmarks    Bookmark[]
-  chatSessions ChatSession[]
+  // chatSessions ChatSession[]
   thread       Thread[]
   likes        ThreadLike[]
   comments     ThreadComment[]
@@ -37,24 +37,25 @@ model User {
   followers    Follow[]        @relation("UserFollowers")
   following    Follow[]        @relation("UserFollowing")
   quizAttempts QuizAttempt[]
+  threadDrafts ThreadDrafts[]
 
   @@index([email])
 }
 
-model UserProfile {
+model UserProgress {
   id String @id @default(cuid())
 
   userId String @unique
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  currentStreak      Int      @default(0)
-  totalQuizzesPlayed Int      @default(0)
-  totalXP            Int      @default(0)
-  averageAccuracy    Float    @default(0.0)
-  overallProgress    Float    @default(0.0)
-  quizLevel          Int      @default(0)
-  createdAt          DateTime @default(now())
-  updatedAt          DateTime @updatedAt
+  currentStreak   Int      @default(0)
+  // totalQuizzesPlayed Int      @default(0)
+  totalXP         Int      @default(0)
+  // averageAccuracy    Float    @default(0.0)
+  overallProgress Float    @default(0.0)
+  // quizLevel          Int      @default(0)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 }
 
 model Interest {
@@ -115,32 +116,32 @@ model Bookmark {
   @@index([folderId])
 }
 
-model ChatSession {
-  id String @id @default(cuid())
+// model ChatSession {
+//   id String @id @default(cuid())
 
-  userId String
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+//   userId String
+//   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  title     String
-  domain    String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+//   title     String
+//   domain    String?
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt
 
-  messages ChatMessage[]
-}
+//   messages ChatMessage[]
+// }
 
-model ChatMessage {
-  id String @id @default(cuid())
+// model ChatMessage {
+//   id String @id @default(cuid())
 
-  sessionId String
-  session   ChatSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
-  role      Role
+//   sessionId String
+//   session   ChatSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+//   role      Role
 
-  description String
-  timeStamp   DateTime @default(now())
+//   description String
+//   timeStamp   DateTime @default(now())
 
-  @@index([sessionId])
-}
+//   @@index([sessionId])
+// }
 
 model Thread {
   id String @id @default(cuid())
@@ -150,6 +151,7 @@ model Thread {
 
   title         String
   description   String
+  imageName     String
   tags          String[]
   likesCount    Int      @default(0)
   commentsCount Int      @default(0)
@@ -160,6 +162,25 @@ model Thread {
   likes    ThreadLike[]
   comments ThreadComment[]
   shares   ThreadShare[]
+  drafts   ThreadDrafts[]
+
+  @@index([userId])
+  @@index([createdAt])
+}
+
+model ThreadDrafts {
+  id          String   @id @default(cuid())
+  title       String
+  tags        String[]
+  description String
+  imageName   String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  userId   String
+  user     User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  threadId String
+  thread   Thread @relation(fields: [threadId], references: [id], onDelete: Cascade)
 
   @@index([userId])
   @@index([createdAt])
@@ -169,9 +190,9 @@ model ThreadLike {
   id String @id @default(cuid())
 
   userId   String
-  user     User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  threadId String
-  thread   Thread @relation(fields: [threadId], references: [id], onDelete: Cascade)
+  user     User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  threadId String? @unique
+  thread   Thread? @relation(fields: [threadId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
 
@@ -229,14 +250,9 @@ model Follow {
 model ArticleSummaryQnA {
   id String @id @default(cuid())
 
-  articleUrl   String
-  articleTitle String
-
   question  String
   answer    String
   createdAt DateTime @default(now())
-
-  @@index([articleUrl])
 }
 
 model QuizAttempt {
