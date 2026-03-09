@@ -6,10 +6,13 @@ import {
   userSignInSchema,
   userSignUpSchema,
 } from '../validators/user.validator';
+import { nanoid } from 'nanoid';
 
 export class UserAuth {
   async signUp(ctx: Context) {
     const data = userSignUpSchema.safeParse(await ctx.req.json());
+
+    const username = data.data?.name.split(" ")[0]?.toLowerCase() + "_" + nanoid(4)
 
     if (!data.success) {
       return ctx.json('Invalid Input', 422);
@@ -31,12 +34,14 @@ export class UserAuth {
       const newUser = await prisma.user.create({
         data: {
           name: data.data.name,
+          username: username,
           email: data.data.email,
           password: hashedPassword,
           phone: data.data.phone,
           level: data.data.level,
           dob: data.data.dob,
           gender: data.data.gender,
+          hasOnboarding: data.data.hasOnboarding,
         },
       });
 
