@@ -42,10 +42,10 @@ class ThreadsDataStore {
             tags: ["Economy", "Global Markets"],
             imageName: "urban_5",
             description: """
-    Rising interest rates, slowing consumer demand, and geopolitical tensions are forcing economists to rethink growth projections for the next year.
+    Rising interest rates, 
     """,
             likes: 702,
-            comments: 41,
+            comments: [],
             shares: 11,
             isLiked: false
         ),
@@ -59,10 +59,10 @@ class ThreadsDataStore {
             tags: ["Markets", "Nifty"],
             imageName: "img(F5)",
             description: """
-    Indian indices continue to hit record highs, but stretched valuations and global cues raise questions about how long this rally can last.
+    Indian indices continue to hit record highs, but stretched valuations and global cues raise questions about how long this rally can last.Indian indices continue to hit record highs, but stretched valuations and global cues raise questions about how long this rally can last.
     """,
             likes: 518,
-            comments: 29,
+            comments: [],
             shares: 6,
             isLiked: false
         ),
@@ -79,7 +79,7 @@ class ThreadsDataStore {
     From chips to software platforms, investors are betting big on AI-led growth, but valuations are starting to price in perfection.
     """,
             likes: 332,
-            comments: 18,
+            comments: [],
             shares: 4,
             isLiked: false
         ),
@@ -96,7 +96,7 @@ class ThreadsDataStore {
     Companies with low debt and healthy cash flows tend to survive market downturns better and reward long-term investors.
     """,
             likes: 190,
-            comments: 12,
+            comments: [],
             shares: 2,
             isLiked: false
         ),
@@ -112,7 +112,7 @@ class ThreadsDataStore {
                     imageName: "beach_9",
                     description: "Lessons learnt while building Threads clone",
                     likes: 120,
-                    comments: 14,
+                    comments: [],
                     shares: 3,
                     isLiked: false
                 ),
@@ -129,7 +129,7 @@ class ThreadsDataStore {
     Consistency, asset allocation, and patience matter more than chasing short-term returns in wealth creation.
     """,
             likes: 120,
-            comments: 14,
+            comments: [],
             shares: 3,
             isLiked: false
         ),
@@ -146,7 +146,7 @@ class ThreadsDataStore {
     Volatility creates fear, but for disciplined investors it often presents the best opportunities to buy quality businesses.
     """,
             likes: 98,
-            comments: 9,
+            comments: [],
             shares: 1,
             isLiked: false
         ),
@@ -163,7 +163,7 @@ class ThreadsDataStore {
     Both approaches have their merits — the right choice depends on risk appetite, time commitment, and investment knowledge.
     """,
             likes: 210,
-            comments: 22,
+            comments: [],
             shares: 6,
             isLiked: false
         ),
@@ -180,7 +180,7 @@ class ThreadsDataStore {
     Wealth creation is less about predicting markets and more about discipline, patience, and emotional control.
     """,
             likes: 305,
-            comments: 31,
+            comments: [],
             shares: 10,
             isLiked: false
         )
@@ -191,6 +191,66 @@ class ThreadsDataStore {
     
     func getDrafts() -> [Draft] {
         drafts
+    }
+    
+    private func indexOfPost(with id: Int) -> Int? {
+        threadPosts.firstIndex { $0.id == id }
+    }
+    
+    func getComments(for postID: Int) -> [Comment] {
+        guard let index = indexOfPost(with: postID) else { return [] }
+        return threadPosts[index].comments
+    }
+    
+    func addComment(to postID: Int, text: String) {
+        guard let index = indexOfPost(with: postID) else { return }
+
+        let newComment = Comment(
+            id: UUID(),
+            userName: currentUserName,
+            userProfileImage: "beach_1",
+            text: text,
+            likes: 0,
+            isLiked: false,
+            replies: []
+        )
+
+        threadPosts[index].comments.insert(newComment, at: 0)
+    }
+    
+    func toggleLikeOnComment(postID: Int, commentID: UUID) {
+        guard let postIndex = indexOfPost(with: postID) else { return }
+
+        guard let commentIndex = threadPosts[postIndex]
+            .comments
+            .firstIndex(where: { $0.id == commentID }) else { return }
+
+        threadPosts[postIndex].comments[commentIndex].isLiked.toggle()
+        threadPosts[postIndex].comments[commentIndex].likes +=
+            threadPosts[postIndex].comments[commentIndex].isLiked ? 1 : -1
+    }
+
+    func addReply(
+        to postID: Int,
+        commentID: UUID,
+        text: String
+    ) {
+        guard let postIndex = indexOfPost(with: postID) else { return }
+
+        guard let commentIndex = threadPosts[postIndex]
+            .comments
+            .firstIndex(where: { $0.id == commentID }) else { return }
+
+        let reply = Reply(
+            id: UUID(),
+            userName: currentUserName,
+            userProfileImage: "beach_1",
+            text: text,
+            likes: 0,
+            isLiked: false
+        )
+
+        threadPosts[postIndex].comments[commentIndex].replies.append(reply)
     }
     
     func saveDraft(
@@ -236,7 +296,7 @@ class ThreadsDataStore {
     func getForYouThreads() -> [ThreadPost] {
 //        threadPosts.filter { $0.userName != currentUserName }
         threadPosts.filter {
-              $0.userName != currentUserName &&
+              $0.userName != currentUserName ||
               !followedUsers.contains($0.userName)
           }
     }
@@ -261,7 +321,8 @@ class ThreadsDataStore {
     func postThreadFromCreate(
         title: String,
         body: String,
-        imageName: String?
+        imageName: String?,
+        tags: [String]
     ) {
         let newThread = ThreadPost(
             id: Int(Date().timeIntervalSince1970),
@@ -269,11 +330,11 @@ class ThreadsDataStore {
             userProfileImage: "beach_1",
             timeAgo: "Just now",
             title: title,
-            tags: ["iOS"],
+            tags: tags,
             imageName: imageName,
             description: body,
             likes: 0,
-            comments: 0,
+            comments: [],
             shares: 0,
             isLiked: false
         )
@@ -308,8 +369,15 @@ class ThreadsDataStore {
             followedUsers.insert(userName)
         }
     }
-   
     
+    func getAllPostsForSearch() -> [ThreadPost] {
+        threadPosts
+    }
+   
+    func deletePost(id: Int) {
+           threadPosts.removeAll { $0.id == id }
+       }
+      
    
 }
 
