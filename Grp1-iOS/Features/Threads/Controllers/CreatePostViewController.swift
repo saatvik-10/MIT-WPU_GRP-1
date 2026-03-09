@@ -63,71 +63,77 @@ class CreatePostViewController: UIViewController,UITextViewDelegate, UITextField
     
     @IBAction func didTapSaveDraft(_ sender: UIButton) {
         
-        let title = titleTextField.text
-        let topic = addTopicTextField.text
-        let body = bodyTextView.text
-        let imagePath: String?
-        if let image = postImageView.image {
-            imagePath = saveImageToDisk(image)
-        } else {
-            imagePath = nil
-        }
         
-        switch mode {
+            let title = titleTextField.text
+            let topic = addTopicTextField.text
+            let body = bodyTextView.text
             
-        case .newPost:
-            ThreadsDataStore.shared.saveDraft(
-                title: title,
-                topic: topic,
-                body: body,
-                imageName: imagePath
-            )
+            let imagePath: String?
+            if let image = postImageView.image {
+                imagePath = saveImageToDisk(image)
+            } else {
+                imagePath = nil
+            }
             
-        case .editDraft:
-            guard let draft else { return }
-            ThreadsDataStore.shared.updateDraft(
-                id: draft.id,
-                title: title,
-                topic: topic,
-                body: body,
-                imageName: imagePath
-            )
-        }
-        
-        
-        performSegue(withIdentifier: "Drafts", sender: nil)
+            switch mode {
+            case .newPost:
+                ThreadsDataStore.shared.saveDraft(
+                    title: title,
+                    topic: topic,
+                    body: body,
+                    imageName: imagePath
+                )
+                
+            case .editDraft:
+                guard let draft else { return }
+                ThreadsDataStore.shared.updateDraft(
+                    id: draft.id,
+                    title: title,
+                    topic: topic,
+                    body: body,
+                    imageName: imagePath
+                )
+            }
+            
+            // Go back to drafts without pushing a new VC
+            navigationController?.popViewController(animated: true)
         
     }
     
     @IBAction func didTapPost(_ sender: UIButton) {
         
         guard
-            let title = titleTextField.text, !title.isEmpty,
-            let body = bodyTextView.text, !body.isEmpty
-        else {
-            return
+                let title = titleTextField.text, !title.isEmpty,
+                let body = bodyTextView.text, !body.isEmpty
+            else { return }
+
+            let imagePath: String?
+            if let image = postImageView.image {
+                imagePath = saveImageToDisk(image)
+            } else {
+                imagePath = nil
+            }
+
+            // Parse tags from comma-separated input e.g. "iOS, Swift, UIKit"
+            let rawTags = addTopicTextField.text ?? ""
+            let tags = rawTags
+                .split(separator: ",")
+                .map { $0.trimmingCharacters(in: .whitespaces) }
+                .filter { !$0.isEmpty }
+
+            ThreadsDataStore.shared.postThreadFromCreate(
+                title: title,
+                body: body,
+                imageName: imagePath,
+                tags: tags.isEmpty ? ["General"] : tags
+            )
+
+            if mode == .editDraft, let draft {
+                ThreadsDataStore.shared.deleteDraft(id: draft.id)
+            }
+
+            navigationController?.popViewController(animated: true)
         }
-        
-       // let imageName = postImageView.image != nil ? "draft_image" : nil
-        let imagePath: String?
-        if let image = postImageView.image {
-            imagePath = saveImageToDisk(image)
-        } else {
-            imagePath = nil
-        }
-        
-        ThreadsDataStore.shared.postThreadFromCreate(
-            title: title,
-            body: body,
-            imageName: imagePath
-        )
-        
-        if mode == .editDraft, let draft {
-            ThreadsDataStore.shared.deleteDraft(id: draft.id)
-        }
-        
-        navigationController?.popViewController(animated: true)
-    }
     
     
     
