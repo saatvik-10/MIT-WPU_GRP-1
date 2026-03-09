@@ -81,7 +81,7 @@
                             </stackView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="248" verticalCompressionResistancePriority="1000" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bgv-CE-RvK" userLabel="Title Label">
                                 <rect key="frame" x="0.0" y="67" width="676" height="256.33333333333331"/>
-                                <fontDescription key="fontDescription" style="UICTFontTextStyleTitle1"/>
+                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="24"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
@@ -108,10 +108,10 @@
                         </constraints>
                     </view>
                     <stackView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="1000" distribution="fillProportionally" alignment="bottom" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="QGZ-U3-Dcd" userLabel="Action Stack View">
-                        <rect key="frame" x="0.0" y="777.66666666666663" width="600" height="34.333333333333371"/>
+                        <rect key="frame" x="-10" y="777.66666666666663" width="500" height="34.333333333333371"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="249" horizontalCompressionResistancePriority="1000" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1xg-id-gcP" userLabel="LikeButton">
-                                <rect key="frame" x="0.0" y="0.0" width="234.33333333333334" height="34.333333333333336"/>
+                                <rect key="frame" x="0.0" y="0.0" width="195.33333333333334" height="34.333333333333336"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" title="Button"/>
                                 <connections>
@@ -119,7 +119,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" horizontalCompressionResistancePriority="1000" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lkQ-Mu-59q" userLabel="CommentButton">
-                                <rect key="frame" x="242.33333333333337" y="0.0" width="164.66666666666663" height="34.333333333333336"/>
+                                <rect key="frame" x="203.33333333333337" y="0.0" width="137" height="34.333333333333336"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" image="message" catalog="system"/>
                                 <connections>
@@ -127,7 +127,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" horizontalCompressionResistancePriority="1000" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mFm-5z-Rf1" userLabel="ShareButton">
-                                <rect key="frame" x="415" y="0.0" width="185" height="34.333333333333336"/>
+                                <rect key="frame" x="348.33333333333331" y="0.0" width="151.66666666666669" height="34.333333333333336"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" image="square.and.arrow.up" catalog="system"/>
                             </button>
@@ -136,12 +136,12 @@
                 </subviews>
                 <constraints>
                     <constraint firstItem="0Jr-DD-JKb" firstAttribute="leading" secondItem="Ka8-vI-yoS" secondAttribute="leading" id="4aY-D7-YU3"/>
-                    <constraint firstItem="QGZ-U3-Dcd" firstAttribute="leading" secondItem="Ka8-vI-yoS" secondAttribute="leading" id="Es6-hb-VJp"/>
+                    <constraint firstItem="QGZ-U3-Dcd" firstAttribute="leading" secondItem="Ka8-vI-yoS" secondAttribute="leading" constant="-10" id="Es6-hb-VJp"/>
                     <constraint firstAttribute="bottom" secondItem="0Jr-DD-JKb" secondAttribute="bottom" id="KIZ-6L-i3M"/>
                     <constraint firstItem="gDM-87-AEI" firstAttribute="leading" secondItem="Ka8-vI-yoS" secondAttribute="leading" constant="12" id="MjW-T8-aOJ"/>
                     <constraint firstAttribute="bottom" secondItem="gDM-87-AEI" secondAttribute="bottom" constant="60" id="Oew-Qo-YCM"/>
                     <constraint firstAttribute="trailing" secondItem="gDM-87-AEI" secondAttribute="trailing" constant="12" id="eF3-Ec-EGm"/>
-                    <constraint firstAttribute="trailing" secondItem="QGZ-U3-Dcd" secondAttribute="trailing" constant="100" id="j31-yU-MML"/>
+                    <constraint firstAttribute="trailing" secondItem="QGZ-U3-Dcd" secondAttribute="trailing" constant="210" id="j31-yU-MML"/>
                     <constraint firstAttribute="bottom" secondItem="QGZ-U3-Dcd" secondAttribute="bottom" constant="10" id="sb8-ko-AVt"/>
                     <constraint firstAttribute="trailing" secondItem="0Jr-DD-JKb" secondAttribute="trailing" id="uAd-i0-xeu"/>
                     <constraint firstItem="gDM-87-AEI" firstAttribute="top" secondItem="Ka8-vI-yoS" secondAttribute="top" constant="12" id="wpw-rB-PtY"/>

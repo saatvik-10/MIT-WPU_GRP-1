@@ -296,7 +296,7 @@ class ThreadsDataStore {
     func getForYouThreads() -> [ThreadPost] {
 //        threadPosts.filter { $0.userName != currentUserName }
         threadPosts.filter {
-              $0.userName != currentUserName &&
+              $0.userName != currentUserName ||
               !followedUsers.contains($0.userName)
           }
     }
@@ -321,7 +321,8 @@ class ThreadsDataStore {
     func postThreadFromCreate(
         title: String,
         body: String,
-        imageName: String?
+        imageName: String?,
+        tags: [String]
     ) {
         let newThread = ThreadPost(
             id: Int(Date().timeIntervalSince1970),
@@ -329,7 +330,7 @@ class ThreadsDataStore {
             userProfileImage: "beach_1",
             timeAgo: "Just now",
             title: title,
-            tags: ["iOS"],
+            tags: tags,
             imageName: imageName,
             description: body,
             likes: 0,
@@ -373,7 +374,10 @@ class ThreadsDataStore {
         threadPosts
     }
    
-    
+    func deletePost(id: Int) {
+           threadPosts.removeAll { $0.id == id }
+       }
+      
    
 }
 

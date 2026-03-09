@@ -9,8 +9,10 @@ import UIKit
 
 class collectionViewCell: UICollectionViewCell {
     var onFollowTapped: (() -> Void)?
+    var onDeleteTapped: (() -> Void)?
     var isFollowingUser: Bool = false
     var shouldShowFollowAction: Bool = true
+    var isOwnPost: Bool = false
     var onMoreTapped: (() -> Void)?
     var onLikeTapped: (() -> Void)?
     var onCommentTapped: (() -> Void)?
@@ -184,7 +186,7 @@ class collectionViewCell: UICollectionViewCell {
         titleLabel.lineBreakMode = .byTruncatingTail
         //  titleLabel.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
         
-        descriptionLabel.numberOfLines = 0
+        descriptionLabel.numberOfLines = 0   //girl check this
         
         threadImg.contentMode = .scaleAspectFill
         threadImg.layer.cornerRadius = 12
@@ -194,7 +196,7 @@ class collectionViewCell: UICollectionViewCell {
         
         descriptionLabel.numberOfLines = 3
         descriptionLabel.lineBreakMode = .byTruncatingTail
-//        descriptionLabel
+
         //descriptionLabel.font = UIFont.systemFont(ofSize: 15)
         
         
@@ -204,7 +206,7 @@ class collectionViewCell: UICollectionViewCell {
         likesButton.configuration = config
         commentsButton.tintColor = .systemBlue
         sharesButton.tintColor = .systemBlue
-        
+        sharesButton.isHidden = true
         
         // moreButton.setImage(UIImage(systemName: "ellipsis"), for: .normal)
         moreButton.tintColor = .secondaryLabel
@@ -320,7 +322,7 @@ class collectionViewCell: UICollectionViewCell {
         
         self.isFollowingUser = isFollowing
         self.shouldShowFollowAction = !isOwnPost
-        
+        self.isOwnPost = isOwnPost
        
         userNameLabel.text = post.userName
         timeAgoLabel.text = post.timeAgo
@@ -445,55 +447,40 @@ class collectionViewCell: UICollectionViewCell {
     //    }
     //}
     private func setupMoreMenu() {
-        
-        var actions: [UIAction] = []
-        
-        if shouldShowFollowAction {
-                let followTitle = isFollowingUser ? "Unfollow" : "Follow"
-                let followImageName = isFollowingUser
-                    ? "person.badge.minus"
-                    : "person.badge.plus"
+            var actions: [UIAction] = []
 
+            if isOwnPost {
+                // My Threads: Delete + Bookmark
+                let deleteAction = UIAction(
+                    title: "Delete post",
+                    image: UIImage(systemName: "trash"),
+                    attributes: .destructive
+                ) { [weak self] _ in
+                    self?.onDeleteTapped?()
+                }
+                actions.append(deleteAction)
+            } else {
+                // For You / Following: Follow/Unfollow + Bookmark
+                let followTitle = isFollowingUser ? "Unfollow" : "Follow"
+                let followImageName = isFollowingUser ? "person.badge.minus" : "person.badge.plus"
                 let followAction = UIAction(
                     title: followTitle,
                     image: UIImage(systemName: followImageName)
                 ) { [weak self] _ in
                     self?.onFollowTapped?()
                 }
-
                 actions.append(followAction)
             }
-        
-        let bookmarkAction = UIAction(
-            title: "Bookmark",
-            image: UIImage(systemName: "bookmark")
-        ) { _ in }
-        
-        let reportAction = UIAction(
-            title: "Report this user",
-            image: UIImage(systemName: "flag"),
-            attributes: .destructive
-        ) { _ in }
-        
-        let blockAction = UIAction(
-            title: "Block user",
-            image: UIImage(systemName: "hand.raised"),
-            attributes: .destructive
-        ) { _ in }
-        
-        let notInterestedAction = UIAction(
-            title: "Not interested in this post",
-            image: UIImage(systemName: "exclamationmark.triangle")
-        ) { _ in }
-        
-        actions.append(contentsOf: [
-            bookmarkAction,
-            reportAction,
-            blockAction,
-            notInterestedAction
-        ])
-        
-        moreButton.menu = UIMenu(title: "", children: actions)
-           moreButton.showsMenuAsPrimaryAction = true
+
+            let bookmarkAction = UIAction(
+                title: "Bookmark",
+                image: UIImage(systemName: "bookmark")
+            ) { _ in
+                // TODO: wire up in v2
+            }
+            actions.append(bookmarkAction)
+
+            moreButton.menu = UIMenu(title: "", children: actions)
+            moreButton.showsMenuAsPrimaryAction = true
+        }
     }
-}

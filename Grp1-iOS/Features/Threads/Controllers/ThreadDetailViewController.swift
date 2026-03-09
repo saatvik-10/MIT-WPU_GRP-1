@@ -1,10 +1,3 @@
-//
-//  ThreadDetailViewController.swift
-//  Grp1-iOS
-//
-//  Created by SDC-USER on 12/01/26.
-//
-
 import UIKit
 
 class ThreadDetailViewController: UIViewController {
@@ -13,44 +6,50 @@ class ThreadDetailViewController: UIViewController {
 
     // MARK: - UI Elements
     private let scrollView = UIScrollView()
-    private let contentView = UIView()
+    private let scrollContent = UIView()          // scroll container
+
+    // ── Card (white rounded shadow box) ──────────────────────────────
+    private let cardView = UIView()
 
     private let profileImageView = UIImageView()
-    private let usernameLabel = UILabel()
-    private let timeLabel = UILabel()
+    private let usernameLabel    = UILabel()
+    private let timeLabel        = UILabel()
 
-    private let tagsStackView = UIStackView()
-    private let titleLabel = UILabel()
-    private let postImageView = UIImageView()
+    private let tagsStackView    = UIStackView()
+    private let titleLabel       = UILabel()
+    private let postImageView    = UIImageView()
     private let descriptionLabel = UILabel()
 
-    private let divider = UIView()
+    private let divider          = UIView()
 
-    private let likeButton = UIButton(type: .system)
-    private let likeCountLabel = UILabel()
-    private let commentButton = UIButton(type: .system)
+    // Action row
+    private let likeButton        = UIButton(type: .system)
+    private let likeCountLabel    = UILabel()
+    private let commentButton     = UIButton(type: .system)
     private let commentCountLabel = UILabel()
-    private let shareButton = UIButton(type: .system)
-    private let shareCountLabel = UILabel()
-    private let actionsStackView = UIStackView()
+    private let shareButton       = UIButton(type: .system)
+    private let shareCountLabel   = UILabel()
+    private let actionsStackView  = UIStackView()
 
     private var isLiked = false
 
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .systemBackground
-        setupUI()
+        view.backgroundColor = UIColor(white: 250/255, alpha: 1)   // same bg as feed
+        setupScrollView()
+        setupCard()
+        setupActionButtons()
         configureWithData()
     }
 
-    // MARK: - Setup
-    private func setupUI() {
-        // ScrollView
+    // MARK: - ScrollView + outer container
+    private func setupScrollView() {
         scrollView.translatesAutoresizingMaskIntoConstraints = false
-        contentView.translatesAutoresizingMaskIntoConstraints = false
+        scrollContent.translatesAutoresizingMaskIntoConstraints = false
+
         view.addSubview(scrollView)
-        scrollView.addSubview(contentView)
+        scrollView.addSubview(scrollContent)
 
         NSLayoutConstraint.activate([
             scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
@@ -58,123 +57,156 @@ class ThreadDetailViewController: UIViewController {
             scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
 
-            contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
-            contentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
-            contentView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
-            contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
-            contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
+            scrollContent.topAnchor.constraint(equalTo: scrollView.topAnchor),
+            scrollContent.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+            scrollContent.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
+            scrollContent.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
+            scrollContent.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
+        ])
+    }
+
+    // MARK: - Card setup (mirrors feed card style)
+    private func setupCard() {
+        // ── Card container ───────────────────────────────────────────
+        cardView.translatesAutoresizingMaskIntoConstraints = false
+        cardView.backgroundColor = .white
+        cardView.layer.cornerRadius = 16
+        cardView.layer.masksToBounds = true        // clips inner content
+        scrollContent.addSubview(cardView)
+
+        // Shadow lives on scrollContent (not cardView) so masksToBounds doesn't clip it
+        let shadowHost = UIView()
+        shadowHost.translatesAutoresizingMaskIntoConstraints = false
+        shadowHost.backgroundColor = .clear
+        shadowHost.layer.shadowColor  = UIColor.gray.cgColor
+        shadowHost.layer.shadowOpacity = 0.08
+        shadowHost.layer.shadowOffset  = CGSize(width: 0, height: 2)
+        shadowHost.layer.shadowRadius  = 4
+        shadowHost.layer.cornerRadius  = 16
+        shadowHost.layer.masksToBounds = false
+        scrollContent.insertSubview(shadowHost, belowSubview: cardView)
+
+        NSLayoutConstraint.activate([
+            cardView.topAnchor.constraint(equalTo: scrollContent.topAnchor, constant: 16),
+            cardView.leadingAnchor.constraint(equalTo: scrollContent.leadingAnchor, constant: 16),
+            cardView.trailingAnchor.constraint(equalTo: scrollContent.trailingAnchor, constant: -16),
+            cardView.bottomAnchor.constraint(equalTo: scrollContent.bottomAnchor, constant: -24),
+
+            shadowHost.topAnchor.constraint(equalTo: cardView.topAnchor),
+            shadowHost.leadingAnchor.constraint(equalTo: cardView.leadingAnchor),
+            shadowHost.trailingAnchor.constraint(equalTo: cardView.trailingAnchor),
+            shadowHost.bottomAnchor.constraint(equalTo: cardView.bottomAnchor),
         ])
 
-        // Profile Image
+        // ── Profile image ────────────────────────────────────────────
         profileImageView.translatesAutoresizingMaskIntoConstraints = false
-        profileImageView.layer.cornerRadius = 24
+        profileImageView.layer.cornerRadius = 20
         profileImageView.clipsToBounds = true
         profileImageView.contentMode = .scaleAspectFill
         profileImageView.backgroundColor = .systemGray5
 
-        // Username
+        // ── Username ─────────────────────────────────────────────────
         usernameLabel.translatesAutoresizingMaskIntoConstraints = false
-        usernameLabel.font = .boldSystemFont(ofSize: 17)
+        usernameLabel.font = .boldSystemFont(ofSize: 16)           // matches card
 
-        // Time
+        // ── Time ─────────────────────────────────────────────────────
         timeLabel.translatesAutoresizingMaskIntoConstraints = false
         timeLabel.font = .systemFont(ofSize: 14)
         timeLabel.textColor = .secondaryLabel
 
-        // Tags
+        // ── Tags ─────────────────────────────────────────────────────
         tagsStackView.translatesAutoresizingMaskIntoConstraints = false
         tagsStackView.axis = .horizontal
         tagsStackView.spacing = 8
         tagsStackView.alignment = .leading
 
-        // Title
+        // ── Title ────────────────────────────────────────────────────
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        titleLabel.font = .boldSystemFont(ofSize: 26)
+        titleLabel.font = .systemFont(ofSize: 18, weight: .semibold)  // matches card
         titleLabel.numberOfLines = 0
 
-        // Post Image
+        // ── Post Image ───────────────────────────────────────────────
         postImageView.translatesAutoresizingMaskIntoConstraints = false
         postImageView.contentMode = .scaleAspectFill
         postImageView.clipsToBounds = true
-        postImageView.layer.cornerRadius = 16
+        postImageView.layer.cornerRadius = 12                        // matches card
 
-        // Description
+        // ── Description ──────────────────────────────────────────────
         descriptionLabel.translatesAutoresizingMaskIntoConstraints = false
-        descriptionLabel.font = .systemFont(ofSize: 17)
-        descriptionLabel.numberOfLines = 0
+        descriptionLabel.font = .systemFont(ofSize: 15)              // matches card
+        descriptionLabel.numberOfLines = 0                           // show full content
         descriptionLabel.textColor = .label
         descriptionLabel.lineBreakMode = .byWordWrapping
 
-        // Divider
+        // ── Divider ──────────────────────────────────────────────────
         divider.translatesAutoresizingMaskIntoConstraints = false
-        divider.backgroundColor = .systemGray6
+        divider.backgroundColor = .systemGray5                       // matches card dividerView
 
-        // Actions
+        // ── Actions stack ─────────────────────────────────────────────
         actionsStackView.translatesAutoresizingMaskIntoConstraints = false
         actionsStackView.axis = .horizontal
         actionsStackView.spacing = 24
         actionsStackView.alignment = .center
 
-        setupActionButtons()
-
-        // Add subviews
+        // Add all subviews to card
         [profileImageView, usernameLabel, timeLabel,
          tagsStackView, titleLabel, postImageView,
          descriptionLabel, divider, actionsStackView].forEach {
-            contentView.addSubview($0)
+            cardView.addSubview($0)
         }
 
-        // Constraints
+        // ── Constraints inside card ───────────────────────────────────
         NSLayoutConstraint.activate([
-            // Profile image
-            profileImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
-            profileImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            profileImageView.widthAnchor.constraint(equalToConstant: 48),
-            profileImageView.heightAnchor.constraint(equalToConstant: 48),
+            // Profile image  (40pt — same as card)
+            profileImageView.topAnchor.constraint(equalTo: cardView.topAnchor, constant: 16),
+            profileImageView.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: 16),
+            profileImageView.widthAnchor.constraint(equalToConstant: 40),
+            profileImageView.heightAnchor.constraint(equalToConstant: 40),
 
             // Username
-            usernameLabel.topAnchor.constraint(equalTo: profileImageView.topAnchor, constant: 4),
-            usernameLabel.leadingAnchor.constraint(equalTo: profileImageView.trailingAnchor, constant: 12),
-            usernameLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            usernameLabel.topAnchor.constraint(equalTo: profileImageView.topAnchor, constant: 2),
+            usernameLabel.leadingAnchor.constraint(equalTo: profileImageView.trailingAnchor, constant: 10),
+            usernameLabel.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -16),
 
             // Time
-            timeLabel.topAnchor.constraint(equalTo: usernameLabel.bottomAnchor, constant: 4),
+            timeLabel.topAnchor.constraint(equalTo: usernameLabel.bottomAnchor, constant: 2),
             timeLabel.leadingAnchor.constraint(equalTo: usernameLabel.leadingAnchor),
 
             // Tags
-            tagsStackView.topAnchor.constraint(equalTo: profileImageView.bottomAnchor, constant: 16),
-            tagsStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            tagsStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            tagsStackView.topAnchor.constraint(equalTo: profileImageView.bottomAnchor, constant: 12),
+            tagsStackView.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: 16),
+            tagsStackView.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -16),
 
             // Title
-            titleLabel.topAnchor.constraint(equalTo: tagsStackView.bottomAnchor, constant: 14),
-            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            titleLabel.topAnchor.constraint(equalTo: tagsStackView.bottomAnchor, constant: 10),
+            titleLabel.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: 16),
+            titleLabel.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -16),
 
-            // Post Image
-            postImageView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 16),
-            postImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            postImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            // Post image (hidden when nil)
+            postImageView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 12),
+            postImageView.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: 16),
+            postImageView.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -16),
             postImageView.heightAnchor.constraint(equalTo: postImageView.widthAnchor, multiplier: 0.6),
 
-            // Description
-            descriptionLabel.topAnchor.constraint(equalTo: postImageView.bottomAnchor, constant: 20),
-            descriptionLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            descriptionLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            // Description — anchored to postImageView; toggled when no image
+            descriptionLabel.topAnchor.constraint(equalTo: postImageView.bottomAnchor, constant: 14),
+            descriptionLabel.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: 16),
+            descriptionLabel.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -16),
 
             // Divider
-            divider.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 24),
-            divider.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            divider.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            divider.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 16),
+            divider.leadingAnchor.constraint(equalTo: cardView.leadingAnchor),
+            divider.trailingAnchor.constraint(equalTo: cardView.trailingAnchor),
             divider.heightAnchor.constraint(equalToConstant: 1),
 
             // Actions
-            actionsStackView.topAnchor.constraint(equalTo: divider.bottomAnchor, constant: 16),
-            actionsStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            actionsStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -32),
+            actionsStackView.topAnchor.constraint(equalTo: divider.bottomAnchor, constant: 14),
+            actionsStackView.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: 16),
+            actionsStackView.bottomAnchor.constraint(equalTo: cardView.bottomAnchor, constant: -16),
         ])
     }
 
+    // MARK: - Action buttons
     private func setupActionButtons() {
         likeButton.setImage(UIImage(systemName: "heart"), for: .normal)
         commentButton.setImage(UIImage(systemName: "bubble.right"), for: .normal)
@@ -182,64 +214,50 @@ class ThreadDetailViewController: UIViewController {
 
         [likeButton, commentButton, shareButton].forEach {
             $0.tintColor = .systemBlue
-            $0.imageView?.contentMode = .scaleAspectFit
-            $0.imageEdgeInsets = .zero
         }
 
         [likeCountLabel, commentCountLabel, shareCountLabel].forEach {
-            $0.font = .systemFont(ofSize: 16)
+            $0.font = .systemFont(ofSize: 15)
             $0.textColor = .secondaryLabel
         }
 
-        let likeStack   = makeActionItem(button: likeButton,    label: likeCountLabel)
-        let commentStack = makeActionItem(button: commentButton, label: commentCountLabel)
-        let shareStack  = makeActionItem(button: shareButton,   label: shareCountLabel)
-
-        actionsStackView.addArrangedSubview(likeStack)
-        actionsStackView.addArrangedSubview(commentStack)
-        actionsStackView.addArrangedSubview(shareStack)
+        actionsStackView.addArrangedSubview(makeActionPair(button: likeButton,    label: likeCountLabel))
+        actionsStackView.addArrangedSubview(makeActionPair(button: commentButton, label: commentCountLabel))
+        actionsStackView.addArrangedSubview(makeActionPair(button: shareButton,   label: shareCountLabel))
 
         likeButton.addTarget(self, action: #selector(didTapLike), for: .touchUpInside)
     }
 
-    private func makeActionItem(button: UIButton, label: UILabel) -> UIStackView {
-        let stack = UIStackView(arrangedSubviews: [button, label])
-        stack.axis = .horizontal
-        stack.spacing = 6
-        stack.alignment = .center
-        return stack
+    private func makeActionPair(button: UIButton, label: UILabel) -> UIStackView {
+        let s = UIStackView(arrangedSubviews: [button, label])
+        s.axis = .horizontal
+        s.spacing = 4
+        s.alignment = .center
+        return s
     }
 
-    private func makeTagLabel(text: String) -> UILabel {
-        let label = UILabel()
-        label.text = text
-        label.font = .systemFont(ofSize: 13, weight: .medium)
-        label.textColor = .secondaryLabel
-        label.backgroundColor = .systemGray6
-        label.layer.cornerRadius = 10
-        label.clipsToBounds = true
-        label.textAlignment = .center
-        label.translatesAutoresizingMaskIntoConstraints = false
-
-        // Padding via attributed string trick — use insets via a wrapper
-        label.setContentHuggingPriority(.required, for: .horizontal)
-
-        // Add padding
-        let padding: CGFloat = 10
-        label.widthAnchor.constraint(greaterThanOrEqualToConstant: 0).isActive = true
-        label.layoutMargins = UIEdgeInsets(top: 4, left: padding, bottom: 4, right: padding)
-
-        // Use a container view for padding
-        return label
+    // MARK: - Tag pill  (identical style to feed card)
+    private func makeTagPill(text: String) -> TagLabel {
+        let pill = TagLabel()
+        pill.text = text                                   // NO "#" prefix — matches card
+        pill.font = UIFont.systemFont(ofSize: 14, weight: .regular)
+        pill.textColor = .black
+        pill.backgroundColor = .systemGray6
+        pill.layer.cornerRadius = 12
+        pill.clipsToBounds = true
+        pill.textAlignment = .center
+        pill.setContentHuggingPriority(.required, for: .horizontal)
+        pill.setContentCompressionResistancePriority(.required, for: .horizontal)
+        return pill
     }
 
-    // MARK: - Configure
+    // MARK: - Configure with data
     private func configureWithData() {
         guard let thread else { return }
 
         usernameLabel.text = thread.userName
-        timeLabel.text = thread.timeAgo
-        titleLabel.text = thread.title
+        timeLabel.text     = thread.timeAgo
+        titleLabel.text    = thread.title
         descriptionLabel.text = thread.description
 
         // Profile image
@@ -249,68 +267,48 @@ class ThreadDetailViewController: UIViewController {
         // Post image
         if let imageName = thread.imageName {
             postImageView.isHidden = false
-            if imageName.contains("/") {
-                postImageView.image = UIImage(contentsOfFile: imageName)
-            } else {
-                postImageView.image = UIImage(named: imageName)
-            }
+            postImageView.image = imageName.contains("/")
+                ? UIImage(contentsOfFile: imageName)
+                : UIImage(named: imageName)
         } else {
             postImageView.isHidden = true
-            // When no image, link description directly to title
-            NSLayoutConstraint.activate([
-                descriptionLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 20)
-            ])
+            // Re-anchor description directly under title when no image
+            descriptionLabel.topAnchor
+                .constraint(equalTo: titleLabel.bottomAnchor, constant: 14)
+                .isActive = true
         }
 
-        // Tags
+        // Tags — same pill style as card, no "#" prefix
         tagsStackView.arrangedSubviews.forEach {
-            tagsStackView.removeArrangedSubview($0)
-            $0.removeFromSuperview()
+            tagsStackView.removeArrangedSubview($0); $0.removeFromSuperview()
         }
         for tag in thread.tags.prefix(3) {
-            let pill = TagLabel()
-            pill.text = "#\(tag)"
-            pill.font = .systemFont(ofSize: 13, weight: .medium)
-            pill.textColor = .secondaryLabel
-            pill.backgroundColor = .systemGray6
-            pill.layer.cornerRadius = 10
-            pill.clipsToBounds = true
-          //  pill.textInsets = UIEdgeInsets(top: 4, left: 10, bottom: 4, right: 10)
-            tagsStackView.addArrangedSubview(pill)
+            tagsStackView.addArrangedSubview(makeTagPill(text: tag))
         }
+        tagsStackView.isHidden = thread.tags.isEmpty
 
         // Counts
-        likeCountLabel.text = "\(thread.likes)"
+        likeCountLabel.text    = "\(thread.likes)"
         commentCountLabel.text = "\(thread.comments.count)"
-        shareCountLabel.text = "\(thread.shares)"
+        shareCountLabel.text   = "\(thread.shares)"
 
         isLiked = thread.isLiked
         updateLikeUI()
     }
 
-    // MARK: - Actions
+    // MARK: - Like action
     @objc private func didTapLike() {
         isLiked.toggle()
-        let updatedLikes = isLiked ? thread.likes + 1 : thread.likes - 1
-        likeCountLabel.text = "\(updatedLikes)"
+        likeCountLabel.text = "\(isLiked ? thread.likes + 1 : thread.likes - 1)"
         updateLikeUI()
         ThreadsDataStore.shared.toggleLike(for: thread.id)
     }
 
     private func updateLikeUI() {
-        let imageName = isLiked ? "heart.fill" : "heart"
-        likeButton.setImage(UIImage(systemName: imageName), for: .normal)
+        likeButton.setImage(UIImage(systemName: isLiked ? "heart.fill" : "heart"), for: .normal)
         likeButton.tintColor = isLiked ? .systemRed : .systemBlue
     }
 }
-
-
-
-
-
-
-
-
 
 
 

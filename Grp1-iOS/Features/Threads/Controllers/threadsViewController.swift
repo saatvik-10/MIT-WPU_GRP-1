@@ -196,31 +196,49 @@ class threadsViewController: UIViewController {
                }
                
                cell.onCommentTapped = { [weak self] in
-                       guard let self else { return }
-
-                       let vc = CommentsViewController()
-                       vc.postID = post.id
-                      vc.modalPresentationStyle = .pageSheet
-                      // vc.modalPresentationStyle = .overFullScreen
-                      // vc.modalTransitionStyle = .crossDissolve
+                   guard let self else { return }
+                   
+                   let vc = CommentsViewController()
+                   vc.postID = post.id
+                   vc.modalPresentationStyle = .pageSheet
+                   // vc.modalPresentationStyle = .overFullScreen
+                   // vc.modalTransitionStyle = .crossDissolve
                    if let screen = self.view.window?.windowScene?.screen {
                        vc.preferredContentSize = CGSize(width: screen.bounds.width, height: 0)
                    }
                    if let sheet = vc.sheetPresentationController {
-                      //     sheet.detents = [.medium(), .large()]      // 👈 native bottom sheet
-                           sheet.prefersGrabberVisible = true         // small drag indicator
-                           sheet.preferredCornerRadius = 40           // rounded top corners
-                         sheet.largestUndimmedDetentIdentifier = .medium
+                       //     sheet.detents = [.medium(), .large()]      // 👈 native bottom sheet
+                       sheet.prefersGrabberVisible = true         // small drag indicator
+                       sheet.preferredCornerRadius = 40           // rounded top corners
+                       sheet.largestUndimmedDetentIdentifier = .medium
                        sheet.selectedDetentIdentifier = .medium
                        
                        sheet.widthFollowsPreferredContentSizeWhenEdgeAttached = true
-                           sheet.prefersEdgeAttachedInCompactHeight = true
+                       sheet.prefersEdgeAttachedInCompactHeight = true
                        
-                       }
-
-                       self.present(vc, animated: true)
                    }
-
+                   self.present(vc, animated: true)
+               }
+                   cell.onDeleteTapped = { [weak self] in
+                       guard let self else { return }
+                       
+                       let alert = UIAlertController(
+                           title: "Delete Post",
+                           message: "Are you sure you want to delete this post?",
+                           preferredStyle: .alert
+                       )
+                       
+                       alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+                       
+                       alert.addAction(UIAlertAction(title: "Delete", style: .destructive) { _ in
+                           self.threadsStore.deletePost(id: post.id)
+                           self.reloadData()
+                           self.collectionView.reloadData()
+                       })
+                       
+                       self.present(alert, animated: true)
+                   }
+                       
                return cell
            }
 

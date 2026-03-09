@@ -103,7 +103,7 @@ final class CommentInputAccessoryView: UIView {
             divider.trailingAnchor.constraint(equalTo: inputRow.trailingAnchor),
             divider.heightAnchor.constraint(equalToConstant: 1),
 
-            avatarImageView.leadingAnchor.constraint(equalTo: inputRow.leadingAnchor, constant: 16),
+            avatarImageView.leadingAnchor.constraint(equalTo: inputRow.leadingAnchor, constant: 24),
             avatarImageView.centerYAnchor.constraint(equalTo: inputRow.centerYAnchor),
             avatarImageView.widthAnchor.constraint(equalToConstant: 40),
             avatarImageView.heightAnchor.constraint(equalToConstant: 40),
@@ -112,7 +112,7 @@ final class CommentInputAccessoryView: UIView {
             textField.centerYAnchor.constraint(equalTo: inputRow.centerYAnchor),
             textField.trailingAnchor.constraint(equalTo: sendButton.leadingAnchor, constant: -8),
 
-            sendButton.trailingAnchor.constraint(equalTo: inputRow.trailingAnchor, constant: -16),
+            sendButton.trailingAnchor.constraint(equalTo: inputRow.trailingAnchor, constant: -30),
             sendButton.centerYAnchor.constraint(equalTo: inputRow.centerYAnchor),
             sendButton.widthAnchor.constraint(equalToConstant: 44),
         ])
@@ -172,21 +172,21 @@ final class CommentsViewController: UIViewController {
         titleLabel.textAlignment = .center
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
 
-        let closeButton = UIButton(type: .system)
-        closeButton.translatesAutoresizingMaskIntoConstraints = false
-        closeButton.setImage(UIImage(systemName: "xmark"), for: .normal)
-        closeButton.tintColor = .label
-        closeButton.backgroundColor = .systemGray5
-        closeButton.layer.cornerRadius = 18
-        closeButton.clipsToBounds = true
-        closeButton.addTarget(self, action: #selector(didTapClose), for: .touchUpInside)
+//        let closeButton = UIButton(type: .system)
+//        closeButton.translatesAutoresizingMaskIntoConstraints = false
+//        closeButton.setImage(UIImage(systemName: "xmark"), for: .normal)
+//        closeButton.tintColor = .label
+//        closeButton.backgroundColor = .systemGray5
+//        closeButton.layer.cornerRadius = 18
+//        closeButton.clipsToBounds = true
+//        closeButton.addTarget(self, action: #selector(didTapClose), for: .touchUpInside)
 
         let headerView = UIView()
         headerView.translatesAutoresizingMaskIntoConstraints = false
         headerView.backgroundColor = .systemBackground
         headerView.tag = 99
         headerView.addSubview(titleLabel)
-        headerView.addSubview(closeButton)
+    //    headerView.addSubview(closeButton)
         view.addSubview(headerView)
 
         NSLayoutConstraint.activate([
@@ -195,10 +195,10 @@ final class CommentsViewController: UIViewController {
             headerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             headerView.heightAnchor.constraint(equalToConstant: 56),
 
-            closeButton.leadingAnchor.constraint(equalTo: headerView.leadingAnchor, constant: 16),
-            closeButton.centerYAnchor.constraint(equalTo: headerView.centerYAnchor),
-            closeButton.widthAnchor.constraint(equalToConstant: 36),
-            closeButton.heightAnchor.constraint(equalToConstant: 36),
+//            closeButton.leadingAnchor.constraint(equalTo: headerView.leadingAnchor, constant: 16),
+//            closeButton.centerYAnchor.constraint(equalTo: headerView.centerYAnchor),
+//            closeButton.widthAnchor.constraint(equalToConstant: 36),
+//            closeButton.heightAnchor.constraint(equalToConstant: 36),
 
             titleLabel.centerXAnchor.constraint(equalTo: headerView.centerXAnchor),
             titleLabel.centerYAnchor.constraint(equalTo: headerView.centerYAnchor),
