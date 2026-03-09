@@ -16,6 +16,7 @@ datasource db {
 model User {
   id              String   @id @default(cuid())
   name            String
+  username        String   @unique
   email           String   @unique
   password        String
   profileImageUrl String?
@@ -23,6 +24,7 @@ model User {
   level           Level    @default(BEGINNER)
   dob             String
   gender          Gender
+  hasOnboarding   Boolean  @default(false)
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 
