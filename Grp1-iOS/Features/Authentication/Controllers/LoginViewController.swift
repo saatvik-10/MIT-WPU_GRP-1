@@ -44,8 +44,8 @@ class LoginViewController: UIViewController,
     private func mockLogin() {
         let mockUser = AuthenticateUser(
             userId: "mock_user_\(UUID().uuidString.prefix(8))",
-            email: "dev@test.com",
-            name: "Dev User"
+            email: nil,
+            name: nil
         )
 
         SessionManager.shared.currentUser = mockUser
