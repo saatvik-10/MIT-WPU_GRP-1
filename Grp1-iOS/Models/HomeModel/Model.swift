@@ -1,13 +1,13 @@
 import Foundation
 import UIKit
 
-struct ArticleQA {
+struct ArticleQA: Codable {
     let question: String
     let answer: String
     let createdAt: Date
 }
 
-struct NewsArticle {
+struct NewsArticle: Codable {
     let id: Int
     let title: String
     let description: String
@@ -20,7 +20,9 @@ struct NewsArticle {
     let jargons: [String]
     var selectedJargon: String? = ""
     var qaHistory: [ArticleQA] = []
+    var relevanceScore: Double = 0.0   // ✅ NEW — scored at fetch time
 }
+
 
 class selectedWord {
     static var word: String?
@@ -72,7 +74,8 @@ struct NewsArticleAssembler {
 
     static func makeArticle(
         from scraped: ScrapedArticle,
-        summary: ArticleSummary
+        summary: ArticleSummary,
+        score: Double = 0.0          // ✅ NEW param
     ) -> NewsArticle {
 
         return NewsArticle(
@@ -87,7 +90,8 @@ struct NewsArticleAssembler {
             keyTakeaways: summary.keyTakeaways,
             jargons: summary.jargons,
             selectedJargon: nil,
-            qaHistory: []
+            qaHistory: [],
+            relevanceScore: score    // ✅ stored on the article
         )
     }
 }

@@ -1,12 +1,20 @@
 import Foundation
 import FoundationModels
 
-@MainActor
+@Generable
+struct ShortHeadline {
+    @Guide(description: "A concise headline under 90 characters")
+    let text: String
+}
+
 final class HeadlineShortener {
 
-    private let session: LanguageModelSession
+    func shortenIfNeeded(_ title: String) async -> String {
 
-    init() {
+        guard title.count > 40 else {
+            return title
+        }
+
         let instructions = Instructions {
             "You are a financial news editor."
             "Rewrite headlines to be concise and professional."
@@ -16,41 +24,26 @@ final class HeadlineShortener {
             "Return ONLY the headline text."
         }
 
-        self.session = LanguageModelSession(instructions: instructions)
-    }
-
-    func shortenIfNeeded(_ title: String) async -> String {
-
-        guard title.count > 40 else {
-            return title
-        }
+        let session = LanguageModelSession(instructions: instructions)
 
         let prompt = Prompt {
             "Shorten the following financial news headline to under 90 characters."
             title
         }
-
         do {
             var finalText = ""
-
             let stream = session.streamResponse(
                 to: prompt,
-                generating: String.self,
-                includeSchemaInPrompt: false
+                generating: ShortHeadline.self,
+                includeSchemaInPrompt: true
             )
-
             for try await partial in stream {
-                finalText = partial.content
+                if let text = partial.content.text {
+                    finalText = text
+                }
             }
-
-            let cleaned = finalText.trimmingCharacters(
-                in: CharacterSet.whitespacesAndNewlines
-            )
-
-            return cleaned.isEmpty
-                ? String(title.prefix(90))
-                : cleaned
-
+            let cleaned = finalText.trimmingCharacters(in: .whitespacesAndNewlines)
+            return cleaned.isEmpty ? String(title.prefix(90)) : cleaned
         } catch {
             print("Headline shortening failed:", error)
             return String(title.prefix(90))
