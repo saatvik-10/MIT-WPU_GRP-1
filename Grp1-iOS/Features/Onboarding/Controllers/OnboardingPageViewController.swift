@@ -4,6 +4,11 @@ class OnboardingPageViewController: UIPageViewController {
 
     private var controllers: [UIViewController] = []
     private var currentIndex: Int = 0
+    
+    var selectedLevel: String?
+    var selectedDomains: [String] = []
+    var selectedInterests: [String] = []
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -54,6 +59,14 @@ class OnboardingPageViewController: UIPageViewController {
         let step3 = storyboard.instantiateViewController(
             withIdentifier: "InterestCollectionViewController"
         ) as! InterestCollectionViewController
+        
+        step3.onFinishTapped = { [weak self] in
+                    if let indexPaths = step3.interestCollectionView.indexPathsForSelectedItems {
+                        self?.selectedInterests = indexPaths.map { preferences[$0.item].title }
+                    }
+                    // Save everything to the backend
+                    self?.submitOnboardingToBackend()
+                }
 
         step3.onBackTapped = { [weak self] in
             self?.goToPreviousPage()
@@ -94,5 +107,59 @@ class OnboardingPageViewController: UIPageViewController {
             animated: true
         )
     }
+    
+    // MARK: - Submission
+    func submitOnboardingToBackend() {
+        // Get the auth token (from Keychain/UserDefaults)
+        guard let token = UserDefaults.standard.string(forKey: "authToken") else {
+            print("No auth token found")
+            return
+        }
+
+        let api = OnboardingAPIService.shared
+
+        // 1) Save level
+        if let level = selectedLevel {
+            api.saveLevel(level, token: token) { success in
+                print("Level saved: \(success)")
+            }
+        }
+
+        // 2) Fetch available interests from DB, match by name, then POST each
+        api.fetchAvailableInterests { [weak self] availableInterests in
+            guard let self = self else { return }
+
+            // Combine domains + interests
+            let allSelected = self.selectedDomains + self.selectedInterests
+
+            for selected in allSelected {
+                // Find the matching interest by name
+                if let match = availableInterests.first(where: {
+                    ($0["name"] as? String)?.lowercased() == selected.lowercased()
+                }),
+                   let interestId = match["id"] as? String {
+
+                    api.saveInterest(interestId: interestId, token: token) { success in
+                        print("Saved interest '\(selected)': \(success)")
+                    }
+                }
+            }
+
+            // 3) Navigate to the home screen
+            DispatchQueue.main.async {
+                self.navigateToHome()
+            }
+        }
+    }
+
+    func navigateToHome() {
+        // Transition to the main tab bar / home storyboard
+        let storyboard = UIStoryboard(name: "HomeMain", bundle: nil)
+        if let homeVC = storyboard.instantiateInitialViewController() {
+            homeVC.modalPresentationStyle = .fullScreen
+            self.present(homeVC, animated: true)
+        }
+    }
+
 }
 

@@ -78,9 +78,9 @@ class news2ViewController: UIViewController, UICollectionViewDataSource {
         headlineLabel.text = article.title
         dateLabel.text = ("\(article.source) • \(article.date)")
 
-        if let image = UIImage(named: article.imageName) {
-            topImageView.image = image
-        }
+
+            topImageView.setSmartImage(from: article.imageName)
+        
     }
 
     private func setupCollectionView() {

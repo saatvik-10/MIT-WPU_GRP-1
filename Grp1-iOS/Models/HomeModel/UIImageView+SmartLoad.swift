@@ -6,9 +6,10 @@ extension UIImageView {
 
     func setSmartImage(from imageNameOrURL: String) {
 
-        if imageNameOrURL.lowercased().hasSuffix(".cms"),
-           let url = URL(string: imageNameOrURL) {
+        let lower = imageNameOrURL.lowercased()
+        let isRemoteURL = lower.hasPrefix("http://") || lower.hasPrefix("https://")
 
+        if isRemoteURL, let url = URL(string: imageNameOrURL) {
             loadImageFromURL(url)
             return
         }
@@ -45,3 +46,4 @@ extension UIImageView {
         }.resume()
     }
 }
+

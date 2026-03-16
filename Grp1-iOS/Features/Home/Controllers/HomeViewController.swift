@@ -4,133 +4,112 @@ class HomeViewController: UIViewController, UICollectionViewDelegate {
 
     @IBOutlet weak var collectionView: UICollectionView!
     var autoScrollTimer: Timer?
-        var currentIndex = 0
+    var currentIndex = 0
     var rssItem: RSSItem?
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        RSSService.shared.fetchTOINews { items in
 
-            print("RSS fetched, items count:", items.count)
+    private var refreshTimer: Timer?
+    private var lastKnownCount = 0
+    private var stableTickCount = 0
 
-                if let first = items.first {
-                    print("First title:", first.title)
-                    print("First image:", first.imageURL)
-                    print("First date:", first.pubDate)
-                }
-            
-
-                guard let firstItem = items.first else {
-                    print("No RSS items")
-                    return
-                }
-            
-
-                ArticleContentService.shared.fetchArticleHTML(from: firstItem.link) { html in
-                    guard let html = html else {
-                        print("Failed to load article HTML")
-                        return
-                    }
-
-                    let fullText = html.extractTOIArticleBody()
-                    print("FULL ARTICLE (first item):")
-                    print(fullText.prefix(50000))
-                    let generator = ArticleSummaryGenerator()
-                    let shortener = HeadlineShortener()
-
-                    Task {
-                        await generator.generateSummary(from: fullText)
-                        let cleanTitle = await shortener.shortenIfNeeded(firstItem.title)
-                        print(cleanTitle)
-                        print("========================================================")
-                        guard
-                            let overview = generator.summary?.overview,
-                            let keyTakeaways = generator.summary?.keyTakeaways,
-                            let jargons = generator.summary?.jargons
-                        else {
-                            print("Summary not ready")
-                            return
-                        }
-
-                        let summary = ArticleSummary(
-                            overview: overview,
-                            keyTakeaways: keyTakeaways,
-                            jargons: jargons
-                        )
-
-                        let scrapedArticle = ScrapedArticle(
-                            title: cleanTitle,
-                            bodyText: fullText,
-                            imageName: firstItem.imageURL,
-                            source: "Times of India",
-                            publishedDate: firstItem.pubDate
-                        )
-
-                        let article = NewsArticleAssembler.makeArticle(
-                            from: scrapedArticle,
-                            summary: summary
-                        )
-
-                        NewsDataStore.shared.addArticle(article)
-
-                        print("OVERVIEW:")
-                        summary.overview.forEach {
-                                print("• \($0)\n")
-                            }
-
-                            print("KEY TAKEAWAYS:")
-                        summary.keyTakeaways.forEach {
-                                print("• \($0)\n")
-                            }
-
-                            print("JARGONS:")
-                            summary.jargons.forEach {
-                                print("• \($0)")
-                            }
-                    }
-                }
-            
-            }
-        
-        
-        
-        
-        
-//        fetchFullArticle()
-        startAutoScroll()
-    }
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        stopAutoScroll()
-    }
-    var onArticleLensTapped: (() -> Void)?
-    
-    let newsStore = NewsDataStore.shared
-    
-    var todaysPick: [NewsArticle] = []
-    var trendingNews: [NewsArticle] = []
-    var marketHighlights: [NewsArticle] = []
-    var article: NewsArticle?
+    // MARK: - Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .black
 
-        
         registerCells()
-
-        todaysPick = newsStore.getAllNews()
-        trendingNews = newsStore.getAllNews().reversed()
-        marketHighlights = newsStore.getAllNews().shuffled()
-        
-        collectionView.setCollectionViewLayout(generateLayout(), animated: true)
+        collectionView.setCollectionViewLayout(generateLayout(), animated: false)
         collectionView.dataSource = self
         collectionView.delegate = self
+
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(articlesDidUpdate),
+            name: .articlesUpdated,
+            object: nil
+        )
+
+        reloadFromStore()
     }
-    
-    
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        reloadFromStore()
+        startAutoScroll()
+        startRefreshPolling()
+        NewsDataStore.shared.getAllNews().forEach {
+            print("📰 [\(String(format: "%.1f", $0.relevanceScore))] \($0.title)")
+        }
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        stopAutoScroll()
+        stopRefreshPolling()
+    }
+
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+
+    // MARK: - Reload
+
+    private func reloadFromStore() {
+        let all = newsStore.getAllNews()
+        // ✅ Preserve sorted order — NewsDataStore keeps articles sorted by relevanceScore descending
+        if !all.isEmpty {
+            todaysPick       = all
+            trendingNews     = all
+            marketHighlights = all
+        }
+        collectionView.reloadData()
+    }
+
+    @objc private func articlesDidUpdate() {
+        reloadFromStore()
+    }
+
+    // MARK: - Polling
+
+    private func startRefreshPolling() {
+        stopRefreshPolling()
+        lastKnownCount  = newsStore.getAllNews().count
+        stableTickCount = 0
+
+        refreshTimer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: true) { [weak self] _ in
+            guard let self = self else { return }
+            let current = self.newsStore.getAllNews().count
+            if current != self.lastKnownCount {
+                self.lastKnownCount  = current
+                self.stableTickCount = 0
+                self.reloadFromStore()
+            } else {
+                self.stableTickCount += 1
+                if self.stableTickCount >= 3 {
+                    self.stopRefreshPolling()
+                }
+            }
+        }
+    }
+
+    private func stopRefreshPolling() {
+        refreshTimer?.invalidate()
+        refreshTimer = nil
+    }
+
+    // MARK: - Properties
+
+    var onArticleLensTapped: (() -> Void)?
+    let newsStore = NewsDataStore.shared
+    var todaysPick:       [NewsArticle] = []
+    var trendingNews:     [NewsArticle] = []
+    var marketHighlights: [NewsArticle] = []
+    var article: NewsArticle?
+
+    // MARK: - Auto Scroll
+
     func startAutoScroll() {
         stopAutoScroll()
-
         autoScrollTimer = Timer.scheduledTimer(withTimeInterval: 3.5, repeats: true) { [weak self] _ in
             self?.scrollTodaysPick()
         }
@@ -143,207 +122,172 @@ class HomeViewController: UIViewController, UICollectionViewDelegate {
 
     func scrollTodaysPick() {
         guard todaysPick.count > 1 else { return }
-
-        let section = 0
         let lastIndex = todaysPick.count - 1
-
-        if currentIndex < lastIndex {
-            currentIndex += 1
-        } else {
-            currentIndex = 0
-        }
-
-        let indexPath = IndexPath(item: currentIndex, section: section)
-
-        collectionView.scrollToItem(at: indexPath,
-                                    at: .centeredHorizontally,
-                                    animated: true)
+        currentIndex  = currentIndex < lastIndex ? currentIndex + 1 : 0
+        let indexPath = IndexPath(item: currentIndex, section: 0)
+        collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
     }
-    
+
+    // MARK: - Navigation
+
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-            
+
         var selectedArticle: NewsArticle?
 
-            if indexPath.section == 0 {
-                selectedArticle = todaysPick[indexPath.row]
-                performSegue(withIdentifier: "showArticleDetail2", sender: selectedArticle)
-                return
-            }
-
-            if indexPath.section == 1 {
-                selectedArticle = trendingNews[indexPath.row]
-            } else if indexPath.section == 2 {
-                selectedArticle = marketHighlights[indexPath.row]
-            } else {
-                selectedArticle = marketHighlights[indexPath.row]
-            }
-
-            performSegue(withIdentifier: "showArticleDetail", sender: selectedArticle)
+        if indexPath.section == 0 {
+            guard indexPath.row < todaysPick.count else { return }
+            selectedArticle = todaysPick[indexPath.row]
+            performSegue(withIdentifier: "showArticleDetail2", sender: selectedArticle)
+            return
         }
 
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if indexPath.section == 1 {
+            guard indexPath.row < trendingNews.count else { return }
+            selectedArticle = trendingNews[indexPath.row]
+        } else if indexPath.section == 2 {
+            guard indexPath.row < marketHighlights.count else { return }
+            selectedArticle = marketHighlights[indexPath.row]
+        } else {
+            guard indexPath.row < marketHighlights.count else { return }
+            selectedArticle = marketHighlights[indexPath.row]
+        }
 
+        performSegue(withIdentifier: "showArticleDetail", sender: selectedArticle)
+    }
+
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "showArticleDetail",
            let destinationVC = segue.destination as? news1ViewController,
            let article = sender as? NewsArticle {
             destinationVC.article = article
         }
-
         if segue.identifier == "showArticleDetail2",
            let destinationVC = segue.destination as? news2ViewController,
            let article = sender as? NewsArticle {
             destinationVC.article = article
         }
     }
-    
-    func generateLayout()->UICollectionViewLayout {
+
+    // MARK: - Layout
+
+    func generateLayout() -> UICollectionViewLayout {
+
         let layout = UICollectionViewCompositionalLayout { section, _ in
-            
+
             let headerSize = NSCollectionLayoutSize(
                 widthDimension: .fractionalWidth(1.0),
                 heightDimension: .absolute(50)
             )
-            
             let headerItem = NSCollectionLayoutBoundarySupplementaryItem(
                 layoutSize: headerSize,
                 elementKind: "header",
                 alignment: .top
             )
-            
+
             if section == 0 {
-                let itemSize = NSCollectionLayoutSize(
-                    widthDimension: .fractionalWidth(1.0),
-                    heightDimension: .fractionalHeight(1.0)
+                let item = NSCollectionLayoutItem(
+                    layoutSize: NSCollectionLayoutSize(
+                        widthDimension: .fractionalWidth(1.0),
+                        heightDimension: .fractionalHeight(1.0)
+                    )
                 )
-                
-                let item = NSCollectionLayoutItem(layoutSize: itemSize)
-                item.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
-                
-                let groupSize = NSCollectionLayoutSize(
-                    widthDimension: .fractionalWidth(1.0),
-                    heightDimension: .estimated(410)
-                )
-                
                 let group = NSCollectionLayoutGroup.horizontal(
-                    layoutSize: groupSize,
+                    layoutSize: NSCollectionLayoutSize(
+                        widthDimension: .fractionalWidth(1.0),
+                        heightDimension: .estimated(410)
+                    ),
                     subitems: [item]
                 )
-                
                 let section = NSCollectionLayoutSection(group: group)
                 section.orthogonalScrollingBehavior = .groupPagingCentered
                 section.contentInsets = NSDirectionalEdgeInsets(top: -170, leading: 0, bottom: 15, trailing: 0)
                 section.boundarySupplementaryItems = [headerItem]
-                
-                
-                
                 return section
             }
-            
 
             if section == 1 {
-                let itemSize = NSCollectionLayoutSize(
-                    widthDimension: .fractionalWidth(1.0),
-                    heightDimension: .fractionalHeight(1.0)
+                let item = NSCollectionLayoutItem(
+                    layoutSize: NSCollectionLayoutSize(
+                        widthDimension: .fractionalWidth(1.0),
+                        heightDimension: .fractionalHeight(1.0)
+                    )
                 )
-                
-                let item = NSCollectionLayoutItem(layoutSize: itemSize)
                 item.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 10, bottom: 15, trailing: 10)
-                
-                let groupSize = NSCollectionLayoutSize(
-                    widthDimension: .fractionalWidth(1.0),
-                    heightDimension: .estimated(320)
-                )
-                
                 let group = NSCollectionLayoutGroup.horizontal(
-                    layoutSize: groupSize,
+                    layoutSize: NSCollectionLayoutSize(
+                        widthDimension: .fractionalWidth(1.0),
+                        heightDimension: .estimated(320)
+                    ),
                     subitems: [item]
                 )
-                
                 let section = NSCollectionLayoutSection(group: group)
-
                 section.boundarySupplementaryItems = [headerItem]
-                
                 return section
             }
-            
 
             if section == 3 {
-                let itemSize = NSCollectionLayoutSize(
-                    widthDimension: .fractionalWidth(0.5),
-                    heightDimension: .fractionalHeight(1.0)
+                let item = NSCollectionLayoutItem(
+                    layoutSize: NSCollectionLayoutSize(
+                        widthDimension: .fractionalWidth(0.5),
+                        heightDimension: .fractionalHeight(1.0)
+                    )
                 )
-                
-                let item = NSCollectionLayoutItem(layoutSize: itemSize)
                 item.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 10)
-                
-                let groupSize = NSCollectionLayoutSize(
-                    widthDimension: .fractionalWidth(0.9),
-                    heightDimension: .estimated(250)
-                )
-                
                 let group = NSCollectionLayoutGroup.horizontal(
-                    layoutSize: groupSize,
+                    layoutSize: NSCollectionLayoutSize(
+                        widthDimension: .fractionalWidth(0.9),
+                        heightDimension: .estimated(250)
+                    ),
                     subitems: [item]
                 )
-                
                 let section = NSCollectionLayoutSection(group: group)
                 section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 30, trailing: 0)
                 section.orthogonalScrollingBehavior = .groupPagingCentered
                 section.boundarySupplementaryItems = [headerItem]
                 return section
             }
-            
 
-            let itemSize = NSCollectionLayoutSize(
-                widthDimension: .fractionalWidth(1.0),
-                heightDimension: .fractionalHeight(1.0)
+            let item = NSCollectionLayoutItem(
+                layoutSize: NSCollectionLayoutSize(
+                    widthDimension: .fractionalWidth(1.0),
+                    heightDimension: .fractionalHeight(1.0)
+                )
             )
-            
-            let item = NSCollectionLayoutItem(layoutSize: itemSize)
             item.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 10, bottom: 10, trailing: 10)
-            
-            let groupSize = NSCollectionLayoutSize(
-                widthDimension: .fractionalWidth(1.0),
-                heightDimension: .estimated(175)
-            )
-            
             let group = NSCollectionLayoutGroup.horizontal(
-                layoutSize: groupSize,
+                layoutSize: NSCollectionLayoutSize(
+                    widthDimension: .fractionalWidth(1.0),
+                    heightDimension: .estimated(175)
+                ),
                 subitems: [item]
             )
-            
             let section = NSCollectionLayoutSection(group: group)
             section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 30, trailing: 0)
-//            section.orthogonalScrollingBehavior = .groupPagingCentered
-            section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 30, trailing: 0)
-//            section.boundarySupplementaryItems = [headerItem]
             return section
         }
-        
+
         return layout
     }
-    
+
+    // MARK: - Cell Registration
+
     func registerCells() {
         collectionView.register(
             UINib(nibName: "TodaysPickCollectionViewCell", bundle: nil),
             forCellWithReuseIdentifier: "today_cell"
         )
-        
         collectionView.register(
             UINib(nibName: "TrendingCollectionViewCell", bundle: nil),
             forCellWithReuseIdentifier: "trending_cell"
         )
-        
         collectionView.register(
             UINib(nibName: "ExploreCollectionViewCell", bundle: nil),
             forCellWithReuseIdentifier: "explore_cell"
         )
-        
         collectionView.register(
             UINib(nibName: "RealExploreCollectionViewCell", bundle: nil),
             forCellWithReuseIdentifier: "realexplore_cell"
         )
-        
         collectionView.register(
             UINib(nibName: "HeaderView", bundle: nil),
             forSupplementaryViewOfKind: "header",
@@ -352,119 +296,137 @@ class HomeViewController: UIViewController, UICollectionViewDelegate {
     }
 }
 
+// MARK: - UICollectionViewDataSource
+
 extension HomeViewController: UICollectionViewDataSource {
-    
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        4
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+
+    func numberOfSections(in collectionView: UICollectionView) -> Int { 4 }
+
+    func collectionView(_ collectionView: UICollectionView,
+                        numberOfItemsInSection section: Int) -> Int {
         switch section {
         case 0: return todaysPick.count
-        case 1: return 1
+        case 1: return min(trendingNews.count, 1)   // ✅ max 1 item, 0 if empty
         case 2: return marketHighlights.count
         case 3: return marketHighlights.count
         default: return 0
         }
     }
-    
+
     func collectionView(_ collectionView: UICollectionView,
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        
-        if indexPath.section == 0 {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "today_cell", for: indexPath) as! TodaysPickCollectionViewCell
+
+        switch indexPath.section {
+
+        case 0:
+            // ✅ Safe guard before access
+            guard indexPath.row < todaysPick.count else {
+                return collectionView.dequeueReusableCell(withReuseIdentifier: "today_cell", for: indexPath)
+            }
+            let cell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: "today_cell", for: indexPath
+            ) as! TodaysPickCollectionViewCell
             cell.configureCell(with: todaysPick[indexPath.row])
-            //            cell.onArticleLensTapped = { [weak self] in
-            //                    self?.presentArticleLens()
             return cell
-        }
-        else if indexPath.section == 1 {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "trending_cell", for: indexPath) as! TrendingCollectionViewCell
+
+        case 1:
+            guard indexPath.row < trendingNews.count else {
+                return collectionView.dequeueReusableCell(withReuseIdentifier: "trending_cell", for: indexPath)
+            }
+            let cell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: "trending_cell", for: indexPath
+            ) as! TrendingCollectionViewCell
             cell.configureCell(with: trendingNews[indexPath.row])
             cell.onArticleLensTapped = { [weak self] in
-                    guard let self = self else { return }
-
-                    let popupVC = ArticleLensPopupViewController(nibName: "ArticleLensPopupViewController", bundle: nil)
-                    popupVC.modalPresentationStyle = .overFullScreen
-                    popupVC.modalTransitionStyle = .crossDissolve
-                    self.present(popupVC, animated: true)
-                }
+                guard let self = self else { return }
+                let popupVC = ArticleLensPopupViewController(
+                    nibName: "ArticleLensPopupViewController", bundle: nil
+                )
+                popupVC.modalPresentationStyle = .overFullScreen
+                popupVC.modalTransitionStyle   = .crossDissolve
+                self.present(popupVC, animated: true)
+            }
             cell.onRecommendTapped = { [weak self] in
-                    self?.showToast(message: "Recommendation sent!")
-                }
-
+                self?.showToast(message: "Recommendation sent!")
+            }
             return cell
-        } else if indexPath.section == 2 {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "explore_cell", for: indexPath) as! ExploreCollectionViewCell
+
+        case 2:
+            guard indexPath.row < marketHighlights.count else {
+                return collectionView.dequeueReusableCell(withReuseIdentifier: "explore_cell", for: indexPath)
+            }
+            let cell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: "explore_cell", for: indexPath
+            ) as! ExploreCollectionViewCell
             cell.configureCell(with: marketHighlights[indexPath.row])
             cell.onArticleLensTapped = { [weak self] in
-                    guard let self = self else { return }
-
-                    let popupVC = ArticleLensPopupViewController(nibName: "ArticleLensPopupViewController", bundle: nil)
-                    popupVC.modalPresentationStyle = .overFullScreen
-                    popupVC.modalTransitionStyle = .crossDissolve
-                    self.present(popupVC, animated: true)
-                }
+                guard let self = self else { return }
+                let popupVC = ArticleLensPopupViewController(
+                    nibName: "ArticleLensPopupViewController", bundle: nil
+                )
+                popupVC.modalPresentationStyle = .overFullScreen
+                popupVC.modalTransitionStyle   = .crossDissolve
+                self.present(popupVC, animated: true)
+            }
             cell.onRecommendTapped = { [weak self] in
-                    self?.showToast(message: "Recommendation sent!")
-                }
+                self?.showToast(message: "Recommendation sent!")
+            }
             return cell
-        }
-        else {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "realexplore_cell", for: indexPath) as! RealExploreCollectionViewCell
+
+        default:
+            guard indexPath.row < marketHighlights.count else {
+                return collectionView.dequeueReusableCell(withReuseIdentifier: "realexplore_cell", for: indexPath)
+            }
+            let cell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: "realexplore_cell", for: indexPath
+            ) as! RealExploreCollectionViewCell
             cell.configureCell(with: marketHighlights[indexPath.row])
             return cell
         }
-        
     }
-    
+
     func collectionView(_ collectionView: UICollectionView,
                         viewForSupplementaryElementOfKind kind: String,
                         at indexPath: IndexPath) -> UICollectionReusableView {
-        
+
         let headerView = collectionView.dequeueReusableSupplementaryView(
             ofKind: "header",
             withReuseIdentifier: "header_cell",
             for: indexPath
         ) as! HeaderView
-        
-        if indexPath.section == 0 {
-            headerView.headerLabel.text = " "
-            headerView.arrowImageView.isHidden = true
-            headerView.headerLabel.font = UIFont.systemFont(ofSize: 34, weight: .bold)
-            headerView.headerLabel.textColor = .black
-        }
-        else if indexPath.section == 1 {
-            headerView.headerLabel.text = "Your News Feed"
-            headerView.arrowImageView.isHidden = true
-            headerView.headerLabel.font = UIFont.systemFont(ofSize: 22, weight: .semibold)
-            headerView.headerLabel.textColor = .black
-        }
-        else if indexPath.section == 2 {
-            headerView.headerLabel.text = "Explore More"
-            headerView.arrowImageView.isHidden = true
-            headerView.headerLabel.font = UIFont.systemFont(ofSize: 22, weight: .semibold)
-        }
-        else {
-            headerView.headerLabel.text = "Explore More"
-            headerView.arrowImageView.isHidden = false
-            headerView.headerLabel.font = UIFont.systemFont(ofSize: 22, weight: .semibold)
-        }
-        
-        
-        headerView.onTap = { [weak self] in
-                guard let self = self else { return }
 
-                if indexPath.section == 2 || indexPath.section == 3 {
-                    self.openExploreMore()
-                }
+        switch indexPath.section {
+        case 0:
+            headerView.headerLabel.text        = " "
+            headerView.arrowImageView.isHidden = true
+            headerView.headerLabel.font        = UIFont.systemFont(ofSize: 34, weight: .bold)
+            headerView.headerLabel.textColor   = .black
+        case 1:
+            headerView.headerLabel.text        = "Your News Feed"
+            headerView.arrowImageView.isHidden = true
+            headerView.headerLabel.font        = UIFont.systemFont(ofSize: 22, weight: .semibold)
+            headerView.headerLabel.textColor   = .black
+        case 2:
+            headerView.headerLabel.text        = "Explore More"
+            headerView.arrowImageView.isHidden = true
+            headerView.headerLabel.font        = UIFont.systemFont(ofSize: 22, weight: .semibold)
+        default:
+            headerView.headerLabel.text        = "Explore More"
+            headerView.arrowImageView.isHidden = false
+            headerView.headerLabel.font        = UIFont.systemFont(ofSize: 22, weight: .semibold)
+        }
+
+        headerView.onTap = { [weak self] in
+            guard let self = self else { return }
+            if indexPath.section == 2 || indexPath.section == 3 {
+                self.openExploreMore()
             }
-        
+        }
+
         return headerView
     }
-    
-    
+
     func openExploreMore() {
-        self.performSegue(withIdentifier: "toExploreMore", sender: nil)
+        performSegue(withIdentifier: "toExploreMore", sender: nil)
     }
 }
