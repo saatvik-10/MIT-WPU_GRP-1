@@ -18,13 +18,14 @@
   "dependencies": {
     "@hono/node-server": "^1.19.9",
     "@prisma/adapter-pg": "^7.3.0",
-    "@prisma/client": "^7.4.0",
+    "@prisma/client": "^7.4.2",
     "@types/cookie-parser": "^1.4.10",
     "bcrypt": "^6.0.0",
     "cookie-parser": "^1.4.7",
     "dotenv": "^17.2.3",
     "fast-xml-parser": "^5.3.3",
     "jsonwebtoken": "^9.0.3",
+    "nanoid": "^5.1.6",
     "zod": "^4.3.6"
   }
 }

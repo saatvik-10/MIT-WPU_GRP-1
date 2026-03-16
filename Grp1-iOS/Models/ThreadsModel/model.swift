@@ -15,7 +15,7 @@ struct ThreadPost {
     let imageName: String?
     let description: String
     var likes: Int
-    let comments: Int
+   var comments: [Comment]
     let shares: Int
     
     var isLiked: Bool 
