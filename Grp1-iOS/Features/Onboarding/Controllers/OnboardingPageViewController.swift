@@ -40,39 +40,24 @@ class OnboardingPageViewController: UIPageViewController {
             self?.goToNextPage()
         }
 
-        // STEP 2 — Domain Selection
-        let step2 = storyboard.instantiateViewController(
-            withIdentifier: "DomainSelectionViewController"
-        ) as! DomainSelectionViewController
-
-        step2.loadViewIfNeeded()
-
-        step2.onNextTapped = { [weak self] in
-            self?.goToNextPage()
-        }
-
-        step2.onBackTapped = { [weak self] in
-            self?.goToPreviousPage()
-        }
-
         // STEP 3 — Interest Selection
-        let step3 = storyboard.instantiateViewController(
+        let step2 = storyboard.instantiateViewController(
             withIdentifier: "InterestCollectionViewController"
         ) as! InterestCollectionViewController
         
-        step3.onFinishTapped = { [weak self] in
-                    if let indexPaths = step3.interestCollectionView.indexPathsForSelectedItems {
+        step2.onFinishTapped = { [weak self] in
+                    if let indexPaths = step2.interestCollectionView.indexPathsForSelectedItems {
                         self?.selectedInterests = indexPaths.map { preferences[$0.item].title }
                     }
                     // Save everything to the backend
                     self?.submitOnboardingToBackend()
                 }
 
-        step3.onBackTapped = { [weak self] in
+        step2.onBackTapped = { [weak self] in
             self?.goToPreviousPage()
         }
 
-        controllers = [step1, step2, step3]
+        controllers = [step1, step2]
 
         setViewControllers(
             [controllers[0]],
