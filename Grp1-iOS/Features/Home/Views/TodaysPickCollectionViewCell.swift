@@ -12,9 +12,6 @@ class TodaysPickCollectionViewCell: UICollectionViewCell {
 
     override func awakeFromNib() {
         super.awakeFromNib()
-//        pageControl.numberOfPages = NewsDataStore.shared.getAllNews().count
-//        pageControl.currentPage = 0
-        
         contentView.clipsToBounds = true
         
         newsImageView.contentMode = .scaleAspectFill
@@ -32,7 +29,6 @@ class TodaysPickCollectionViewCell: UICollectionViewCell {
         headlineLabel.layer.shadowRadius = 4
         headlineLabel.layer.shadowOffset = CGSize(width: 1, height: 1)
     }
-    
     
     func dominantColor(from image: UIImage) -> UIColor? {
         guard let inputImage = CIImage(image: image) else { return nil }
@@ -61,9 +57,7 @@ class TodaysPickCollectionViewCell: UICollectionViewCell {
                        alpha: 1)
     }
     
-    
     private func applyGradient(using color: UIColor) {
-        
         gradientLayer?.removeFromSuperlayer()
         
         let gradient = CAGradientLayer()
@@ -76,38 +70,34 @@ class TodaysPickCollectionViewCell: UICollectionViewCell {
         ]
         
         gradient.locations = [0.0, 0.50, 1.0]
-        
         gradient.startPoint = CGPoint(x: 0.5, y: 0)
         gradient.endPoint   = CGPoint(x: 0.5, y: 1)
         
         contentView.layer.insertSublayer(gradient, above: newsImageView.layer)
-        
         self.gradientLayer = gradient
     }
-    
     
     override func layoutSubviews() {
         super.layoutSubviews()
         gradientLayer?.frame = contentView.bounds
     }
     
-    
     func configureCell(with article: NewsArticle) {
-        
-        newsImageView.image = UIImage(named: article.imageName)
-        
-        if let img = newsImageView.image,
-           let color = dominantColor(from: img) {
-            applyGradient(using: color)
-        }
-        
         pickLabel.text = "Today's Pick"
         headlineLabel.text = article.title
         sourceLabel.text = article.source
+
+        // ✅ Use setSmartImage — handles both asset names and remote URLs (just like RealExploreCollectionViewCell)
+        newsImageView.setSmartImage(from: article.imageName)
+
+        // Apply gradient once image is loaded — observe via KVO or delay slightly
+        // since setSmartImage loads async for remote URLs
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
+            guard let self = self else { return }
+            if let img = self.newsImageView.image,
+               let color = self.dominantColor(from: img) {
+                self.applyGradient(using: color)
+            }
+        }
     }
-//    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-//        let page = Int(scrollView.contentOffset.x / scrollView.frame.width)
-//        pageControl.currentPage = page
-//    }
-    
 }
