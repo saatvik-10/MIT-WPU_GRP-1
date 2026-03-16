@@ -703,10 +703,12 @@ class news1ViewController: UIViewController, UICollectionViewDataSource {
             }
         }
         if segue.identifier == "showJargonDetail" {
-                if let vc = segue.destination as? JargonDetailViewController {
-                    vc.jargonWord = selectedJargon
-                }
+            if let vc = segue.destination as? jargonDefinationViewController {
+                vc.jargonWord     = selectedJargon
+                vc.articleContext = article?.overview.joined(separator: " ") ?? ""
+                // ↑ gives AI context so definitions are relevant to the article
             }
+        }
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
