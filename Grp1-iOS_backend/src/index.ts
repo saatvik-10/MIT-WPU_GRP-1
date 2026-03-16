@@ -10,7 +10,7 @@ const app = new Hono();
 app.use(logger());
 app.use(cors());
 
-app.route('/', router);
+app.route('/api', router);
 
 app.notFound((c) => {
   return c.json({ err: 'Page Not Found' }, 404);
