@@ -5,7 +5,7 @@ export class Threads {
   async getForYouThreads(ctx: Context) {
     try {
       const threads = await prisma.thread.findMany();
-      return threads;
+      return ctx.json(threads);
     } catch (err) {
       console.error('Error fetching progress:', err);
       return ctx.json({ error: 'Internal server error' }, 500);
