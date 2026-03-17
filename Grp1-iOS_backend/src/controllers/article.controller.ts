@@ -24,8 +24,6 @@ export class Articles {
     }
   }
 
-  async summaryQuiz(ctx: Context) {}
-
   async allChatQuestions(ctx: Context) {
     try {
       const data = await prisma.articleSummaryQnA.findMany();
