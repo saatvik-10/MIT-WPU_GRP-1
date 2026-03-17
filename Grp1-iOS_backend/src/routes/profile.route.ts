@@ -6,6 +6,9 @@ const profileRoute = new Hono();
 const controller = new Profile();
 
 profileRoute.get('/profile', proxyAuth, controller.getProfile);
+profileRoute.get('/users/:userId/profile', proxyAuth, controller.getUserProfile);
+profileRoute.get('/users/:userId/followers', proxyAuth, controller.getFollowers);
+profileRoute.get('/users/:userId/following', proxyAuth, controller.getFollowing);
 profileRoute.get('/interests', proxyAuth, controller.getUserInterests);
 profileRoute.get('/interests/available', controller.getAvailableInterests);
 profileRoute.post('/interests', proxyAuth, controller.addUserInterest);
