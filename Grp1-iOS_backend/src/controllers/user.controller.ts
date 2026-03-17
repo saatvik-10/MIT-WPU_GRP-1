@@ -12,7 +12,10 @@ export class UserAuth {
   async signUp(ctx: Context) {
     const data = userSignUpSchema.safeParse(await ctx.req.json());
 
-    const username = data.data?.name.split(" ")[0]?.toLowerCase() + "_" + nanoid(4)
+    const username =
+      data.data?.name.split(' ')[0]?.toLowerCase() +
+      '_' +
+      nanoid(4).toLowerCase();
 
     if (!data.success) {
       return ctx.json('Invalid Input', 422);
