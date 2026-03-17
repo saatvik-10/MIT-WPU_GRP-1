@@ -5,7 +5,7 @@ const articleRoute = new Hono();
 const controller = new Articles()
 
 articleRoute.post('chat/question', controller.postChatQuestion);
-articleRoute.post('quiz/summary', controller.summaryQuiz);
+articleRoute.post('article', controller.summaryQuiz);
 articleRoute.get('chat/questions', controller.allChatQuestions);
 
 export default articleRoute;
