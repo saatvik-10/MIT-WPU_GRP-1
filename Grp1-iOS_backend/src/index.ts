@@ -12,6 +12,10 @@ app.use(cors());
 
 app.route('/api', router);
 
+app.get('health', (c) => {
+  return c.json({ status: 'ok' });
+});
+
 app.notFound((c) => {
   return c.json({ err: 'Page Not Found' }, 404);
 });
