@@ -1,7 +1,101 @@
 import type { Context } from 'hono';
 import { prisma } from '../../prisma';
+import {
+  createBookmarkFolderSchema,
+  createBookmarkSchema,
+} from '../validators/bookmark.validator';
 
 export class Profile {
+  async createBookmarkFolder(ctx: Context) {
+    const userId = ctx.get('userId');
+
+    if (!userId) {
+      return ctx.json({ error: 'Unauthorized' }, 401);
+    }
+
+    const data = createBookmarkFolderSchema.safeParse(await ctx.req.json());
+
+    if (!data.success) {
+      return ctx.json({ error: 'Invalid Input' }, 422);
+    }
+
+    const folderName = data.data.name;
+
+    try {
+      const existingFolder = await prisma.bookmarkFolder.findUnique({
+        where: {
+          userId_name: {
+            userId,
+            name: folderName,
+          },
+        },
+      });
+
+      if (existingFolder) {
+        return ctx.json({ error: 'Folder already exists' }, 409);
+      }
+
+      const folder = await prisma.bookmarkFolder.create({
+        data: {
+          userId,
+          name: folderName,
+        },
+      });
+
+      return ctx.json(folder, 201);
+    } catch (err) {
+      console.log(err);
+      return ctx.json({ error: 'Error creating bookmark folder' }, 500);
+    }
+  }
+
+  async createBookmark(ctx: Context) {
+    const userId = ctx.get('userId');
+
+    if (!userId) {
+      return ctx.json({ error: 'Unauthorized' }, 401);
+    }
+
+    const data = createBookmarkSchema.safeParse(await ctx.req.json());
+
+    if (!data.success) {
+      return ctx.json({ error: 'Invalid Input' }, 422);
+    }
+
+    const { folderId, title, url, sourceType, imageUrl, description } =
+      data.data;
+
+    try {
+      const folder = await prisma.bookmarkFolder.findFirst({
+        where: {
+          id: folderId,
+          userId,
+        },
+      });
+
+      if (!folder) {
+        return ctx.json({ error: 'Folder not found' }, 404);
+      }
+
+      const bookmark = await prisma.bookmark.create({
+        data: {
+          userId,
+          folderId,
+          title,
+          url,
+          imageUrl: imageUrl ?? '',
+          description: description ?? '',
+          sourceType,
+        },
+      });
+
+      return ctx.json(bookmark, 201);
+    } catch (err) {
+      console.log(err);
+      return ctx.json({ error: 'Error creating bookmark' }, 500);
+    }
+  }
+
   async getProfile(ctx: Context) {
     const userId = ctx.get('userId');
 

@@ -54,12 +54,33 @@ export class Threads {
       return ctx.json({ error: 'Internal server error' }, 500);
     }
   }
+
+  async updateFollow(ctx: Context) {
+    const userId = ctx.get('userId');
+
+    if (!userId) {
+      return ctx.json({ error: 'Unauthorized' }, 401);
+    }
+
+    try {
+      // const updateFollow = await prisma.follow.update({
+      //   where: {
+      //     id: userId,
+      //   },
+      //   update: {
+      //     followCount: {
+      //       increment: 1,
+      //     },
+      //   },
+      // });
+    } catch (err) {
+      console.error('Error updating followers count:', err);
+      return ctx.json({ error: 'Internal server error' }, 500);
+    }
+  }
 }
 
 /**
- * get all threads
- * get all follow waale threads
- * add threads bookmark
  * add follow / unfollow on click in the three dots menu section
  * user profile -> image, posts, followers, following, all the posts
  * draft -> post title, tags, images, description, save draft which shows the saved ones and post is creation
