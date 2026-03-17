@@ -11,7 +11,7 @@ final class APIService {
 		   !configuredURL.isEmpty {
 			self.baseURL = configuredURL
 		} else {
-			self.baseURL = "https://your-backend-name.onrender.com"
+			self.baseURL = "https://mit-wpu-grp-1.onrender.com"
 		}
 		self.session = session
 	}
@@ -328,6 +328,31 @@ final class APIService {
 		completion: @escaping (Result<[APIThread], APIError>) -> Void
 	) {
 		request(method: .post, path: "/api/following-threads", token: token, body: EmptyBody(), completion: completion)
+	}
+
+	// MARK: - Articles
+
+	func postArticleChatQuestion(
+		question: String,
+		answer: String,
+		completion: @escaping (Result<String, APIError>) -> Void
+	) {
+		let payload = APIArticleChatQuestionRequest(question: question, answer: answer)
+		request(method: .post, path: "/api/chat/question", body: payload) {
+			(result: Result<String, APIError>) in
+			completion(result)
+		}
+	}
+
+	func fetchArticleChatQuestions(
+		completion: @escaping (Result<[APIArticleChatQuestion], APIError>) -> Void
+	) {
+		request(
+			method: .get,
+			path: "/api/chat/questions",
+			body: Optional<EmptyBody>.none,
+			completion: completion
+		)
 	}
 
 	// MARK: - Compatibility Helpers
