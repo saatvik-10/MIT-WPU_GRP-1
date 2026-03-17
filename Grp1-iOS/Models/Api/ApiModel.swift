@@ -1,3 +1,5 @@
+import Foundation
+
 enum APIMethod: String {
 	case get = "GET"
 	case post = "POST"
@@ -104,4 +106,16 @@ struct APIThread: Decodable {
 	let createdAt: String
 	let updatedAt: String
 	let user: APIThreadUser?
+}
+
+struct APIArticleChatQuestionRequest: Encodable {
+	let question: String
+	let answer: String
+}
+
+struct APIArticleChatQuestion: Decodable {
+	let id: String?
+	let question: String
+	let answer: String
+	let createdAt: Date?
 }
