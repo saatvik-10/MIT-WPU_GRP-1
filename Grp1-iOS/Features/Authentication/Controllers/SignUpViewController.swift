@@ -39,7 +39,6 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
         return label
     }()
 
-    // Profile Image View
     private let profileImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(systemName: "person.circle.fill")
@@ -330,7 +329,6 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
 
         showLoading(true)
 
-        // Map gender to backend enum
         let genderString = selectedGender == .male ? "MALE" : "FEMALE"
 
         // Call backend signup — all data goes to the DATABASE
@@ -384,9 +382,6 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
         if let onboardingVC = storyboard.instantiateViewController(
             withIdentifier: "OnboardingPageViewController"
         ) as? OnboardingPageViewController {
-            onboardingVC.modalPresentationStyle = .fullScreen
-
-            // Present from the root to replace the entire stack
             if let window = self.view.window {
                 window.rootViewController = onboardingVC
                 UIView.transition(with: window, duration: 0.3, options: .transitionCrossDissolve, animations: nil)
@@ -399,11 +394,7 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
     private func showLoading(_ loading: Bool) {
         signUpButton.setTitle(loading ? "" : "Sign Up", for: .normal)
         signUpButton.isEnabled = !loading
-        if loading {
-            activityIndicator.startAnimating()
-        } else {
-            activityIndicator.stopAnimating()
-        }
+        loading ? activityIndicator.startAnimating() : activityIndicator.stopAnimating()
     }
 
     private func showAlert(title: String, message: String) {
