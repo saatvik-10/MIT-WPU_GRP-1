@@ -52,12 +52,8 @@ class news1ViewController: UIViewController, UICollectionViewDataSource {
         
         relatedNews = newsStore.getAllNews().shuffled()
         
-        if let articleID = article?.id {
-            qaHistory = newsStore.getQAHistory(for: articleID)
-        } else {
-            qaHistory = []
-        }
-        print("QA count:", qaHistory.count)
+        // Fetch questions from backend
+        fetchQuestionsFromBackend()
         
         
         
@@ -713,11 +709,42 @@ class news1ViewController: UIViewController, UICollectionViewDataSource {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        guard let articleID = article?.id else { return }
-
-        qaHistory = newsStore.getQAHistory(for: articleID)
-
-        collectionView.reloadSections(IndexSet(integer: 1))
+        // Refresh questions from backend when view appears
+        fetchQuestionsFromBackend()
+    }
+    
+    // MARK: - Backend API Methods
+    
+    private func fetchQuestionsFromBackend() {
+        guard let articleID = article?.id else {
+            qaHistory = []
+            collectionView.reloadSections(IndexSet(integer: 1))
+            return
+        }
+        
+        APIService.shared.fetchArticleChatQuestions { [weak self] result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let questions):
+                    // Convert APIArticleChatQuestion to ArticleQA for display
+                    self?.qaHistory = questions.map { apiQuestion in
+                        ArticleQA(
+                            question: apiQuestion.question,
+                            answer: apiQuestion.answer,
+                            createdAt: apiQuestion.createdAt ?? Date()
+                        )
+                    }
+                    print("Fetched \(self?.qaHistory.count ?? 0) questions from backend")
+                    
+                case .failure(let error):
+                    // Fall back to local storage if API fails
+                    print("Failed to fetch questions from backend: \(error)")
+                    self?.qaHistory = NewsDataStore.shared.getQAHistory(for: articleID)
+                }
+                
+                self?.collectionView.reloadSections(IndexSet(integer: 1))
+            }
+        }
     }
     
     
