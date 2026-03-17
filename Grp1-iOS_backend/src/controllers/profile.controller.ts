@@ -6,6 +6,153 @@ import {
 } from '../validators/bookmark.validator';
 
 export class Profile {
+  async getUserProfile(ctx: Context) {
+    const currentUserId = ctx.get('userId');
+    const requestedUserId = ctx.req.param('userId');
+
+    if (!currentUserId) {
+      return ctx.json({ error: 'Unauthorized' }, 401);
+    }
+
+    if (!requestedUserId) {
+      return ctx.json({ error: 'User ID is required' }, 400);
+    }
+
+    try {
+      const profile = await prisma.user.findUnique({
+        where: {
+          id: requestedUserId,
+        },
+        select: {
+          id: true,
+          name: true,
+          username: true,
+          email: true,
+          phone: true,
+          dob: true,
+          gender: true,
+          profileImageUrl: true,
+          level: true,
+          _count: {
+            select: {
+              followers: true,
+              following: true,
+              thread: true,
+            },
+          },
+        },
+      });
+
+      if (!profile) {
+        return ctx.json({ error: 'User not found' }, 404);
+      }
+
+      const isFollowing =
+        requestedUserId === currentUserId
+          ? false
+          : !!(await prisma.follow.findUnique({
+              where: {
+                followerId_followingId: {
+                  followerId: currentUserId,
+                  followingId: requestedUserId,
+                },
+              },
+            }));
+
+      return ctx.json(
+        {
+          ...profile,
+          isSelf: requestedUserId === currentUserId,
+          isFollowing,
+        },
+        200,
+      );
+    } catch (err) {
+      console.log(err);
+      return ctx.json({ error: 'Error fetching user profile' }, 500);
+    }
+  }
+
+  async getFollowers(ctx: Context) {
+    const currentUserId = ctx.get('userId');
+    const requestedUserId = ctx.req.param('userId');
+
+    if (!currentUserId) {
+      return ctx.json({ error: 'Unauthorized' }, 401);
+    }
+
+    if (!requestedUserId) {
+      return ctx.json({ error: 'User ID is required' }, 400);
+    }
+
+    try {
+      const followers = await prisma.follow.findMany({
+        where: {
+          followingId: requestedUserId,
+        },
+        select: {
+          follower: {
+            select: {
+              id: true,
+              name: true,
+              username: true,
+              profileImageUrl: true,
+              level: true,
+            },
+          },
+        },
+        orderBy: {
+          createdAt: 'desc',
+        },
+      });
+
+      return ctx.json(followers.map((item) => item.follower), 200);
+    } catch (err) {
+      console.log(err);
+      return ctx.json({ error: 'Error fetching followers' }, 500);
+    }
+  }
+
+  async getFollowing(ctx: Context) {
+    const currentUserId = ctx.get('userId');
+    const requestedUserId = ctx.req.param('userId');
+
+    if (!currentUserId) {
+      return ctx.json({ error: 'Unauthorized' }, 401);
+    }
+
+    if (!requestedUserId) {
+      return ctx.json({ error: 'User ID is required' }, 400);
+    }
+
+    try {
+      const following = await prisma.follow.findMany({
+        where: {
+          followerId: requestedUserId,
+        },
+        select: {
+          following: {
+            select: {
+              id: true,
+              name: true,
+              username: true,
+              profileImageUrl: true,
+              level: true,
+            },
+          },
+        },
+        orderBy: {
+          createdAt: 'desc',
+        },
+      });
+
+      return ctx.json(following.map((item) => item.following), 200);
+    } catch (err) {
+      console.log(err);
+      return ctx.json({ error: 'Error fetching following users' }, 500);
+    }
+  }
+
   async createBookmarkFolder(ctx: Context) {
     const userId = ctx.get('userId');
 
