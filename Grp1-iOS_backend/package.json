@@ -4,7 +4,8 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "dev:docker": "bunx prisma migrate dev && bun run src/index.ts"
+    "dev:docker": "bunx prisma migrate dev && bun run src/index.ts",
+    "start": "bun run src/index.ts"
   },
   "devDependencies": {
     "@types/bcrypt": "^6.0.0",
@@ -16,14 +17,19 @@
     "typescript": "^5"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.1011.0",
+    "@aws-sdk/lib-storage": "^3.1011.0",
+    "@aws-sdk/s3-request-presigner": "^3.1011.0",
     "@hono/node-server": "^1.19.9",
     "@prisma/adapter-pg": "^7.3.0",
     "@prisma/client": "^7.4.2",
     "@types/cookie-parser": "^1.4.10",
+    "@types/formidable": "^3.5.0",
     "bcrypt": "^6.0.0",
     "cookie-parser": "^1.4.7",
     "dotenv": "^17.2.3",
     "fast-xml-parser": "^5.3.3",
+    "formidable": "^3.5.4",
     "jsonwebtoken": "^9.0.3",
     "nanoid": "^5.1.6",
     "zod": "^4.3.6"
