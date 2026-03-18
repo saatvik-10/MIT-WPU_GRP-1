@@ -54,5 +54,4 @@ let chats: [ChatPreview] = [
     ChatPreview(id: UUID(), title: "How does fiscal policy differ from monetary policy?", timestamp: Date()),
     ChatPreview(id: UUID(), title: "How does crude oil price affect inflation?", timestamp: Date()),
     ChatPreview(id: UUID(), title: "What is NAV in mutual funds?", timestamp: Date())
-    
-]
+] 

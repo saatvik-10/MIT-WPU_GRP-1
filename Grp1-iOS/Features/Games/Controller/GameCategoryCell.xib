@@ -17,10 +17,10 @@
                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 <subviews>
                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Rk0-Fl-WoI">
-                        <rect key="frame" x="322" y="0.0" width="100" height="90"/>
+                        <rect key="frame" x="382" y="10" width="30" height="30"/>
                         <constraints>
-                            <constraint firstAttribute="width" constant="100" id="NnT-KP-As0"/>
-                            <constraint firstAttribute="height" constant="90" id="W57-aY-SS4"/>
+                            <constraint firstAttribute="width" constant="30" id="NnT-KP-As0"/>
+                            <constraint firstAttribute="height" constant="30" id="W57-aY-SS4"/>
                         </constraints>
                     </imageView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zZh-bA-x9Q">
@@ -37,10 +37,10 @@
             <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
             <constraints>
                 <constraint firstAttribute="trailing" secondItem="zZh-bA-x9Q" secondAttribute="trailing" constant="20" id="Dpg-6T-ObU"/>
-                <constraint firstAttribute="trailing" secondItem="Rk0-Fl-WoI" secondAttribute="trailing" id="HQU-gw-JfZ"/>
+                <constraint firstAttribute="trailing" secondItem="Rk0-Fl-WoI" secondAttribute="trailing" constant="10" id="HQU-gw-JfZ"/>
                 <constraint firstItem="zZh-bA-x9Q" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="20" id="IQq-6E-MKB"/>
                 <constraint firstAttribute="bottom" secondItem="zZh-bA-x9Q" secondAttribute="bottom" constant="20" id="Uhy-sr-cBQ"/>
-                <constraint firstItem="Rk0-Fl-WoI" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" symbolic="YES" id="tUy-Tm-eef"/>
+                <constraint firstItem="Rk0-Fl-WoI" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="10" id="tUy-Tm-eef"/>
             </constraints>
             <size key="customSize" width="422" height="334"/>
             <connections>
