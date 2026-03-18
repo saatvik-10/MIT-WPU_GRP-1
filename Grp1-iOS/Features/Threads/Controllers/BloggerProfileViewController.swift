@@ -87,7 +87,7 @@ extension BloggerProfileViewController: UICollectionViewDataSource {
         ) as! collectionViewCell
  
         let post = posts[indexPath.item]
-        let isFollowing = store.isFollowing(userName: post.userName)
+        let isFollowing = store.isFollowing( post.userName)
         cell.configure(with: post, isFollowing: isFollowing, isOwnPost: false)
         cell.applyStyle(isCard: true)
  
@@ -100,7 +100,7 @@ extension BloggerProfileViewController: UICollectionViewDataSource {
  
         cell.onFollowTapped = { [weak self] in
             guard let self else { return }
-            self.store.toggleFollow(userName: post.userName)
+            self.store.toggleFollow(post.userName)
             self.loadPosts()
             collectionView.reloadData()
         }
@@ -133,13 +133,13 @@ extension BloggerProfileViewController: UICollectionViewDataSource {
             for: indexPath
         ) as! BloggerProfileHeaderView
  
-        let isFollowing = store.isFollowing(userName: bloggerUserName)
+        let isFollowing = store.isFollowing( bloggerUserName)
         let postCount = posts.count
         header.configure(userName: bloggerUserName, posts: postCount, isFollowing: isFollowing)
  
         header.onFollowTapped = { [weak self] in
             guard let self else { return }
-            self.store.toggleFollow(userName: self.bloggerUserName)
+            self.store.toggleFollow(self.bloggerUserName)
             self.loadPosts()
             collectionView.reloadData()
         }

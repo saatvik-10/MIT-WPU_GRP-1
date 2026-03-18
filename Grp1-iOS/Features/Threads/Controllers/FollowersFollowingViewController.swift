@@ -86,14 +86,14 @@ extension FollowersFollowingViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "FollowUserCell", for: indexPath) as! FollowUserCell
         let userName = currentNames[indexPath.row]
-        let isFollowing = store.isFollowing(userName: userName)
+        let isFollowing = store.isFollowing( userName)
         let isOwnProfile = userName == store.currentUserName
  
         cell.configure(userName: userName, isFollowing: isFollowing, isOwnProfile: isOwnProfile)
  
         cell.onFollowTapped = { [weak self] in
             guard let self else { return }
-            self.store.toggleFollow(userName: userName)
+            self.store.toggleFollow( userName)
             tableView.reloadRows(at: [indexPath], with: .none)
         }
  

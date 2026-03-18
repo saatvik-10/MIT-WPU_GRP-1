@@ -29,6 +29,7 @@ class threadsViewController: UIViewController {
             segmentControl.selectedSegmentIndex = 0
             setupCollectionView()
             reloadData()
+            testRecommendationEngine()  
             
             let bg = UIColor(white: 250/255, alpha: 1)
             view.backgroundColor = bg
@@ -42,7 +43,32 @@ class threadsViewController: UIViewController {
             
             
         }
+    private func testRecommendationEngine() {
+        var profile = MockEnvironment.shared.ananditaProfile
+        let articles = MockEnvironment.shared.blogArticles(
+            from: ThreadsDataStore.shared.getForYouThreads()
+        )
         
+        let results = BlogRecommendationEngine.shared.recommend(
+            articles: articles,
+            profile: &profile,
+            limit: 20
+        )
+        
+        print("\n" + String(repeating: "=", count: 60))
+        print("🎯 RECOMMENDATION ENGINE RESULTS FOR ANANDITA")
+        print(String(repeating: "=", count: 60))
+        
+        for (rank, item) in results.enumerated() {
+            print("""
+            
+            #\(rank + 1) [\(String(format: "%.1f", item.finalScore))] \(item.article.title)
+                 base: \(String(format: "%.1f", item.baseScore)) | level: ×\(String(format: "%.2f", item.levelMultiplier)) | fresh: ×\(String(format: "%.2f", item.freshnessScore))
+                 tags: \(item.matchedTags.isEmpty ? "none matched" : item.matchedTags.joined(separator: ", "))
+            """)
+        }
+        print(String(repeating: "=", count: 60) + "\n")
+    }
         override func viewDidLayoutSubviews() {
             super.viewDidLayoutSubviews()
      
@@ -172,7 +198,7 @@ class threadsViewController: UIViewController {
                    case .myThreads: post = threadsStore.getMyThreads()[indexPath.item]
                    }
      
-                   let isFollowing = threadsStore.isFollowing(userName: post.userName)
+                   let isFollowing = threadsStore.isFollowing(post.userName)
                    let isOwnPost = post.userName == threadsStore.currentUserName
                    cell.configure(with: post, isFollowing: isFollowing, isOwnPost: isOwnPost)
                    cell.applyStyle(isCard: selectedSegment != .myThreads)
@@ -187,13 +213,21 @@ class threadsViewController: UIViewController {
                    cell.onFollowTapped = { [weak self] in
                        guard let self else { return }
      
-                       self.threadsStore.toggleFollow(userName: post.userName)
+                       self.threadsStore.toggleFollow(post.userName)
      
                        self.reloadData()
                        self.collectionView.reloadData()
                        
                        
                    }
+                   
+                   cell.onUsernameTapped = { [weak self] in
+                                          guard let self else { return }
+                                          guard post.userName != self.threadsStore.currentUserName else { return }
+                                          let profileVC = BloggerProfileViewController()
+                                          profileVC.bloggerUserName = post.userName
+                                          self.navigationController?.pushViewController(profileVC, animated: true)
+                                      }
                    
                    cell.onCommentTapped = { [weak self] in
                        guard let self else { return }
@@ -255,12 +289,13 @@ class threadsViewController: UIViewController {
                        for: indexPath
                    ) as! MyThreadsProfileHeaderCollectionReusableView
      
+                   let user = MockEnvironment.shared.anandita
                    header.configure(
-                       userName: "Anandita Babar",
-                       profileImage: "beach_1",
-                       posts: 5,
-                       followers: 345,
-                       following: 45
+                       userName: user.userName,
+                       profileImage: user.profileImage,
+                       posts: threadsStore.getMyThreads().count,
+                       followers: user.followerCount,    // → 20
+                       following: user.followingCount    // → 22
                    )
      
                    header.onFollowersTapped = { [weak self] in
