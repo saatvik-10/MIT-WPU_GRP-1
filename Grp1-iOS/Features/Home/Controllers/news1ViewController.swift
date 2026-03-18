@@ -50,8 +50,13 @@ class news1ViewController: UIViewController, UICollectionViewDataSource {
         
         setupUI()
         
-        relatedNews = newsStore.getAllNews().shuffled()
-        
+        if let currentScore = article?.relevanceScore {
+            relatedNews = newsStore.getAllNews()
+                .filter { $0.id != article?.id && abs($0.relevanceScore - currentScore) <= 25 }
+                .shuffled()
+        } else {
+            relatedNews = newsStore.getAllNews().shuffled()
+        }
         // Fetch questions from backend
         fetchQuestionsFromBackend()
         
@@ -156,7 +161,7 @@ class news1ViewController: UIViewController, UICollectionViewDataSource {
             
             let groupSize = NSCollectionLayoutSize(
                 widthDimension: .fractionalWidth(0.95),
-                heightDimension: .estimated(220)
+                heightDimension: .absolute(280)
             )
             
             let group = NSCollectionLayoutGroup.horizontal(
