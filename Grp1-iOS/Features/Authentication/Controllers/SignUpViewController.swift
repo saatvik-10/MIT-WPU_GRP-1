@@ -331,7 +331,6 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
 
         let genderString = selectedGender == .male ? "MALE" : "FEMALE"
 
-        // Call backend signup — all data goes to the DATABASE
         AuthenticationService.shared.signUp(
             name: name,
             email: email,
@@ -340,22 +339,19 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
             level: "BEGINNER",
             dob: dob,
             gender: genderString,
-            hasOnboarding: false
+            hasOnboarding: false,
+            profileImageUrl: nil
         ) { [weak self] success, errorMessage in
             guard let self = self else { return }
 
             if success {
                 print("✅ Sign up successful — now auto signing in...")
 
-                // Auto sign in after successful signup
                 AuthenticationService.shared.signIn(email: email, password: password) { signInSuccess, token, signInError in
                     self.showLoading(false)
 
                     if signInSuccess, let token = token {
-                        // Save credentials to Keychain
                         _ = CredentialStorageService.shared.saveCredentials(email: email, password: password)
-
-                        // Save session info
                         SessionManager.shared.authToken = token
                         UserDefaults.standard.set(true, forKey: "isLoggedIn")
                         UserDefaults.standard.set(token, forKey: "authToken")
