@@ -269,13 +269,13 @@ model Follow {
   @@index([followingId])
 }
 
-// model ArticleSummaryQnA {
-//   id String @id @default(cuid())
+model ArticleSummaryQnA {
+  id String @id @default(cuid())
 
-//   question  String
-//   answer    String
-//   createdAt DateTime @default(now())
-// }
+  question  String
+  answer    String
+  createdAt DateTime @default(now())
+}
 
 model QuizAttempt {
   id String @id @default(cuid())
