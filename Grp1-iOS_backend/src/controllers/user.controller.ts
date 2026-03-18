@@ -7,47 +7,112 @@ import {
   userSignUpSchema,
 } from '../validators/user.validator';
 import { nanoid } from 'nanoid';
+import { r2Service } from '../services/r2.service';
+import formidable from 'formidable';
+import { readFile } from 'fs/promises';
 
 export class UserAuth {
   async signUp(ctx: Context) {
-    const data = userSignUpSchema.safeParse(await ctx.req.json());
-
-    const username = data.data?.name.split(" ")[0]?.toLowerCase() + "_" + nanoid(4)
-
-    if (!data.success) {
-      return ctx.json('Invalid Input', 422);
-    }
-
     try {
-      const existingUser = await prisma.user.findUnique({
-        where: {
-          email: data.data.email,
-        },
-      });
+      const contentType = ctx.req.header('content-type');
+      let formData: Record<string, any> = {};
+      let profileImageS3Key: string | null = null;
 
-      if (existingUser) {
-        return ctx.json('User with this email already exists', 409);
+      if (contentType?.includes('multipart/form-data')) {
+        const nodeReq = ctx.env.incoming || (ctx.req as any).raw;
+        const form = formidable({
+          multiples: false,
+          maxFileSize: 5 * 1024 * 1024,
+        });
+
+        const [fields, files] = await form.parse(nodeReq);
+
+        Object.keys(fields).forEach((key) => {
+          const field = fields[key];
+          if (field) {
+            formData[key] = Array.isArray(field) ? field[0] : field;
+          }
+        });
+
+        if (files.profileImage) {
+          const profileImageFile = Array.isArray(files.profileImage)
+            ? files.profileImage[0]
+            : files.profileImage;
+
+          if (profileImageFile) {
+            const fileBuffer = await readFile(profileImageFile.filepath);
+            const fileName = profileImageFile.originalFilename || 'profile.jpg';
+
+            const temp_username =
+              formData.name.split(' ')[0]?.toLowerCase() +
+              '_' +
+              nanoid(4).toLowerCase();
+            const temp_id = nanoid(12);
+
+            profileImageS3Key = await r2Service.uploadProfileImage(
+              temp_id,
+              fileName,
+              fileBuffer,
+            );
+          }
+        }
+      } else {
+        formData = await ctx.req.json();
       }
 
-      const hashedPassword = await hashPassword(data.data.password);
+      const data = userSignUpSchema.safeParse(formData);
 
-      const newUser = await prisma.user.create({
-        data: {
-          name: data.data.name,
-          username: username,
-          email: data.data.email,
-          password: hashedPassword,
-          phone: data.data.phone,
-          level: data.data.level,
-          dob: data.data.dob,
-          gender: data.data.gender,
-          hasOnboarding: data.data.hasOnboarding,
-        },
-      });
+      const username =
+        data.data?.name.split(' ')[0]?.toLowerCase() +
+        '_' +
+        nanoid(4).toLowerCase();
 
-      return ctx.json(newUser.id, 201);
+      if (!data.success) {
+        return ctx.json('Invalid Input', 422);
+      }
+
+      try {
+        const existingUser = await prisma.user.findUnique({
+          where: {
+            email: data.data.email,
+          },
+        });
+
+        if (existingUser) {
+          return ctx.json('User with this email already exists', 409);
+        }
+
+        const hashedPassword = await hashPassword(data.data.password);
+
+        const newUser = await prisma.user.create({
+          data: {
+            name: data.data.name,
+            username: username,
+            email: data.data.email,
+            password: hashedPassword,
+            phone: data.data.phone,
+            level: data.data.level,
+            dob: data.data.dob,
+            gender: data.data.gender,
+            hasOnboarding: data.data.hasOnboarding,
+            profileImageUrl: profileImageS3Key || undefined,
+          },
+        });
+
+        return ctx.json(newUser.id, 201);
+      } catch (err) {
+        if (profileImageS3Key) {
+          try {
+            await r2Service.deleteProfileImage(profileImageS3Key);
+          } catch (deleteErr) {
+            console.error('Failed to clean up R2 file:', deleteErr);
+          }
+        }
+        console.log(err);
+        return ctx.json('Server Err', 500);
+      }
     } catch (err) {
-      console.log(err);
+      console.log('Signup error:', err);
       return ctx.json('Server Err', 500);
     }
   }

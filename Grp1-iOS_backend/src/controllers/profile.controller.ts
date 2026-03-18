@@ -4,6 +4,7 @@ import {
   createBookmarkFolderSchema,
   createBookmarkSchema,
 } from '../validators/bookmark.validator';
+import { r2Service } from '../services/r2.service';
 
 export class Profile {
   async getUserProfile(ctx: Context) {
@@ -47,6 +48,18 @@ export class Profile {
         return ctx.json({ error: 'User not found' }, 404);
       }
 
+      let profileImagePresignedUrl = null;
+      if (profile.profileImageUrl) {
+        try {
+          profileImagePresignedUrl = await r2Service.getPresignedUrl(
+            profile.profileImageUrl,
+          );
+        } catch (err) {
+          console.error('Failed to get presigned URL:', err);
+          return ctx.json({ error: 'Error fetching user image' }, 500);
+        }
+      }
+
       const isFollowing =
         requestedUserId === currentUserId
           ? false
@@ -62,6 +75,7 @@ export class Profile {
       return ctx.json(
         {
           ...profile,
+          profileImageUrl: profileImagePresignedUrl,
           isSelf: requestedUserId === currentUserId,
           isFollowing,
         },
@@ -106,7 +120,26 @@ export class Profile {
         },
       });
 
-      return ctx.json(followers.map((item) => item.follower), 200);
+      const followersWithUrls = await Promise.all(
+        followers.map(async (item) => {
+          let profileImageUrl = item.follower.profileImageUrl;
+          if (profileImageUrl) {
+            try {
+              profileImageUrl =
+                await r2Service.getPresignedUrl(profileImageUrl);
+            } catch (err) {
+              console.error('Failed to get presigned URL for follower:', err);
+              return ctx.json({ error: 'Error fetching follower image' }, 500);
+            }
+          }
+          return {
+            ...item.follower,
+            profileImageUrl,
+          };
+        }),
+      );
+
+      return ctx.json(followersWithUrls, 200);
     } catch (err) {
       console.log(err);
       return ctx.json({ error: 'Error fetching followers' }, 500);
@@ -146,7 +179,30 @@ export class Profile {
         },
       });
 
-      return ctx.json(following.map((item) => item.following), 200);
+      // Fetch presigned URLs for profile images
+      const followingWithUrls = await Promise.all(
+        following.map(async (item) => {
+          let profileImageUrl = item.following.profileImageUrl;
+          if (profileImageUrl) {
+            try {
+              profileImageUrl =
+                await r2Service.getPresignedUrl(profileImageUrl);
+            } catch (err) {
+              console.error(
+                'Failed to get presigned URL for following user:',
+                err,
+              );
+              // Keep original URL if presigned URL fails
+            }
+          }
+          return {
+            ...item.following,
+            profileImageUrl,
+          };
+        }),
+      );
+
+      return ctx.json(followingWithUrls, 200);
     } catch (err) {
       console.log(err);
       return ctx.json({ error: 'Error fetching following users' }, 500);

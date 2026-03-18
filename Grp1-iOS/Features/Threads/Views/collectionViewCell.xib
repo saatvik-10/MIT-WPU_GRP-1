@@ -111,7 +111,7 @@
                         <rect key="frame" x="-10" y="777.66666666666663" width="500" height="34.333333333333371"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="249" horizontalCompressionResistancePriority="1000" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1xg-id-gcP" userLabel="LikeButton">
-                                <rect key="frame" x="0.0" y="0.0" width="195.33333333333334" height="34.333333333333336"/>
+                                <rect key="frame" x="0.0" y="0.0" width="195" height="34.333333333333336"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" title="Button"/>
                                 <connections>
@@ -119,15 +119,15 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" horizontalCompressionResistancePriority="1000" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lkQ-Mu-59q" userLabel="CommentButton">
-                                <rect key="frame" x="203.33333333333337" y="0.0" width="137" height="34.333333333333336"/>
+                                <rect key="frame" x="203" y="0.0" width="137.66666666666663" height="34.333333333333336"/>
                                 <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="plain" image="message" catalog="system"/>
+                                <buttonConfiguration key="configuration" style="plain" image="bubble.right" catalog="system"/>
                                 <connections>
                                     <action selector="commentButtonTapped:" destination="QQ2-TW-q0V" eventType="touchUpInside" id="hXJ-8H-Ic9"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" horizontalCompressionResistancePriority="1000" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mFm-5z-Rf1" userLabel="ShareButton">
-                                <rect key="frame" x="348.33333333333331" y="0.0" width="151.66666666666669" height="34.333333333333336"/>
+                                <rect key="frame" x="348.66666666666669" y="0.0" width="151.33333333333331" height="34.333333333333336"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" image="square.and.arrow.up" catalog="system"/>
                             </button>
@@ -167,8 +167,8 @@
         </collectionViewCell>
     </objects>
     <resources>
+        <image name="bubble.right" catalog="system" width="128" height="110"/>
         <image name="ellipsis" catalog="system" width="128" height="37"/>
-        <image name="message" catalog="system" width="128" height="106"/>
         <image name="square.and.arrow.up" catalog="system" width="110" height="128"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
