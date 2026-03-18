@@ -261,6 +261,13 @@ extension GamesViewController: UICollectionViewDelegate {
 
         case "Crossword":
             performSegue(withIdentifier: "crossword", sender: nil)
+            
+        case "Scenario":
+            performSegue(withIdentifier: "scenario", sender: nil)
+            
+        case "Evaluate the Company":
+            performSegue(withIdentifier: "Evaluate", sender: nil)
+
 
         default:
             print("No screen connected for:", category.title)

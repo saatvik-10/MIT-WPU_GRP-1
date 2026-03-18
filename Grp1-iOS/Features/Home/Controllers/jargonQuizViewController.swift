@@ -24,6 +24,8 @@ class jargonQuizViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        greetingLabel.isHidden = true
+        congratsLabel.isHidden = true
         isModalInPresentation = true
         view.backgroundColor = AppTheme.shared.dominantColor.withAlphaComponent(0.1)
 
@@ -47,6 +49,7 @@ class jargonQuizViewController: UIViewController {
 
     private func showGeneratingState() {
         questionLabel.text = "Generating quiz question..."
+        questionLabel.font = UIFont.systemFont(ofSize: 32, weight: .bold)
         [optionButton1, optionButton2, optionButton3, optionButton4].forEach {
             $0?.setTitle("...", for: .normal)
             $0?.isUserInteractionEnabled = false
@@ -122,24 +125,15 @@ class jargonQuizViewController: UIViewController {
     private func showResult(isCorrect: Bool) {
         let jargon = quiz.jargonWord
 
-        if isCorrect {
-            greetingLabel.text = "WOW! That's correct 🎉"
-            congratsLabel.text = "That's great — you've now conquered \(jargon)."
-            greetingLabel.textColor = .systemGreen
-            congratsLabel.textColor = .systemGreen
-        } else {
-            greetingLabel.text = "Oops! That was wrong 😅"
-            congratsLabel.text = "Don't worry — with a little practice, you'll master \(jargon)."
-            greetingLabel.textColor = .systemRed
-            congratsLabel.textColor = .systemRed
-        }
-
-        greetingLabel.alpha = 0
-        congratsLabel.alpha = 0
-        UIView.animate(withDuration: 0.25) {
-            self.greetingLabel.alpha = 1
-            self.congratsLabel.alpha = 1
-        }
+        let alert = UIAlertController(
+            title: isCorrect ? "WOW! That's correct 🎉" : "Oops! That was wrong 😅",
+            message: isCorrect
+                ? "That's great — you've now conquered \(jargon)."
+                : "Don't worry — with a little practice, you'll master \(jargon).",
+            preferredStyle: .alert
+        )
+        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        present(alert, animated: true)
     }
 
     // MARK: - Confetti
