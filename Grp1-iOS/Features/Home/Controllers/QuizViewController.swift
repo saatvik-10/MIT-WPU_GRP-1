@@ -28,14 +28,93 @@ class QuizViewController: UIViewController {
         isModalInPresentation = true
         view.backgroundColor = AppTheme.shared.dominantColor.withAlphaComponent(0.1)
 
-        
-        guard let articleId = QuizContext.shared.selectedArticleId else { return }
-        
-        quizQuestions = QuizStore.shared.quizForArticle(articleId: articleId)
-        setupContinueButton()
-        renderCurrentQuestion()
-        setupEndQuizButton()
+        showLoadingState()
+        generateAndStart()
     }
+    
+    private func showLoadingState() {
+        questionLabel.text = ""
+
+        optionButton1.isHidden = true
+        optionButton2.isHidden = true
+        optionButton3.isHidden = true
+        optionButton4.isHidden = true
+        continueButton.isHidden = true
+        endQuizButton.isHidden = true
+        quitButton.isHidden = true
+        progressView.isHidden = true
+
+        let spinner = UIActivityIndicatorView(style: .large)
+        spinner.tag = 99
+        spinner.translatesAutoresizingMaskIntoConstraints = false
+        spinner.startAnimating()
+        view.addSubview(spinner)
+
+        let label = UILabel()
+        label.tag = 98
+        label.text = "Generating your quiz..."
+        label.textAlignment = .center
+        label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+        label.textColor = .secondaryLabel
+        label.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(label)
+
+        NSLayoutConstraint.activate([
+            spinner.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            spinner.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+
+            label.topAnchor.constraint(equalTo: spinner.bottomAnchor, constant: 16),
+            label.centerXAnchor.constraint(equalTo: view.centerXAnchor)
+        ])
+    }
+    private func hideLoadingState() {
+        view.viewWithTag(99)?.removeFromSuperview()
+        view.viewWithTag(98)?.removeFromSuperview()
+
+        optionButton1.isHidden = false
+        optionButton2.isHidden = false
+        optionButton3.isHidden = false
+        optionButton4.isHidden = false
+        quitButton.isHidden = false
+        progressView.isHidden = false
+    }
+
+    private func generateAndStart() {
+        guard let article = QuizContext.shared.currentArticle else {
+            dismiss(animated: true)
+            return
+        }
+
+        let articleText = ([article.title, article.description] + article.overview + article.keyTakeaways)
+            .joined(separator: "\n")
+
+        Task { @MainActor in
+            let generator = QuizGenerator()
+            await generator.generateQuiz(from: articleText)
+
+            if let generated = generator.result, !generated.questions.isEmpty {
+                self.quizQuestions = generated.questions.map {
+                    QuizQuestion(
+                        articleId: article.id,
+                        question: $0.question,
+                        options: $0.options,
+                        correctIndex: $0.correctIndex
+                    )
+                }
+            }
+
+            guard !self.quizQuestions.isEmpty else {
+                self.dismiss(animated: true)
+                return
+            }
+
+            self.hideLoadingState()
+            self.setupContinueButton()
+            self.setupEndQuizButton()
+            self.renderCurrentQuestion()
+        }
+    }
+    
     
     func setupEndQuizButton() {
         endQuizButton.isEnabled = false

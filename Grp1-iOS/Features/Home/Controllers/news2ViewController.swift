@@ -600,12 +600,11 @@ class news2ViewController: UIViewController, UICollectionViewDataSource {
     
     @IBAction func startQuizTapped(_ sender: Any) {
         
-        guard let article = article else {
-               print("Article is nil")
-               return
-           }
-
+        guard let article = article else { return }
            QuizContext.shared.selectedArticleId = article.id
+           QuizContext.shared.currentArticle = article
+           QuizContext.shared.generatedQuestions = []
+//           performSegue(withIdentifier: "toQuiz", sender: nil)
     }
     
 }
