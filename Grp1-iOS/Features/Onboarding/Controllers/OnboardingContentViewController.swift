@@ -22,7 +22,7 @@ class OnboardingContentViewController: UIViewController {
     // MARK: - UI Setup
     func setupUI() {
         // header styling
-        stepHeaderLabel.layer.cornerRadius = 12
+        stepHeaderLabel.layer.cornerRadius = 10
         stepHeaderLabel.layer.masksToBounds = true
 
         // prepare a default configuration to apply to all buttons

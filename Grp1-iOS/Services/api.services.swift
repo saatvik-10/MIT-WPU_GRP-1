@@ -3,7 +3,7 @@ import Foundation
 final class APIService {
 	static let shared = APIService()
 
-	private let baseURL: String
+	var baseURL: String
 	private let session: URLSession
 
 	private init(session: URLSession = .shared) {

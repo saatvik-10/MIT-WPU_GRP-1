@@ -103,8 +103,8 @@ struct APIThread: Decodable {
 	let likesCount: Int
 	let commentsCount: Int
 	let sharesCount: Int
-	let createdAt: Date
-	let updatedAt: Date
+	let createdAt: String
+	let updatedAt: String
 	let user: APIThreadUser?
 }
 

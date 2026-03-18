@@ -4,11 +4,10 @@ class OnboardingPageViewController: UIPageViewController {
 
     private var controllers: [UIViewController] = []
     private var currentIndex: Int = 0
-    
+
     var selectedLevel: String?
     var selectedDomains: [String] = []
     var selectedInterests: [String] = []
-    
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -16,7 +15,6 @@ class OnboardingPageViewController: UIPageViewController {
     }
 
     private func setupControllers() {
-
         let storyboard = UIStoryboard(name: "Onboarding", bundle: nil)
 
         // STEP 1 — Investment Level
@@ -36,43 +34,31 @@ class OnboardingPageViewController: UIPageViewController {
             )
         )
 
+        step1.onOptionSelected = { [weak self] selected in
+            self?.selectedLevel = selected
+        }
+
         step1.onNextTapped = { [weak self] in
             self?.goToNextPage()
         }
 
-        // STEP 2 — Domain Selection
+        // STEP 2 — Interest Selection
         let step2 = storyboard.instantiateViewController(
-            withIdentifier: "DomainSelectionViewController"
-        ) as! DomainSelectionViewController
+            withIdentifier: "InterestCollectionViewController"
+        ) as! InterestCollectionViewController
 
-        step2.loadViewIfNeeded()
-
-        step2.onNextTapped = { [weak self] in
-            self?.goToNextPage()
+        step2.onFinishTapped = { [weak self] in
+            if let indexPaths = step2.interestCollectionView.indexPathsForSelectedItems {
+                self?.selectedInterests = indexPaths.map { preferences[$0.item].title }
+            }
+            self?.submitOnboardingToBackend()
         }
 
         step2.onBackTapped = { [weak self] in
             self?.goToPreviousPage()
         }
 
-        // STEP 3 — Interest Selection
-        let step3 = storyboard.instantiateViewController(
-            withIdentifier: "InterestCollectionViewController"
-        ) as! InterestCollectionViewController
-        
-        step3.onFinishTapped = { [weak self] in
-                    if let indexPaths = step3.interestCollectionView.indexPathsForSelectedItems {
-                        self?.selectedInterests = indexPaths.map { preferences[$0.item].title }
-                    }
-                    // Save everything to the backend
-                    self?.submitOnboardingToBackend()
-                }
-
-        step3.onBackTapped = { [weak self] in
-            self?.goToPreviousPage()
-        }
-
-        controllers = [step1, step2, step3]
+        controllers = [step1, step2]
 
         setViewControllers(
             [controllers[0]],
@@ -88,7 +74,6 @@ class OnboardingPageViewController: UIPageViewController {
             print("Onboarding finished")
             return
         }
-
         currentIndex += 1
         setViewControllers(
             [controllers[currentIndex]],
@@ -99,7 +84,6 @@ class OnboardingPageViewController: UIPageViewController {
 
     func goToPreviousPage() {
         guard currentIndex - 1 >= 0 else { return }
-
         currentIndex -= 1
         setViewControllers(
             [controllers[currentIndex]],
@@ -107,12 +91,12 @@ class OnboardingPageViewController: UIPageViewController {
             animated: true
         )
     }
-    
-    // MARK: - Submission
+
+    // MARK: - Submission (saves to DATABASE via API)
+
     func submitOnboardingToBackend() {
-        // Get the auth token (from Keychain/UserDefaults)
         guard let token = UserDefaults.standard.string(forKey: "authToken") else {
-            print("No auth token found")
+            print("❌ No auth token found")
             return
         }
 
@@ -121,7 +105,7 @@ class OnboardingPageViewController: UIPageViewController {
         // 1) Save level
         if let level = selectedLevel {
             api.saveLevel(level, token: token) { success in
-                print("Level saved: \(success)")
+                print("Level saved to DB: \(success)")
             }
         }
 
@@ -129,37 +113,39 @@ class OnboardingPageViewController: UIPageViewController {
         api.fetchAvailableInterests { [weak self] availableInterests in
             guard let self = self else { return }
 
-            // Combine domains + interests
             let allSelected = self.selectedDomains + self.selectedInterests
 
             for selected in allSelected {
-                // Find the matching interest by name
                 if let match = availableInterests.first(where: {
                     ($0["name"] as? String)?.lowercased() == selected.lowercased()
                 }),
                    let interestId = match["id"] as? String {
-
                     api.saveInterest(interestId: interestId, token: token) { success in
-                        print("Saved interest '\(selected)': \(success)")
+                        print("Saved interest '\(selected)' to DB: \(success)")
                     }
                 }
             }
 
-            // 3) Navigate to the home screen
+            // 3) Mark onboarding as complete and navigate to Home
             DispatchQueue.main.async {
+                UserDefaults.standard.set(true, forKey: "hasOnboarding")
+                print("✅ Onboarding complete — navigating to Home")
                 self.navigateToHome()
             }
         }
     }
 
     func navigateToHome() {
-        // Transition to the main tab bar / home storyboard
         let storyboard = UIStoryboard(name: "HomeMain", bundle: nil)
         if let homeVC = storyboard.instantiateInitialViewController() {
-            homeVC.modalPresentationStyle = .fullScreen
-            self.present(homeVC, animated: true)
+            // Set as root so user can't swipe back
+            if let window = self.view.window {
+                window.rootViewController = homeVC
+                UIView.transition(with: window, duration: 0.3,
+                                  options: .transitionCrossDissolve,
+                                  animations: nil)
+            }
         }
     }
-
 }
 
