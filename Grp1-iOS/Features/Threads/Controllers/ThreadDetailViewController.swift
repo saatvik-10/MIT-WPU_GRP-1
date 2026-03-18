@@ -1,3 +1,8 @@
+//
+//  ThreadDetailViewController.swift
+//  Grp1-iOS
+//
+
 import UIKit
 
 class ThreadDetailViewController: UIViewController {
@@ -107,7 +112,7 @@ class ThreadDetailViewController: UIViewController {
 
         // ── Username ─────────────────────────────────────────────────
         usernameLabel.translatesAutoresizingMaskIntoConstraints = false
-        usernameLabel.font = .boldSystemFont(ofSize: 16)           // matches card
+        usernameLabel.font = .systemFont(ofSize: 20)               // System 20 Default
 
         // ── Time ─────────────────────────────────────────────────────
         timeLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -118,11 +123,12 @@ class ThreadDetailViewController: UIViewController {
         tagsStackView.translatesAutoresizingMaskIntoConstraints = false
         tagsStackView.axis = .horizontal
         tagsStackView.spacing = 8
-        tagsStackView.alignment = .leading
+        tagsStackView.alignment = .center
+        tagsStackView.distribution = .equalSpacing   // pills only take intrinsic width
 
         // ── Title ────────────────────────────────────────────────────
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        titleLabel.font = .systemFont(ofSize: 18, weight: .semibold)  // matches card
+        titleLabel.font = .systemFont(ofSize: 24, weight: .medium) // System Medium 24
         titleLabel.numberOfLines = 0
 
         // ── Post Image ───────────────────────────────────────────────
@@ -133,7 +139,8 @@ class ThreadDetailViewController: UIViewController {
 
         // ── Description ──────────────────────────────────────────────
         descriptionLabel.translatesAutoresizingMaskIntoConstraints = false
-        descriptionLabel.font = .systemFont(ofSize: 15)              // matches card
+        descriptionLabel.font = .preferredFont(forTextStyle: .title3) // Title 3
+        descriptionLabel.adjustsFontForContentSizeCategory = true
         descriptionLabel.numberOfLines = 0                           // show full content
         descriptionLabel.textColor = .label
         descriptionLabel.lineBreakMode = .byWordWrapping
@@ -172,10 +179,9 @@ class ThreadDetailViewController: UIViewController {
             timeLabel.topAnchor.constraint(equalTo: usernameLabel.bottomAnchor, constant: 2),
             timeLabel.leadingAnchor.constraint(equalTo: usernameLabel.leadingAnchor),
 
-            // Tags
+            // Tags — leading pin only; pills hug their own intrinsic width
             tagsStackView.topAnchor.constraint(equalTo: profileImageView.bottomAnchor, constant: 12),
             tagsStackView.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: 16),
-            tagsStackView.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -16),
 
             // Title
             titleLabel.topAnchor.constraint(equalTo: tagsStackView.bottomAnchor, constant: 10),
@@ -246,8 +252,11 @@ class ThreadDetailViewController: UIViewController {
         pill.layer.cornerRadius = 12
         pill.clipsToBounds = true
         pill.textAlignment = .center
+        // Hug intrinsic width — prevents pills from stretching
         pill.setContentHuggingPriority(.required, for: .horizontal)
         pill.setContentCompressionResistancePriority(.required, for: .horizontal)
+        pill.setContentHuggingPriority(.required, for: .vertical)
+        pill.setContentCompressionResistancePriority(.required, for: .vertical)
         return pill
     }
 
@@ -309,10 +318,3 @@ class ThreadDetailViewController: UIViewController {
         likeButton.tintColor = isLiked ? .systemRed : .systemBlue
     }
 }
-
-
-
-
-
-
-
