@@ -38,13 +38,14 @@ export class R2Service {
     });
   }
 
-  async uploadProfileImage(
-    userId: string,
+  async uploadImage(
+    folder: string,
+    id: string,
     fileName: string,
     buffer: Buffer,
   ): Promise<string> {
     const timestamp = Date.now();
-    const s3Key = `profile-images/${userId}/${timestamp}-${fileName}`;
+    const s3Key = `${folder}/${id}/${timestamp}-${fileName}`;
 
     try {
       const command = new PutObjectCommand({
@@ -55,14 +56,30 @@ export class R2Service {
       });
 
       await this.client.send(command);
-      console.log(`✓ Profile image uploaded: ${s3Key}`);
+      console.log(`✓ Image uploaded: ${s3Key}`);
       return s3Key;
     } catch (error) {
       console.error('Error uploading to R2:', error);
       throw new Error(
-        `Failed to upload profile image to R2: ${error instanceof Error ? error.message : String(error)}`,
+        `Failed to upload image to R2: ${error instanceof Error ? error.message : String(error)}`,
       );
     }
+  }
+
+  async uploadProfileImage(
+    userId: string,
+    fileName: string,
+    buffer: Buffer,
+  ): Promise<string> {
+    return this.uploadImage('profile-images', userId, fileName, buffer);
+  }
+
+  async uploadThreadImage(
+    threadId: string,
+    fileName: string,
+    buffer: Buffer,
+  ): Promise<string> {
+    return this.uploadImage('thread-images', threadId, fileName, buffer);
   }
 
   async getPresignedUrl(s3Key: string): Promise<string> {
