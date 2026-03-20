@@ -8,6 +8,7 @@ import {
   followSchema,
   createThreadSchema,
   threadDraftSchema,
+  updateThreadDraftSchema,
   threadCommentSchema,
   threadLikeSchema,
 } from '../validators/thread.validator';
@@ -420,6 +421,98 @@ export class Threads {
       return ctx.json(drafts);
     } catch (err) {
       console.error('Error fetching drafts:', err);
+      return ctx.json({ error: 'Internal server error' }, 500);
+    }
+  }
+
+  async updateDraft(ctx: Context) {
+    const userId = ctx.get('userId');
+    const draftId = ctx.req.param('draftId');
+
+    if (!userId) {
+      return ctx.json({ error: 'Unauthorized' }, 401);
+    }
+
+    if (!draftId) {
+      return ctx.json({ error: 'draftId is required' }, 400);
+    }
+
+    try {
+      const draft = await prisma.threadDrafts.findUnique({
+        where: { id: draftId },
+        select: { userId: true },
+      });
+
+      if (!draft) {
+        return ctx.json({ error: 'Draft not found' }, 404);
+      }
+
+      if (draft.userId !== userId) {
+        return ctx.json({ error: 'Unauthorized' }, 401);
+      }
+
+      const contentType = ctx.req.header('content-type');
+      let formData: Record<string, any> = {};
+      let draftImageS3Key: string | null = null;
+
+      if (contentType?.includes('multipart/form-data')) {
+        const nodeReq = ctx.env.incoming || (ctx.req as any).raw;
+        const form = formidable({
+          multiples: false,
+          maxFileSize: 10 * 1024 * 1024,
+        });
+
+        const [fields, files] = await form.parse(nodeReq);
+
+        Object.keys(fields).forEach((key) => {
+          const field = fields[key];
+          if (field) {
+            formData[key] = Array.isArray(field) ? field[0] : field;
+          }
+        });
+
+        if (files.threadImage) {
+          const threadImageFile = Array.isArray(files.threadImage)
+            ? files.threadImage[0]
+            : files.threadImage;
+
+          if (threadImageFile) {
+            const fileBuffer = await readFile(threadImageFile.filepath);
+            const fileName = threadImageFile.originalFilename || 'draft.jpg';
+
+            draftImageS3Key = await r2Service.uploadThreadImage(
+              draftId,
+              fileName,
+              fileBuffer,
+            );
+          }
+        }
+      } else {
+        formData = await ctx.req.json();
+      }
+
+      const data = updateThreadDraftSchema.safeParse(formData);
+
+      if (!data.success) {
+        return ctx.json({ error: 'Invalid input' }, 422);
+      }
+
+      const updateData: any = {};
+
+      if (data.data.title !== undefined) updateData.title = data.data.title;
+      if (data.data.description !== undefined)
+        updateData.description = data.data.description;
+      if (data.data.tags !== undefined) updateData.tags = data.data.tags;
+      if (draftImageS3Key) updateData.imageName = draftImageS3Key;
+
+      const updatedDraft = await prisma.threadDrafts.update({
+        where: { id: draftId },
+        data: updateData,
+      });
+
+      return ctx.json(updatedDraft);
+    } catch (err) {
+      console.error('Error updating draft:', err);
       return ctx.json({ error: 'Internal server error' }, 500);
     }
   }

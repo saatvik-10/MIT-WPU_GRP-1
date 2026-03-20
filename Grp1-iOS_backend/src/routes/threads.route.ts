@@ -18,6 +18,7 @@ threadRoute.post('/create-thread', proxyAuth, controller.createThread);
 
 threadRoute.post('/draft', proxyAuth, controller.saveDraft);
 threadRoute.get('/drafts', proxyAuth, controller.getDrafts);
+threadRoute.put('/draft/:draftId', proxyAuth, controller.updateDraft);
 threadRoute.delete('/draft', proxyAuth, controller.deleteDraft)
 
 threadRoute.delete('/thread', proxyAuth, controller.deleteThread)
