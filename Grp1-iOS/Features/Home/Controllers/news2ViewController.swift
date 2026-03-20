@@ -127,7 +127,7 @@ class news2ViewController: UIViewController, UICollectionViewDataSource {
             let item = NSCollectionLayoutItem(layoutSize: itemSize)
             item.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 8, bottom: 50, trailing: 2)
             
-            let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.95), heightDimension: .estimated(220))
+            let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.95), heightDimension: .absolute(420))
             let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
             let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(40))
             let header = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerSize, elementKind: "header", alignment: .top)
@@ -600,12 +600,11 @@ class news2ViewController: UIViewController, UICollectionViewDataSource {
     
     @IBAction func startQuizTapped(_ sender: Any) {
         
-        guard let article = article else {
-               print("Article is nil")
-               return
-           }
-
+        guard let article = article else { return }
            QuizContext.shared.selectedArticleId = article.id
+           QuizContext.shared.currentArticle = article
+           QuizContext.shared.generatedQuestions = []
+//           performSegue(withIdentifier: "toQuiz", sender: nil)
     }
     
 }

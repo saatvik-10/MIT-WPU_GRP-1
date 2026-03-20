@@ -50,8 +50,13 @@ class news1ViewController: UIViewController, UICollectionViewDataSource {
         
         setupUI()
         
-        relatedNews = newsStore.getAllNews().shuffled()
-        
+        if let currentScore = article?.relevanceScore {
+            relatedNews = newsStore.getAllNews()
+                .filter { $0.id != article?.id && abs($0.relevanceScore - currentScore) <= 25 }
+                .shuffled()
+        } else {
+            relatedNews = newsStore.getAllNews().shuffled()
+        }
         // Fetch questions from backend
         fetchQuestionsFromBackend()
         
@@ -156,7 +161,7 @@ class news1ViewController: UIViewController, UICollectionViewDataSource {
             
             let groupSize = NSCollectionLayoutSize(
                 widthDimension: .fractionalWidth(0.95),
-                heightDimension: .estimated(220)
+                heightDimension: .absolute(280)
             )
             
             let group = NSCollectionLayoutGroup.horizontal(
@@ -412,21 +417,35 @@ class news1ViewController: UIViewController, UICollectionViewDataSource {
                 print("Recommend more articles like: \(article.title)")
             }
 
-            let saveAction = UIAction(
-                title: "Save article",
-                image: UIImage(systemName: "bookmark")
-            ) { [weak self] _ in
-                guard let self = self, let article = self.article else { return }
+        let saveAction = UIAction(
+            title: "Save article",
+            image: UIImage(systemName: "bookmark")
+        ) { [weak self] _ in
+            guard let self = self, let article = self.article else { return }
 
-                let generator = UINotificationFeedbackGenerator()
-                generator.notificationOccurred(.success)
+            let generator = UINotificationFeedbackGenerator()
+            generator.notificationOccurred(.success)
 
-                self.animateSaveBookmarkIcon()
+            // Build alert with folder options from Bookmarks.mockBookmarks
+            let alert = UIAlertController(title: "Save to Folder", message: nil, preferredStyle: .actionSheet)
 
-                self.showToast(message: "Article saved to your reading list.")
-                
-                print("Saved article: \(article.title)")
+            for folder in Bookmarks.mockBookmarks {
+                let action = UIAlertAction(title: folder.title, style: .default) { _ in
+                    self.animateSaveBookmarkIcon()
+                    self.showToast(message: "Saved to \(folder.title)")
+                    print("Saved article '\(article.title)' to folder: \(folder.title)")
+                }
+                alert.addAction(action)
             }
+
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+
+        // For iPad
+        alert.popoverPresentationController?.barButtonItem = self.optionsButton
+
+        self.present(alert, animated: true)
+    }
+
 
             let shareAction = UIAction(
                 title: "Share article",

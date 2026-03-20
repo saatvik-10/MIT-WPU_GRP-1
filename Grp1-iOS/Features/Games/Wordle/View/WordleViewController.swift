@@ -41,7 +41,7 @@ class WordleViewController: UIViewController {
             hintLabel.transform = CGAffineTransform(translationX: 0, y: 20)
             buildGrid()
             setupKeyboard()
-            view.layer.insertSublayer(makeGradient(), at: 0)
+//            view.layer.insertSublayer(makeGradient(), at: 0)
         }
     private func makeGradient() -> CAGradientLayer {
         let g = CAGradientLayer()

@@ -771,7 +771,7 @@ Overall sentiment remains positive, and dips are expected to attract fresh buyin
                                         <constraints>
                                             <constraint firstAttribute="width" constant="360" id="fj0-aq-wmR"/>
                                         </constraints>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>

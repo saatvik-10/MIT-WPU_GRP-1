@@ -21,7 +21,7 @@ struct OnboardingInterestModel {
 var preferences : [OnboardingInterestModel] = [
     OnboardingInterestModel(icon: "indianrupeesign.gauge.chart.lefthalf.righthalf", title: "Indian Economy", subtitle: "Consumption,inflation , growth"),
     OnboardingInterestModel(icon: "figure.wave", title:"Personal Finance", subtitle: "Exports, Imports and Trade Balance"),
-    OnboardingInterestModel(icon: "newspaper", title:"Government and Policy", subtitle: "Public Spending and Reforms"),
+    OnboardingInterestModel(icon: "newspaper", title:"Government Policies", subtitle: "Public Spending and Reforms"),
     OnboardingInterestModel(icon: "chart.line.uptrend.xyaxis", title:"Stock Markets", subtitle: "Shares ,Indices and Market Cycles"),
     OnboardingInterestModel(icon: "building.2", title:"Real Estate Economics", subtitle: "Housing Interest rates, demand"),
     OnboardingInterestModel(icon: "globe.central.south.asia.fill", title:"Global Economy", subtitle: "Exports, Imports and Trade Balance"),

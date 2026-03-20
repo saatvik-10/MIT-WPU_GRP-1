@@ -1,16 +1,17 @@
 //
-//  GameCategoryCell.swift
+//  GameCatergory3CollectionViewCell.swift
 //  Grp1-iOS
 //
-//  Created by SDC-USER on 02/02/26.
+//  Created by SDC-USER on 03/02/26.
 //
 
 import UIKit
 
-final class GameCategoryCell: UICollectionViewCell {
+class GameCatergory3CollectionViewCell: UICollectionViewCell {
 
     @IBOutlet weak var iconView: UIImageView!
     @IBOutlet weak var titleLabel: UILabel!
+    @IBOutlet weak var descriptionLabel: UILabel!
 
     private let gradientLayer = CAGradientLayer()
 
@@ -27,15 +28,12 @@ final class GameCategoryCell: UICollectionViewCell {
         contentView.layer.insertSublayer(gradientLayer, at: 0)
 
         iconView.tintColor = .white.withAlphaComponent(0.3)
-        titleLabel.textColor = .white
-        titleLabel.font = .systemFont(ofSize: 22, weight: .heavy)
+//        titleLabel.textColor = .white
+        titleLabel.font = .systemFont(ofSize: 22, weight: .bold)
 
-        // Shadow like App Store
-        layer.shadowColor = UIColor.black.cgColor
-        layer.shadowOpacity = 0.15
-        layer.shadowRadius = 8
-        layer.shadowOffset = CGSize(width: 0, height: 4)
-        layer.masksToBounds = false
+        // Thin border
+        contentView.layer.borderColor = UIColor.systemGray3.cgColor
+        contentView.layer.borderWidth = 2
     }
 
     override func layoutSubviews() {
@@ -46,6 +44,8 @@ final class GameCategoryCell: UICollectionViewCell {
     func configure(with model: GameCategory) {
         titleLabel.text = model.title
         iconView.image = model.icon
+        iconView.tintColor = .systemGray.withAlphaComponent(0.8)
+        descriptionLabel.text = model.description
         gradientLayer.colors = model.colors.map { $0.cgColor }
     }
 }
