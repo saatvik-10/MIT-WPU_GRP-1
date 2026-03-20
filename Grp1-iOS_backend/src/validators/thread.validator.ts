@@ -3,7 +3,6 @@ import {z} from 'zod';
 export const createThreadSchema = z.object({
   title: z.string().trim().min(1, 'title is required').max(200),
   description: z.string().trim().min(1, 'description is required'),
-  imageName: z.string().trim().min(1, 'imageName is required'),
   tags: z.array(z.string()).default([]),
 });
 
@@ -18,7 +17,6 @@ export const threadDraftSchema = z.object({
   threadId: z.string().trim().min(1, 'threadId is required'),
   title: z.string().trim().min(1, 'title is required').max(200),
   description: z.string().trim().min(1, 'description is required'),
-  imageName: z.string().trim().min(1, 'imageName is required'),
   tags: z.array(z.string()).default([]),
 });
 
