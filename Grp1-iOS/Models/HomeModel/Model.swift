@@ -46,6 +46,9 @@ final class QuizContext {
     private init() {}
 
     var selectedArticleId: Int?
+    var generatedQuestions: [QuizQuestion] = []   // ← store generated questions here
+    var currentArticle: NewsArticle?          // ← add this
+
 }
 
 struct QuizQuestion {

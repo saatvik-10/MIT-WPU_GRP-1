@@ -3,7 +3,7 @@ import Foundation
 final class APIService {
 	static let shared = APIService()
 
-	private let baseURL: String
+	var baseURL: String
 	private let session: URLSession
 
 	private init(session: URLSession = .shared) {
@@ -397,5 +397,380 @@ final class APIService {
 				completion(false)
 			}
 		}
+	}
+
+	// MARK: - User Profile
+
+	func fetchUserProfile(
+		userId: String,
+		token: String,
+		completion: @escaping (Result<APIUserProfileResponse, APIError>) -> Void
+	) {
+		request(
+			method: .get,
+			path: "/api/users/\(userId)/profile",
+			token: token,
+			body: Optional<EmptyBody>.none,
+			completion: completion
+		)
+	}
+
+	func fetchUserFollowers(
+		userId: String,
+		token: String,
+		completion: @escaping (Result<[APIUserBasicInfo], APIError>) -> Void
+	) {
+		request(
+			method: .get,
+			path: "/api/users/\(userId)/followers",
+			token: token,
+			body: Optional<EmptyBody>.none,
+			completion: completion
+		)
+	}
+
+	func fetchUserFollowing(
+		userId: String,
+		token: String,
+		completion: @escaping (Result<[APIUserBasicInfo], APIError>) -> Void
+	) {
+		request(
+			method: .get,
+			path: "/api/users/\(userId)/following",
+			token: token,
+			body: Optional<EmptyBody>.none,
+			completion: completion
+		)
+	}
+
+	func fetchUserInterests(
+		token: String,
+		type: APIInterestType? = nil,
+		completion: @escaping (Result<[APIInterest], APIError>) -> Void
+	) {
+		let queryItems: [URLQueryItem]
+		if let type {
+			queryItems = [URLQueryItem(name: "type", value: type.rawValue)]
+		} else {
+			queryItems = []
+		}
+
+		request(
+			method: .get,
+			path: "/api/interests",
+			token: token,
+			queryItems: queryItems,
+			body: Optional<EmptyBody>.none,
+			completion: completion
+		)
+	}
+
+	// MARK: - Follow
+
+	func updateFollow(
+		followingId: String,
+		token: String,
+		completion: @escaping (Result<APIFollowResponse, APIError>) -> Void
+	) {
+		let payload = APIFollowRequest(followingId: followingId)
+		request(method: .post, path: "/api/follow", token: token, body: payload, completion: completion)
+	}
+
+	func fetchAllFollowers(
+		token: String,
+		completion: @escaping (Result<[APIUserBasicInfo], APIError>) -> Void
+	) {
+		request(
+			method: .get,
+			path: "/api/all-followers",
+			token: token,
+			body: Optional<EmptyBody>.none,
+			completion: completion
+		)
+	}
+
+	func fetchAllFollowing(
+		token: String,
+		completion: @escaping (Result<[APIUserBasicInfo], APIError>) -> Void
+	) {
+		request(
+			method: .get,
+			path: "/api/all-following",
+			token: token,
+			body: Optional<EmptyBody>.none,
+			completion: completion
+		)
+	}
+
+	// MARK: - Threads
+
+	func createThread(
+		payload: APICreateThreadRequest,
+		token: String,
+		completion: @escaping (Result<APIThread, APIError>) -> Void
+	) {
+		request(method: .post, path: "/api/create-thread", token: token, body: payload, completion: completion)
+	}
+
+	func saveDraft(
+		payload: APICreateThreadRequest,
+		token: String,
+		completion: @escaping (Result<APIThreadDraft, APIError>) -> Void
+	) {
+		request(method: .post, path: "/api/draft", token: token, body: payload, completion: completion)
+	}
+
+	func fetchDrafts(
+		token: String,
+		completion: @escaping (Result<[APIThreadDraft], APIError>) -> Void
+	) {
+		request(
+			method: .get,
+			path: "/api/drafts",
+			token: token,
+			body: Optional<EmptyBody>.none,
+			completion: completion
+		)
+	}
+
+	func updateDraft(
+		draftId: String,
+		payload: APIUpdateDraftRequest,
+		token: String,
+		completion: @escaping (Result<APIThreadDraft, APIError>) -> Void
+	) {
+		request(method: .put, path: "/api/draft/\(draftId)", token: token, body: payload, completion: completion)
+	}
+
+	func deleteDraft(
+		draftId: String,
+		token: String,
+		completion: @escaping (Result<Void, APIError>) -> Void
+	) {
+		requestStatus(
+			method: .delete,
+			path: "/api/draft?draftId=\(draftId)",
+			token: token,
+			body: Optional<EmptyBody>.none,
+			completion: completion
+		)
+	}
+
+	func deleteThread(
+		threadId: String,
+		token: String,
+		completion: @escaping (Result<Void, APIError>) -> Void
+	) {
+		requestStatus(
+			method: .delete,
+			path: "/api/thread?threadId=\(threadId)",
+			token: token,
+			body: Optional<EmptyBody>.none,
+			completion: completion
+		)
+	}
+
+	func createComment(
+		payload: APICreateCommentRequest,
+		token: String,
+		completion: @escaping (Result<APIThreadComment, APIError>) -> Void
+	) {
+		request(method: .post, path: "/api/comment", token: token, body: payload, completion: completion)
+	}
+
+	func fetchComments(
+		threadId: String,
+		completion: @escaping (Result<[APIThreadComment], APIError>) -> Void
+	) {
+		request(
+			method: .get,
+			path: "/api/comments",
+			queryItems: [URLQueryItem(name: "threadId", value: threadId)],
+			body: Optional<EmptyBody>.none,
+			completion: completion
+		)
+	}
+
+	func toggleThreadLike(
+		threadId: String,
+		token: String,
+		completion: @escaping (Result<APIThreadLikeResponse, APIError>) -> Void
+	) {
+		let payload = APIThreadLikeRequest(threadId: threadId)
+		request(method: .post, path: "/api/like", token: token, body: payload, completion: completion)
+	}
+
+	// MARK: - Bookmark Folders
+
+	func fetchBookmarkFolders(
+		token: String,
+		completion: @escaping (Result<[APIBookmarkFolder], APIError>) -> Void
+	) {
+		request(
+			method: .get,
+			path: "/api/folders",
+			token: token,
+			body: Optional<EmptyBody>.none,
+			completion: completion
+		)
+	}
+
+	func createBookmarkFolder(
+		name: String,
+		token: String,
+		completion: @escaping (Result<APIBookmarkFolder, APIError>) -> Void
+	) {
+		let payload = APICreateBookmarkFolderRequest(name: name)
+		request(method: .post, path: "/api/folders", token: token, body: payload, completion: completion)
+	}
+
+	func deleteBookmarkFolder(
+		folderId: String,
+		token: String,
+		completion: @escaping (Result<Void, APIError>) -> Void
+	) {
+		requestStatus(
+			method: .delete,
+			path: "/api/folders/\(folderId)",
+			token: token,
+			body: Optional<EmptyBody>.none,
+			completion: completion
+		)
+	}
+
+	// MARK: - Bookmarks (General)
+
+	func fetchBookmarks(
+		folderId: String,
+		token: String,
+		completion: @escaping (Result<[APIBookmark], APIError>) -> Void
+	) {
+		request(
+			method: .get,
+			path: "/api/bookmarks",
+			token: token,
+			queryItems: [URLQueryItem(name: "folderId", value: folderId)],
+			body: Optional<EmptyBody>.none,
+			completion: completion
+		)
+	}
+
+	func createBookmark(
+		payload: APICreateBookmarkRequest,
+		token: String,
+		completion: @escaping (Result<APIBookmark, APIError>) -> Void
+	) {
+		request(method: .post, path: "/api/bookmarks", token: token, body: payload, completion: completion)
+	}
+
+	// MARK: - Bookmarked Articles
+
+	func fetchBookmarkedArticles(
+		token: String,
+		folderId: String? = nil,
+		completion: @escaping (Result<[APIBookmarkedArticle], APIError>) -> Void
+	) {
+		var queryItems: [URLQueryItem] = []
+		if let folderId {
+			queryItems = [URLQueryItem(name: "folderId", value: folderId)]
+		}
+
+		request(
+			method: .get,
+			path: "/api/articles",
+			token: token,
+			queryItems: queryItems,
+			body: Optional<EmptyBody>.none,
+			completion: completion
+		)
+	}
+
+	func createBookmarkedArticle(
+		payload: APICreateBookmarkedArticleRequest,
+		token: String,
+		completion: @escaping (Result<APIBookmarkedArticle, APIError>) -> Void
+	) {
+		request(method: .post, path: "/api/articles", token: token, body: payload, completion: completion)
+	}
+
+	func deleteBookmarkedArticle(
+		articleId: String,
+		token: String,
+		completion: @escaping (Result<Void, APIError>) -> Void
+	) {
+		requestStatus(
+			method: .delete,
+			path: "/api/articles/\(articleId)",
+			token: token,
+			body: Optional<EmptyBody>.none,
+			completion: completion
+		)
+	}
+
+	// MARK: - Bookmarked Threads
+
+	func fetchBookmarkedThreads(
+		token: String,
+		folderId: String? = nil,
+		completion: @escaping (Result<[APIBookmarkedThread], APIError>) -> Void
+	) {
+		var queryItems: [URLQueryItem] = []
+		if let folderId {
+			queryItems = [URLQueryItem(name: "folderId", value: folderId)]
+		}
+
+		request(
+			method: .get,
+			path: "/api/threads",
+			token: token,
+			queryItems: queryItems,
+			body: Optional<EmptyBody>.none,
+			completion: completion
+		)
+	}
+
+	func createBookmarkedThread(
+		payload: APICreateBookmarkedThreadRequest,
+		token: String,
+		completion: @escaping (Result<APIBookmarkedThread, APIError>) -> Void
+	) {
+		request(method: .post, path: "/api/threads", token: token, body: payload, completion: completion)
+	}
+
+	func deleteBookmarkedThread(
+		threadId: String,
+		token: String,
+		completion: @escaping (Result<Void, APIError>) -> Void
+	) {
+		requestStatus(
+			method: .delete,
+			path: "/api/threads/\(threadId)",
+			token: token,
+			body: Optional<EmptyBody>.none,
+			completion: completion
+		)
+	}
+
+	// MARK: - Progress
+
+	func fetchUserProgress(
+		token: String,
+		completion: @escaping (Result<APIUserProgress, APIError>) -> Void
+	) {
+		request(
+			method: .get,
+			path: "/api/progress",
+			token: token,
+			body: Optional<EmptyBody>.none,
+			completion: completion
+		)
+	}
+
+	func updateProgress(
+		payload: APIUpdateProgressRequest,
+		token: String,
+		completion: @escaping (Result<APIUpdateProgressResponse, APIError>) -> Void
+	) {
+		request(method: .post, path: "/api/progress", token: token, body: payload, completion: completion)
 	}
 }

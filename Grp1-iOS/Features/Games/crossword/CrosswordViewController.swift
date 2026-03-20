@@ -42,7 +42,7 @@ final class CrosswordViewController: UIViewController, UICollectionViewDataSourc
         super.viewDidLoad()
             setupCollectionView()
             setupKeyboard()
-            view.layer.insertSublayer(makeGradient(), at: 0)
+//            view.layer.insertSublayer(makeGradient(), at: 0)
 
 
     }

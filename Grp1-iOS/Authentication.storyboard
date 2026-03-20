@@ -30,13 +30,13 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YK6-y2-aX5">
-                                <rect key="frame" x="43" y="649" width="354" height="24"/>
+                                <rect key="frame" x="43" y="634" width="354" height="24"/>
                                 <fontDescription key="fontDescription" type="system" weight="medium" pointSize="20"/>
                                 <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6CS-Fp-uXD">
-                                <rect key="frame" x="43" y="758" width="354" height="55"/>
+                                <rect key="frame" x="43" y="713" width="354" height="55"/>
                                 <color key="backgroundColor" systemColor="systemBlueColor"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="55" id="OMg-Zw-NfN"/>
@@ -51,6 +51,19 @@
                                     <action selector="appleSignInTapped:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="2le-J2-IXD"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kHT-uy-5rs">
+                                <rect key="frame" x="43" y="786" width="354" height="57"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="57" id="TvD-ng-rBP"/>
+                                </constraints>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="gray" title="Already Have An Account">
+                                    <fontDescription key="titleFontDescription" style="UICTFontTextStyleTitle3"/>
+                                </buttonConfiguration>
+                                <connections>
+                                    <action selector="signInButtonTapped:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="Ykl-72-RxK"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
                         <color key="backgroundColor" systemColor="secondarySystemBackgroundColor"/>
@@ -62,11 +75,14 @@
                             <constraint firstItem="xnr-fW-PTx" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="20" id="Ozq-Fv-iKF"/>
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="YK6-y2-aX5" secondAttribute="trailing" constant="43" id="UG6-RG-qFF"/>
                             <constraint firstItem="kue-qh-H5S" firstAttribute="top" secondItem="xnr-fW-PTx" secondAttribute="bottom" constant="40" id="a9r-Qt-bG9"/>
-                            <constraint firstItem="vDu-zF-Fre" firstAttribute="bottom" secondItem="6CS-Fp-uXD" secondAttribute="bottom" constant="75" id="bsr-Kd-BMg"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="bottom" secondItem="6CS-Fp-uXD" secondAttribute="bottom" constant="120" id="bsr-Kd-BMg"/>
                             <constraint firstItem="YK6-y2-aX5" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="43" id="dB4-bM-7r4"/>
-                            <constraint firstItem="6CS-Fp-uXD" firstAttribute="top" secondItem="YK6-y2-aX5" secondAttribute="bottom" constant="85" id="rnN-Bf-2KW"/>
+                            <constraint firstItem="6CS-Fp-uXD" firstAttribute="top" secondItem="YK6-y2-aX5" secondAttribute="bottom" constant="55" id="rnN-Bf-2KW"/>
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="kue-qh-H5S" secondAttribute="trailing" constant="43" id="tR0-gp-o1I"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="bottom" secondItem="kHT-uy-5rs" secondAttribute="bottom" constant="45" id="vn8-yQ-Izm"/>
+                            <constraint firstItem="kHT-uy-5rs" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="43" id="zIY-qR-Hf9"/>
                             <constraint firstItem="kue-qh-H5S" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="43" id="zWU-sm-uaO"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="kHT-uy-5rs" secondAttribute="trailing" constant="43" id="zeq-Pl-5Pa"/>
                         </constraints>
                     </view>
                     <connections>

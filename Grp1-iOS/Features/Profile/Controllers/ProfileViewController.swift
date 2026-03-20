@@ -32,6 +32,31 @@ class ProfileViewController: UIViewController, ProfileOptionCellDelegate {
         
         collectionView.setCollectionViewLayout(generateLayout(), animated: false)
     }
+
+    private func performLogout() {
+    // 1. Call your existing AuthenticationService
+    AuthenticationService.shared.signOut { [weak self] success in
+        guard success else {
+            print("Error signing out.")
+            return
+        }
+        
+        // 2. Redirect to the Authentication Storyboard
+        DispatchQueue.main.async {
+            let storyboard = UIStoryboard(name: "Authentication", bundle: nil)
+            if let authVC = storyboard.instantiateInitialViewController(),
+               let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+               let window = windowScene.windows.first {
+                
+                // Swap out the root view controller
+                window.rootViewController = authVC
+                
+                // Add a smooth fade animation
+                UIView.transition(with: window, duration: 0.3, options: .transitionCrossDissolve, animations: nil, completion: nil)
+            }
+        }
+    }
+    }
     
     func setupProfileHeader() {
         let user = User.current
@@ -112,6 +137,7 @@ extension ProfileViewController {
             print("About us Tapped")
         case .logout:
             print("Logout tapped")
+            performLogout()
         default:
             break
         }
@@ -131,6 +157,7 @@ extension ProfileViewController {
 //            performSegue(withIdentifier: "aboutSegue", sender: self)
         } else {
             print("Logout tapped")
+            performLogout()
 //            performSegue(withIdentifier: "logoutSegue", sender: self)
         }
     }
