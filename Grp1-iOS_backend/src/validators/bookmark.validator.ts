@@ -1,5 +1,14 @@
 import { z } from 'zod';
 
+export const createBookmarkSchema = z.object({
+  folderId: z.string().trim().min(1, 'folderId is required'),
+  title: z.string().trim().min(1, 'title is required').max(200),
+  url: z.string().trim().url('Invalid URL'),
+  sourceType: z.string().trim().min(1, 'sourceType is required'),
+  imageUrl: z.string().trim().min(1, 'imageUrl is required'),
+  description: z.string().trim().min(1, 'description is required'),
+});
+
 export const createBookmarkFolderSchema = z.object({
   name: z
     .string()
@@ -29,6 +38,7 @@ export const createBookmarkedThreadSchema = z.object({
   tags: z.array(z.string()).default([]),
 });
 
+export type CreateBookmarkType = z.infer<typeof createBookmarkSchema>;
 export type CreateBookmarkFolderType = z.infer<typeof createBookmarkFolderSchema>;
 export type CreateBookmarkedArticleType = z.infer<typeof createBookmarkedArticleSchema>;
 export type CreateBookmarkedThreadType = z.infer<typeof createBookmarkedThreadSchema>;
