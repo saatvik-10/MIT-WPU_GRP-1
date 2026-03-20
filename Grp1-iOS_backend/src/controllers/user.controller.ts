@@ -158,12 +158,4 @@ export class UserAuth {
       return ctx.json('Unauthorized', 401);
     }
   }
-
-  async signout(ctx: Context) {
-    try {
-      return ctx.json('User signed out. Please remove token on client.', 200);
-    } catch (err) {
-      return ctx.json('Server Error', 500);
-    }
-  }
 }

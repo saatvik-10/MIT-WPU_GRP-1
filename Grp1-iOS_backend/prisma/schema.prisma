@@ -30,17 +30,18 @@ model User {
 
   progress           UserProgress?
   interests          UserInterest[]
-  bookmarks          Bookmark[]
+  // bookmarks          Bookmark[]
   // chatSessions ChatSession[]
   thread             Thread[]
   likes              ThreadLike[]
   comments           ThreadComment[]
-  shares             ThreadShare[]
+  // shares             ThreadShare[]
   followers          Follow[]            @relation("UserFollowers")
   following          Follow[]            @relation("UserFollowing")
   quizAttempts       QuizAttempt[]
   threadDrafts       ThreadDrafts[]
   bookmarkedArticles BookmarkedArticle[]
+  bookmarkedThreads  BookmarkedThread[]
 
   @@index([email])
 }
@@ -94,36 +95,20 @@ model BookmarkFolder {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  bookmarks Bookmark[]
+  bookmarkedArticle BookmarkedArticle[]
+  bookmarkedThread  BookmarkedThread[]
 
   @@unique([userId, name])
   @@index([userId])
 }
 
-model Bookmark {
-  id     String @id @default(cuid())
-  userId String
-
-  user     User           @relation(fields: [userId], references: [id], onDelete: Cascade)
-  folderId String
-  folder   BookmarkFolder @relation(fields: [folderId], references: [id], onDelete: Cascade)
-
-  title       String
-  url         String
-  imageUrl    String
-  description String
-  sourceType  BookmarkSource
-  createdAt   DateTime       @default(now())
-
-  @@index([userId])
-  @@index([folderId])
-}
-
 model BookmarkedArticle {
   id String @id @default(cuid())
 
-  userId String
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId   String
+  user     User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  folderId String
+  folder   BookmarkFolder @relation(fields: [folderId], references: [id], onDelete: Cascade)
 
   title        String
   description  String
@@ -134,8 +119,31 @@ model BookmarkedArticle {
   jargons      String[]
   date         String
   createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 
+  @@unique([userId, folderId, title])
   @@index([userId])
+  @@index([folderId])
+}
+
+model BookmarkedThread {
+  id String @id @default(cuid())
+
+  userId   String
+  user     User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  folderId String
+  folder   BookmarkFolder @relation(fields: [folderId], references: [id], onDelete: Cascade)
+
+  title       String
+  description String
+  imageName   String
+  tags        String[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([userId, folderId, title])
+  @@index([userId])
+  @@index([folderId])
 }
 
 // model ChatSession {
@@ -177,13 +185,13 @@ model Thread {
   tags          String[]
   likesCount    Int      @default(0)
   commentsCount Int      @default(0)
-  sharesCount   Int      @default(0)
+  // sharesCount   Int      @default(0)
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
   likes    ThreadLike[]
   comments ThreadComment[]
-  shares   ThreadShare[]
+  // shares   ThreadShare[]
   drafts   ThreadDrafts[]
 
   @@index([userId])
@@ -229,6 +237,8 @@ model ThreadComment {
   threadId String
   thread   Thread @relation(fields: [threadId], references: [id], onDelete: Cascade)
 
+  description String
+
   parentCommentId String?
   parentComment   ThreadComment?  @relation("CommentReplies", fields: [parentCommentId], references: [id])
   replies         ThreadComment[] @relation("CommentReplies")
@@ -239,19 +249,19 @@ model ThreadComment {
   @@index([threadId])
 }
 
-model ThreadShare {
-  id String @id @default(cuid())
+// model ThreadShare {
+//   id String @id @default(cuid())
 
-  userId   String
-  user     User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  threadId String
-  thread   Thread @relation(fields: [threadId], references: [id], onDelete: Cascade)
+//   userId   String
+//   user     User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+//   threadId String
+//   thread   Thread @relation(fields: [threadId], references: [id], onDelete: Cascade)
 
-  createdAt DateTime @default(now())
+//   createdAt DateTime @default(now())
 
-  @@index([userId])
-  @@index([threadId])
-}
+//   @@index([userId])
+//   @@index([threadId])
+// }
 
 model Follow {
   id String @id @default(cuid())
@@ -315,11 +325,6 @@ enum Gender {
 enum Type {
   DOMAIN
   PREFERENCE
-}
-
-enum BookmarkSource {
-  ARTICLE
-  THREADS
 }
 
 enum Role {
