@@ -8,14 +8,27 @@ export const createBookmarkFolderSchema = z.object({
     .max(80, 'Folder name is too long'),
 });
 
-export const createBookmarkSchema = z.object({
+export const createBookmarkedArticleSchema = z.object({
   folderId: z.string().trim().min(1, 'folderId is required'),
   title: z.string().trim().min(1, 'title is required').max(200),
-  url: z.string().trim().url('url must be a valid URL'),
-  imageUrl: z.string().trim().url('imageUrl must be a valid URL').optional(),
-  description: z.string().trim().optional(),
-  sourceType: z.enum(['ARTICLE', 'THREADS']),
+  description: z.string().trim().min(1, 'description is required'),
+  imageName: z.string().trim().min(1, 'imageName is required'),
+  source: z.string().trim().min(1, 'source is required'),
+  overview: z.array(z.string()).default([]),
+  keyTakeaways: z.array(z.string()).default([]),
+  jargons: z.array(z.string()).default([]),
+  date: z.string().trim().min(1, 'date is required'),
+});
+
+export const createBookmarkedThreadSchema = z.object({
+  folderId: z.string().trim().min(1, 'folderId is required'),
+  threadId: z.string().trim().min(1, 'threadId is required'),
+  title: z.string().trim().min(1, 'title is required').max(200),
+  description: z.string().trim().min(1, 'description is required'),
+  imageName: z.string().trim().min(1, 'imageName is required'),
+  tags: z.array(z.string()).default([]),
 });
 
 export type CreateBookmarkFolderType = z.infer<typeof createBookmarkFolderSchema>;
-export type CreateBookmarkType = z.infer<typeof createBookmarkSchema>;
+export type CreateBookmarkedArticleType = z.infer<typeof createBookmarkedArticleSchema>;
+export type CreateBookmarkedThreadType = z.infer<typeof createBookmarkedThreadSchema>;
