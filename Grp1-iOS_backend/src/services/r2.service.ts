@@ -10,31 +10,41 @@ export class R2Service {
   private client: S3Client;
   private bucketName: string;
   private accountId: string;
-  private accessKeyId: string;
-  private secretAccessKey: string;
 
   constructor() {
     this.accountId = process.env.CLOUDFLARE_ACCOUNT_ID || '';
-    this.accessKeyId = process.env.CLOUDFLARE_ACCESS_KEY_ID || '';
-    this.secretAccessKey = process.env.CLOUDFLARE_SECRET_ACCESS_KEY || '';
+    const accessKeyId = process.env.CLOUDFLARE_ACCESS_KEY_ID || '';
+    const secretAccessKey = process.env.CLOUDFLARE_SECRET_ACCESS_KEY || '';
     this.bucketName = process.env.CLOUDFLARE_BUCKET_NAME || '';
 
     if (
       !this.accountId ||
-      !this.accessKeyId ||
-      !this.secretAccessKey ||
+      !accessKeyId ||
+      !secretAccessKey ||
       !this.bucketName
     ) {
-      throw new Error('Missing required Cloudflare R2 environment variables');
+      throw new Error(
+        `Missing R2 environment variables. Check:\n` +
+          `  CLOUDFLARE_ACCOUNT_ID: ${this.accountId ? '✓' : '✗ MISSING'}\n` +
+          `  CLOUDFLARE_ACCESS_KEY_ID: ${accessKeyId ? '✓' : '✗ MISSING'}\n` +
+          `  CLOUDFLARE_SECRET_ACCESS_KEY: ${secretAccessKey ? '✓' : '✗ MISSING'}\n` +
+          `  CLOUDFLARE_BUCKET_NAME: ${this.bucketName ? '✓' : '✗ MISSING'}`,
+      );
     }
+
+    console.log(`[R2] Initialized with:
+  Account ID : ${this.accountId.slice(0, 6)}...
+  Bucket     : ${this.bucketName}
+  Endpoint   : https://${this.accountId}.r2.cloudflarestorage.com`);
 
     this.client = new S3Client({
       region: 'auto',
-      credentials: {
-        accessKeyId: this.accessKeyId,
-        secretAccessKey: this.secretAccessKey,
-      },
       endpoint: `https://${this.accountId}.r2.cloudflarestorage.com`,
+      credentials: {
+        accessKeyId,
+        secretAccessKey,
+      },
+      forcePathStyle: true,
     });
   }
 
@@ -45,24 +55,37 @@ export class R2Service {
     buffer: Buffer,
   ): Promise<string> {
     const timestamp = Date.now();
-    const s3Key = `${folder}/${id}/${timestamp}-${fileName}`;
+    const sanitizedFileName = fileName.replace(/[^a-zA-Z0-9.\-_]/g, '_');
+    const s3Key = `${folder}/${id}/${timestamp}-${sanitizedFileName}`;
+    const contentType = this.getContentType(fileName);
+
+    console.log(
+      `[R2] Uploading: ${s3Key} (${buffer.length} bytes, ${contentType})`,
+    );
 
     try {
       const command = new PutObjectCommand({
         Bucket: this.bucketName,
         Key: s3Key,
         Body: buffer,
-        ContentType: this.getContentType(fileName),
+        ContentType: contentType,
       });
 
-      await this.client.send(command);
-      console.log(`✓ Image uploaded: ${s3Key}`);
+      const result = await this.client.send(command);
+
+      console.log(`[R2] ✅ Upload success: ${s3Key} | ETag: ${result.ETag}`);
       return s3Key;
-    } catch (error) {
-      console.error('Error uploading to R2:', error);
-      throw new Error(
-        `Failed to upload image to R2: ${error instanceof Error ? error.message : String(error)}`,
+    } catch (error: any) {
+      // ✅ Detailed error logging so you can see exactly what went wrong
+      console.error(`[R2] ❌ Upload failed for key: ${s3Key}`);
+      console.error(
+        `[R2] Error code    : ${error.Code || error.code || 'unknown'}`,
       );
+      console.error(
+        `[R2] HTTP status   : ${error.$metadata?.httpStatusCode || 'unknown'}`,
+      );
+      console.error(`[R2] Message       : ${error.message}`);
+      throw new Error(`R2 upload failed (${error.Code || error.message})`);
     }
   }
 
@@ -82,7 +105,13 @@ export class R2Service {
     return this.uploadImage('thread-images', threadId, fileName, buffer);
   }
 
-  async getPresignedUrl(s3Key: string): Promise<string> {
+  async getPresignedUrl(
+    s3Key: string | null | undefined,
+  ): Promise<string | null> {
+    if (!s3Key || s3Key.trim() === '') {
+      return null;
+    }
+
     try {
       const command = new GetObjectCommand({
         Bucket: this.bucketName,
@@ -92,30 +121,36 @@ export class R2Service {
       const url = await getSignedUrl(this.client, command, {
         expiresIn: 86400,
       });
+
       return url;
-    } catch (error) {
-      console.error('Error generating presigned URL:', error);
-      throw new Error(
-        `Failed to generate presigned URL: ${error instanceof Error ? error.message : String(error)}`,
+    } catch (error: any) {
+      console.error(
+        `[R2] ❌ Presign failed for key: ${s3Key} | ${error.message}`,
       );
+      throw new Error(`Failed to generate presigned URL: ${error.message}`);
     }
   }
 
-  async deleteProfileImage(s3Key: string): Promise<void> {
+  async deleteObject(s3Key: string): Promise<void> {
+    if (!s3Key || s3Key.trim() === '') return;
+
     try {
       const command = new DeleteObjectCommand({
         Bucket: this.bucketName,
         Key: s3Key,
       });
-
       await this.client.send(command);
-      console.log(`✓ Profile image deleted: ${s3Key}`);
-    } catch (error) {
-      console.error('Error deleting from R2:', error);
-      throw new Error(
-        `Failed to delete profile image from R2: ${error instanceof Error ? error.message : String(error)}`,
+      console.log(`[R2] ✅ Deleted: ${s3Key}`);
+    } catch (error: any) {
+      console.error(
+        `[R2] ❌ Delete failed for key: ${s3Key} | ${error.message}`,
       );
+      throw new Error(`Failed to delete object: ${error.message}`);
     }
+  }
+
+  async deleteProfileImage(s3Key: string): Promise<void> {
+    return this.deleteObject(s3Key);
   }
 
   private getContentType(fileName: string): string {
@@ -127,11 +162,7 @@ export class R2Service {
       gif: 'image/gif',
       webp: 'image/webp',
     };
-    return contentTypes[ext || ''] || 'image/jpeg';
-  }
-
-  getPublicUrl(s3Key: string): string {
-    return `https://${this.bucketName}.${this.accountId}.r2.cloudflarestorage.com/${s3Key}`;
+    return contentTypes[ext || ''] || 'application/octet-stream';
   }
 }
 
