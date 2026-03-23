@@ -4,7 +4,7 @@ export const userSignUpSchema = z.object({
   name: z.string().min(3, 'Name must be atleast 3 characters long'),
   email: z.email('Email is required'),
   password: z.string().min(8, 'Password must be atleast 8 characters long'),
-  profileImageUrl: z.string(),
+  profileImageUrl: z.string().optional(),
   phone: z.string(),
   level: z.enum(['BEGINNER', 'INTERMEDIATE', 'ADVANCE']),
   dob: z.string(),
