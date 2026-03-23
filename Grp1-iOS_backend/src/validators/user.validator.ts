@@ -9,7 +9,10 @@ export const userSignUpSchema = z.object({
   level: z.enum(['BEGINNER', 'INTERMEDIATE', 'ADVANCE']),
   dob: z.string(),
   gender: z.enum(['MALE', 'FEMALE', 'OTHERS']),
-  hasOnboarding: z.boolean(),
+  hasOnboarding: z.union([
+    z.boolean(),
+    z.string().transform((v) => v === 'true'),
+  ]),
 });
 
 export const userSignInSchema = z.object({
