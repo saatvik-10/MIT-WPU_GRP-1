@@ -33,7 +33,7 @@ class GamesCategoryCollectionViewCell: UICollectionViewCell {
         timeLabel.textColor = .systemGray
 
         headlineLabel.numberOfLines = 2
-        headlineLabel.font = UIFont.systemFont(ofSize: 16, weight: .bold)
+        headlineLabel.font = UIFont.systemFont(ofSize: 20, weight: .bold)
         headlineLabel.textColor = .black
         
     }
