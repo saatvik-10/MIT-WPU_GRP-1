@@ -95,7 +95,7 @@ final class GamesViewController: UIViewController {
 
             let groupSize = NSCollectionLayoutSize(
                 widthDimension: .fractionalWidth(1.0),
-                heightDimension: .estimated(250)
+                heightDimension: .estimated(270)
             )
 
             let group = NSCollectionLayoutGroup.horizontal(
