@@ -401,21 +401,21 @@ class news1ViewController: UIViewController, UICollectionViewDataSource {
     
     
     private func setupOptionsMenu() {
-            let recommendAction = UIAction(
-                title: "Recommend article more",
-                image: UIImage(systemName: "hand.thumbsup")
-            ) { [weak self] _ in
-                guard let self = self, let article = self.article else { return }
+        let recommendAction = UIAction(
+            title: "Recommend article more",
+            image: UIImage(systemName: "hand.thumbsup")
+        ) { [weak self] _ in
+            guard let self = self, let article = self.article else { return }
 
-                let generator = UINotificationFeedbackGenerator()
-                generator.notificationOccurred(.success)
+            let generator = UINotificationFeedbackGenerator()
+            generator.notificationOccurred(.success)
 
-                self.animateRecommendationPulse()
+            self.animateRecommendationPulse()
 
-                self.showToast(message: "We’ll show you more stories like this.")
-                
-                print("Recommend more articles like: \(article.title)")
-            }
+            self.showToast(message: "We'll show you more stories like this.")
+            
+            print("Recommend more articles like: \(article.title)")
+        }
 
         let saveAction = UIAction(
             title: "Save article",
@@ -426,52 +426,53 @@ class news1ViewController: UIViewController, UICollectionViewDataSource {
             let generator = UINotificationFeedbackGenerator()
             generator.notificationOccurred(.success)
 
-            // Build alert with folder options from Bookmarks.mockBookmarks
-            let alert = UIAlertController(title: "Save to Folder", message: nil, preferredStyle: .actionSheet)
+            // Create custom sheet
+            let sheetVC = SaveArticleSheetViewController(
+                folders: Bookmarks.mockBookmarks,
+                articleTitle: article.title
+            ) { [weak self] folderTitle in
+                self?.animateSaveBookmarkIcon()
+                self?.showToast(message: "Saved to \(folderTitle)")
+                print("Saved article '\(article.title)' to folder: \(folderTitle)")
+            }
 
-            for folder in Bookmarks.mockBookmarks {
-                let action = UIAlertAction(title: folder.title, style: .default) { _ in
-                    self.animateSaveBookmarkIcon()
-                    self.showToast(message: "Saved to \(folder.title)")
-                    print("Saved article '\(article.title)' to folder: \(folder.title)")
+            sheetVC.modalPresentationStyle = .pageSheet
+            if #available(iOS 16.0, *) {
+                if let sheet = sheetVC.sheetPresentationController {
+                    sheet.detents = [.medium(), .large()]
+                    sheet.prefersGrabberVisible = true
+                    sheet.preferredCornerRadius = 24
                 }
-                alert.addAction(action)
             }
 
-        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+            self.present(sheetVC, animated: true)
+        }
 
-        // For iPad
-        alert.popoverPresentationController?.barButtonItem = self.optionsButton
+        let shareAction = UIAction(
+            title: "Share article",
+            image: UIImage(systemName: "square.and.arrow.up")
+        ) { [weak self] _ in
+            guard let self = self, let article = self.article else { return }
 
-        self.present(alert, animated: true)
-    }
+            let customActivity = ShareToFriendsActivity()
+            customActivity.article = article
 
-
-            let shareAction = UIAction(
-                title: "Share article",
-                image: UIImage(systemName: "square.and.arrow.up")
-            ) { [weak self] _ in
-                guard let self = self, let article = self.article else { return }
-
-                let customActivity = ShareToFriendsActivity()
-                customActivity.article = article
-
-                let activityVC = UIActivityViewController(
-                    activityItems: [article.title],
-                    applicationActivities: [customActivity]
-                )
-
-                activityVC.popoverPresentationController?.barButtonItem = self.optionsButton
-
-                self.present(activityVC, animated: true)
-            }
-
-            let menu = UIMenu(
-                title: "",
-                children: [recommendAction, saveAction, shareAction]
+            let activityVC = UIActivityViewController(
+                activityItems: [article.title],
+                applicationActivities: [customActivity]
             )
 
-            optionsButton.menu = menu
+            activityVC.popoverPresentationController?.barButtonItem = self.optionsButton
+
+            self.present(activityVC, animated: true)
+        }
+
+        let menu = UIMenu(
+            title: "",
+            children: [recommendAction, saveAction, shareAction]
+        )
+
+        optionsButton.menu = menu
     }
     
     private func setupGlassEffect() {
@@ -830,10 +831,223 @@ extension news1ViewController: UICollectionViewDelegate {
     }
 }
 
-//class selectedWord {
-//    static var word: String?
-//}
-//
-//
-//selectedWord.selectedJargon = word
-//Type 'selectedWord' has no member 'selectedJargon'
+// MARK: - Save Article Sheet
+
+class SaveArticleSheetViewController: UIViewController {
+    
+    private let folders: [BookmarkItem]
+    private let articleTitle: String
+    private let onFolderSelected: (String) -> Void
+    
+    private let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
+    
+    init(folders: [BookmarkItem], articleTitle: String, onFolderSelected: @escaping (String) -> Void) {
+        self.folders = folders
+        self.articleTitle = articleTitle
+        self.onFolderSelected = onFolderSelected
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        setupUI()
+    }
+    
+    private func setupUI() {
+        view.backgroundColor = .systemBackground
+        
+        // Header
+        let headerStack = UIStackView()
+        headerStack.axis = .vertical
+        headerStack.spacing = 8
+        headerStack.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(headerStack)
+        
+        let titleLabel = UILabel()
+        titleLabel.text = "Save Article"
+        titleLabel.font = UIFont.systemFont(ofSize: 24, weight: .bold)
+        titleLabel.textColor = .label
+        headerStack.addArrangedSubview(titleLabel)
+        
+        let subtitleLabel = UILabel()
+        subtitleLabel.text = "Choose a folder to save this article"
+        subtitleLabel.font = UIFont.systemFont(ofSize: 15, weight: .regular)
+        subtitleLabel.textColor = .secondaryLabel
+        subtitleLabel.numberOfLines = 2
+        headerStack.addArrangedSubview(subtitleLabel)
+//        
+//        let articlePreview = UILabel()
+//        articlePreview.text = "\"\(articleTitle)\""
+//        articlePreview.font = UIFont.systemFont(ofSize: 13, weight: .semibold)
+//        articlePreview.textColor = .systemBlue
+//        articlePreview.numberOfLines = 2
+//        articlePreview.lineBreakMode = .byTruncatingTail
+//        headerStack.addArrangedSubview(articlePreview)
+        
+        NSLayoutConstraint.activate([
+            headerStack.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
+            headerStack.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            headerStack.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20)
+        ])
+        
+        // Collection View
+        // Replace the existing layout block with this:
+        let layout = UICollectionViewFlowLayout()
+
+        // 1. Define your padding constants
+        let horizontalPadding: CGFloat = 20
+        let interItemSpacing: CGFloat = 12
+
+        // 2. Calculate the available width
+        // (Total Width) - (Left + Right Insets) - (Spacing between the 2 items)
+        let totalPadding = (horizontalPadding * 2) + interItemSpacing
+        let itemWidth = (UIScreen.main.bounds.width - totalPadding) / 2
+
+        layout.itemSize = CGSize(width: itemWidth, height: 140)
+        layout.minimumInteritemSpacing = interItemSpacing
+        layout.minimumLineSpacing = 12
+        layout.sectionInset = UIEdgeInsets(top: 16, left: horizontalPadding, bottom: 20, right: horizontalPadding)
+        
+        collectionView.collectionViewLayout = layout
+        collectionView.dataSource = self
+        collectionView.delegate = self
+        collectionView.backgroundColor = .clear
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.register(FolderCell.self, forCellWithReuseIdentifier: "FolderCell")
+        
+        view.addSubview(collectionView)
+        
+        NSLayoutConstraint.activate([
+            collectionView.topAnchor.constraint(equalTo: headerStack.bottomAnchor, constant: 20),
+            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
+    }
+}
+
+extension SaveArticleSheetViewController: UICollectionViewDataSource, UICollectionViewDelegate {
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return folders.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "FolderCell", for: indexPath) as! FolderCell
+        let bookmark = folders[indexPath.item]
+        cell.configure(with: bookmark.title, icon: bookmark.icon)
+        return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let selectedFolder = folders[indexPath.item]
+        
+        // Animation
+        UIView.animate(withDuration: 0.2, animations: {
+            if let cell = collectionView.cellForItem(at: indexPath) {
+                cell.transform = CGAffineTransform(scaleX: 0.95, y: 0.95)
+            }
+        }) { _ in
+            UIView.animate(withDuration: 0.2) {
+                if let cell = collectionView.cellForItem(at: indexPath) {
+                    cell.transform = .identity
+                }
+            }
+        }
+        
+        onFolderSelected(selectedFolder.title)
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+            self.dismiss(animated: true)
+        }
+    }
+}
+
+// MARK: - Folder Cell
+
+class FolderCell: UICollectionViewCell {
+    
+    private let containerView = UIView()
+    private let iconLabel = UIImageView()
+    private let titleLabel = UILabel()
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setupUI()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func setupUI() {
+        contentView.backgroundColor = .clear
+        
+        containerView.backgroundColor = UIColor { trait in
+            trait.userInterfaceStyle == .dark
+                ? UIColor.systemGray5
+                : UIColor.systemGray6
+        }
+        containerView.layer.cornerRadius = 16
+        containerView.layer.masksToBounds = true
+        containerView.translatesAutoresizingMaskIntoConstraints = false
+        containerView.layer.borderWidth = 2
+        containerView.layer.borderColor = UIColor.clear.cgColor
+        contentView.addSubview(containerView)
+        
+        // Icon
+        iconLabel.contentMode = .scaleAspectFit
+        iconLabel.tintColor = .systemBlue
+        iconLabel.translatesAutoresizingMaskIntoConstraints = false
+        containerView.addSubview(iconLabel)
+        
+        // Title
+        titleLabel.font = UIFont.systemFont(ofSize: 15, weight: .semibold)
+        titleLabel.textColor = .label
+        titleLabel.textAlignment = .center
+        titleLabel.numberOfLines = 2
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        containerView.addSubview(titleLabel)
+        
+        NSLayoutConstraint.activate([
+            containerView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            
+            iconLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 16),
+            iconLabel.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
+            iconLabel.widthAnchor.constraint(equalToConstant: 40),
+            iconLabel.heightAnchor.constraint(equalToConstant: 40),
+            
+            titleLabel.topAnchor.constraint(equalTo: iconLabel.bottomAnchor, constant: 12),
+            titleLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 8),
+            titleLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -8),
+            titleLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -12)
+        ])
+    }
+    
+    func configure(with title: String, icon: UIImage) {
+        titleLabel.text = title
+        iconLabel.image = icon
+    }
+    
+    override var isHighlighted: Bool {
+        didSet {
+            UIView.animate(withDuration: 0.15) {
+                self.containerView.layer.borderColor = self.isHighlighted
+                    ? UIColor.systemBlue.cgColor
+                    : UIColor.clear.cgColor
+                self.containerView.backgroundColor = UIColor { trait in
+                    trait.userInterfaceStyle == .dark
+                        ? (self.isHighlighted ? UIColor.systemGray4 : UIColor.systemGray5)
+                        : (self.isHighlighted ? UIColor.systemGray5 : UIColor.systemGray6)
+                }
+            }
+        }
+    }
+}
