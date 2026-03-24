@@ -197,7 +197,7 @@ class HomeChatDetailViewController: MessagesViewController {
                         self?.dismiss(animated: true)
                     }
 
-                case .failure(let error):
+                case .failure(_):
                     NewsDataStore.shared.addQA(for: articleID, question: question, answer: answer)
 
                     let generator = UINotificationFeedbackGenerator()
