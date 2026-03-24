@@ -30,17 +30,5 @@ profileRoute.delete(
   proxyAuth,
   controller.deleteUserInterest,
 );
-profileRoute.get(
-  '/bookmarks/folders',
-  proxyAuth,
-  controller.getBookmarkFolders,
-);
-profileRoute.post(
-  '/bookmarks/folders',
-  proxyAuth,
-  controller.createBookmarkFolder,
-);
-profileRoute.get('/bookmarks', proxyAuth, controller.getBookmarks);
-profileRoute.post('/bookmarks', proxyAuth, controller.createBookmark);
 
 export default profileRoute;
