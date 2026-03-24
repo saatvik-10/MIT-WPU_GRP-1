@@ -100,19 +100,36 @@ struct NewsArticleAssembler {
 }
 struct DateUtils {
 
-    static func formattedArticleDate(from isoString: String) -> String {
+    static func formattedArticleDate(from dateString: String) -> String {
+        let output = DateFormatter()
+        output.dateFormat = "MMM d, yyyy • h:mm a"
+        output.locale = Locale.current
+
+        // 1. ISO 8601 — used internally when assembling articles
         let isoFormatter = ISO8601DateFormatter()
         isoFormatter.formatOptions = [.withInternetDateTime]
-
-        guard let date = isoFormatter.date(from: isoString) else {
-            return isoString
+        if let date = isoFormatter.date(from: dateString) {
+            return output.string(from: date)
         }
 
-        let formatter = DateFormatter()
-        formatter.dateFormat = "MMM d, yyyy • h:mm a"
-        formatter.locale = Locale.current
+        // 2. RFC 2822 — used by TOI, ET, and Mint RSS feeds
+        let rfc2822 = DateFormatter()
+        rfc2822.locale = Locale(identifier: "en_US_POSIX")
+        rfc2822.dateFormat = "EEE, dd MMM yyyy HH:mm:ss Z"
+        if let date = rfc2822.date(from: dateString) {
+            return output.string(from: date)
+        }
 
-        return formatter.string(from: date)
+        // 3. RFC 2822 without seconds — some feeds omit them
+        let rfc2822Short = DateFormatter()
+        rfc2822Short.locale = Locale(identifier: "en_US_POSIX")
+        rfc2822Short.dateFormat = "EEE, dd MMM yyyy HH:mm Z"
+        if let date = rfc2822Short.date(from: dateString) {
+            return output.string(from: date)
+        }
+
+        // Fallback — return raw string if nothing matched
+        return dateString
     }
 }
 
