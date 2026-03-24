@@ -68,6 +68,7 @@ struct APIProfileResponse: Decodable {
 	let gender: String
 	let profileImageUrl: String?
 	let level: String
+	let hasOnboarding: Bool?
 }
 
 struct APIInterest: Codable {
