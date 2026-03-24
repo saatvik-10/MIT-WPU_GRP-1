@@ -145,17 +145,10 @@ class TrendingCollectionViewCell: UICollectionViewCell {
             }
         }
 
-            let lensAction = UIAction(
-                title: "Article Lens",
-                image: UIImage(systemName: "eye")
-            ) { [weak self] _ in
-                self?.onArticleLensTapped?()
-            }
-
         let menu = UIMenu(
             title: "",
             options: .displayInline,
-            children: [recommendAction, noRecommendAction, lensAction]   
+            children: [recommendAction, noRecommendAction]   
         )
             sender.menu = menu
             sender.showsMenuAsPrimaryAction = true
