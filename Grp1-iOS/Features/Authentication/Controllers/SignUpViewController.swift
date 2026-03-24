@@ -304,7 +304,7 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
         dismiss(animated: true)
     }
 
-    // MARK: - Sign Up (sends to database)
+    // MARK: - Sign Up
 
     @objc private func signUpTapped() {
         guard let name = nameField.text, !name.isEmpty,
@@ -331,6 +331,11 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
 
         let genderString = selectedGender == .male ? "MALE" : "FEMALE"
 
+        // ✅ FIXED: Convert selectedImage to JPEG Data and pass it
+        // If user skipped photo, selectedImage is nil → imageData is nil → no image uploaded (that's fine)
+        let imageData = selectedImage?.jpegData(compressionQuality: 0.8)
+        print("[SignUp] Profile image data size: \(imageData?.count ?? 0) bytes")
+
         AuthenticationService.shared.signUp(
             name: name,
             email: email,
@@ -340,7 +345,8 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
             dob: dob,
             gender: genderString,
             hasOnboarding: false,
-            profileImageUrl: nil
+            profileImageData: imageData,         // ✅ FIXED: was hardcoded nil
+            profileImageFileName: "avatar.jpg"
         ) { [weak self] success, errorMessage in
             guard let self = self else { return }
 

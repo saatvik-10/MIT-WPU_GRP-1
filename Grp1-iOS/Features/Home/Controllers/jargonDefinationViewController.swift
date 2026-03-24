@@ -60,15 +60,40 @@ class jargonDefinationViewController: UIViewController {
     // MARK: - Loading State
 
     private func showLoadingState() {
-        headingLabel.text = "Generating..."
-        jargonDefination.text = "Please wait while we generate a definition for \"\(jargonWord ?? "")\"..."
-        pageNumberLabel.text = "–/2"
+        headingLabel.text = ""
+        jargonDefination.text = ""
+        pageNumberLabel.text = ""
         actionButton.isHidden = true
+
+        let spinner = UIActivityIndicatorView(style: .large)
+        spinner.tag = 99
+        spinner.translatesAutoresizingMaskIntoConstraints = false
+        spinner.startAnimating()
+        glassView.addSubview(spinner)
+
+        let label = UILabel()
+        label.tag = 98
+        label.text = "Generating definition..."
+        label.textAlignment = .center
+        label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+        label.textColor = .secondaryLabel
+        label.translatesAutoresizingMaskIntoConstraints = false
+        glassView.addSubview(label)
+
+        NSLayoutConstraint.activate([
+            spinner.centerXAnchor.constraint(equalTo: glassView.centerXAnchor),
+            spinner.centerYAnchor.constraint(equalTo: glassView.centerYAnchor),
+
+            label.topAnchor.constraint(equalTo: spinner.bottomAnchor, constant: 16),
+            label.centerXAnchor.constraint(equalTo: glassView.centerXAnchor)
+        ])
     }
 
     // MARK: - Page Display
 
     private func applyPage(index: Int) {
+        glassView.viewWithTag(99)?.removeFromSuperview()
+            glassView.viewWithTag(98)?.removeFromSuperview()
         guard index >= 0 && index < pages.count else {
             print("Index out of range:", index)
             return

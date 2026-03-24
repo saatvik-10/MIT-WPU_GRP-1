@@ -7,7 +7,6 @@ const controller = new UserAuth();
 
 userRoute.post('/signup', controller.signUp);
 userRoute.post('/signin', controller.signIn);
-userRoute.post('/signout', controller.signout);
 userRoute.get('/me', proxyAuth, controller.getMe);
 
 export default userRoute;

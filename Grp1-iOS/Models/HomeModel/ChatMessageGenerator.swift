@@ -26,7 +26,7 @@ final class ChatMessageGenerator {
             "You are a helpful financial learning assistant."
             "Answer user questions clearly and concisely about finance, economics, banking, and markets."
             "Use simple language when explaining complex concepts."
-            "Keep answers focused and under 4 sentences unless more detail is needed."
+            "Keep answers focused and under 4 sentences ."
             "Do not use bullet points — respond in plain conversational text."
 
             if !overviewText.isEmpty {

@@ -316,48 +316,50 @@
                         <rect key="frame" x="0.0" y="0.0" width="440" height="956"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Yel-Xo-klO">
-                                <rect key="frame" x="0.0" y="178" width="440" height="661"/>
-                                <subviews>
-                                    <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="Dgt-N3-pYB">
-                                        <rect key="frame" x="0.0" y="0.0" width="440" height="661"/>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="Dgt-N3-pYB">
+                                <rect key="frame" x="0.0" y="229" width="440" height="579"/>
+                                <color key="backgroundColor" systemColor="systemGray6Color"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="5HM-9M-cFA">
+                                    <size key="itemSize" width="393" height="511"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                                <cells>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="BookmarkViewCell" id="LTv-uZ-o9L">
+                                        <rect key="frame" x="24" y="0.0" width="392" height="536"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="ccu-uz-CKe">
+                                            <rect key="frame" x="0.0" y="0.0" width="392" height="536"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </collectionViewCellContentView>
                                         <color key="backgroundColor" systemColor="systemGray6Color"/>
-                                        <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="5HM-9M-cFA">
-                                            <size key="itemSize" width="393" height="511"/>
-                                            <size key="headerReferenceSize" width="0.0" height="0.0"/>
-                                            <size key="footerReferenceSize" width="0.0" height="0.0"/>
-                                            <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
-                                        </collectionViewFlowLayout>
-                                        <cells>
-                                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="BookmarkViewCell" id="LTv-uZ-o9L">
-                                                <rect key="frame" x="24" y="0.0" width="392" height="536"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="ccu-uz-CKe">
-                                                    <rect key="frame" x="0.0" y="0.0" width="392" height="536"/>
-                                                    <autoresizingMask key="autoresizingMask"/>
-                                                </collectionViewCellContentView>
-                                                <color key="backgroundColor" systemColor="systemGray6Color"/>
-                                                <size key="customSize" width="392" height="536"/>
-                                            </collectionViewCell>
-                                        </cells>
-                                    </collectionView>
-                                </subviews>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                <constraints>
-                                    <constraint firstItem="Dgt-N3-pYB" firstAttribute="top" secondItem="Yel-Xo-klO" secondAttribute="top" id="6I9-fs-K5o"/>
-                                    <constraint firstAttribute="trailing" secondItem="Dgt-N3-pYB" secondAttribute="trailing" id="KKV-xi-aqr"/>
-                                    <constraint firstAttribute="bottom" secondItem="Dgt-N3-pYB" secondAttribute="bottom" id="cjz-p3-gPl"/>
-                                    <constraint firstItem="Dgt-N3-pYB" firstAttribute="leading" secondItem="Yel-Xo-klO" secondAttribute="leading" id="qvB-jr-qF3"/>
-                                </constraints>
-                            </view>
+                                        <size key="customSize" width="392" height="536"/>
+                                    </collectionViewCell>
+                                </cells>
+                            </collectionView>
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="dfc-Bm-QEf">
+                                <rect key="frame" x="20" y="178" width="400" height="32"/>
+                                <segments>
+                                    <segment title="First"/>
+                                    <segment title="Second"/>
+                                </segments>
+                                <connections>
+                                    <action selector="segmentChanged:" destination="nVT-bV-ibC" eventType="valueChanged" id="o7s-GI-TSH"/>
+                                </connections>
+                            </segmentedControl>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="lhL-s4-xXL"/>
                         <color key="backgroundColor" systemColor="systemGray6Color"/>
                         <constraints>
-                            <constraint firstItem="lhL-s4-xXL" firstAttribute="trailing" secondItem="Yel-Xo-klO" secondAttribute="trailing" id="VKL-cO-fxG"/>
-                            <constraint firstItem="Yel-Xo-klO" firstAttribute="leading" secondItem="lhL-s4-xXL" secondAttribute="leading" id="Xgb-3T-B0M"/>
-                            <constraint firstItem="lhL-s4-xXL" firstAttribute="bottom" secondItem="Yel-Xo-klO" secondAttribute="bottom" id="aV8-1l-Y6h"/>
-                            <constraint firstItem="Yel-Xo-klO" firstAttribute="top" secondItem="lhL-s4-xXL" secondAttribute="top" id="cjA-zo-tlo"/>
+                            <constraint firstItem="Dgt-N3-pYB" firstAttribute="centerX" secondItem="FI6-ZV-4hH" secondAttribute="centerX" id="4tQ-8H-5Vb"/>
+                            <constraint firstItem="lhL-s4-xXL" firstAttribute="bottom" secondItem="Dgt-N3-pYB" secondAttribute="bottom" constant="31" id="6Ai-SV-HEN"/>
+                            <constraint firstItem="Dgt-N3-pYB" firstAttribute="trailing" secondItem="lhL-s4-xXL" secondAttribute="trailing" id="80a-jY-cqr"/>
+                            <constraint firstItem="dfc-Bm-QEf" firstAttribute="centerX" secondItem="FI6-ZV-4hH" secondAttribute="centerX" id="IN4-Mz-Koa"/>
+                            <constraint firstItem="Dgt-N3-pYB" firstAttribute="top" secondItem="dfc-Bm-QEf" secondAttribute="bottom" constant="20" id="boK-XJ-fzO"/>
+                            <constraint firstItem="dfc-Bm-QEf" firstAttribute="top" secondItem="lhL-s4-xXL" secondAttribute="top" id="eZg-uA-TmS"/>
+                            <constraint firstItem="dfc-Bm-QEf" firstAttribute="leading" secondItem="lhL-s4-xXL" secondAttribute="leading" constant="20" id="f5n-mb-PAI"/>
+                            <constraint firstItem="Dgt-N3-pYB" firstAttribute="leading" secondItem="lhL-s4-xXL" secondAttribute="leading" id="gt9-gq-zSU"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Bookmarks" id="7U6-L7-hEf">
@@ -369,11 +371,12 @@
                     </navigationItem>
                     <connections>
                         <outlet property="collectionView" destination="Dgt-N3-pYB" id="0uN-Tk-Dl9"/>
+                        <outlet property="segmentControl" destination="dfc-Bm-QEf" id="blM-2Z-XaX"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="v3T-N5-jOB" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2933" y="856"/>
+            <point key="canvasLocation" x="3115" y="855"/>
         </scene>
         <!--Interests-->
         <scene sceneID="zGI-x2-xv3">
@@ -803,16 +806,16 @@
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="systemGray2Color">
-            <color red="0.68235294120000001" green="0.68235294120000001" blue="0.69803921570000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.68235294117647061" green="0.68235294117647061" blue="0.69803921568627447" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemGray6Color">
-            <color red="0.94901960780000005" green="0.94901960780000005" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemGrayColor">
-            <color red="0.5568627451" green="0.5568627451" blue="0.57647058819999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.55686274509803924" green="0.55686274509803924" blue="0.57647058823529407" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemOrangeColor">
-            <color red="1" green="0.58431372550000005" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="1" green="0.55294117647058827" blue="0.15686274509803921" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemYellowColor">
             <color red="1" green="0.80000000000000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

@@ -58,7 +58,7 @@ class HomeViewController: UIViewController, UICollectionViewDelegate {
         let all = newsStore.getAllNews()
         // ✅ Preserve sorted order — NewsDataStore keeps articles sorted by relevanceScore descending
         if !all.isEmpty {
-            todaysPick       = all
+            todaysPick = Array(all.shuffled().prefix(4))
             trendingNews     = all
             marketHighlights = all
         }
@@ -121,8 +121,9 @@ class HomeViewController: UIViewController, UICollectionViewDelegate {
     }
 
     func scrollTodaysPick() {
-        guard todaysPick.count > 1 else { return }
-        let lastIndex = todaysPick.count - 1
+        let count = min(todaysPick.count, 4)
+        guard count > 1 else { return }
+        let lastIndex = count - 1
         currentIndex  = currentIndex < lastIndex ? currentIndex + 1 : 0
         let indexPath = IndexPath(item: currentIndex, section: 0)
         collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
@@ -140,16 +141,17 @@ class HomeViewController: UIViewController, UICollectionViewDelegate {
             performSegue(withIdentifier: "showArticleDetail2", sender: selectedArticle)
             return
         }
-
         if indexPath.section == 1 {
-            guard indexPath.row < trendingNews.count else { return }
-            selectedArticle = trendingNews[indexPath.row]
+            guard !trendingNews.isEmpty else { return }
+            selectedArticle = trendingNews[0]
         } else if indexPath.section == 2 {
-            guard indexPath.row < marketHighlights.count else { return }
-            selectedArticle = marketHighlights[indexPath.row]
+            let items = Array(marketHighlights.filter { $0.relevanceScore >= 35 }.dropFirst(1))
+            guard indexPath.row < items.count else { return }
+            selectedArticle = items[indexPath.row]
         } else {
-            guard indexPath.row < marketHighlights.count else { return }
-            selectedArticle = marketHighlights[indexPath.row]
+            let items = marketHighlights.filter { $0.relevanceScore < 35 }
+            guard indexPath.row < items.count else { return }
+            selectedArticle = items[indexPath.row]
         }
 
         performSegue(withIdentifier: "showArticleDetail", sender: selectedArticle)
@@ -305,10 +307,10 @@ extension HomeViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView,
                         numberOfItemsInSection section: Int) -> Int {
         switch section {
-        case 0: return todaysPick.count
-        case 1: return min(trendingNews.count, 1)   // ✅ max 1 item, 0 if empty
-        case 2: return marketHighlights.count
-        case 3: return marketHighlights.count
+        case 0: return min(todaysPick.count, 4)
+        case 1: return min(trendingNews.count, 1)
+        case 2: return marketHighlights.filter { $0.relevanceScore >= 35 }.dropFirst(1).count
+        case 3: return marketHighlights.filter { $0.relevanceScore < 35 }.count
         default: return 0
         }
     }
@@ -319,8 +321,7 @@ extension HomeViewController: UICollectionViewDataSource {
         switch indexPath.section {
 
         case 0:
-            // ✅ Safe guard before access
-            guard indexPath.row < todaysPick.count else {
+            guard indexPath.row < min(todaysPick.count, 4) else {
                 return collectionView.dequeueReusableCell(withReuseIdentifier: "today_cell", for: indexPath)
             }
             let cell = collectionView.dequeueReusableCell(
@@ -330,13 +331,13 @@ extension HomeViewController: UICollectionViewDataSource {
             return cell
 
         case 1:
-            guard indexPath.row < trendingNews.count else {
+            guard !trendingNews.isEmpty else {
                 return collectionView.dequeueReusableCell(withReuseIdentifier: "trending_cell", for: indexPath)
             }
             let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: "trending_cell", for: indexPath
             ) as! TrendingCollectionViewCell
-            cell.configureCell(with: trendingNews[indexPath.row])
+            cell.configureCell(with: trendingNews[0])
             cell.onArticleLensTapped = { [weak self] in
                 guard let self = self else { return }
                 let popupVC = ArticleLensPopupViewController(
@@ -352,13 +353,14 @@ extension HomeViewController: UICollectionViewDataSource {
             return cell
 
         case 2:
-            guard indexPath.row < marketHighlights.count else {
+            let items = Array(marketHighlights.filter { $0.relevanceScore >= 35 }.dropFirst(1))
+            guard indexPath.row < items.count else {
                 return collectionView.dequeueReusableCell(withReuseIdentifier: "explore_cell", for: indexPath)
             }
             let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: "explore_cell", for: indexPath
             ) as! ExploreCollectionViewCell
-            cell.configureCell(with: marketHighlights[indexPath.row])
+            cell.configureCell(with: items[indexPath.row])
             cell.onArticleLensTapped = { [weak self] in
                 guard let self = self else { return }
                 let popupVC = ArticleLensPopupViewController(
@@ -374,13 +376,14 @@ extension HomeViewController: UICollectionViewDataSource {
             return cell
 
         default:
-            guard indexPath.row < marketHighlights.count else {
+            let items = marketHighlights.filter { $0.relevanceScore < 35 }
+            guard indexPath.row < items.count else {
                 return collectionView.dequeueReusableCell(withReuseIdentifier: "realexplore_cell", for: indexPath)
             }
             let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: "realexplore_cell", for: indexPath
             ) as! RealExploreCollectionViewCell
-            cell.configureCell(with: marketHighlights[indexPath.row])
+            cell.configureCell(with: items[indexPath.row])
             return cell
         }
     }
