@@ -481,24 +481,29 @@ class EndingViewController: UIViewController {
         self.ringLayer = ringLayer
     }
     
-    func navigateToIntro() {
-        let storyboard = UIStoryboard(name: "Scenario", bundle: nil)
-        let introVC = storyboard.instantiateViewController(
-            withIdentifier: "IntroViewController"
-        )
-
-        guard let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+    func navigateToHome() {
+        let storyboard = UIStoryboard(name: "HomeMain", bundle: nil)
+        if let homeVC = storyboard.instantiateInitialViewController() {
+            
+            // Access the active window scene to swap the root view controller safely
+            guard let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
                   let window = scene.windows.first else {
                 return
             }
-
-            window.rootViewController = introVC
+            window.rootViewController = homeVC
+            
+            // Add a smooth cross-dissolve animation so it doesn't just snap suddenly
+            UIView.transition(with: window, duration: 0.3,
+                              options: .transitionCrossDissolve,
+                              animations: nil)
+            
             window.makeKeyAndVisible()
-            print("Button tapped")
+            print("🏁 Re-routed from Ending screen to Home")
+        }
     }
     
 
     @IBAction func restartTapped(_ sender: UIButton) {
-        navigateToIntro()
+        navigateToHome()
     }
 }
