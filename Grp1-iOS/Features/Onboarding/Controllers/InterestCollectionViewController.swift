@@ -10,7 +10,7 @@ import UIKit
 class InterestCollectionViewController: UIViewController {
     
     
-    @IBOutlet weak var stepLabel: UILabel!
+//    @IBOutlet weak var stepLabel: UILabel!
     var onBackTapped: (() -> Void)?
     
     var onFinishTapped: (() -> Void)?
@@ -26,7 +26,6 @@ class InterestCollectionViewController: UIViewController {
         interestCollectionView.delegate = self
         interestCollectionView.dataSource = self
         interestCollectionView.allowsMultipleSelection = true
-        stepLabel.layer.cornerRadius = 16
         interestCollectionView.register(
             UINib(nibName: "InterestCollectionViewCell", bundle: nil),
             forCellWithReuseIdentifier: "InterestCollectionViewCell"
