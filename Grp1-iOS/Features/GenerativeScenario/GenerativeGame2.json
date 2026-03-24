@@ -1,0 +1,95 @@
+{
+  "id": "scenario_esop_02",
+  "type": "classroom",
+  "meta": {
+    "title": "The ESOP Classroom",
+    "description": "Linear — zero branching"
+  },
+  "envelopes": [
+    {
+      "id": "env_vesting",
+      "title": "Envelope 1 — Vesting",
+      "revealedTexts": [
+        "Year 0-1: You own nothing (cliff)",
+        "Year 1-4: 25% unlocks per year"
+      ],
+      "reactionOptions": [
+        "I knew this",
+        "I didn't know this",
+        "This changes my view"
+      ]
+    },
+    {
+      "id": "env_strike",
+      "title": "Envelope 2 — Strike Price",
+      "revealedTexts": [
+        "You pay ₹100 per share to exercise",
+        "1000 shares = ₹1,00,000 out of pocket",
+        "Before you see a single rupee of profit"
+      ],
+      "reactionOptions": [
+        "Fair — I'm buying at founder price",
+        "Annoying — I earned these",
+        "Risky — what if company value drops"
+      ]
+    },
+    {
+      "id": "env_dilution",
+      "title": "Envelope 3 — Dilution",
+      "revealedTexts": [
+        "Series B: your 0.1% → 0.07%",
+        "Series C: your 0.07% → 0.04%",
+        "IPO: your 0.04% → 0.02%"
+      ],
+      "reactionOptions": [
+        "Expected — that's how equity works",
+        "Didn't know this — concerning",
+        "Need anti-dilution clause in contract"
+      ]
+    },
+    {
+      "id": "env_liquidity",
+      "title": "Envelope 4 — Liquidity",
+      "revealedTexts": [
+        "Cannot sell until: IPO or acquisition",
+        "Average time to IPO in India: 8-10 years",
+        "You will be waiting almost a decade"
+      ],
+      "reactionOptions": [
+        "Fine — I'm playing the long game",
+        "That's a long time to wait",
+        "Need to check secondary sale options"
+      ]
+    },
+    {
+      "id": "env_tax",
+      "title": "Envelope 5 — Tax",
+      "revealedTexts": [
+        "Tax event 1: Exercise → income tax 30%",
+        "Tax event 2: Sale → capital gains tax",
+        "On ₹10L profit → you keep ~₹6.5L"
+      ],
+      "reactionOptions": [
+        "Make sense",
+        "Double taxation is brutal",
+        "I need a CA"
+      ]
+    }
+  ],
+  "finalAssessment": {
+    "slider": {
+      "question": "Rate your confidence in this offer now",
+      "minLabel": "Not worth it",
+      "maxLabel": "Fully convinced"
+    },
+    "multipleChoice": {
+      "question": "What's the one thing you'd ask the founder before signing?",
+      "options": [
+        { "id": "ask_cap", "text": "Show me the cap table" },
+        { "id": "ask_ipo", "text": "What's your IPO timeline realistically?" },
+        { "id": "ask_burn", "text": "Can I see last 6 months burn rate?" },
+        { "id": "ask_acquired", "text": "What happens to ESOPs if acquired?" }
+      ]
+    }
+  }
+}
