@@ -120,8 +120,7 @@ final class APIService {
 	}
 
 	// ─────────────────────────────────────────────
-	// MARK: - ✅ Multipart Form-Data Request
-	// Use this for any endpoint that accepts images
+	// MARK: - Multipart Form-Data Request
 	// ─────────────────────────────────────────────
 
 	private func multipartRequest<Response: Decodable>(
@@ -298,6 +297,14 @@ final class APIService {
 		completion: @escaping (Result<APIProfileResponse, APIError>) -> Void
 	) {
 		request(method: .get, path: "/api/profile", token: token, body: Optional<EmptyBody>.none, completion: completion)
+	}
+
+	func editProfile(
+		payload: APIEditProfileRequest,
+		token: String,
+		completion: @escaping (Result<APIProfileResponse, APIError>) -> Void
+	) {
+		request(method: .patch, path: "/api/profile", token: token, body: payload, completion: completion)
 	}
 
 	func fetchAvailableInterests(
