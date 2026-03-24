@@ -20,5 +20,14 @@ export const userSignInSchema = z.object({
   password: z.string().min(8, 'Password must be atleast 8 characters long'),
 });
 
+export const editProfileSchema = z.object({
+  name: z.string().min(3, 'Name must be atleast 3 characters long').optional(),
+  email: z.email('Invalid email').optional(),
+  phone: z.string().optional(),
+  dob: z.string().optional(),
+  gender: z.enum(['MALE', 'FEMALE', 'OTHERS']).optional(),
+});
+
 export type UserSignUpType = z.infer<typeof userSignUpSchema>;
 export type UserSignInType = z.infer<typeof userSignInSchema>;
+export type EditProfileType = z.infer<typeof editProfileSchema>;
