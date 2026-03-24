@@ -1,9 +1,6 @@
 import type { Context } from 'hono';
 import { prisma } from '../../prisma';
-import {
-  createBookmarkFolderSchema,
-  createBookmarkSchema,
-} from '../validators/bookmark.validator';
+import { editProfileSchema } from '../validators/user.validator';
 import { r2Service } from '../services/r2.service';
 
 export class Profile {
@@ -209,96 +206,6 @@ export class Profile {
     }
   }
 
-  async createBookmarkFolder(ctx: Context) {
-    const userId = ctx.get('userId');
-
-    if (!userId) {
-      return ctx.json({ error: 'Unauthorized' }, 401);
-    }
-
-    const data = createBookmarkFolderSchema.safeParse(await ctx.req.json());
-
-    if (!data.success) {
-      return ctx.json({ error: 'Invalid Input' }, 422);
-    }
-
-    const folderName = data.data.name;
-
-    try {
-      const existingFolder = await prisma.bookmarkFolder.findUnique({
-        where: {
-          userId_name: {
-            userId,
-            name: folderName,
-          },
-        },
-      });
-
-      if (existingFolder) {
-        return ctx.json({ error: 'Folder already exists' }, 409);
-      }
-
-      const folder = await prisma.bookmarkFolder.create({
-        data: {
-          userId,
-          name: folderName,
-        },
-      });
-
-      return ctx.json(folder, 201);
-    } catch (err) {
-      console.log(err);
-      return ctx.json({ error: 'Error creating bookmark folder' }, 500);
-    }
-  }
-
-  async createBookmark(ctx: Context) {
-    const userId = ctx.get('userId');
-
-    if (!userId) {
-      return ctx.json({ error: 'Unauthorized' }, 401);
-    }
-
-    const data = createBookmarkSchema.safeParse(await ctx.req.json());
-
-    if (!data.success) {
-      return ctx.json({ error: 'Invalid Input' }, 422);
-    }
-
-    const { folderId, title, url, sourceType, imageUrl, description } =
-      data.data;
-
-    try {
-      const folder = await prisma.bookmarkFolder.findFirst({
-        where: {
-          id: folderId,
-          userId,
-        },
-      });
-
-      if (!folder) {
-        return ctx.json({ error: 'Folder not found' }, 404);
-      }
-
-      const bookmark = await prisma.bookmark.create({
-        data: {
-          userId,
-          folderId,
-          title,
-          url,
-          imageUrl: imageUrl ?? '',
-          description: description ?? '',
-          sourceType,
-        },
-      });
-
-      return ctx.json(bookmark, 201);
-    } catch (err) {
-      console.log(err);
-      return ctx.json({ error: 'Error creating bookmark' }, 500);
-    }
-  }
-
   async getProfile(ctx: Context) {
     const userId = ctx.get('userId');
 
@@ -331,6 +238,57 @@ export class Profile {
     } catch (err) {
       console.log(err);
       return ctx.json('Error fetching profile', 500);
+    }
+  }
+
+  async editProfile(ctx: Context) {
+    const userId = ctx.get('userId');
+
+    if (!userId) {
+      return ctx.json({ error: 'Unauthorized' }, 401);
+    }
+
+    const body = await ctx.req.json();
+    const data = editProfileSchema.safeParse(body);
+
+    if (!data.success) {
+      return ctx.json({ error: 'Invalid Input' }, 422);
+    }
+
+    const { name, email, phone, dob, gender } = data.data;
+
+    const updateData: Record<string, string> = {};
+    if (name !== undefined) updateData.name = name;
+    if (email !== undefined) updateData.email = email;
+    if (phone !== undefined) updateData.phone = phone;
+    if (dob !== undefined) updateData.dob = dob;
+    if (gender !== undefined) updateData.gender = gender;
+
+    if (Object.keys(updateData).length === 0) {
+      return ctx.json({ error: 'No fields to update' }, 400);
+    }
+
+    try {
+      const updatedUser = await prisma.user.update({
+        where: { id: userId },
+        data: updateData,
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          phone: true,
+          dob: true,
+          gender: true,
+        },
+      });
+
+      return ctx.json(updatedUser, 200);
+    } catch (err) {
+      console.error('Error updating profile:', err);
+      if ((err as any).code === 'P2002') {
+        return ctx.json({ error: 'Email already in use' }, 409);
+      }
+      return ctx.json({ error: 'Error updating profile' }, 500);
     }
   }
 
@@ -472,66 +430,6 @@ export class Profile {
     } catch (err) {
       console.log(err);
       return ctx.json({ error: 'Error adding interest' }, 500);
-    }
-  }
-
-  async getBookmarkFolders(ctx: Context) {
-    const userId = ctx.get('userId');
-
-    if (!userId) {
-      return ctx.json({ error: 'Unauthorized' }, 401);
-    }
-
-    try {
-      const bookmarkFolders = await prisma.bookmarkFolder.findMany({
-        where: {
-          userId,
-        },
-        include: {
-          _count: {
-            select: {
-              bookmarks: true,
-            },
-          },
-        },
-        orderBy: {
-          createdAt: 'desc',
-        },
-      });
-      return ctx.json(bookmarkFolders, 200);
-    } catch (err) {
-      console.log(err);
-      return ctx.json('Err fetching bookmark folders', 500);
-    }
-  }
-
-  async getBookmarks(ctx: Context) {
-    const userId = ctx.get('userId');
-    const folderId = ctx.req.query('folderId');
-
-    if (!userId) {
-      return ctx.json('Unauthorized', 401);
-    }
-
-    if (!folderId) {
-      return ctx.json('Folder ID is required', 400);
-    }
-
-    try {
-      const bookmarks = await prisma.bookmark.findMany({
-        where: {
-          userId,
-          folderId,
-        },
-        orderBy: {
-          createdAt: 'desc',
-        },
-      });
-
-      return ctx.json(bookmarks, 200);
-    } catch (err) {
-      console.log(err);
-      return ctx.json('Error fetching bookmarks', 500);
     }
   }
 }
