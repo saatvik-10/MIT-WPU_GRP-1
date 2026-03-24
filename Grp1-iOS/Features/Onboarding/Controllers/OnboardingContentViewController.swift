@@ -2,7 +2,7 @@ import UIKit
 
 class OnboardingContentViewController: UIViewController {
 
-    @IBOutlet weak var stepHeaderLabel: UILabel!
+//    @IBOutlet weak var stepHeaderLabel: UILabel!
     @IBOutlet weak var beginnerButton: UIButton!
     @IBOutlet weak var intermediateButton: UIButton!
     @IBOutlet weak var advancedButton: UIButton!
@@ -11,6 +11,7 @@ class OnboardingContentViewController: UIViewController {
     // callback to parent (page controller)
     var onOptionSelected: ((String) -> Void)?
     var onNextTapped: (() -> Void)?
+    var onSkipTapped: (() -> Void)?
 
     var selectedButton : UIButton?
     override func viewDidLoad() {
@@ -22,8 +23,8 @@ class OnboardingContentViewController: UIViewController {
     // MARK: - UI Setup
     func setupUI() {
         // header styling
-        stepHeaderLabel.layer.cornerRadius = 10
-        stepHeaderLabel.layer.masksToBounds = true
+//        stepHeaderLabel.layer.cornerRadius = 10
+//        stepHeaderLabel.layer.masksToBounds = true
 
         // prepare a default configuration to apply to all buttons
         let buttons = [beginnerButton, intermediateButton, advancedButton]
@@ -141,5 +142,10 @@ class OnboardingContentViewController: UIViewController {
     @IBAction func nextTapped(_ sender: UIButton) {
             onNextTapped?()
         }
-
+    
+    
+    @IBAction func skipButtonTapped(_ sender: UIButton) {
+        onSkipTapped?()
+    }
+    
 }
