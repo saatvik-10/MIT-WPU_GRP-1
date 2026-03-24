@@ -21,6 +21,8 @@ struct NewsArticle: Codable {
     var selectedJargon: String? = ""
     var qaHistory: [ArticleQA] = []
     var relevanceScore: Double = 0.0   // ✅ NEW — scored at fetch time
+    var bodyText: String   // ← add this
+
 }
 
 
@@ -94,7 +96,9 @@ struct NewsArticleAssembler {
             jargons: summary.jargons,
             selectedJargon: nil,
             qaHistory: [],
-            relevanceScore: score    // ✅ stored on the article
+            relevanceScore: score,    // ✅ stored on the article
+            bodyText: scraped.bodyText,        // ← add this
+
         )
     }
 }
