@@ -26,9 +26,10 @@ class ExploreMoreViewController: UIViewController, UICollectionViewDelegate {
 
             registerCells()
 
-            exploreTrending = newsStore.getAllNews().reversed()
-            exploreList = newsStore.getAllNews().shuffled()
-            exploreGrid = newsStore.getAllNews().shuffled()
+            let all = newsStore.getAllNews()
+            exploreTrending = Array(all.prefix(4))
+            exploreList     = Array(all.dropFirst(4).prefix(5))
+            exploreGrid     = Array(all.dropFirst(9))
 
             collectionView.setCollectionViewLayout(generateLayout(), animated: false)
             collectionView.delegate = self
