@@ -13,7 +13,7 @@ struct DailyPuzzle: Codable {
     let companies: [Company]
     let visibleIndicators: [IndicatorValue]
     let twistIndicators: [IndicatorValue]
-    let results: [Result]
+    let results: [Result1]
 }
 
 extension DailyPuzzle {

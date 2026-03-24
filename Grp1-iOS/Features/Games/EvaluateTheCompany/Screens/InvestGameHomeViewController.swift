@@ -13,27 +13,34 @@ class InvestGameHomeViewController: UIViewController {
     @IBOutlet weak var sectorLabel: UILabel!
     @IBOutlet weak var startEvaluationButton: UIButton!
  
-    private var puzzle: DailyPuzzle!
+        private var puzzle: DailyPuzzle!
         private var collectionView: UICollectionView!
         private var flippedCards = Set<Int>()
         private var collectionViewTopRef: UILabel?
-     
-        // MARK: - Lifecycle
-     
+        private var indicatorPillButton: UIButton?
+    
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        hidesBottomBarWhenPushed = true
+    }
         override func viewDidLoad() {
+            
             super.viewDidLoad()
+           
             puzzle = DailyPuzzleLoader.loadDailyPuzzle()
             view.backgroundColor = UIColor(red: 0.961, green: 0.957, blue: 0.945, alpha: 1)
             setupHeader()
+            setupIndicatorInfoButton()
             setupCollectionView()
             setupHintLabel()
             styleStartButton()
         }
-     
-        // MARK: - Header (title + sector)
+ 
+
+    // MARK: - Header (title + sector)
      
         private func setupHeader() {
-            // Big Georgia title
             let titleLabel = UILabel()
             titleLabel.text          = "Evaluate The\nCompany"
             titleLabel.font          = UIFont(name: "Georgia-Bold", size: 40)
@@ -44,14 +51,12 @@ class InvestGameHomeViewController: UIViewController {
             titleLabel.translatesAutoresizingMaskIntoConstraints = false
             view.addSubview(titleLabel)
      
-            // Restyle the storyboard sector label
             sectorLabel.font          = UIFont.systemFont(ofSize: 20, weight: .regular)
             sectorLabel.textColor     = .secondaryLabel
             sectorLabel.textAlignment = .center
             sectorLabel.text          = "Sector — \(puzzle.sector)"
             sectorLabel.translatesAutoresizingMaskIntoConstraints = false
      
-            // Remove any storyboard constraints on sectorLabel so we can reposition it
             if let superviewConstraints = sectorLabel.superview?.constraints {
                 let toRemove = superviewConstraints.filter {
                     $0.firstItem === sectorLabel || $0.secondItem === sectorLabel
@@ -60,7 +65,7 @@ class InvestGameHomeViewController: UIViewController {
             }
      
             NSLayoutConstraint.activate([
-                titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: -48),
+                titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: -60),
                 titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
                 titleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
      
@@ -70,6 +75,67 @@ class InvestGameHomeViewController: UIViewController {
             ])
      
             collectionViewTopRef = sectorLabel
+        }
+     
+        // MARK: - Indicator Info Button
+     
+        private func setupIndicatorInfoButton() {
+            let green = UIColor(red: 0.18, green: 0.62, blue: 0.37, alpha: 1)
+     
+            let dot = UIView()
+            dot.backgroundColor    = green
+            dot.layer.cornerRadius = 3.5
+            dot.translatesAutoresizingMaskIntoConstraints = false
+            dot.widthAnchor.constraint(equalToConstant: 7).isActive  = true
+            dot.heightAnchor.constraint(equalToConstant: 7).isActive = true
+     
+            let lbl = UILabel()
+            lbl.text      = "What do these indicators mean?"
+            lbl.font      = UIFont.systemFont(ofSize: 13, weight: .medium)
+            lbl.textColor = green
+     
+            let row = UIStackView(arrangedSubviews: [dot, lbl])
+            row.axis                 = .horizontal
+            row.spacing              = 6
+            row.alignment            = .center
+            row.isUserInteractionEnabled = false
+            row.translatesAutoresizingMaskIntoConstraints = false
+     
+            let pill = UIButton(type: .custom)
+            pill.backgroundColor    = green.withAlphaComponent(0.10)
+            pill.layer.cornerRadius = 16
+            pill.layer.borderWidth  = 1
+            pill.layer.borderColor  = green.withAlphaComponent(0.25).cgColor
+            pill.translatesAutoresizingMaskIntoConstraints = false
+            pill.addSubview(row)
+            pill.addTarget(self, action: #selector(indicatorInfoTapped), for: .touchUpInside)
+     
+            NSLayoutConstraint.activate([
+                row.topAnchor.constraint(equalTo: pill.topAnchor, constant: 8),
+                row.bottomAnchor.constraint(equalTo: pill.bottomAnchor, constant: -8),
+                row.leadingAnchor.constraint(equalTo: pill.leadingAnchor, constant: 14),
+                row.trailingAnchor.constraint(equalTo: pill.trailingAnchor, constant: -14),
+            ])
+     
+            view.addSubview(pill)
+            NSLayoutConstraint.activate([
+                pill.topAnchor.constraint(equalTo: sectorLabel.bottomAnchor, constant: 14),
+                pill.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            ])
+     
+            collectionViewTopRef   = nil
+            indicatorPillButton    = pill
+        }
+     
+        @objc private func indicatorInfoTapped() {
+            let vc = IndicatorInfoViewController()
+            vc.modalPresentationStyle = .pageSheet
+            if let sheet = vc.sheetPresentationController {
+                sheet.detents               = [.large()]
+                sheet.prefersGrabberVisible = false
+                sheet.preferredCornerRadius = 24
+            }
+            present(vc, animated: true)
         }
      
         // MARK: - Collection view
@@ -93,7 +159,10 @@ class InvestGameHomeViewController: UIViewController {
      
             view.addSubview(collectionView)
      
-            let topRef = collectionViewTopRef?.bottomAnchor ?? view.safeAreaLayoutGuide.topAnchor
+            let topRef = indicatorPillButton?.bottomAnchor
+                      ?? collectionViewTopRef?.bottomAnchor
+                      ?? view.safeAreaLayoutGuide.topAnchor
+     
             NSLayoutConstraint.activate([
                 collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
                 collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
@@ -138,7 +207,7 @@ class InvestGameHomeViewController: UIViewController {
             view.addSubview(row)
             NSLayoutConstraint.activate([
                 row.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-                row.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -92)
+                row.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -80)
             ])
         }
      
@@ -168,7 +237,6 @@ class InvestGameHomeViewController: UIViewController {
      
         @IBAction func startEvaluationTapped(_ sender: UIButton) {
             guard flippedCards.count >= puzzle.companies.count else {
-               // shakeButton(sender)
                 return
             }
             performSegue(withIdentifier: "showTwist", sender: nil)
@@ -191,14 +259,6 @@ class InvestGameHomeViewController: UIViewController {
             }
             UINotificationFeedbackGenerator().notificationOccurred(.success)
         }
-     
-//        private func shakeButton(_ btn: UIButton) {
-//            let anim = CAKeyframeAnimation(keyPath: "transform.translation.x")
-//            anim.timingFunction = CAMediaTimingFunction(name: .linear)
-//            anim.duration = 0.4
-//            anim.values   = [-8, 8, -6, 6, -4, 4, 0]
-//            btn.layer.add(anim, forKey: "shake")
-//        }
     }
      
     // MARK: - UICollectionViewDataSource
@@ -234,7 +294,7 @@ class InvestGameHomeViewController: UIViewController {
                             sizeForItemAt indexPath: IndexPath) -> CGSize {
             let spacing: CGFloat = 20 + 20 + 14
             let width = (collectionView.bounds.width - spacing) / 2
-            return CGSize(width: width, height: width * 1.35)
+            return CGSize(width: width, height: width * 1.28)
         }
      
         func collectionView(_ collectionView: UICollectionView,

@@ -11,21 +11,27 @@ final class TwistViewController: UIViewController {
  
     var puzzle: DailyPuzzle!
  
-    private let mainStack    = UIStackView()
+    private let mainStack     = UIStackView()
     private let cagrContainer = UIView()
-    private let valuesStack  = UIStackView()
-    private let proceedButton = UIButton(type: .system)
+    private let valuesStack   = UIStackView()
+ 
+    // ── Connect this in Storyboard ──
+    @IBOutlet weak var proceedButton: UIButton!
  
     override func viewDidLoad() {
         super.viewDidLoad()
-        // ── Same warm off-white as screen 1 ──
         view.backgroundColor = UIColor(red: 0.961, green: 0.957, blue: 0.945, alpha: 1)
+        // Shadow must stay in code (Storyboard can't do shadows)
+        proceedButton.layer.shadowColor   = UIColor.black.cgColor
+        proceedButton.layer.shadowOpacity = 0.15
+        proceedButton.layer.shadowOffset  = CGSize(width: 0, height: 4)
+        proceedButton.layer.shadowRadius  = 10
         setupUI()
     }
  
     // MARK: - Navigation
  
-    @objc private func didTapProceed() {
+    @IBAction func proceedTapped(_ sender: UIButton) {
         performSegue(withIdentifier: "showInvest", sender: self)
     }
  
@@ -90,17 +96,15 @@ final class TwistViewController: UIViewController {
         mainStack.addArrangedSubview(sector)
  
         setupCAGRSection()
-        setupButton()
     }
  
     private func setupCAGRSection() {
-        // ── Container: white card, same style as flip cards ──
         cagrContainer.translatesAutoresizingMaskIntoConstraints = false
-        cagrContainer.backgroundColor    = .systemBackground
-        cagrContainer.layer.cornerRadius = 20
-        cagrContainer.layer.cornerCurve  = .continuous
-        cagrContainer.clipsToBounds      = false
-        cagrContainer.layer.shadowColor  = UIColor.black.cgColor
+        cagrContainer.backgroundColor     = .systemBackground
+        cagrContainer.layer.cornerRadius  = 20
+        cagrContainer.layer.cornerCurve   = .continuous
+        cagrContainer.clipsToBounds       = false
+        cagrContainer.layer.shadowColor   = UIColor.black.cgColor
         cagrContainer.layer.shadowOpacity = 0.07
         cagrContainer.layer.shadowRadius  = 12
         cagrContainer.layer.shadowOffset  = CGSize(width: 0, height: 4)
@@ -121,9 +125,9 @@ final class TwistViewController: UIViewController {
  
         let indicatorName = puzzle.twistIndicators.first?.indicatorName ?? "Twist Indicator"
         let pillLabel = UILabel()
-        pillLabel.text          = indicatorName
-        pillLabel.font          = UIFont.systemFont(ofSize: 20, weight: .medium)
-        pillLabel.textColor     = UIColor(red: 0.30, green: 0.35, blue: 0.30, alpha: 1)
+        pillLabel.text      = indicatorName
+        pillLabel.font      = UIFont.systemFont(ofSize: 20, weight: .medium)
+        pillLabel.textColor = UIColor(red: 0.30, green: 0.35, blue: 0.30, alpha: 1)
         pillLabel.translatesAutoresizingMaskIntoConstraints = false
  
         pillBg.addSubview(pillLabel)
@@ -159,7 +163,6 @@ final class TwistViewController: UIViewController {
     private func addIndicatorRows() {
         let grouped = Dictionary(grouping: puzzle.twistIndicators, by: { $0.companyId })
  
-        // Find max numeric value to highlight best card
         let numericValues: [(String, Double)] = puzzle.companies.compactMap { company in
             guard let raw = grouped[company.id]?.first?.displayValue else { return nil }
             let cleaned = raw.replacingOccurrences(of: "%", with: "")
@@ -180,7 +183,6 @@ final class TwistViewController: UIViewController {
             let numVal  = Double(cleaned) ?? 0
             let isBest  = numVal == maxValue && maxValue > 0
  
-            // ── Row card ──
             let card = UIView()
             card.backgroundColor    = UIColor(red: 0.961, green: 0.957, blue: 0.945, alpha: 1)
             card.layer.cornerRadius = 14
@@ -189,26 +191,23 @@ final class TwistViewController: UIViewController {
             card.heightAnchor.constraint(equalToConstant: 72).isActive = true
  
             if isBest {
-                card.backgroundColor    = .systemBackground
-                card.layer.borderWidth  = 1.5
-                card.layer.borderColor  = green.cgColor
+                card.backgroundColor   = .systemBackground
+                card.layer.borderWidth = 1.5
+                card.layer.borderColor = green.cgColor
             }
  
-            // Company name
             let nameLabel = UILabel()
-            nameLabel.text          = company.name
-            nameLabel.font          = UIFont.systemFont(ofSize: 16, weight: .semibold)
-            nameLabel.textColor     = UIColor(red: 0.08, green: 0.08, blue: 0.08, alpha: 1)
+            nameLabel.text      = company.name
+            nameLabel.font      = UIFont.systemFont(ofSize: 16, weight: .semibold)
+            nameLabel.textColor = UIColor(red: 0.08, green: 0.08, blue: 0.08, alpha: 1)
             nameLabel.translatesAutoresizingMaskIntoConstraints = false
  
-            // Company description
             let descLabel = UILabel()
             descLabel.text      = company.description
             descLabel.font      = UIFont.systemFont(ofSize: 13, weight: .regular)
             descLabel.textColor = .systemGray
             descLabel.translatesAutoresizingMaskIntoConstraints = false
  
-            // Value
             let valueLabel = UILabel()
             valueLabel.text          = raw
             valueLabel.font          = UIFont.systemFont(ofSize: 17, weight: .semibold)
@@ -216,13 +215,12 @@ final class TwistViewController: UIViewController {
             valueLabel.textAlignment = .right
             valueLabel.translatesAutoresizingMaskIntoConstraints = false
  
-            // Mini bar
             let barBg = UIView()
-            barBg.backgroundColor   = UIColor(red: 0.88, green: 0.87, blue: 0.85, alpha: 1)
+            barBg.backgroundColor    = UIColor(red: 0.88, green: 0.87, blue: 0.85, alpha: 1)
             barBg.layer.cornerRadius = 1.5
             barBg.translatesAutoresizingMaskIntoConstraints = false
-            barBg.heightAnchor.constraint(equalToConstant: 5).isActive = true
-            barBg.widthAnchor.constraint(equalToConstant: 52).isActive = true
+            barBg.heightAnchor.constraint(equalToConstant: 5).isActive  = true
+            barBg.widthAnchor.constraint(equalToConstant: 52).isActive  = true
  
             let barFill = UIView()
             barFill.backgroundColor   = green
@@ -238,7 +236,6 @@ final class TwistViewController: UIViewController {
                 barFill.widthAnchor.constraint(equalTo: barBg.widthAnchor, multiplier: max(ratio, 0.04))
             ])
  
-            // Right value stack
             let rightStack = UIStackView(arrangedSubviews: [valueLabel, barBg])
             rightStack.axis      = .vertical
             rightStack.spacing   = 4
@@ -263,31 +260,6 @@ final class TwistViewController: UIViewController {
  
             valuesStack.addArrangedSubview(card)
         }
-    }
- 
-    private func setupButton() {
-        // ── Dark button matching "Start Evaluation" on screen 1 ──
-        proceedButton.setTitle("Proceed to invest  →", for: .normal)
-        proceedButton.backgroundColor = UIColor(red: 0.08, green: 0.08, blue: 0.08, alpha: 1)
-        proceedButton.setTitleColor(.white, for: .normal)
-        proceedButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
-        proceedButton.layer.cornerRadius = 16
-        proceedButton.translatesAutoresizingMaskIntoConstraints = false
-        proceedButton.addTarget(self, action: #selector(didTapProceed), for: .touchUpInside)
- 
-        proceedButton.layer.shadowColor   = UIColor.black.cgColor
-        proceedButton.layer.shadowOpacity = 0.15
-        proceedButton.layer.shadowOffset  = CGSize(width: 0, height: 4)
-        proceedButton.layer.shadowRadius  = 10
- 
-        view.addSubview(proceedButton)
- 
-        NSLayoutConstraint.activate([
-            proceedButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            proceedButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            proceedButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16),
-            proceedButton.heightAnchor.constraint(equalToConstant: 54)
-        ])
     }
 }
  

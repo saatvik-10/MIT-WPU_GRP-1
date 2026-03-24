@@ -7,71 +7,82 @@
 
 
 import UIKit
-
+ 
 final class ResultViewController: UIViewController {
-
-    // MARK: – Injected by the previous screen (already wired in your project)
+ 
     var puzzle: DailyPuzzle!
     var selectedCompanyId: String!
-
-    // MARK: – Private state
+ 
     private var data: ResultScreenData!
-
-    // MARK: – UI root
+ 
     private let scrollView  = UIScrollView()
     private let contentView = UIView()
-
-    // MARK: – Palette
+ 
+    // ── Palette (matches game theme) ──────────────────────────────────────
     private enum C {
-        static let green      = UIColor(red: 0.18, green: 0.75, blue: 0.42, alpha: 1)
-        static let greenLight = UIColor(red: 0.90, green: 0.98, blue: 0.93, alpha: 1)
-        static let red        = UIColor(red: 1.00, green: 0.27, blue: 0.23, alpha: 1)
-        static let redLight   = UIColor(red: 1.00, green: 0.94, blue: 0.94, alpha: 1)
-        static let redBorder  = UIColor(red: 1.00, green: 0.70, blue: 0.69, alpha: 1)
-        static let teal       = UIColor(red: 0.20, green: 0.68, blue: 0.90, alpha: 1)
-        static let tealLight  = UIColor(red: 0.91, green: 0.96, blue: 0.99, alpha: 1)
-        static let tealBorder = UIColor(red: 0.20, green: 0.68, blue: 0.90, alpha: 0.28)
-        static let gold       = UIColor(red: 1.00, green: 0.72, blue: 0.00, alpha: 1)
-        static let goldLight  = UIColor(red: 1.00, green: 0.98, blue: 0.91, alpha: 1)
-        static let cardBg     = UIColor(red: 0.95, green: 0.95, blue: 0.97, alpha: 1)
-        static let border     = UIColor(red: 0.90, green: 0.90, blue: 0.91, alpha: 1)
-        static let text       = UIColor(red: 0.11, green: 0.11, blue: 0.12, alpha: 1)
-        static let subtext    = UIColor(red: 0.42, green: 0.42, blue: 0.44, alpha: 1)
-        static let orange     = UIColor(red: 1.00, green: 0.58, blue: 0.00, alpha: 1)
+        static let bg         = UIColor(red: 0.961, green: 0.957, blue: 0.945, alpha: 1)
+        static let green      = UIColor(red: 0.18,  green: 0.62,  blue: 0.37,  alpha: 1)
+        static let greenLight = UIColor(red: 0.90,  green: 0.97,  blue: 0.92,  alpha: 1)
+        static let greenDark  = UIColor(red: 0.05,  green: 0.17,  blue: 0.10,  alpha: 1)
+        static let red        = UIColor(red: 0.75,  green: 0.18,  blue: 0.13,  alpha: 1)
+        static let redLight   = UIColor(red: 0.98,  green: 0.93,  blue: 0.92,  alpha: 1)
+        static let charcoal   = UIColor(red: 0.11,  green: 0.11,  blue: 0.12,  alpha: 1)
+        static let card       = UIColor.systemBackground
+        static let text       = UIColor(red: 0.08,  green: 0.08,  blue: 0.08,  alpha: 1)
+        static let subtext    = UIColor(red: 0.50,  green: 0.50,  blue: 0.50,  alpha: 1)
+        static let border     = UIColor.black.withAlphaComponent(0.06)
+        static let separator  = UIColor.black.withAlphaComponent(0.05)
     }
-
-    // MARK: – Lifecycle
-
+ 
+    // ── Rank circle colors ──
+    private let rankColors: [UIColor] = [
+        UIColor(red: 0.18, green: 0.62, blue: 0.37, alpha: 1),  // 1st — green
+        UIColor(red: 0.55, green: 0.55, blue: 0.58, alpha: 1),  // 2nd — silver
+        UIColor(red: 0.63, green: 0.47, blue: 0.31, alpha: 1),  // 3rd — bronze
+        UIColor(red: 0.78, green: 0.78, blue: 0.76, alpha: 1),  // 4th — grey
+    ]
+ 
+    // ── Top 2 correlations per twist indicator ──
+    private let correlationMap: [String: [String]] = [
+        "5Y Sales CAGR":       ["EPS Growth (YoY)", "Net Profit Margin"],
+        "5Y Revenue CAGR":     ["EPS Growth (YoY)", "Net Profit Margin"],
+        "Net Profit Margin":   ["EPS Growth (YoY)", "Debt-to-Equity"],
+        "EPS Growth (YoY)":    ["P/E Ratio", "Net Profit Margin"],
+        "P/E Ratio":           ["EPS Growth (YoY)", "Debt-to-Equity"],
+        "Debt-to-Equity":      ["Net Profit Margin", "P/E Ratio"],
+        "Return on Equity":    ["EPS Growth (YoY)", "Net Profit Margin"],
+    ]
+ 
+    // MARK: - Lifecycle
+ 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .systemBackground
-
-        guard let d = puzzle.buildResultScreenData(selectedCompanyId: selectedCompanyId) else {
-            return
-        }
+        view.backgroundColor = C.bg
+ 
+        guard let d = puzzle.buildResultScreenData(selectedCompanyId: selectedCompanyId) else { return }
         self.data = d
-
+ 
         setupScrollView()
         buildUI()
         animateEntrance()
     }
-
-    // MARK: – ScrollView scaffold
-
+ 
+    // MARK: - ScrollView
+ 
     private func setupScrollView() {
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         scrollView.showsVerticalScrollIndicator = false
         contentView.translatesAutoresizingMaskIntoConstraints = false
-
+ 
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
-
+ 
         NSLayoutConstraint.activate([
             scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-
+ 
             contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
             contentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
             contentView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
@@ -79,265 +90,346 @@ final class ResultViewController: UIViewController {
             contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor)
         ])
     }
-
-    // MARK: – Build all sections
-
+ 
+    // MARK: - Build UI
+ 
     private func buildUI() {
         let stack = UIStackView()
-        stack.axis = .vertical
+        stack.axis    = .vertical
         stack.spacing = 0
         stack.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(stack)
-
+ 
         NSLayoutConstraint.activate([
             stack.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
             stack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             stack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             stack.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -32)
         ])
-
-        // Back button row
-        stack.addArrangedSubview(makeBackRow())
-
-        // 1. Hero banner
-        stack.addArrangedSubview(padded(makeBanner(), h: 16, v: 14))
-
-        // 2. Your Pick
-        stack.addArrangedSubview(sectionLabel("Your Pick"))
-        stack.addArrangedSubview(padded(makePickStrip(), h: 18, v: 0))
-
-        // 3. Twist definition
-        stack.addArrangedSubview(sectionLabel("🌀  Twist Indicator — What It Means"))
-        stack.addArrangedSubview(padded(makeTwistCard(), h: 18, v: 0))
-
-        // 4. Correlations
-        stack.addArrangedSubview(sectionLabel("🔗  How \(data.twistIndicatorName) Connects"))
-        stack.addArrangedSubview(padded(makeCorrelationsStack(), h: 18, v: 0))
-
-        // 5. Best pick
-        stack.addArrangedSubview(sectionLabel("🏆  Best Company to Invest In"))
-        stack.addArrangedSubview(padded(makeBestCard(), h: 18, v: 0))
-
-        // 6. Rankings
-        stack.addArrangedSubview(sectionLabel("📋  Final Rankings"))
-        stack.addArrangedSubview(padded(makeRankTable(), h: 18, v: 0))
-
-        // 7. CTAs
-        stack.addArrangedSubview(padded(makeCTAs(), h: 18, v: 20))
+ 
+        stack.addArrangedSubview(padded(makeBanner(),         h: 16, v: 10))
+        stack.addArrangedSubview(sectionLabel("Your pick", icon: "person.fill"))
+        stack.addArrangedSubview(padded(makePickStrip(),      h: 16, v: 0))
+        stack.addArrangedSubview(sectionLabel("Twist indicator", icon: "bolt.fill"))
+        stack.addArrangedSubview(padded(makeTwistCard(),      h: 16, v: 0))
+        stack.addArrangedSubview(sectionLabel("How it affects other indicators", icon: "arrow.triangle.branch"))
+        stack.addArrangedSubview(padded(makeCorrelationsStack(), h: 16, v: 0))
+        stack.addArrangedSubview(sectionLabel("Best company to invest in", icon: "star.fill"))
+        stack.addArrangedSubview(padded(makeBestCard(),       h: 16, v: 0))
+        stack.addArrangedSubview(sectionLabel("Final rankings", icon: "list.number"))
+        stack.addArrangedSubview(padded(makeRankTable(),      h: 16, v: 0))
+        stack.addArrangedSubview(padded(makeCTAs(),           h: 16, v: 20))
     }
-
-    // MARK: – Section helpers
-
-    private func makeBackRow() -> UIView {
-        let row = UIView()
-        let btn = UIButton(type: .system)
-        btn.setTitle("‹  Back", for: .normal)
-        btn.setTitleColor(C.teal, for: .normal)
-        btn.titleLabel?.font = .systemFont(ofSize: 16, weight: .semibold)
-        btn.addTarget(self, action: #selector(backTapped), for: .touchUpInside)
-        btn.translatesAutoresizingMaskIntoConstraints = false
-        row.addSubview(btn)
+ 
+    // MARK: - Section label
+ 
+    private func sectionLabel(_ text: String, icon: String) -> UIView {
+        let wrapper = UIView()
+ 
+        let img = UIImageView(image: UIImage(systemName: icon))
+        img.tintColor  = C.subtext
+        img.contentMode = .scaleAspectFit
+        img.translatesAutoresizingMaskIntoConstraints = false
+        img.widthAnchor.constraint(equalToConstant: 13).isActive  = true
+        img.heightAnchor.constraint(equalToConstant: 13).isActive = true
+ 
+        let lbl = UILabel()
+        lbl.text      = text.uppercased()
+        lbl.font      = UIFont.systemFont(ofSize: 10, weight: .semibold)
+        lbl.textColor = C.subtext
+ 
+        let row = UIStackView(arrangedSubviews: [img, lbl])
+        row.axis      = .horizontal
+        row.spacing   = 5
+        row.alignment = .center
+        row.translatesAutoresizingMaskIntoConstraints = false
+ 
+        wrapper.addSubview(row)
         NSLayoutConstraint.activate([
-            btn.topAnchor.constraint(equalTo: row.topAnchor, constant: 8),
-            btn.leadingAnchor.constraint(equalTo: row.leadingAnchor, constant: 20),
-            btn.bottomAnchor.constraint(equalTo: row.bottomAnchor, constant: -4)
+            row.topAnchor.constraint(equalTo: wrapper.topAnchor, constant: 20),
+            row.leadingAnchor.constraint(equalTo: wrapper.leadingAnchor, constant: 20),
+            row.bottomAnchor.constraint(equalTo: wrapper.bottomAnchor, constant: -8)
         ])
-        return row
+        return wrapper
     }
-
-    // ── 1. Hero Banner ──────────────────────────────────────────────────────
-
+ 
+    // MARK: - 1. Hero Banner
+ 
     private func makeBanner() -> UIView {
         let card = UIView()
-        card.layer.cornerRadius = 26
-        card.clipsToBounds = true
-
-        // Gradient
-        let grad = CAGradientLayer()
-        grad.colors = data.isCorrect
-            ? [UIColor(red:0.15,green:0.68,blue:0.38,alpha:1).cgColor, UIColor(red:0.18,green:0.75,blue:0.42,alpha:1).cgColor]
-            : [UIColor(red:0.75,green:0.22,blue:0.17,alpha:1).cgColor, UIColor(red:1.00,green:0.27,blue:0.23,alpha:1).cgColor]
-        grad.startPoint = CGPoint(x: 0, y: 0)
-        grad.endPoint   = CGPoint(x: 1, y: 1)
-        card.layer.insertSublayer(grad, at: 0)
-
-        // Dot-grid overlay using a pattern image
-        let dot = UIView()
-        dot.backgroundColor = UIColor(patternImage: dotPatternImage())
-        dot.alpha = 0.18
-        dot.translatesAutoresizingMaskIntoConstraints = false
-        card.addSubview(dot)
-
-        let emoji = UILabel()
-        emoji.text = data.isCorrect ? "🎯" : "📉"
-        emoji.font = .systemFont(ofSize: 44)
-
+        card.backgroundColor    = data.isCorrect ? C.greenDark : C.charcoal
+        card.layer.cornerRadius = 22
+        card.layer.cornerCurve  = .continuous
+        card.clipsToBounds      = true
+ 
+        // Icon box
+        let iconBox = UIView()
+        iconBox.backgroundColor    = data.isCorrect
+            ? UIColor(red: 0.12, green: 0.30, blue: 0.18, alpha: 1)
+            : UIColor(red: 0.20, green: 0.20, blue: 0.22, alpha: 1)
+        iconBox.layer.cornerRadius = 10
+        iconBox.translatesAutoresizingMaskIntoConstraints = false
+        iconBox.widthAnchor.constraint(equalToConstant: 36).isActive  = true
+        iconBox.heightAnchor.constraint(equalToConstant: 36).isActive = true
+ 
+        let iconImg = UIImageView(image: UIImage(systemName: data.isCorrect ? "checkmark" : "xmark"))
+        iconImg.tintColor    = data.isCorrect ? C.green : UIColor(red: 0.85, green: 0.35, blue: 0.30, alpha: 1)
+        iconImg.contentMode  = .scaleAspectFit
+        iconImg.translatesAutoresizingMaskIntoConstraints = false
+        iconBox.addSubview(iconImg)
+        NSLayoutConstraint.activate([
+            iconImg.centerXAnchor.constraint(equalTo: iconBox.centerXAnchor),
+            iconImg.centerYAnchor.constraint(equalTo: iconBox.centerYAnchor),
+            iconImg.widthAnchor.constraint(equalToConstant: 16),
+            iconImg.heightAnchor.constraint(equalToConstant: 16)
+        ])
+ 
+        // Badge row
+        let badgeLabel = UILabel()
+        badgeLabel.text      = "RESULT"
+        badgeLabel.font      = UIFont.systemFont(ofSize: 9, weight: .semibold)
+        badgeLabel.textColor = data.isCorrect ? C.green : UIColor(red: 0.55, green: 0.55, blue: 0.58, alpha: 1)
+ 
+        let badgeRow = UIStackView(arrangedSubviews: [iconBox, badgeLabel])
+        badgeRow.axis      = .horizontal
+        badgeRow.spacing   = 8
+        badgeRow.alignment = .center
+ 
+        // Title
         let title = UILabel()
-        title.text = data.isCorrect ? "Nailed it, Analyst!" : "Close, But Not Quite!"
-        title.font = .systemFont(ofSize: 22, weight: .heavy)
-        title.textColor = .white
+        title.text          = data.isCorrect ? "Nailed It, Analyst!" : "Close, But Not Quite!"
+        title.font          = UIFont(name: "Georgia-Bold", size: 22)
+            ?? UIFont.systemFont(ofSize: 22, weight: .bold)
+        title.textColor     = .white
         title.numberOfLines = 0
-
+ 
+        // Message
         let msg = UILabel()
         msg.text = data.isCorrect
-            ? "You read all the indicators like a pro. \(data.bestCompany.name) was the clear winner — and you saw it. Your instincts are investor-grade. 💼"
-            : "The twist indicator was the key signal. A low \(data.twistIndicatorName) told the whole story. Every miss is a lesson in reading the numbers. 📖"
-        msg.font = .systemFont(ofSize: 13.5, weight: .regular)
-        msg.textColor = UIColor.white.withAlphaComponent(0.9)
+            ? "You read the indicators like a pro. \(data.bestCompany.name) was the clear winner — and you saw it."
+            : "The twist indicator was the key signal. A low \(data.twistIndicatorName) told the whole story. Every miss is a lesson."
+        msg.font          = UIFont.systemFont(ofSize: 13, weight: .regular)
+        msg.textColor     = UIColor.white.withAlphaComponent(0.65)
         msg.numberOfLines = 0
-
-        let vstack = UIStackView(arrangedSubviews: [emoji, title, msg])
-        vstack.axis = .vertical
+ 
+        let vstack = UIStackView(arrangedSubviews: [badgeRow, title, msg])
+        vstack.axis    = .vertical
         vstack.spacing = 8
         vstack.translatesAutoresizingMaskIntoConstraints = false
         card.addSubview(vstack)
-
+ 
         NSLayoutConstraint.activate([
-            dot.topAnchor.constraint(equalTo: card.topAnchor),
-            dot.leadingAnchor.constraint(equalTo: card.leadingAnchor),
-            dot.trailingAnchor.constraint(equalTo: card.trailingAnchor),
-            dot.bottomAnchor.constraint(equalTo: card.bottomAnchor),
-
-            vstack.topAnchor.constraint(equalTo: card.topAnchor, constant: 24),
-            vstack.leadingAnchor.constraint(equalTo: card.leadingAnchor, constant: 22),
-            vstack.trailingAnchor.constraint(equalTo: card.trailingAnchor, constant: -22),
-            vstack.bottomAnchor.constraint(equalTo: card.bottomAnchor, constant: -24),
+            vstack.topAnchor.constraint(equalTo: card.topAnchor, constant: 20),
+            vstack.leadingAnchor.constraint(equalTo: card.leadingAnchor, constant: 20),
+            vstack.trailingAnchor.constraint(equalTo: card.trailingAnchor, constant: -20),
+            vstack.bottomAnchor.constraint(equalTo: card.bottomAnchor, constant: -20)
         ])
-
-        card.layoutIfNeeded()
-        grad.frame = card.bounds
-
-        // Update gradient frame after layout
-        DispatchQueue.main.async {
-            grad.frame = card.bounds
-        }
-
         return card
     }
-
-    // ── 2. Your Pick Strip ──────────────────────────────────────────────────
-
+ 
+    // MARK: - 2. Your Pick
+ 
     private func makePickStrip() -> UIView {
         let card = UIView()
-        card.backgroundColor = data.isCorrect ? C.greenLight : C.redLight
-        card.layer.cornerRadius = 18
+        card.backgroundColor    = C.card
+        card.layer.cornerRadius = 16
+        card.layer.cornerCurve  = .continuous
         card.layer.borderWidth  = 1.5
-        card.layer.borderColor  = (data.isCorrect ? C.green.withAlphaComponent(0.4) : C.redBorder).cgColor
-
-        // Left: company name + wrong/correct chip + description
+        card.layer.borderColor  = (data.isCorrect ? C.green : C.red).withAlphaComponent(0.4).cgColor
+ 
+        // Name + badge
         let nameLabel = UILabel()
-        nameLabel.text = data.selectedCompany.name
-        nameLabel.font = .systemFont(ofSize: 17, weight: .heavy)
+        nameLabel.text      = data.selectedCompany.name
+        nameLabel.font      = UIFont(name: "Georgia-Bold", size: 16)
+            ?? UIFont.systemFont(ofSize: 16, weight: .semibold)
         nameLabel.textColor = C.text
-
-        let chip = makePill(
-            text: data.isCorrect ? "Correct ✓" : "Wrong ✗",
-            bg: data.isCorrect ? C.green : C.red,
-            fg: .white,
-            size: 10
-        )
-
-        let nameRow = UIStackView(arrangedSubviews: [nameLabel, chip])
-        nameRow.axis = .horizontal
-        nameRow.spacing = 8
-        nameRow.alignment = .center
-
+ 
+        let badgeBg  = UIView()
+        badgeBg.backgroundColor    = data.isCorrect ? C.greenLight : C.redLight
+        badgeBg.layer.cornerRadius = 7
+ 
+        let badgeLbl = UILabel()
+        badgeLbl.text      = data.isCorrect ? "Correct" : "Wrong"
+        badgeLbl.font      = UIFont.systemFont(ofSize: 10, weight: .semibold)
+        badgeLbl.textColor = data.isCorrect ? C.green : C.red
+        badgeLbl.translatesAutoresizingMaskIntoConstraints = false
+ 
+        let badgeIcon = UIImageView(image: UIImage(systemName: data.isCorrect ? "checkmark" : "xmark"))
+        badgeIcon.tintColor    = data.isCorrect ? C.green : C.red
+        badgeIcon.contentMode  = .scaleAspectFit
+        badgeIcon.translatesAutoresizingMaskIntoConstraints = false
+        badgeIcon.widthAnchor.constraint(equalToConstant: 9).isActive  = true
+        badgeIcon.heightAnchor.constraint(equalToConstant: 9).isActive = true
+ 
+        let badgeRow = UIStackView(arrangedSubviews: [badgeIcon, badgeLbl])
+        badgeRow.axis      = .horizontal
+        badgeRow.spacing   = 4
+        badgeRow.alignment = .center
+        badgeRow.translatesAutoresizingMaskIntoConstraints = false
+        badgeBg.addSubview(badgeRow)
+        NSLayoutConstraint.activate([
+            badgeRow.topAnchor.constraint(equalTo: badgeBg.topAnchor, constant: 4),
+            badgeRow.bottomAnchor.constraint(equalTo: badgeBg.bottomAnchor, constant: -4),
+            badgeRow.leadingAnchor.constraint(equalTo: badgeBg.leadingAnchor, constant: 8),
+            badgeRow.trailingAnchor.constraint(equalTo: badgeBg.trailingAnchor, constant: -8)
+        ])
+ 
+        let topRow = UIStackView(arrangedSubviews: [nameLabel, badgeBg])
+        topRow.axis      = .horizontal
+        topRow.spacing   = 8
+        topRow.alignment = .center
+ 
         let descLabel = UILabel()
-        descLabel.text = data.selectedCompany.description
-        descLabel.font = .systemFont(ofSize: 12.5, weight: .regular)
+        descLabel.text      = data.selectedCompany.description
+        descLabel.font      = UIFont.systemFont(ofSize: 12, weight: .regular)
         descLabel.textColor = C.subtext
-
-        let leftStack = UIStackView(arrangedSubviews: [nameRow, descLabel])
-        leftStack.axis = .vertical
-        leftStack.spacing = 4
-
+ 
         // Divider
         let divider = UIView()
-        divider.backgroundColor = data.isCorrect ? C.green.withAlphaComponent(0.25) : C.redBorder
+        divider.backgroundColor = C.separator
         divider.translatesAutoresizingMaskIntoConstraints = false
         divider.widthAnchor.constraint(equalToConstant: 1).isActive = true
-
-        // Right: rank
+ 
+        // Rank
         let rankNum = UILabel()
-        let suffix = ordinalSuffix(data.selectedRank)
-        rankNum.text = "\(data.selectedRank)\(suffix)"
-        rankNum.font = .systemFont(ofSize: 30, weight: .heavy)
-        rankNum.textColor = data.isCorrect ? C.green : C.red
+        let suffix  = ordinalSuffix(data.selectedRank)
+        rankNum.text          = "\(data.selectedRank)\(suffix)"
+        rankNum.font          = UIFont.systemFont(ofSize: 28, weight: .bold)
+        rankNum.textColor     = data.isCorrect ? C.green : C.red
         rankNum.textAlignment = .center
-
+ 
         let rankSub = UILabel()
-        rankSub.text = "out of \(data.rankedResults.count)"
-        rankSub.font = .systemFont(ofSize: 11, weight: .regular)
-        rankSub.textColor = C.subtext
+        rankSub.text          = "of \(data.rankedResults.count)"
+        rankSub.font          = UIFont.systemFont(ofSize: 11, weight: .regular)
+        rankSub.textColor     = C.subtext
         rankSub.textAlignment = .center
-
+ 
         let rightStack = UIStackView(arrangedSubviews: [rankNum, rankSub])
-        rightStack.axis = .vertical
-        rightStack.spacing = 2
+        rightStack.axis      = .vertical
+        rightStack.spacing   = 0
         rightStack.alignment = .center
         rightStack.translatesAutoresizingMaskIntoConstraints = false
-        rightStack.widthAnchor.constraint(equalToConstant: 72).isActive = true
-
+        rightStack.widthAnchor.constraint(equalToConstant: 64).isActive = true
+ 
+        let leftStack = UIStackView(arrangedSubviews: [topRow, descLabel])
+        leftStack.axis    = .vertical
+        leftStack.spacing = 3
+ 
         let hstack = UIStackView(arrangedSubviews: [leftStack, divider, rightStack])
-        hstack.axis = .horizontal
-        hstack.spacing = 14
+        hstack.axis      = .horizontal
+        hstack.spacing   = 14
         hstack.alignment = .center
         hstack.translatesAutoresizingMaskIntoConstraints = false
         card.addSubview(hstack)
-
+ 
         NSLayoutConstraint.activate([
             hstack.topAnchor.constraint(equalTo: card.topAnchor, constant: 16),
-            hstack.leadingAnchor.constraint(equalTo: card.leadingAnchor, constant: 18),
-            hstack.trailingAnchor.constraint(equalTo: card.trailingAnchor, constant: -18),
-            hstack.bottomAnchor.constraint(equalTo: card.bottomAnchor, constant: -16),
+            hstack.leadingAnchor.constraint(equalTo: card.leadingAnchor, constant: 16),
+            hstack.trailingAnchor.constraint(equalTo: card.trailingAnchor, constant: -16),
+            hstack.bottomAnchor.constraint(equalTo: card.bottomAnchor, constant: -16)
         ])
-
         return card
     }
-
-    // ── 3. Twist Definition Card ────────────────────────────────────────────
-
+ 
+    // MARK: - 3. Twist Indicator Card
+ 
     private func makeTwistCard() -> UIView {
         let card = UIView()
-        card.backgroundColor = C.tealLight
-        card.layer.cornerRadius = 18
-        card.layer.borderWidth  = 1.5
-        card.layer.borderColor  = C.tealBorder.cgColor
-
-        let titleRow = UIStackView(arrangedSubviews: [
-            makeLabel(data.twistIndicatorName, size: 16, weight: .heavy, color: C.text),
-            makePill(text: "Twist Metric", bg: C.teal, fg: .white, size: 9)
+        card.backgroundColor    = C.card
+        card.layer.cornerRadius = 16
+        card.layer.cornerCurve  = .continuous
+        card.layer.borderWidth  = 0.5
+        card.layer.borderColor  = C.border.cgColor
+ 
+        // Header row: icon + name + "KEY SIGNAL" badge
+        let iconBox = UIView()
+        iconBox.backgroundColor    = UIColor(red: 0.90, green: 0.97, blue: 0.92, alpha: 1)
+        iconBox.layer.cornerRadius = 10
+        iconBox.translatesAutoresizingMaskIntoConstraints = false
+        iconBox.widthAnchor.constraint(equalToConstant: 36).isActive  = true
+        iconBox.heightAnchor.constraint(equalToConstant: 36).isActive = true
+ 
+        let iconImg = UIImageView(image: UIImage(systemName: "waveform.path.ecg"))
+        iconImg.tintColor   = C.green
+        iconImg.contentMode = .scaleAspectFit
+        iconImg.translatesAutoresizingMaskIntoConstraints = false
+        iconBox.addSubview(iconImg)
+        NSLayoutConstraint.activate([
+            iconImg.centerXAnchor.constraint(equalTo: iconBox.centerXAnchor),
+            iconImg.centerYAnchor.constraint(equalTo: iconBox.centerYAnchor),
+            iconImg.widthAnchor.constraint(equalToConstant: 18),
+            iconImg.heightAnchor.constraint(equalToConstant: 18)
         ])
-        titleRow.axis = .horizontal
-        titleRow.spacing = 8
-        titleRow.alignment = .center
-
+ 
+        let nameLabel = UILabel()
+        nameLabel.text      = data.twistIndicatorName
+        nameLabel.font      = UIFont(name: "Georgia-Bold", size: 15)
+            ?? UIFont.systemFont(ofSize: 15, weight: .semibold)
+        nameLabel.textColor = C.text
+ 
+        let subLabel = UILabel()
+        subLabel.text      = "Twist indicator"
+        subLabel.font      = UIFont.systemFont(ofSize: 10, weight: .regular)
+        subLabel.textColor = C.subtext
+ 
+        let nameStack = UIStackView(arrangedSubviews: [nameLabel, subLabel])
+        nameStack.axis    = .vertical
+        nameStack.spacing = 1
+ 
+        let keyBadge = UIView()
+        keyBadge.backgroundColor    = UIColor(red: 0.90, green: 0.97, blue: 0.92, alpha: 1)
+        keyBadge.layer.cornerRadius = 6
+ 
+        let keyLbl = UILabel()
+        keyLbl.text      = "KEY SIGNAL"
+        keyLbl.font      = UIFont.systemFont(ofSize: 8.5, weight: .bold)
+        keyLbl.textColor = C.green
+        keyLbl.translatesAutoresizingMaskIntoConstraints = false
+        keyBadge.addSubview(keyLbl)
+        NSLayoutConstraint.activate([
+            keyLbl.topAnchor.constraint(equalTo: keyBadge.topAnchor, constant: 3),
+            keyLbl.bottomAnchor.constraint(equalTo: keyBadge.bottomAnchor, constant: -3),
+            keyLbl.leadingAnchor.constraint(equalTo: keyBadge.leadingAnchor, constant: 6),
+            keyLbl.trailingAnchor.constraint(equalTo: keyBadge.trailingAnchor, constant: -6)
+        ])
+ 
+        let headerRow = UIStackView(arrangedSubviews: [iconBox, nameStack, keyBadge])
+        headerRow.axis      = .horizontal
+        headerRow.spacing   = 10
+        headerRow.alignment = .center
+ 
+        // Divider
+        let divider = UIView()
+        divider.backgroundColor = C.separator
+        divider.heightAnchor.constraint(equalToConstant: 0.5).isActive = true
+ 
+        // Definition
         let defLabel = UILabel()
-        defLabel.text = data.twistDefinition
-        defLabel.font = .systemFont(ofSize: 13.5, weight: .regular)
-        defLabel.textColor = C.text
+        defLabel.text          = data.twistDefinition
+        defLabel.font          = UIFont.systemFont(ofSize: 13, weight: .regular)
+        defLabel.textColor     = UIColor(red: 0.30, green: 0.30, blue: 0.30, alpha: 1)
         defLabel.numberOfLines = 0
-
+ 
         // Formula box
         let formulaBox = UIView()
-        formulaBox.backgroundColor = C.teal.withAlphaComponent(0.12)
+        formulaBox.backgroundColor    = UIColor(red: 0.94, green: 0.98, blue: 0.95, alpha: 1)
         formulaBox.layer.cornerRadius = 10
-
+ 
         let leftBar = UIView()
-        leftBar.backgroundColor = C.teal
+        leftBar.backgroundColor    = C.green
         leftBar.layer.cornerRadius = 1.5
         leftBar.translatesAutoresizingMaskIntoConstraints = false
         leftBar.widthAnchor.constraint(equalToConstant: 3).isActive = true
-
-        let formulaLabel = UILabel()
-        formulaLabel.text = data.twistFormula
-        formulaLabel.font = .systemFont(ofSize: 12, weight: .semibold)
-        formulaLabel.textColor = UIColor(red: 0.10, green: 0.37, blue: 0.48, alpha: 1)
-        formulaLabel.numberOfLines = 0
-
-        let formulaInner = UIStackView(arrangedSubviews: [leftBar, formulaLabel])
-        formulaInner.axis = .horizontal
-        formulaInner.spacing = 10
+ 
+        let formulaLbl = UILabel()
+        formulaLbl.text          = data.twistFormula
+        formulaLbl.font          = UIFont.monospacedSystemFont(ofSize: 12, weight: .medium)
+        formulaLbl.textColor     = UIColor(red: 0.10, green: 0.40, blue: 0.22, alpha: 1)
+        formulaLbl.numberOfLines = 0
+ 
+        let formulaInner = UIStackView(arrangedSubviews: [leftBar, formulaLbl])
+        formulaInner.axis      = .horizontal
+        formulaInner.spacing   = 10
         formulaInner.alignment = .center
         formulaInner.translatesAutoresizingMaskIntoConstraints = false
         formulaBox.addSubview(formulaInner)
@@ -345,523 +437,481 @@ final class ResultViewController: UIViewController {
             formulaInner.topAnchor.constraint(equalTo: formulaBox.topAnchor, constant: 10),
             formulaInner.leadingAnchor.constraint(equalTo: formulaBox.leadingAnchor, constant: 12),
             formulaInner.trailingAnchor.constraint(equalTo: formulaBox.trailingAnchor, constant: -12),
-            formulaInner.bottomAnchor.constraint(equalTo: formulaBox.bottomAnchor, constant: -10),
+            formulaInner.bottomAnchor.constraint(equalTo: formulaBox.bottomAnchor, constant: -10)
         ])
-
-        let vstack = UIStackView(arrangedSubviews: [titleRow, defLabel, formulaBox])
-        vstack.axis = .vertical
-        vstack.spacing = 10
+ 
+        let vstack = UIStackView(arrangedSubviews: [headerRow, divider, defLabel, formulaBox])
+        vstack.axis    = .vertical
+        vstack.spacing = 12
         vstack.translatesAutoresizingMaskIntoConstraints = false
         card.addSubview(vstack)
-
+ 
         NSLayoutConstraint.activate([
-            vstack.topAnchor.constraint(equalTo: card.topAnchor, constant: 18),
-            vstack.leadingAnchor.constraint(equalTo: card.leadingAnchor, constant: 18),
-            vstack.trailingAnchor.constraint(equalTo: card.trailingAnchor, constant: -18),
-            vstack.bottomAnchor.constraint(equalTo: card.bottomAnchor, constant: -18),
+            vstack.topAnchor.constraint(equalTo: card.topAnchor, constant: 16),
+            vstack.leadingAnchor.constraint(equalTo: card.leadingAnchor, constant: 16),
+            vstack.trailingAnchor.constraint(equalTo: card.trailingAnchor, constant: -16),
+            vstack.bottomAnchor.constraint(equalTo: card.bottomAnchor, constant: -16)
         ])
         return card
     }
-
-    // ── 4. Correlations ─────────────────────────────────────────────────────
-
+ 
+    // MARK: - 4. Correlations (top 2 most impacted indicators)
+ 
     private func makeCorrelationsStack() -> UIView {
         let container = UIStackView()
-        container.axis = .vertical
-        container.spacing = 9
-
-        let icons = ["📈", "💰", "⚖️", "🔬"]
-        let iconColors: [UIColor] = [
-            UIColor(red: 0.87, green: 0.97, blue: 0.91, alpha: 1),
-            UIColor(red: 1.00, green: 0.95, blue: 0.88, alpha: 1),
-            UIColor(red: 0.95, green: 0.94, blue: 1.00, alpha: 1),
-            UIColor(red: 0.91, green: 0.94, blue: 1.00, alpha: 1),
-        ]
-
-        for (i, name) in data.correlatedIndicators.enumerated() {
-            let icon  = icons[safe: i] ?? "📊"
-            let color = iconColors[safe: i] ?? C.cardBg
-            let desc  = correlationDescription(for: name)
-            container.addArrangedSubview(makeCorrelationRow(icon: icon, iconBg: color, title: name, desc: desc))
+        container.axis    = .vertical
+        container.spacing = 10
+ 
+        // Get top 2 relevant indicators from the map
+        let topTwo = correlationMap[data.twistIndicatorName]
+            ?? Array(data.correlatedIndicators.prefix(2))
+ 
+        // Only show ones actually in the puzzle
+        let visible = puzzle.visibleIndicators.map { $0.indicatorName }
+        let toShow  = topTwo.filter { visible.contains($0) }.prefix(2)
+ 
+        // Fallback: if none match, just use first 2 correlatedIndicators
+        let finalList = toShow.isEmpty
+            ? Array(data.correlatedIndicators.prefix(2))
+            : Array(toShow)
+ 
+        let sfIcons = ["chart.line.uptrend.xyaxis", "dollarsign.circle", "clock.arrow.2.circlepath", "building.columns"]
+ 
+        for (i, name) in finalList.enumerated() {
+            let desc = correlationDescription(for: name)
+            let icon = sfIcons[safe: i] ?? "chart.bar"
+            container.addArrangedSubview(makeCorrelationRow(sfIcon: icon, title: name, desc: desc))
         }
-
+ 
         return container
     }
-
-    private func makeCorrelationRow(icon: String, iconBg: UIColor, title: String, desc: String) -> UIView {
+ 
+    private func makeCorrelationRow(sfIcon: String, title: String, desc: String) -> UIView {
         let card = UIView()
-        card.backgroundColor = C.tealLight
-        card.layer.cornerRadius = 15
-        card.layer.borderWidth  = 1.5
-        card.layer.borderColor  = C.tealBorder.cgColor
-
+        card.backgroundColor    = C.card
+        card.layer.cornerRadius = 16
+        card.layer.cornerCurve  = .continuous
+        card.layer.borderWidth  = 0.5
+        card.layer.borderColor  = C.border.cgColor
+ 
         let iconBox = UIView()
-        iconBox.backgroundColor = iconBg
-        iconBox.layer.cornerRadius = 11
+        iconBox.backgroundColor    = UIColor(red: 0.96, green: 0.96, blue: 0.95, alpha: 1)
+        iconBox.layer.cornerRadius = 10
         iconBox.translatesAutoresizingMaskIntoConstraints = false
-        iconBox.widthAnchor.constraint(equalToConstant: 38).isActive = true
-        iconBox.heightAnchor.constraint(equalToConstant: 38).isActive = true
-
-        let iconLabel = UILabel()
-        iconLabel.text = icon
-        iconLabel.font = .systemFont(ofSize: 18)
-        iconLabel.textAlignment = .center
-        iconLabel.translatesAutoresizingMaskIntoConstraints = false
-        iconBox.addSubview(iconLabel)
+        iconBox.widthAnchor.constraint(equalToConstant: 36).isActive  = true
+        iconBox.heightAnchor.constraint(equalToConstant: 36).isActive = true
+ 
+        let img = UIImageView(image: UIImage(systemName: sfIcon))
+        img.tintColor   = UIColor(red: 0.40, green: 0.40, blue: 0.42, alpha: 1)
+        img.contentMode = .scaleAspectFit
+        img.translatesAutoresizingMaskIntoConstraints = false
+        iconBox.addSubview(img)
         NSLayoutConstraint.activate([
-            iconLabel.centerXAnchor.constraint(equalTo: iconBox.centerXAnchor),
-            iconLabel.centerYAnchor.constraint(equalTo: iconBox.centerYAnchor),
+            img.centerXAnchor.constraint(equalTo: iconBox.centerXAnchor),
+            img.centerYAnchor.constraint(equalTo: iconBox.centerYAnchor),
+            img.widthAnchor.constraint(equalToConstant: 16),
+            img.heightAnchor.constraint(equalToConstant: 16)
         ])
-
-        let titleLabel = UILabel()
-        titleLabel.text = title
-        titleLabel.font = .systemFont(ofSize: 13, weight: .bold)
-        titleLabel.textColor = C.text
-
-        let descLabel = UILabel()
-        descLabel.text = desc
-        descLabel.font = .systemFont(ofSize: 12.5, weight: .regular)
-        descLabel.textColor = C.subtext
-        descLabel.numberOfLines = 0
-
-        let textStack = UIStackView(arrangedSubviews: [titleLabel, descLabel])
-        textStack.axis = .vertical
+ 
+        let titleLbl = UILabel()
+        titleLbl.text      = title
+        titleLbl.font      = UIFont.systemFont(ofSize: 13, weight: .semibold)
+        titleLbl.textColor = C.text
+ 
+        let descLbl = UILabel()
+        descLbl.text          = desc
+        descLbl.font          = UIFont.systemFont(ofSize: 12, weight: .regular)
+        descLbl.textColor     = UIColor(red: 0.45, green: 0.45, blue: 0.47, alpha: 1)
+        descLbl.numberOfLines = 0
+ 
+        let textStack = UIStackView(arrangedSubviews: [titleLbl, descLbl])
+        textStack.axis    = .vertical
         textStack.spacing = 3
-
+ 
         let hstack = UIStackView(arrangedSubviews: [iconBox, textStack])
-        hstack.axis = .horizontal
-        hstack.spacing = 12
+        hstack.axis      = .horizontal
+        hstack.spacing   = 12
         hstack.alignment = .top
         hstack.translatesAutoresizingMaskIntoConstraints = false
         card.addSubview(hstack)
-
+ 
         NSLayoutConstraint.activate([
-            hstack.topAnchor.constraint(equalTo: card.topAnchor, constant: 13),
+            hstack.topAnchor.constraint(equalTo: card.topAnchor, constant: 14),
             hstack.leadingAnchor.constraint(equalTo: card.leadingAnchor, constant: 14),
             hstack.trailingAnchor.constraint(equalTo: card.trailingAnchor, constant: -14),
-            hstack.bottomAnchor.constraint(equalTo: card.bottomAnchor, constant: -13),
+            hstack.bottomAnchor.constraint(equalTo: card.bottomAnchor, constant: -14)
         ])
         return card
     }
-
-    // ── 5. Best Company Card ────────────────────────────────────────────────
-
+ 
+    // MARK: - 5. Best Company Card
+ 
     private func makeBestCard() -> UIView {
         let card = UIView()
-        card.backgroundColor = C.goldLight
-        card.layer.cornerRadius = 22
-        card.layer.borderWidth  = 2
-        card.layer.borderColor  = C.gold.cgColor
-
-        let topRow = UIStackView()
-        topRow.axis = .horizontal
-        topRow.spacing = 12
-        topRow.alignment = .center
-
-        let medal = makeLabel("🥇", size: 34, weight: .regular, color: .label)
-        let nameLabel = makeLabel(data.bestCompany.name, size: 19, weight: .heavy, color: C.text)
-        let typeLabel = makeLabel(data.bestCompany.description, size: 12, weight: .regular, color: C.subtext)
-        let nameStack = UIStackView(arrangedSubviews: [nameLabel, typeLabel])
-        nameStack.axis = .vertical
+        card.backgroundColor    = C.card
+        card.layer.cornerRadius = 18
+        card.layer.cornerCurve  = .continuous
+        card.layer.borderWidth  = 1.5
+        card.layer.borderColor  = C.green.cgColor
+ 
+        // Top: rank circle + name + desc
+        let rankCircle = makeRankCircle(rank: 1, size: 28)
+ 
+        let nameLabel = UILabel()
+        nameLabel.text      = data.bestCompany.name
+        nameLabel.font      = UIFont(name: "Georgia-Bold", size: 17)
+            ?? UIFont.systemFont(ofSize: 17, weight: .bold)
+        nameLabel.textColor = C.text
+ 
+        let descLabel = UILabel()
+        descLabel.text      = data.bestCompany.description
+        descLabel.font      = UIFont.systemFont(ofSize: 12, weight: .regular)
+        descLabel.textColor = C.subtext
+ 
+        let nameStack = UIStackView(arrangedSubviews: [nameLabel, descLabel])
+        nameStack.axis    = .vertical
         nameStack.spacing = 2
-        topRow.addArrangedSubview(medal)
-        topRow.addArrangedSubview(nameStack)
-
-        // Indicator pills
-        let pillsStack = UIStackView()
-        pillsStack.axis = .horizontal
-        pillsStack.spacing = 6
-        pillsStack.alignment = .center
-
-        // Best result twist value
-        let twistVal = puzzle.twistIndicators.first(where: { $0.companyId == data.bestCompany.id })?.displayValue ?? ""
-        let pillTexts = ["\(data.twistIndicatorName): \(twistVal)", "Return: \(data.bestResult.returnPercent)%"]
-        for text in pillTexts {
-            pillsStack.addArrangedSubview(makePill(text: text, bg: .white, fg: UIColor(red:0.42,green:0.29,blue:0,alpha:1), size: 11, border: C.gold))
-        }
-
-        // Scrollable pill row
-        let pillScroll = UIScrollView()
-        pillScroll.showsHorizontalScrollIndicator = false
-        pillScroll.translatesAutoresizingMaskIntoConstraints = false
-        pillsStack.translatesAutoresizingMaskIntoConstraints = false
-        pillScroll.addSubview(pillsStack)
-        NSLayoutConstraint.activate([
-            pillsStack.topAnchor.constraint(equalTo: pillScroll.topAnchor),
-            pillsStack.leadingAnchor.constraint(equalTo: pillScroll.leadingAnchor),
-            pillsStack.trailingAnchor.constraint(equalTo: pillScroll.trailingAnchor),
-            pillsStack.bottomAnchor.constraint(equalTo: pillScroll.bottomAnchor),
-            pillsStack.heightAnchor.constraint(equalTo: pillScroll.heightAnchor),
-            pillScroll.heightAnchor.constraint(equalToConstant: 30),
+ 
+        let winnerBadge = makeSmallBadge(text: "Winner", color: C.green)
+ 
+        let topRow = UIStackView(arrangedSubviews: [rankCircle, nameStack, winnerBadge])
+        topRow.axis      = .horizontal
+        topRow.spacing   = 10
+        topRow.alignment = .center
+ 
+        // Stats pills
+        let twistVal  = puzzle.twistIndicators.first(where: { $0.companyId == data.bestCompany.id })?.displayValue ?? ""
+        let pillStack = UIStackView(arrangedSubviews: [
+            makeStatPill(label: data.twistIndicatorName, value: twistVal),
+            makeStatPill(label: "Return", value: "\(data.bestResult.returnPercent)%")
         ])
-
+        pillStack.axis    = .horizontal
+        pillStack.spacing = 8
+ 
+        // Divider
+        let div = UIView()
+        div.backgroundColor = C.separator
+        div.heightAnchor.constraint(equalToConstant: 0.5).isActive = true
+ 
         // Reasons
         let reasonsStack = UIStackView()
-        reasonsStack.axis = .vertical
-        reasonsStack.spacing = 9
-
+        reasonsStack.axis    = .vertical
+        reasonsStack.spacing = 10
+ 
         for (i, reason) in data.bestReasons.enumerated() {
             reasonsStack.addArrangedSubview(makeReasonRow(num: i + 1, text: reason))
         }
-
-        let vstack = UIStackView(arrangedSubviews: [topRow, pillScroll, reasonsStack])
-        vstack.axis = .vertical
-        vstack.spacing = 14
+ 
+        let vstack = UIStackView(arrangedSubviews: [topRow, pillStack, div, reasonsStack])
+        vstack.axis    = .vertical
+        vstack.spacing = 12
         vstack.translatesAutoresizingMaskIntoConstraints = false
         card.addSubview(vstack)
-
+ 
         NSLayoutConstraint.activate([
-            vstack.topAnchor.constraint(equalTo: card.topAnchor, constant: 20),
-            vstack.leadingAnchor.constraint(equalTo: card.leadingAnchor, constant: 18),
-            vstack.trailingAnchor.constraint(equalTo: card.trailingAnchor, constant: -18),
-            vstack.bottomAnchor.constraint(equalTo: card.bottomAnchor, constant: -20),
+            vstack.topAnchor.constraint(equalTo: card.topAnchor, constant: 16),
+            vstack.leadingAnchor.constraint(equalTo: card.leadingAnchor, constant: 16),
+            vstack.trailingAnchor.constraint(equalTo: card.trailingAnchor, constant: -16),
+            vstack.bottomAnchor.constraint(equalTo: card.bottomAnchor, constant: -16)
         ])
         return card
     }
-
+ 
     private func makeReasonRow(num: Int, text: String) -> UIView {
-        let numCircle = UIView()
-        numCircle.backgroundColor = C.gold
-        numCircle.layer.cornerRadius = 10
-        numCircle.translatesAutoresizingMaskIntoConstraints = false
-        numCircle.widthAnchor.constraint(equalToConstant: 20).isActive = true
-        numCircle.heightAnchor.constraint(equalToConstant: 20).isActive = true
-
-        let numLabel = UILabel()
-        numLabel.text = "\(num)"
-        numLabel.font = .systemFont(ofSize: 10.5, weight: .heavy)
-        numLabel.textColor = UIColor(red: 0.35, green: 0.24, blue: 0, alpha: 1)
-        numLabel.textAlignment = .center
-        numLabel.translatesAutoresizingMaskIntoConstraints = false
-        numCircle.addSubview(numLabel)
-        NSLayoutConstraint.activate([
-            numLabel.centerXAnchor.constraint(equalTo: numCircle.centerXAnchor),
-            numLabel.centerYAnchor.constraint(equalTo: numCircle.centerYAnchor),
-        ])
-
-        let textLabel = UILabel()
-        textLabel.text = text
-        textLabel.font = .systemFont(ofSize: 13, weight: .regular)
-        textLabel.textColor = C.text
-        textLabel.numberOfLines = 0
-
-        let row = UIStackView(arrangedSubviews: [numCircle, textLabel])
-        row.axis = .horizontal
-        row.spacing = 9
+        let circle = makeRankCircle(rank: num, size: 20)
+ 
+        let lbl = UILabel()
+        lbl.text          = text
+        lbl.font          = UIFont.systemFont(ofSize: 13, weight: .regular)
+        lbl.textColor     = UIColor(red: 0.30, green: 0.30, blue: 0.32, alpha: 1)
+        lbl.numberOfLines = 0
+ 
+        let row = UIStackView(arrangedSubviews: [circle, lbl])
+        row.axis      = .horizontal
+        row.spacing   = 10
         row.alignment = .top
         return row
     }
-
-    // ── 6. Rankings Table ───────────────────────────────────────────────────
-
+ 
+    // MARK: - 6. Rankings Table
+ 
     private func makeRankTable() -> UIView {
         let card = UIView()
-        card.backgroundColor = C.cardBg
-        card.layer.cornerRadius = 18
-        card.clipsToBounds = true
-
+        card.backgroundColor    = C.card
+        card.layer.cornerRadius = 16
+        card.layer.cornerCurve  = .continuous
+        card.clipsToBounds      = true
+        card.layer.borderWidth  = 0.5
+        card.layer.borderColor  = C.border.cgColor
+ 
         let vstack = UIStackView()
         vstack.axis = .vertical
         vstack.translatesAutoresizingMaskIntoConstraints = false
         card.addSubview(vstack)
-
         NSLayoutConstraint.activate([
             vstack.topAnchor.constraint(equalTo: card.topAnchor),
             vstack.leadingAnchor.constraint(equalTo: card.leadingAnchor),
             vstack.trailingAnchor.constraint(equalTo: card.trailingAnchor),
-            vstack.bottomAnchor.constraint(equalTo: card.bottomAnchor),
+            vstack.bottomAnchor.constraint(equalTo: card.bottomAnchor)
         ])
-
+ 
         for (i, entry) in data.rankedResults.enumerated() {
-            let row = makeRankRow(entry: entry)
-            vstack.addArrangedSubview(row)
-
-            // Separator (except after last)
+            vstack.addArrangedSubview(makeRankRow(entry: entry))
             if i < data.rankedResults.count - 1 {
                 let sep = UIView()
-                sep.backgroundColor = C.border
-                sep.heightAnchor.constraint(equalToConstant: 1).isActive = true
+                sep.backgroundColor = C.separator
+                sep.heightAnchor.constraint(equalToConstant: 0.5).isActive = true
                 vstack.addArrangedSubview(sep)
             }
         }
         return card
     }
-
+ 
     private func makeRankRow(entry: RankedEntry) -> UIView {
         let row = UIView()
-        row.backgroundColor = entry.isUserPick
-            ? (data.isCorrect ? C.greenLight : C.redLight)
-            : (entry.isBest ? C.goldLight : .clear)
-
-        let medals  = ["🥇","🥈","🥉","4️⃣","5️⃣"]
-        let medalLbl = makeLabel(medals[safe: entry.rank - 1] ?? "\(entry.rank)", size: 18, weight: .regular, color: .label)
-        medalLbl.translatesAutoresizingMaskIntoConstraints = false
-        medalLbl.widthAnchor.constraint(equalToConstant: 26).isActive = true
-
+ 
+        if entry.isUserPick {
+            row.backgroundColor = data.isCorrect
+                ? UIColor(red: 0.92, green: 0.98, blue: 0.94, alpha: 1)
+                : UIColor(red: 0.99, green: 0.94, blue: 0.93, alpha: 1)
+        } else {
+            row.backgroundColor = .clear
+        }
+ 
+        let circle = makeRankCircle(rank: entry.rank, size: 22)
+ 
+        // Name + YOU badge
         let nameLbl = UILabel()
-        // Append YOU tag inline if user pick
         if entry.isUserPick {
             let base = NSMutableAttributedString(
                 string: entry.company.name + "  ",
-                attributes: [.font: UIFont.systemFont(ofSize: 14, weight: .bold), .foregroundColor: C.text]
-            )
-            let tag = NSAttributedString(
-                string: " YOU ",
                 attributes: [
-                    .font: UIFont.systemFont(ofSize: 9, weight: .heavy),
-                    .foregroundColor: UIColor.white,
-                    .backgroundColor: data.isCorrect ? C.green : C.red
+                    .font: UIFont(name: "Georgia-Bold", size: 13) ?? UIFont.systemFont(ofSize: 13, weight: .semibold),
+                    .foregroundColor: C.text
                 ]
             )
-            base.append(tag)
+            let youBg  = data.isCorrect ? C.green : C.red
+            let youTag = NSAttributedString(string: " YOU ", attributes: [
+                .font: UIFont.systemFont(ofSize: 8, weight: .bold),
+                .foregroundColor: UIColor.white,
+                .backgroundColor: youBg
+            ])
+            base.append(youTag)
             nameLbl.attributedText = base
         } else {
-            nameLbl.text = entry.company.name
-            nameLbl.font = .systemFont(ofSize: 14, weight: .bold)
+            nameLbl.text      = entry.company.name
+            nameLbl.font      = UIFont(name: "Georgia-Bold", size: 13) ?? UIFont.systemFont(ofSize: 13, weight: .semibold)
             nameLbl.textColor = C.text
         }
-
-        let descLbl = makeLabel(entry.company.description, size: 11.5, weight: .regular, color: C.subtext)
-
+ 
+        let descLbl = UILabel()
+        descLbl.text      = entry.company.description
+        descLbl.font      = UIFont.systemFont(ofSize: 11, weight: .regular)
+        descLbl.textColor = C.subtext
+ 
         let leftStack = UIStackView(arrangedSubviews: [nameLbl, descLbl])
-        leftStack.axis = .vertical
+        leftStack.axis    = .vertical
         leftStack.spacing = 2
-
-        // Twist value colored
-        let twistColor: UIColor
+ 
+        // Value
+        let valColor: UIColor
         switch entry.rank {
-        case 1:    twistColor = C.green
-        case 2, 3: twistColor = C.orange
-        default:   twistColor = C.red
+        case 1:    valColor = C.green
+        case 2, 3: valColor = UIColor(red: 0.63, green: 0.47, blue: 0.31, alpha: 1)
+        default:   valColor = entry.isUserPick && !data.isCorrect ? C.red : C.subtext
         }
-        let cagrLbl = makeLabel(entry.twistValue, size: 14, weight: .heavy, color: twistColor)
-        cagrLbl.textAlignment = .right
-        let cagrSub = makeLabel(data.twistIndicatorName, size: 10, weight: .regular, color: C.subtext)
-        cagrSub.textAlignment = .right
-        let rightStack = UIStackView(arrangedSubviews: [cagrLbl, cagrSub])
-        rightStack.axis = .vertical
-        rightStack.spacing = 1
+ 
+        let valLbl = UILabel()
+        valLbl.text          = entry.twistValue
+        valLbl.font          = UIFont.systemFont(ofSize: 14, weight: .bold)
+        valLbl.textColor     = valColor
+        valLbl.textAlignment = .right
+ 
+        let subLbl = UILabel()
+        subLbl.text          = data.twistIndicatorName
+        subLbl.font          = UIFont.systemFont(ofSize: 9, weight: .regular)
+        subLbl.textColor     = C.subtext
+        subLbl.textAlignment = .right
+        subLbl.numberOfLines = 2
+ 
+        let rightStack = UIStackView(arrangedSubviews: [valLbl, subLbl])
+        rightStack.axis      = .vertical
+        rightStack.spacing   = 1
+        rightStack.alignment = .trailing
         rightStack.translatesAutoresizingMaskIntoConstraints = false
-        rightStack.widthAnchor.constraint(equalToConstant: 60).isActive = true
-
-        let hstack = UIStackView(arrangedSubviews: [medalLbl, leftStack, rightStack])
-        hstack.axis = .horizontal
-        hstack.spacing = 12
+        rightStack.widthAnchor.constraint(equalToConstant: 56).isActive = true
+ 
+        let hstack = UIStackView(arrangedSubviews: [circle, leftStack, rightStack])
+        hstack.axis      = .horizontal
+        hstack.spacing   = 12
         hstack.alignment = .center
         hstack.translatesAutoresizingMaskIntoConstraints = false
         row.addSubview(hstack)
-
+ 
         NSLayoutConstraint.activate([
             hstack.topAnchor.constraint(equalTo: row.topAnchor, constant: 13),
             hstack.leadingAnchor.constraint(equalTo: row.leadingAnchor, constant: 16),
             hstack.trailingAnchor.constraint(equalTo: row.trailingAnchor, constant: -16),
-            hstack.bottomAnchor.constraint(equalTo: row.bottomAnchor, constant: -13),
+            hstack.bottomAnchor.constraint(equalTo: row.bottomAnchor, constant: -13)
         ])
         return row
     }
-
-    // ── 7. CTA Buttons ──────────────────────────────────────────────────────
-
+ 
+    // MARK: - 7. CTAs
+ 
     private func makeCTAs() -> UIView {
-        let nextBtn = makeButton(title: "▶   Try Next Round", bg: C.green, fg: .white)
+        let nextBtn = makeButton(title: "Try Next Round  →", bg: C.charcoal, fg: .white)
         nextBtn.addTarget(self, action: #selector(nextRoundTapped), for: .touchUpInside)
-
-        let homeBtn = makeButton(title: "🏠   Return to Home", bg: C.cardBg, fg: C.text)
+ 
+        let homeBtn = makeButton(title: "Return to Home", bg: UIColor(red: 0.88, green: 0.87, blue: 0.85, alpha: 1), fg: C.subtext)
         homeBtn.addTarget(self, action: #selector(homeTapped), for: .touchUpInside)
-
+ 
         let stack = UIStackView(arrangedSubviews: [nextBtn, homeBtn])
-        stack.axis = .vertical
+        stack.axis    = .vertical
         stack.spacing = 10
         return stack
     }
-
-    // MARK: – Reusable UI builders
-
-    private func sectionLabel(_ text: String) -> UIView {
-        let wrapper = UIView()
+ 
+    // MARK: - Reusable helpers
+ 
+    private func makeRankCircle(rank: Int, size: CGFloat) -> UIView {
+        let circle = UIView()
+        circle.backgroundColor    = rankColors[safe: rank - 1] ?? C.subtext
+        circle.layer.cornerRadius = size / 2
+        circle.translatesAutoresizingMaskIntoConstraints = false
+        circle.widthAnchor.constraint(equalToConstant: size).isActive  = true
+        circle.heightAnchor.constraint(equalToConstant: size).isActive = true
+ 
         let lbl = UILabel()
-        lbl.text = text
-        lbl.font = .systemFont(ofSize: 10.5, weight: .bold)
-        lbl.textColor = C.subtext
+        lbl.text          = "\(rank)"
+        lbl.font          = UIFont.systemFont(ofSize: size * 0.45, weight: .bold)
+        lbl.textColor     = rank <= 3 ? .white : UIColor(red: 0.40, green: 0.40, blue: 0.40, alpha: 1)
+        lbl.textAlignment = .center
         lbl.translatesAutoresizingMaskIntoConstraints = false
-        wrapper.addSubview(lbl)
+        circle.addSubview(lbl)
         NSLayoutConstraint.activate([
-            lbl.topAnchor.constraint(equalTo: wrapper.topAnchor, constant: 20),
-            lbl.leadingAnchor.constraint(equalTo: wrapper.leadingAnchor, constant: 20),
-            lbl.trailingAnchor.constraint(equalTo: wrapper.trailingAnchor, constant: -20),
-            lbl.bottomAnchor.constraint(equalTo: wrapper.bottomAnchor, constant: -8),
+            lbl.centerXAnchor.constraint(equalTo: circle.centerXAnchor),
+            lbl.centerYAnchor.constraint(equalTo: circle.centerYAnchor)
         ])
-        return wrapper
+        return circle
     }
-
-    private func makeLabel(_ text: String, size: CGFloat, weight: UIFont.Weight, color: UIColor) -> UILabel {
-        let l = UILabel()
-        l.text = text
-        l.font = .systemFont(ofSize: size, weight: weight)
-        l.textColor = color
-        l.numberOfLines = 0
-        return l
+ 
+    private func makeSmallBadge(text: String, color: UIColor) -> UIView {
+        let bg = UIView()
+        bg.backgroundColor    = color.withAlphaComponent(0.12)
+        bg.layer.cornerRadius = 6
+ 
+        let lbl = UILabel()
+        lbl.text      = text
+        lbl.font      = UIFont.systemFont(ofSize: 9.5, weight: .semibold)
+        lbl.textColor = color
+        lbl.translatesAutoresizingMaskIntoConstraints = false
+        bg.addSubview(lbl)
+        NSLayoutConstraint.activate([
+            lbl.topAnchor.constraint(equalTo: bg.topAnchor, constant: 3),
+            lbl.bottomAnchor.constraint(equalTo: bg.bottomAnchor, constant: -3),
+            lbl.leadingAnchor.constraint(equalTo: bg.leadingAnchor, constant: 7),
+            lbl.trailingAnchor.constraint(equalTo: bg.trailingAnchor, constant: -7)
+        ])
+        return bg
     }
-
-    private func makePill(text: String, bg: UIColor, fg: UIColor, size: CGFloat, border: UIColor? = nil) -> UIView {
-        let pill = UILabel()
-        pill.text = "  \(text)  "
-        pill.font = .systemFont(ofSize: size, weight: .bold)
-        pill.textColor = fg
-        pill.backgroundColor = bg
-        pill.layer.cornerRadius = 10
-        pill.clipsToBounds = true
-        if let b = border {
-            pill.layer.borderWidth = 1.5
-            pill.layer.borderColor = b.cgColor
-        }
-        return pill
+ 
+    private func makeStatPill(label: String, value: String) -> UIView {
+        let bg = UIView()
+        bg.backgroundColor    = UIColor(red: 0.94, green: 0.94, blue: 0.92, alpha: 1)
+        bg.layer.cornerRadius = 8
+ 
+        let lbl = UILabel()
+        lbl.text      = "\(label): \(value)"
+        lbl.font      = UIFont.systemFont(ofSize: 11, weight: .medium)
+        lbl.textColor = UIColor(red: 0.35, green: 0.35, blue: 0.35, alpha: 1)
+        lbl.translatesAutoresizingMaskIntoConstraints = false
+        bg.addSubview(lbl)
+        NSLayoutConstraint.activate([
+            lbl.topAnchor.constraint(equalTo: bg.topAnchor, constant: 5),
+            lbl.bottomAnchor.constraint(equalTo: bg.bottomAnchor, constant: -5),
+            lbl.leadingAnchor.constraint(equalTo: bg.leadingAnchor, constant: 10),
+            lbl.trailingAnchor.constraint(equalTo: bg.trailingAnchor, constant: -10)
+        ])
+        return bg
     }
-
+ 
     private func makeButton(title: String, bg: UIColor, fg: UIColor) -> UIButton {
         let btn = UIButton(type: .system)
         btn.setTitle(title, for: .normal)
         btn.setTitleColor(fg, for: .normal)
-        btn.titleLabel?.font = .systemFont(ofSize: 16, weight: .bold)
-        btn.backgroundColor = bg
+        btn.titleLabel?.font = UIFont.systemFont(ofSize: 15, weight: .semibold)
+        btn.backgroundColor  = bg
         btn.layer.cornerRadius = 16
-        btn.heightAnchor.constraint(equalToConstant: 52).isActive = true
-        if bg == C.green {
-            btn.layer.shadowColor  = C.green.cgColor
-            btn.layer.shadowOffset = CGSize(width: 0, height: 6)
-            btn.layer.shadowRadius = 12
-            btn.layer.shadowOpacity = 0.35
-        }
+        btn.heightAnchor.constraint(equalToConstant: 54).isActive = true
         return btn
     }
-
-    private func padded(_ view: UIView, h: CGFloat, v: CGFloat) -> UIView {
+ 
+    private func padded(_ v: UIView, h: CGFloat, v vPad: CGFloat) -> UIView {
         let wrapper = UIView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        wrapper.addSubview(view)
+        v.translatesAutoresizingMaskIntoConstraints = false
+        wrapper.addSubview(v)
         NSLayoutConstraint.activate([
-            view.topAnchor.constraint(equalTo: wrapper.topAnchor, constant: v),
-            view.leadingAnchor.constraint(equalTo: wrapper.leadingAnchor, constant: h),
-            view.trailingAnchor.constraint(equalTo: wrapper.trailingAnchor, constant: -h),
-            view.bottomAnchor.constraint(equalTo: wrapper.bottomAnchor, constant: -v),
+            v.topAnchor.constraint(equalTo: wrapper.topAnchor, constant: vPad),
+            v.leadingAnchor.constraint(equalTo: wrapper.leadingAnchor, constant: h),
+            v.trailingAnchor.constraint(equalTo: wrapper.trailingAnchor, constant: -h),
+            v.bottomAnchor.constraint(equalTo: wrapper.bottomAnchor, constant: -vPad)
         ])
         return wrapper
     }
-
-    // MARK: – Dot pattern for banner overlay
-
-    private func dotPatternImage() -> UIImage {
-        let size = CGSize(width: 20, height: 20)
-        UIGraphicsBeginImageContextWithOptions(size, false, 0)
-        UIColor.white.setFill()
-        UIBezierPath(ovalIn: CGRect(x: 8, y: 8, width: 3, height: 3)).fill()
-        let img = UIGraphicsGetImageFromCurrentImageContext()!
-        UIGraphicsEndImageContext()
-        return img
-    }
-
-    // MARK: – Correlation descriptions
-
+ 
+    // MARK: - Correlation descriptions
+ 
     private func correlationDescription(for indicatorName: String) -> String {
         let twist = data.twistIndicatorName
         switch indicatorName {
         case "EPS Growth (YoY)":
-            return "\(twist) compounds EPS growth over 5 years. A high \(twist) validates consistent EPS expansion — not a single lucky quarter."
+            return "\(twist) compounds EPS growth over time. A high value validates consistent earnings — not a single lucky quarter."
         case "Net Profit Margin":
-            return "Sustained \(twist) forces operational efficiency. Companies scaling fast without margin expansion eventually hit a wall."
+            return "Sustained \(twist) forces operational efficiency. Fast growth without margin expansion eventually hits a wall."
         case "P/E Ratio":
-            return "Higher \(twist) justifies a premium P/E — investors pay more for proven compounders. But watch for overvaluation."
+            return "Higher \(twist) justifies a premium P/E — investors pay more for proven compounders."
         case "Debt-to-Equity":
-            return "High-\(twist) companies fund growth internally, reducing reliance on debt. A rising D/E alongside low CAGR is a red flag."
+            return "High-\(twist) companies fund growth internally, reducing debt reliance. Low CAGR with rising D/E is a red flag."
         default:
-            return "\(twist) is directly correlated with \(indicatorName). Both move together as the company's fundamental quality improves."
+            return "\(twist) is directly correlated with \(indicatorName) — both move together as fundamental quality improves."
         }
     }
-
-    // MARK: – Ordinal suffix
-
+ 
+    // MARK: - Ordinal suffix
+ 
     private func ordinalSuffix(_ n: Int) -> String {
-        switch n {
-        case 1: return "st"
-        case 2: return "nd"
-        case 3: return "rd"
-        default: return "th"
-        }
+        switch n { case 1: return "st"; case 2: return "nd"; case 3: return "rd"; default: return "th" }
     }
-
-    // MARK: – Entrance animation
-
+ 
+    // MARK: - Entrance animation
+ 
     private func animateEntrance() {
-        contentView.alpha = 0
-        contentView.transform = CGAffineTransform(translationX: 0, y: 30)
-        UIView.animate(withDuration: 0.5, delay: 0.05, usingSpringWithDamping: 0.85, initialSpringVelocity: 0, options: .curveEaseOut) {
-            self.contentView.alpha = 1
+        contentView.alpha     = 0
+        contentView.transform = CGAffineTransform(translationX: 0, y: 24)
+        UIView.animate(withDuration: 0.45, delay: 0.05,
+                       usingSpringWithDamping: 0.88, initialSpringVelocity: 0) {
+            self.contentView.alpha     = 1
             self.contentView.transform = .identity
         }
     }
-
-    // MARK: – Actions
-
-    @objc private func backTapped() {
-        navigationController?.popViewController(animated: true)
-    }
-
+ 
+    // MARK: - Actions
+ 
     @objc private func nextRoundTapped() {
-        // Pop to root (or navigate to next puzzle — adjust as needed)
         navigationController?.popToRootViewController(animated: true)
     }
-
+ 
     @objc private func homeTapped() {
         navigationController?.popToRootViewController(animated: true)
     }
 }
-
-// MARK: – Safe array subscript
-
+ 
+// MARK: - Safe subscript
+ 
 private extension Array {
     subscript(safe index: Int) -> Element? {
         indices.contains(index) ? self[index] : nil
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-//import UIKit
-//
-//final class ResultViewController: UIViewController {
-//
-//    var puzzle: DailyPuzzle!
-//    var selectedCompanyId: String!
-//
-//    override func viewDidLoad() {
-//        super.viewDidLoad()
-//        let bestId = puzzle.bestCompanyId()
-//
-//            if selectedCompanyId == bestId {
-//                print("User chose correctly ✅")
-//            } else {
-//                print("User chose wrong ❌")
-//            }
-//
-//     //   showResult()
-//    }
-//
-////    private func showResult() {
-////        guard
-////            let result = puzzle.results.first(where: { $0.companyId == selectedCompanyId })
-////        else { return }
-////
-////        print("Return:", result.returnPercent)
-////        print("Explanation:", result.explanation)
-////    }
-//}
+ 

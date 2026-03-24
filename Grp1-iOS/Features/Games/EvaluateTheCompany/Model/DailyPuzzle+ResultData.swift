@@ -26,7 +26,7 @@ struct ResultScreenData {
 
     // Best company
     let bestCompany: Company
-    let bestResult: Result
+    let bestResult: Result1
     let bestReasons: [String]
 
     // Full ranking (sorted best → worst by returnPercent)
@@ -36,7 +36,7 @@ struct ResultScreenData {
 struct RankedEntry {
     let rank: Int
     let company: Company
-    let result: Result
+    let result: Result1
     let twistValue: String          // displayValue from twistIndicators
     let isUserPick: Bool
     let isBest: Bool

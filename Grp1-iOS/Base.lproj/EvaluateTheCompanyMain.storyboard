@@ -11,7 +11,7 @@
         <!--Invest Game Home View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="InvestGameHomeViewController" customModule="evaluateTheCompany" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="EvaluateCompany" id="BYZ-38-t0r" customClass="InvestGameHomeViewController" customModule="Grp1_iOS" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -23,7 +23,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="g5u-mQ-np3">
-                                <rect key="frame" x="24" y="740" width="345" height="52"/>
+                                <rect key="frame" x="24" y="750" width="345" height="52"/>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="52" id="emD-0x-MuY"/>
@@ -41,7 +41,7 @@
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstAttribute="bottom" secondItem="g5u-mQ-np3" secondAttribute="bottom" constant="60" id="BHL-ye-tdt"/>
+                            <constraint firstAttribute="bottom" secondItem="g5u-mQ-np3" secondAttribute="bottom" constant="50" id="BHL-ye-tdt"/>
                             <constraint firstItem="duI-60-hiC" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="sDi-II-3le"/>
                             <constraint firstItem="duI-60-hiC" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="sxx-5V-7an"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="g5u-mQ-np3" secondAttribute="trailing" constant="24" id="vyx-8C-kZd"/>
@@ -56,25 +56,29 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1651" y="131"/>
+            <point key="canvasLocation" x="1584" y="141"/>
         </scene>
         <!--Twist View Controller-->
         <scene sceneID="qFF-Jo-P0r">
             <objects>
-                <viewController id="zwY-Me-WRp" customClass="TwistViewController" customModule="evaluateTheCompany" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="zwY-Me-WRp" customClass="TwistViewController" customModule="Grp1_iOS" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="pOx-Vq-e7O">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Nvl-kI-Zin">
-                                <rect key="frame" x="24" y="740" width="345" height="52"/>
+                                <rect key="frame" x="24" y="750" width="345" height="52"/>
+                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="52" id="hOu-k7-G6C"/>
                                 </constraints>
+                                <color key="tintColor" red="0.9990234375" green="0.9990234375" blue="0.9990234375" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="plain" title="Proceed to invest "/>
+                                <buttonConfiguration key="configuration" style="plain" title="Proceed to invest ">
+                                    <fontDescription key="titleFontDescription" style="UICTFontTextStyleTitle3"/>
+                                </buttonConfiguration>
                                 <connections>
-                                    <segue destination="lna-Qk-GG5" kind="show" identifier="showInvest" id="0m2-hG-ywc"/>
+                                    <action selector="proceedTapped:" destination="zwY-Me-WRp" eventType="touchUpInside" id="Exe-Jg-mbc"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -82,29 +86,33 @@
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="U0E-lK-OYl" firstAttribute="trailing" secondItem="Nvl-kI-Zin" secondAttribute="trailing" constant="24" id="b9q-bm-S1q"/>
-                            <constraint firstAttribute="bottom" secondItem="Nvl-kI-Zin" secondAttribute="bottom" constant="60" id="bxB-ph-xhv"/>
+                            <constraint firstAttribute="bottom" secondItem="Nvl-kI-Zin" secondAttribute="bottom" constant="50" id="bxB-ph-xhv"/>
                             <constraint firstItem="Nvl-kI-Zin" firstAttribute="leading" secondItem="U0E-lK-OYl" secondAttribute="leading" constant="24" id="hZX-wt-1cj"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="Wg2-sB-1cs"/>
+                    <connections>
+                        <outlet property="proceedButton" destination="Nvl-kI-Zin" id="Hg9-X4-0oZ"/>
+                        <segue destination="lna-Qk-GG5" kind="show" identifier="showInvest" id="WxK-61-CxK"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="sS8-eR-MZM" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2456" y="134"/>
+            <point key="canvasLocation" x="2379" y="141"/>
         </scene>
         <!--Invest View Controller-->
         <scene sceneID="eIi-cH-ay5">
             <objects>
-                <viewController id="lna-Qk-GG5" customClass="InvestViewController" customModule="evaluateTheCompany" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="lna-Qk-GG5" customClass="InvestViewController" customModule="Grp1_iOS" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="o17-8J-xpx">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="LrQ-pQ-YjK">
-                                <rect key="frame" x="16" y="374" width="361" height="306"/>
+                                <rect key="frame" x="16" y="374" width="361" height="316"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="CompanySelectCell" id="Eqh-hh-Sd8" customClass="CompanySelectCell" customModule="evaluateTheCompany" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="CompanySelectCell" id="Eqh-hh-Sd8" customClass="CompanySelectCell" customModule="Grp1_iOS" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="50" width="361" height="87.333335876464844"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Eqh-hh-Sd8" id="Poq-j0-szz">
@@ -163,14 +171,16 @@
                                 </prototypes>
                             </tableView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5sa-Sj-4ZD">
-                                <rect key="frame" x="24" y="740" width="345" height="52"/>
+                                <rect key="frame" x="24" y="750" width="345" height="52"/>
                                 <color key="backgroundColor" systemColor="systemGreenColor"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="52" id="AgH-PL-YMV"/>
                                 </constraints>
                                 <color key="tintColor" red="0.9990234375" green="0.9990234375" blue="0.9990234375" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="plain" title="SUBMIT"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Submit">
+                                    <fontDescription key="titleFontDescription" style="UICTFontTextStyleTitle3"/>
+                                </buttonConfiguration>
                                 <connections>
                                     <action selector="didTapSubmit:" destination="lna-Qk-GG5" eventType="touchUpInside" id="vEA-aB-y1f"/>
                                 </connections>
@@ -181,7 +191,7 @@
                         <constraints>
                             <constraint firstItem="LrQ-pQ-YjK" firstAttribute="leading" secondItem="vpN-z7-dSJ" secondAttribute="leading" constant="16" id="2TL-hw-qOu"/>
                             <constraint firstItem="vpN-z7-dSJ" firstAttribute="trailing" secondItem="LrQ-pQ-YjK" secondAttribute="trailing" constant="16" id="I8l-Bz-Rg4"/>
-                            <constraint firstAttribute="bottom" secondItem="5sa-Sj-4ZD" secondAttribute="bottom" constant="60" id="IYp-sX-Dar"/>
+                            <constraint firstAttribute="bottom" secondItem="5sa-Sj-4ZD" secondAttribute="bottom" constant="50" id="IYp-sX-Dar"/>
                             <constraint firstItem="5sa-Sj-4ZD" firstAttribute="centerX" secondItem="o17-8J-xpx" secondAttribute="centerX" id="M24-Ki-CsR"/>
                             <constraint firstItem="5sa-Sj-4ZD" firstAttribute="top" secondItem="LrQ-pQ-YjK" secondAttribute="bottom" constant="60" id="Qs7-AM-Szu"/>
                             <constraint firstItem="LrQ-pQ-YjK" firstAttribute="top" secondItem="vpN-z7-dSJ" secondAttribute="top" constant="150" id="Y7g-AY-wpq"/>
@@ -189,6 +199,7 @@
                             <constraint firstItem="5sa-Sj-4ZD" firstAttribute="leading" secondItem="vpN-z7-dSJ" secondAttribute="leading" constant="24" id="ex4-t8-ISQ"/>
                         </constraints>
                     </view>
+                    <navigationItem key="navigationItem" id="VoP-Br-1IN"/>
                     <connections>
                         <outlet property="submitButton" destination="5sa-Sj-4ZD" id="MwZ-6e-aWr"/>
                         <outlet property="tableView" destination="LrQ-pQ-YjK" id="I4h-AA-DpL"/>
@@ -197,23 +208,23 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="uf4-6R-VQw" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3343" y="131"/>
+            <point key="canvasLocation" x="3147" y="141"/>
         </scene>
-        <!--Evaluate The Company -->
+        <!--Result View Controller-->
         <scene sceneID="35I-d0-R2y">
             <objects>
-                <viewController id="TFg-E5-8Bh" customClass="ResultViewController" customModule="evaluateTheCompany" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="TFg-E5-8Bh" customClass="ResultViewController" customModule="Grp1_iOS" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="d7R-pS-EQl">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <viewLayoutGuide key="safeArea" id="D4X-OC-Vhe"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
-                    <navigationItem key="navigationItem" title="Evaluate The Company " id="V2A-kT-zlf"/>
+                    <navigationItem key="navigationItem" id="V2A-kT-zlf"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="rRF-Yb-GbB" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4266" y="131"/>
+            <point key="canvasLocation" x="3932" y="141"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="sPX-if-nw3">

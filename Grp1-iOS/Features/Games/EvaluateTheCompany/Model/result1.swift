@@ -6,7 +6,7 @@
 //
 
 import Foundation
-struct Result: Codable {
+struct Result1: Codable {
     let companyId: String
     let returnPercent: Int
     let explanation: String
