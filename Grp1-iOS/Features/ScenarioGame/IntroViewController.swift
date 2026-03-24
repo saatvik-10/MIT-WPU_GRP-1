@@ -1,199 +1,286 @@
-//
-//  IntroViewController.swift
-//  Grp1-iOS
-//
-//  Created by SDC-USER on 27/01/26.
-//
-
 import UIKit
 
 class IntroViewController: UIViewController {
     
-    @IBOutlet weak var iconImageView: UIImageView!
-    @IBOutlet weak var capitalLabel: UILabel!
-    @IBOutlet weak var biasLabel: UILabel!
+    // MARK: - UI Components
     
-    @IBOutlet weak var biasCardLabel: UILabel!
-    @IBOutlet weak var capitalCardLabel: UILabel!
+    private let backgroundImageView: UIImageView = {
+        let iv = UIImageView()
+        iv.contentMode = .scaleAspectFill
+        // If you have a background bubbles image, set it here:
+        // iv.image = UIImage(named: "bubbles_background")
+        iv.translatesAutoresizingMaskIntoConstraints = false
+        return iv
+    }()
     
-    @IBOutlet weak var capitalCard: UIView!
-    @IBOutlet weak var biasCard: UIView!
+    private let titleLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Sunk Cost"
+        label.textAlignment = .center
+        label.textColor = UIColor(white: 0.2, alpha: 1.0)
+        
+        // Try to use Georgia (serif) to match the screenshot, fallback to system bold
+        if let serifFont = UIFont(name: "Georgia-Bold", size: 40) {
+            label.font = serifFont
+        } else {
+            label.font = UIFont.systemFont(ofSize: 40, weight: .bold)
+        }
+        
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
     
-    @IBOutlet weak var biasModuleCard: UIView!
-    @IBOutlet weak var biasCardImageView: UIImageView!
-    @IBOutlet weak var biasCardDescriptionLabel: UILabel!
-    @IBOutlet weak var biasCardSubtitle: UILabel!
+    private let subtitleLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Avoid the psychological trap of throwing good money after bad."
+        label.font = UIFont.systemFont(ofSize: 18, weight: .regular)
+        label.textColor = UIColor(white: 0.35, alpha: 1.0)
+        label.numberOfLines = 0
+        label.textAlignment = .center
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
     
-    @IBOutlet weak var marketModuleCard: UIView!
-    @IBOutlet weak var marketImageView: UIImageView!
-    @IBOutlet weak var marketCardLabel: UILabel!
-    @IBOutlet weak var marketCardSubtitle: UILabel!
+    private let capitalCard: UIView = {
+        let view = UIView()
+        view.backgroundColor = .white
+        view.layer.cornerRadius = 24
+        
+        // Soft drop shadow
+        view.layer.shadowColor = UIColor.black.cgColor
+        view.layer.shadowOpacity = 0.08
+        view.layer.shadowOffset = CGSize(width: 0, height: 8)
+        view.layer.shadowRadius = 20
+        view.layer.masksToBounds = false
+        
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
     
-    @IBOutlet weak var timeModuleCard: UIView!
-    @IBOutlet weak var timerCardImageView: UIImageView!
-    @IBOutlet weak var timerCardLabel: UILabel!
-    @IBOutlet weak var timerCardSubtitle: UILabel!
+    private let capitalLabel: UILabel = {
+        let label = UILabel()
+        label.text = "₹50,000"
+        label.font = UIFont.systemFont(ofSize: 42, weight: .semibold)
+        // Deep elegant green
+        label.textColor = UIColor(red: 0.18, green: 0.31, blue: 0.24, alpha: 1.0)
+        label.textAlignment = .center
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
     
-    @IBOutlet weak var beginnerButton: UIButton!
-    private var completed = false
-    private var containerGradient: CAGradientLayer?
+    private let separatorView: UIView = {
+        let view = UIView()
+        view.backgroundColor = UIColor(white: 0.90, alpha: 1.0)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
+    private let contextLabel: UILabel = {
+        let label = UILabel()
+        label.text = "You have invested ₹50,000.\nDo you cut losses or invest more?"
+        label.font = UIFont.systemFont(ofSize: 15, weight: .regular)
+        label.textColor = UIColor(white: 0.35, alpha: 1.0)
+        label.numberOfLines = 0
+        label.textAlignment = .center
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    private let beginnerButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("Begin Your Journey →", for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .medium)
+        button.setTitleColor(.white, for: .normal)
+        
+        // Charcoal grey
+        button.backgroundColor = UIColor(white: 0.28, alpha: 1.0)
+        button.layer.cornerRadius = 22
+        button.clipsToBounds = true
+        
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+    
+    
+    
+    // MARK: - Lifecycle
 
     override func viewDidLoad() {
-            super.viewDidLoad()
-            setupUI()
-            populateData()
-            
-            let config = UIImage.SymbolConfiguration(weight: .light)
-            iconImageView.image = iconImageView.image?
-                .withConfiguration(config)
-            
-            // Setup hold-to-fill animation for begin button
-            beginnerButton.setupHoldToFillAnimation(duration: 1.5)
-            beginnerButton.applyGlass()
-        }
-
-        // MARK: - Setup
-        private func setupUI() {
-            view.backgroundColor = .systemGroupedBackground
-
-            styleCard(capitalCard)
-            styleCard(biasCard)
-
-            styleModuleCard(biasModuleCard, tint: .systemPurple)
-            styleModuleCard(marketModuleCard, tint: .systemRed)
-            styleModuleCard(timeModuleCard, tint: .systemOrange)
-        }
-
-        // MARK: - Data
-        private func populateData() {
-            capitalLabel.text = "₹50,000"
-            capitalLabel.textColor = .systemGreen
-            capitalCardLabel.text = "Total Capital"
-
-            biasLabel.text = "50 / 100"
-            biasLabel.textColor = .systemOrange
-            biasCardLabel.text = "Decision Quality"
-            
-            biasCardDescriptionLabel.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
-            biasCardDescriptionLabel.text = "Logic Analysis"
-            marketCardLabel.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
-            marketCardLabel.text = "Market Awareness"
-            timerCardLabel.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
-            timerCardLabel.text = "Time and Opportunity"
-            
-            biasCardSubtitle.text = "Detect your hidden instinct"
-            timerCardSubtitle.text = "Time your hold, exit, or pivot"
-            marketCardSubtitle.text = "Strike at the perfect time."
-        }
-
-        // MARK: - Card Styling
-        private func styleCard(_ view: UIView) {
-            view.backgroundColor = .systemBackground
-            view.layer.cornerRadius = 20
-
-            view.layer.shadowColor = UIColor.black.cgColor
-            view.layer.shadowOpacity = 0.08
-            view.layer.shadowOffset = CGSize(width: 0, height: 6)
-            view.layer.shadowRadius = 16
-
-            view.layer.masksToBounds = false
-        }
-
-        private func styleModuleCard(_ view: UIView, tint: UIColor) {
-            view.backgroundColor = tint.withAlphaComponent(0.12)
-            view.layer.cornerRadius = 20
-        }
-
-        @IBAction func beginButtonPressed(_ sender: UIButton) {
-            let gameVC = storyboard?.instantiateViewController(
-                withIdentifier: "GameViewController"
-            ) as! GameViewController
-
-            gameVC.modalPresentationStyle = .fullScreen
-            present(gameVC, animated: true)
+        super.viewDidLoad()
+        
+        setupViewHierarchy()
+        setupConstraints()
+        setupActions()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        // Very subtle entry animation
+        capitalCard.alpha = 0
+        capitalCard.transform = CGAffineTransform(translationX: 0, y: 15)
+        
+        UIView.animate(withDuration: 0.7, delay: 0.1, options: [.curveEaseOut]) {
+            self.capitalCard.alpha = 1
+            self.capitalCard.transform = .identity
         }
     }
+    
+    // MARK: - Setup UI
+    
+    private func setupViewHierarchy() {
+        // Light grey fallback background
+        view.backgroundColor = UIColor(white: 0.96, alpha: 1.0)
+        
+        view.addSubview(backgroundImageView)
+        view.addSubview(titleLabel)
+        view.addSubview(subtitleLabel)
+        
+        view.addSubview(capitalCard)
+        capitalCard.addSubview(capitalLabel)
+        capitalCard.addSubview(separatorView)
+        capitalCard.addSubview(contextLabel)
+        capitalCard.addSubview(beginnerButton)
+        
+        //view.addSubview(durationLabel)
+    }
+    
+    private func setupConstraints() {
+        NSLayoutConstraint.activate([
+            // Background Image
+            backgroundImageView.topAnchor.constraint(equalTo: view.topAnchor),
+            backgroundImageView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            backgroundImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            backgroundImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            
+            // Capital Card (Now Centered vertically with a small positive offset)
+            capitalCard.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: 40),
+            capitalCard.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 24),
+            capitalCard.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -24),
+            
+            // Subtitle Label (Pinned ABOVE Capital Card)
+            subtitleLabel.bottomAnchor.constraint(equalTo: capitalCard.topAnchor, constant: -40),
+            subtitleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 24),
+            subtitleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -24),
+            
+            // Title Label (Pinned ABOVE Subtitle)
+            titleLabel.bottomAnchor.constraint(equalTo: subtitleLabel.topAnchor, constant: -16),
+            titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            titleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            
+            // --- Elements Inside the Card ---
+            
+            // Capital Amount Label
+            capitalLabel.topAnchor.constraint(equalTo: capitalCard.topAnchor, constant: 30),
+            capitalLabel.centerXAnchor.constraint(equalTo: capitalCard.centerXAnchor),
+            
+            // Separator Line
+            separatorView.topAnchor.constraint(equalTo: capitalLabel.bottomAnchor, constant: 24),
+            separatorView.leadingAnchor.constraint(equalTo: capitalCard.leadingAnchor),
+            separatorView.trailingAnchor.constraint(equalTo: capitalCard.trailingAnchor),
+            separatorView.heightAnchor.constraint(equalToConstant: 1),
+            
+            // Context Label
+            contextLabel.topAnchor.constraint(equalTo: separatorView.bottomAnchor, constant: 24),
+            contextLabel.leadingAnchor.constraint(equalTo: capitalCard.leadingAnchor, constant: 20),
+            contextLabel.trailingAnchor.constraint(equalTo: capitalCard.trailingAnchor, constant: -20),
+            
+            // Beginner Button
+            beginnerButton.topAnchor.constraint(equalTo: contextLabel.bottomAnchor, constant: 24),
+            beginnerButton.leadingAnchor.constraint(equalTo: capitalCard.leadingAnchor, constant: 20),
+            beginnerButton.trailingAnchor.constraint(equalTo: capitalCard.trailingAnchor, constant: -20),
+            beginnerButton.heightAnchor.constraint(equalToConstant: 54),
+            
+            // Pin bottom of card to bottom of button with padding
+            capitalCard.bottomAnchor.constraint(equalTo: beginnerButton.bottomAnchor, constant: 24),
+            
+            // Duration Label (Below Capital Card)
+//            durationLabel.topAnchor.constraint(equalTo: capitalCard.bottomAnchor, constant: 20),
+//            durationLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor)
+        ])
+    }
+    
+    private func setupActions() {
+        // Setup the hold to fill animation we previously created
+        beginnerButton.setupHoldToFillAnimation(duration: 1.2)
+        
+        // Navigation target if they finish the hold
+        beginnerButton.addTarget(self, action: #selector(beginButtonPressed), for: .touchUpInside)
+    }
 
-    // MARK: - Hold to Fill Animation Extension
-// MARK: - Hold to Fill Animation Extension
+    // MARK: - Handlers
+    
+    @objc private func beginButtonPressed() {
+        let gameVC = storyboard?.instantiateViewController(
+            withIdentifier: "GameViewController"
+        ) as! GameViewController
+
+        gameVC.modalPresentationStyle = .fullScreen
+        present(gameVC, animated: true)
+    }
+}
+
 // MARK: - Hold to Fill Animation Extension
 extension UIButton {
     
     func setupHoldToFillAnimation(duration: TimeInterval = 2.0) {
-        
-        // Remove existing gesture recognizers to avoid duplicates
         gestureRecognizers?.forEach { removeGestureRecognizer($0) }
         
         let longPress = UILongPressGestureRecognizer(target: self, action: #selector(handleHoldGesture(_:)))
         longPress.minimumPressDuration = 0.0
         addGestureRecognizer(longPress)
         
-        // Store duration
         layer.setValue(duration, forKey: "fillDuration")
     }
     
     @objc private func handleHoldGesture(_ gesture: UILongPressGestureRecognizer) {
-        
         switch gesture.state {
         case .began:
             animateFillFromLeft(gesture: gesture)
-            
         case .ended, .cancelled, .failed:
             resetFill(completed: false)
-            
-        default:
-            break
+        default: break
         }
     }
     
     private func animateFillFromLeft(gesture: UILongPressGestureRecognizer) {
-        
-        // Remove existing fill layer
         layer.sublayers?.first(where: { $0.name == "fillLayer" })?.removeFromSuperlayer()
         
-        // Create fill layer
         let fillLayer = CALayer()
         fillLayer.name = "fillLayer"
-        fillLayer.backgroundColor = UIColor.systemBlue.withAlphaComponent(0.50).cgColor
+        // Lighter gray overlay matching the charcoal button theme
+        fillLayer.backgroundColor = UIColor(white: 1.0, alpha: 0.15).cgColor
         
-        // FIXED: Set initial frame starting from left with 0 width
         fillLayer.frame = CGRect(x: 0, y: 0, width: 0, height: bounds.height)
         fillLayer.cornerRadius = layer.cornerRadius
         fillLayer.borderWidth = 1.5
-        fillLayer.borderColor = UIColor.systemBlue as! CGColor
+        fillLayer.borderColor = UIColor(white: 1.0, alpha: 0.3).cgColor
         
-        // FIXED: Set anchor point to left side so it grows from left to right
         fillLayer.anchorPoint = CGPoint(x: 0, y: 0.5)
         fillLayer.position = CGPoint(x: 0, y: bounds.height / 2)
         
-        // Insert below content
-        if let blurView = subviews.first(where: { $0 is UIVisualEffectView }) {
-            layer.insertSublayer(fillLayer, below: blurView.layer)
-        } else {
-            layer.insertSublayer(fillLayer, at: 0)
-        }
+        layer.insertSublayer(fillLayer, at: 0)
         
-        // Animate width from 0 to full width
         let duration = layer.value(forKey: "fillDuration") as? TimeInterval ?? 2.0
         
-        // FIXED: Animate the width property directly
         let animation = CABasicAnimation(keyPath: "bounds.size.width")
         animation.fromValue = 0
         animation.toValue = bounds.width
         animation.duration = duration
-        animation.timingFunction = CAMediaTimingFunction(name: .linear)
+        animation.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
         animation.fillMode = .forwards
         animation.isRemovedOnCompletion = false
         
         fillLayer.add(animation, forKey: "widthAnimation")
-        
-        // FIXED: Update the model layer
         fillLayer.bounds.size.width = bounds.width
         
-        // Check for completion
+        UIView.animate(withDuration: duration) {
+            self.alpha = 0.85
+        }
+        
         DispatchQueue.main.asyncAfter(deadline: .now() + duration) { [weak self, weak gesture] in
             guard let self = self, let gesture = gesture else { return }
-            // Check if gesture is still active
             if gesture.state == .changed || gesture.state == .began {
                 self.onFillComplete()
             }
@@ -201,25 +288,21 @@ extension UIButton {
     }
     
     private func resetFill(completed: Bool) {
-        
         guard let fillLayer = layer.sublayers?.first(where: { $0.name == "fillLayer" }) else { return }
-        
         fillLayer.removeAllAnimations()
         
         UIView.animate(withDuration: 0.2) {
             fillLayer.opacity = 0
+            self.alpha = 1.0
         } completion: { _ in
             fillLayer.removeFromSuperlayer()
         }
     }
     
     private func onFillComplete() {
-        
-        // Haptic feedback
         let generator = UIImpactFeedbackGenerator(style: .medium)
         generator.impactOccurred()
         
-        // Scale animation
         UIView.animate(withDuration: 0.1, animations: {
             self.transform = CGAffineTransform(scaleX: 0.95, y: 0.95)
         }) { _ in
@@ -228,10 +311,7 @@ extension UIButton {
             }
         }
         
-        // Trigger button action
         sendActions(for: .touchUpInside)
-        
-        // Reset fill
         resetFill(completed: true)
     }
 }
