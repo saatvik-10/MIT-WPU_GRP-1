@@ -177,6 +177,7 @@ final class ArticleScorer {
     // β > γ asymmetry justified by unreliability of negative feedback
 
     func updateWeights(for title: String, body: String, signal: FeedbackSignal) {
+        print("🎯 updateWeights called | signal: \(signal) | '\(title.prefix(40))'")
 
         guard let embedding = embedding else { return }
 
@@ -190,6 +191,8 @@ final class ArticleScorer {
                 phrases: phrases,
                 embedding: embedding
             )
+            print("   🔍 tag: '\(tag)' | confidence: \(String(format: "%.3f", confidence))")
+
 
             // Only update weights for tags that were actually present
             // in this article — otherwise unrelated interests get updated
