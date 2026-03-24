@@ -8,6 +8,7 @@ class ProfileViewController: UIViewController, ProfileOptionCellDelegate {
     @IBOutlet weak var collectionView: UICollectionView!
     
     let sections = ProfileDataSource.sections
+    private var profileData: APIProfileResponse?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -17,7 +18,7 @@ class ProfileViewController: UIViewController, ProfileOptionCellDelegate {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        setupProfileHeader()
+        fetchProfile()
     }
     
     private func setupCollectionView() {
@@ -58,13 +59,48 @@ class ProfileViewController: UIViewController, ProfileOptionCellDelegate {
     }
     }
     
+    private func fetchProfile() {
+        guard let token = SessionManager.shared.authToken else {
+            setupProfileHeader()
+            return
+        }
+        
+        APIService.shared.fetchProfile(token: token) { [weak self] result in
+            switch result {
+            case .success(let profile):
+                self?.profileData = profile
+                self?.setupProfileHeader()
+            case .failure:
+                self?.setupProfileHeader()
+            }
+        }
+    }
+    
     func setupProfileHeader() {
-        let user = User.current
-        profileName.text = user.name
-        profileLevel.text = user.level.rawValue
-        profileLevel.textColor = user.level.color
         profileBtn.layer.cornerRadius = profileBtn.bounds.height / 2
         profileBtn.clipsToBounds = true
+        
+        if let profile = profileData {
+            profileName.text = profile.name
+            let level = UserLevel(rawValue: profile.level.capitalized) ?? .beginner
+            profileLevel.text = level.rawValue
+            profileLevel.textColor = level.color
+            
+            if let urlString = profile.profileImageUrl, let url = URL(string: urlString) {
+                URLSession.shared.dataTask(with: url) { [weak self] data, _, _ in
+                    guard let data = data, let image = UIImage(data: data) else { return }
+                    DispatchQueue.main.async {
+                        self?.profileBtn.setImage(nil, for: .normal)
+                        self?.profileBtn.setBackgroundImage(image, for: .normal)
+                    }
+                }.resume()
+            }
+        } else {
+            let user = User.current
+            profileName.text = user.name
+            profileLevel.text = user.level.rawValue
+            profileLevel.textColor = user.level.color
+        }
     }
     
     func generateLayout() -> UICollectionViewLayout {
