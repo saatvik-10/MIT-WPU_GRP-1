@@ -148,3 +148,74 @@ class AppTheme {
 
 
 
+
+struct SavedArticle: Codable {
+    let id: Int
+    let title: String
+    let description: String
+    let imageName: String
+    let category: String
+    let date: String
+    let source: String
+    let overview: [String]
+    let keyTakeaways: [String]
+    let jargons: [String]
+    var selectedJargon: String? = ""
+    var folderName: String
+}
+
+class SavedArticlesStore {
+    static let shared = SavedArticlesStore()
+    private init() { load() }
+
+    private let cacheKey = "saved_articles"
+    private(set) var savedArticles: [SavedArticle] = []
+
+    func save(_ article: NewsArticle, to folderName: String) {
+        guard !savedArticles.contains(where: { $0.id == article.id && $0.folderName == folderName }) else {
+            print("⚠️ Already saved in \(folderName)")
+            return
+        }
+
+        let saved = SavedArticle(
+            id: article.id,
+            title: article.title,
+            description: article.description,
+            imageName: article.imageName,
+            category: article.category,
+            date: article.date,
+            source: article.source,
+            overview: article.overview,
+            keyTakeaways: article.keyTakeaways,
+            jargons: article.jargons,
+            selectedJargon: article.selectedJargon,
+            folderName: folderName
+        )
+
+        savedArticles.append(saved)
+        persist()
+        print("💾 Saved '\(article.title)' to folder: \(folderName)")
+    }
+
+    func articles(in folderName: String) -> [SavedArticle] {
+        savedArticles.filter { $0.folderName == folderName }
+    }
+
+    func remove(_ articleId: Int, from folderName: String) {
+        savedArticles.removeAll { $0.id == articleId && $0.folderName == folderName }
+        persist()
+    }
+
+    private func persist() {
+        guard let data = try? JSONEncoder().encode(savedArticles) else { return }
+        UserDefaults.standard.set(data, forKey: cacheKey)
+    }
+
+    private func load() {
+        guard
+            let data = UserDefaults.standard.data(forKey: cacheKey),
+            let decoded = try? JSONDecoder().decode([SavedArticle].self, from: data)
+        else { return }
+        savedArticles = decoded
+    }
+}

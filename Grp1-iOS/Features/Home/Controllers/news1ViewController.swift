@@ -433,9 +433,10 @@ class news1ViewController: UIViewController, UICollectionViewDataSource {
                 folders: Bookmarks.mockBookmarks,
                 articleTitle: article.title
             ) { [weak self] folderTitle in
-                self?.animateSaveBookmarkIcon()
-                self?.showToast(message: "Saved to \(folderTitle)")
-                print("Saved article '\(article.title)' to folder: \(folderTitle)")
+                guard let self = self, let article = self.article else { return }
+                SavedArticlesStore.shared.save(article, to: folderTitle)   // ← add this
+                self.animateSaveBookmarkIcon()
+                self.showToast(message: "Saved to \(folderTitle)")
             }
 
             sheetVC.modalPresentationStyle = .pageSheet
