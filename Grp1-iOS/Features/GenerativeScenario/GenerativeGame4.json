@@ -1,0 +1,107 @@
+{
+  "id": "scenario_esop_04",
+  "type": "reality_check",
+  "meta": {
+    "title": "Month 3 — Reality Arrives",
+    "description": "Linear — zero branching"
+  },
+  "events": [
+    {
+      "id": "evt_tight_month",
+      "title": "Event 1 — The Tight Month",
+      "messages": [
+        "After all expenses: ₹6,800 left",
+        "Your old lifestyle needed ₹14,000 buffer"
+      ],
+      "question": "What do you do?",
+      "stateKey": "expense_response",
+      "options": [
+        { "id": "cut_expense", "text": "Cut one big expense" },
+        { "id": "dip_savings", "text": "Dip into savings just this month" },
+        { "id": "do_nothing", "text": "Tell yourself it gets better — do nothing" },
+        { "id": "track_expense", "text": "Start tracking every expense now" }
+      ]
+    },
+    {
+      "id": "evt_weekend_ask",
+      "title": "Event 2 — The Weekend Ask",
+      "messages": [
+        "Founder: 'All hands Saturday — investor demo Monday'"
+      ],
+      "question": "Your response?",
+      "stateKey": "boundary_style",
+      "options": [
+        { "id": "say_yes", "text": "Of course — this is why I joined" },
+        { "id": "leave_early", "text": "I'll come but leave by 2pm" },
+        { "id": "wfh", "text": "Work from home — same output" },
+        { "id": "protect_weekend", "text": "I need to protect my weekends" }
+      ]
+    },
+    {
+      "id": "evt_comparison",
+      "title": "Event 3 — The Comparison Sting",
+      "messages": [
+        "College friend just bought a car",
+        "His salary: ₹95,000",
+        "He texts: 'Startup life treating you well?'"
+      ],
+      "question": "Internal reaction — tap what's true:",
+      "stateKey": "comparison_vulnerability",
+      "options": [
+        { "id": "happy", "text": "Happy for him — different paths" },
+        { "id": "sting", "text": "Small sting — I won't lie" },
+        { "id": "fomo", "text": "Real FOMO hitting me hard" },
+        { "id": "remind_why", "text": "I remind myself why I chose this" }
+      ]
+    },
+    {
+      "id": "evt_delay",
+      "title": "Event 4 — The Delay",
+      "messages": [
+        "Salary credited 9 days late",
+        "Founder: 'Cash flow timing — sorted now'"
+      ],
+      "question": "Your reaction?",
+      "stateKey": "red_flag_sensitivity",
+      "options": [
+        { "id": "fine", "text": "Fine — startups have hiccups" },
+        { "id": "watching", "text": "Okay this time — watching closely" },
+        { "id": "ask_writing", "text": "Asked founder for explanation in writing" },
+        { "id": "resume", "text": "Quietly updated my resume" }
+      ]
+    },
+    {
+      "id": "evt_emergency",
+      "title": "Event 5 — The Emergency Fund Dip",
+      "messages": [
+        "Car repair: ₹14,000",
+        "Emergency fund: was 3 months",
+        "Now: 1.8 months"
+      ],
+      "question": "Priority this month?",
+      "stateKey": "financial_discipline",
+      "options": [
+        { "id": "rebuild_fast", "text": "Rebuild emergency fund immediately" },
+        { "id": "rebuild_slow", "text": "Rebuild slowly over 3 months" },
+        { "id": "leave_it", "text": "Leave it — salary will cover next emergency" },
+        { "id": "ask_advance", "text": "Ask HR about salary advance option" }
+      ]
+    }
+  ],
+  "summary": {
+    "title": "Month 3 score:",
+    "stats": [
+      { "label": "Excitement", "value": "████░░░░ (dropping)" },
+      { "label": "Financial stress", "value": "██████░░ (rising)" },
+      { "label": "Confidence in decision", "value": "██████░░" }
+    ],
+    "finalQuestion": "Right now — do you regret joining?",
+    "stateKey": "month3_regret_level",
+    "finalOptions": [
+        { "id": "regret_none", "text": "Not at all — exactly what I expected" },
+        { "id": "regret_little", "text": "A little — it's harder than I thought" },
+        { "id": "regret_sometimes", "text": "Sometimes — on bad days" },
+        { "id": "regret_more", "text": "More than expected — but I'm committed" }
+    ]
+  }
+}

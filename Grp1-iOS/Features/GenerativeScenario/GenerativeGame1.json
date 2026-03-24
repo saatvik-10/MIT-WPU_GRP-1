@@ -1,0 +1,74 @@
+{
+  "id": "scenario_esop_01",
+  "type": "decode_and_rank",
+  "meta": {
+    "title": "The Emotional Arc: Equity Dreams vs Salary Certainty",
+    "description": "The most seductive financial decision of the decade — trading salary certainty for equity dreams. This game decodes what ESOPs actually are vs what they feel like."
+  },
+  "visualContext": {
+    "leftSide": {
+      "title": "Current Job",
+      "visualStyle": "faded"
+    },
+    "rightSide": {
+      "title": "Startup Offer",
+      "visualStyle": "crisp"
+    }
+  },
+  "step1": {
+    "instruction": "Tap each line to reveal the truth:",
+    "decodableItems": [
+      {
+        "id": "item_salary",
+        "initialText": "₹65,000/month",
+        "revealedText": "Take home after tax: ₹54,200"
+      },
+      {
+        "id": "item_esops",
+        "initialText": "1000 ESOPs at ₹100 strike",
+        "revealedText": "Cannot touch for 4 years minimum"
+      },
+      {
+        "id": "item_funding",
+        "initialText": "Series A funded",
+        "revealedText": "Means they have 18-24 months runway"
+      },
+      {
+        "id": "item_structure",
+        "initialText": "Flat structure",
+        "revealedText": "Means: everyone does everything"
+      },
+      {
+        "id": "item_culture",
+        "initialText": "Work hard play hard culture",
+        "revealedText": "Means: weekends are not guaranteed"
+      }
+    ]
+  },
+  "step2": {
+    "question": "Reading this — what's your honest feeling?",
+    "instruction": "Rank these from most to least true (Drag to reorder):",
+    "rankingOptions": [
+      {
+        "id": "rank_excited",
+        "text": "Excited by the upside"
+      },
+      {
+        "id": "rank_nervous",
+        "text": "Nervous about the salary cut"
+      },
+      {
+        "id": "rank_confused",
+        "text": "Confused about the ESOPs"
+      },
+      {
+        "id": "rank_worried",
+        "text": "Worried about stability"
+      },
+      {
+        "id": "rank_ready",
+        "text": "Ready for the challenge"
+      }
+    ]
+  }
+}

@@ -29,6 +29,16 @@ class GameViewController: UIViewController {
     private var lastRenderedNode: DecisionNode?
     private var frozenFinalCapital: Int?
     private var gameEnded = false
+    private var latestBias: CognitiveBias?
+    
+    let biasDefinitions: [CognitiveBias: BiasDefine] = [
+        .lossAversion: BiasDefine(bias: .lossAversion, title: "Loss Aversion", description: "Holding losing positions felt safer than accepting a loss. The emotional pain of losses outweighed rational evaluation of future returns.\n\nLesson: Accept small losses early to avoid larger ones later.", iconName: "exclamationmark.triangle"),
+        .sunkCost: BiasDefine(bias: .sunkCost, title: "Sunk Cost Fallacy", description: "Past investments influenced future decisions. Additional capital was committed to justify earlier losses.\n\nLesson: Markets don’t care what you already invested.", iconName: "arrow.triangle.2.circlepath"),
+        .overconfidence: BiasDefine(bias: .overconfidence, title: "Overconfidence", description: "Strong narratives increased conviction. Confidence exceeded the accuracy of available information.\n\nLesson: Confidence should follow evidence — not stories.", iconName: "brain.head.profile"),
+        .statusQuo: BiasDefine(bias: .statusQuo, title: "Status Quo Bias", description: "Inaction felt less risky than change. Staying invested delayed necessary decisions.\n\nLesson: Inaction is also a decision.", iconName: "pause.circle"),
+        .anchoring: BiasDefine(bias: .anchoring, title: "Anchoring", description: "Early price levels anchored expectations. New information was underweighted.\n\nLesson: Yesterday’s price is irrelevant.", iconName: "paperclip"),
+        .adaptability: BiasDefine(bias: .adaptability, title: "Adaptability", description: "Willingness to change strategy when facts change. Avoiding attachment to previous positions.\n\nLesson: Keep an open mind and pivot when required.", iconName: "arrow.triangle.swap")
+    ]
 
 
     
@@ -80,16 +90,12 @@ class GameViewController: UIViewController {
     }
     
     func revealButtonsSequentially(_ buttons: [(UIButton, String)]) {
-
         for (index, pair) in buttons.enumerated() {
-
             let button = pair.0
             let title = pair.1
-
             DispatchQueue.main.asyncAfter(deadline: .now() + Double(index) * 0.35) {
-                
-                // Apply glass BEFORE setting title
-                button.applyGlass()
+                // Apply the new clean style BEFORE setting title
+//                button.applyCleanStyle()
                 
                 UIView.animate(
                     withDuration: 1.5,
@@ -101,7 +107,6 @@ class GameViewController: UIViewController {
                     button.alpha = 1
                     button.transform = .identity
                 }
-
                 button.typeTitle(title)
             }
         }
@@ -110,6 +115,44 @@ class GameViewController: UIViewController {
     
     func setupUI() {
         styleCards()
+        styleLables()
+        setupBiasPopup()
+    }
+
+    func setupBiasPopup() {
+        biasCard.isUserInteractionEnabled = true
+        let tap = UITapGestureRecognizer(target: self, action: #selector(showBiasExplanation))
+        biasCard.addGestureRecognizer(tap)
+    }
+    
+    @objc func showBiasExplanation() {
+        guard let bias = latestBias, let definition = biasDefinitions[bias] else { return }
+        let alert = UIAlertController(title: definition.title, message: definition.description, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Got it", style: .default))
+        present(alert, animated: true)
+    }
+
+    func styleLables(){
+        //  capitalLabel.textColor = UIColor(red: 0.18, green: 0.31, blue: 0.24, alpha: 1.0)
+        // capitalLabel.font = UIFont.systemFont(ofSize: 42, weight: .semibold)
+        
+        // Scenario Title - Matching Sunk Cost Georgia title
+        scenarioTitleLabel.textColor = UIColor(white: 0.2, alpha: 1.0)
+        if let serifFont = UIFont(name: "Georgia-Bold", size: 32) {
+            scenarioTitleLabel.font = serifFont
+        } else {
+            scenarioTitleLabel.font = UIFont.systemFont(ofSize: 32, weight: .bold)
+        }
+
+        scenatioDescriptionLabel.textColor = UIColor(white: 0.35, alpha: 1.0)
+        scenatioDescriptionLabel.font = UIFont.systemFont(ofSize: 18, weight: .regular)
+        
+        // Secondary context labels
+        timerLabel.textColor = UIColor(white: 0.4, alpha: 1.0)
+        timerLabel.font = UIFont.systemFont(ofSize: 15, weight: .medium)
+        
+        chooseAnOptionLabel.textColor = UIColor(white: 0.4, alpha: 1.0)
+        chooseAnOptionLabel.font = UIFont.systemFont(ofSize: 16, weight: .medium)
     }
     
     func resetChoices() {
@@ -122,23 +165,41 @@ class GameViewController: UIViewController {
             $0?.setTitle("", for: .normal)
         }
     }
+    // func styleCards() {
+    //     [portfolioCard, scenarioCard, biasCard].forEach { card in
+    //         guard let card else { return }
+
+    //         // Rounded corners
+    //         card.layer.cornerRadius = 16
+    //         card.layer.masksToBounds = false
+
+    //         // Background
+    //         card.backgroundColor = .white
+
+    //         // Soft shadow (Apple-style)
+    //         card.layer.shadowColor = UIColor.black.cgColor
+    //         card.layer.shadowOpacity = 0.08
+    //         card.layer.shadowOffset = CGSize(width: 0, height: 6)
+    //         card.layer.shadowRadius = 18
+
+    //         // Performance optimization
+    //         card.layer.shouldRasterize = true
+    //         card.layer.rasterizationScale = UIScreen.main.scale
+    //     }
+    // }
+
     func styleCards() {
         [portfolioCard, scenarioCard, biasCard].forEach { card in
             guard let card else { return }
-
-            // Rounded corners
-            card.layer.cornerRadius = 16
-            card.layer.masksToBounds = false
-
-            // Background
+            // Rounded corners and background matching IntroVC
+            card.layer.cornerRadius = 24
             card.backgroundColor = .white
-
-            // Soft shadow (Apple-style)
+            // Soft drop shadow
             card.layer.shadowColor = UIColor.black.cgColor
             card.layer.shadowOpacity = 0.08
-            card.layer.shadowOffset = CGSize(width: 0, height: 6)
-            card.layer.shadowRadius = 18
-
+            card.layer.shadowOffset = CGSize(width: 0, height: 8)
+            card.layer.shadowRadius = 20
+            card.layer.masksToBounds = false
             // Performance optimization
             card.layer.shouldRasterize = true
             card.layer.rasterizationScale = UIScreen.main.scale
@@ -166,6 +227,7 @@ class GameViewController: UIViewController {
     func applyBias(_ bias: CognitiveBias, weight: Int) {
         state.biasExposure[bias, default: 0] += weight
         state.biasScore += weight
+        latestBias = bias
         updateBiasLabel()
     }
     
@@ -177,14 +239,14 @@ class GameViewController: UIViewController {
         biasLabel.layoutIfNeeded()
 
 
-        if let bias = dominantBias() {
+        if let bias = latestBias, let definition = biasDefinitions[bias] {
             biasLabel.text = bias.rawValue.uppercased()
 
             styleStatLabel(
                 biasLabel,
-                textColor: .systemOrange,
-                bgColor: UIColor.systemOrange.withAlphaComponent(0.15),
-                icon: "brain.head.profile"
+                textColor: .systemIndigo,
+                bgColor: UIColor.systemIndigo.withAlphaComponent(0.15),
+                icon: definition.iconName
             )
 
         } else {
@@ -205,6 +267,22 @@ class GameViewController: UIViewController {
             .max(by: { $0.value < $1.value })?
             .key
     }
+
+        func makeCardsDynamic() {
+        // 1. Find and disable the hardcoded height constraint on the scenario card
+        scenarioCard?.constraints.forEach { constraint in
+            if constraint.firstAttribute == .height {
+                constraint.isActive = false
+            }
+        }
+        
+        // 2. Pin the bottom of the description label to the bottom of the card with padding.
+        // This forces the card's height to be entirely dictated by the text inside it!
+        if let descLabel = scenatioDescriptionLabel, let sCard = scenarioCard {
+            descLabel.bottomAnchor.constraint(equalTo: sCard.bottomAnchor, constant: -24).isActive = true
+        }
+    }
+
 
     func evaluateEnding() -> EndingType {
         let capital = frozenFinalCapital ?? state.capital
@@ -261,15 +339,10 @@ class GameViewController: UIViewController {
             scenarioTitleLabel.text = "The Disruptive Spark"
             scenatioDescriptionLabel.typeThenReveal(
                 """
-                A leaked National Green Mobility Policy sends shockwaves through the market.
-
-                By 2030, 40% of all new vehicle sales must be electric.
-                Investors react instantly.
-                Legacy automakers without EV infrastructure got hit.
-                Bharat Motors opens 12% lower.
-                Nothing has changed inside the company —
-                but everything has changed around it.
-
+                • A leaked National Green Mobility Policy sends shockwaves through the market.
+                • By 2030, 40% of all new vehicle sales must be electric.
+                • Bharat Motors opens 12% lower.
+                • Nothing has changed inside the company — but everything has changed around it.
                 """
             )
             hideAllButtons()
@@ -287,12 +360,10 @@ class GameViewController: UIViewController {
             if nodeChanged {
                     scenatioDescriptionLabel.typeThenReveal(
                         """
-                        Quarterly results beat expectations,
-                        but guidance remains cautious.
-
-                        EPS surprises on the upside.
-                        Supply chain risks persist.
-                        Analyst opinions are divided.
+                        • Quarterly results beat expectations, but guidance remains cautious.
+                        • EPS surprises on the upside.
+                        • Supply chain risks persist.
+                        • Analyst opinions are divided.
                         """
                     )
                 }
@@ -311,14 +382,10 @@ class GameViewController: UIViewController {
             if nodeChanged {
                     scenatioDescriptionLabel.typeThenReveal(
                         """
-                        Revenue beats estimates.
-                        EBITDA margins expand.
-                        Guidance is raised.
-
-                        You double down on your position.
-
-                        The stock responds positively,
-                        but sector uncertainty remains.
+                        • Revenue beats estimates. EBITDA margins expand.
+                        • Guidance is raised.
+                        • You double down on your position.
+                        • The stock responds positively, but sector uncertainty remains.
                         """
                     )
                 }
@@ -343,14 +410,10 @@ class GameViewController: UIViewController {
             if nodeChanged {
                     scenatioDescriptionLabel.typeThenReveal(
                         """
-                        You decide to wait it out.
-
-                        Years pass.
-                        Capital remains stuck.
-                        Inflation and opportunity cost compound.
-
-                        The company survives —
-                        but your money doesn’t grow.
+                        • You decide to wait it out.
+                        • Years pass. Capital remains stuck.
+                        • Inflation and opportunity cost compound.
+                        • The company survives — but your money doesn’t grow.
                         """
                     )
                 }
@@ -369,13 +432,10 @@ class GameViewController: UIViewController {
         case .loyalist_doubleDown_loss :
             scenarioTitleLabel.text = "You Doubled Down"
             scenatioDescriptionLabel.text = """
-            You added more capital to a losing position.
-            Now liquidity has dried up.
-            
-            Buyers have vanished.Your funds are locked in.
-
-            You’re no longer choosing —
-            the market is choosing for you.
+            • You added more capital to a losing position.
+            • Now liquidity has dried up.
+            • Buyers have vanished. Your funds are locked in.
+            • You’re no longer choosing — the market is choosing for you.
             """
             capitalLabel.text = "₹25000"
             choiceButton1.isHidden = true
@@ -404,15 +464,10 @@ class GameViewController: UIViewController {
             if nodeChanged {
                     scenatioDescriptionLabel.typeThenReveal(
                         """
-                        You sell half your position.
-
-                        Risk is reduced,
-                        but uncertainty still lingers.
-
-                        Some capital is safe —
-                        the rest is still exposed.
-
-                        This is a turning point. What do you do next?
+                        • You sell half your position.
+                        • Risk is reduced, but uncertainty still lingers.
+                        • Some capital is safe — the rest is still exposed.
+                        • This is a turning point. What do you do next?
                         """
                     )
                 }
@@ -430,13 +485,9 @@ class GameViewController: UIViewController {
             if nodeChanged {
                     scenatioDescriptionLabel.typeThenReveal(
                         """
-                        You reduced exposure early.
-
-                        Losses continue,
-                        but on a smaller base.
-
-                        Your capital is bruised —
-                        not broken.
+                        • You reduced exposure early.
+                        • Losses continue, but on a smaller base.
+                        • Your capital is bruised — not broken.
                         """
                     )
                 }
@@ -456,14 +507,11 @@ class GameViewController: UIViewController {
             if nodeChanged {
                     scenatioDescriptionLabel.typeThenReveal(
                         """
-                        You exit the legacy auto position.
-                        But at a cost of loss.
-                        
-                        Capital is freed,
-                        but risk is reintroduced.
-
-                        A fast-growing EV theme emerges —
-                        volatile, but promising.
+                        • You exit the legacy auto position, locking in a realized loss.
+                        • Capital is freed, improving liquidity and optionality.
+                        • Emotional bias is reduced, but uncertainty increases.
+                        • Early entry could yield outsized returns — or sharp drawdowns.
+                        • You are effectively rotating from stability to speculation.
                         """
                     )
                 }
@@ -482,12 +530,10 @@ class GameViewController: UIViewController {
         case .ev_pivot_loss :
             scenarioTitleLabel.text = "Lithium Sector goes down"
             scenatioDescriptionLabel.typeThenReveal(  """
-            Geopolitical tensions erupt across key lithium-producing regions.
-            Export routes are disrupted.
-            Battery manufacturers scramble for inventory.
-            
-            EV production slows overnight.
-            Investor confidence collapses high-growth EV stocks plunge.
+            • Geopolitical tensions erupt across key lithium-producing regions.
+            • Export routes are disrupted. Battery manufacturers scramble for inventory.
+            • EV production slows overnight.
+            • Investor confidence collapses. High-growth EV stocks plunge.
             """
             )
             hideAllButtons()
@@ -503,7 +549,14 @@ class GameViewController: UIViewController {
             
         case .ev_pivot_profit :
             scenarioTitleLabel.typeThenReveal( "You have stayed on EV")
-            scenatioDescriptionLabel.typeThenReveal("The gamble was worth it. As the EV sector skyrockets, demand begins to outpace supply. While your competitors scramble to retrofit old factories, you are already operational—but now you must defend your territory against new tech giants entering the fray. By staying the course, you’ve secured a dominant foothold in the fastest-growing industry on the planet.")
+            scenatioDescriptionLabel.typeThenReveal(
+                """
+                • The gamble was worth it, as the EV sector skyrockets and demand outpaces supply.
+                • While competitors scramble to retrofit old factories, you are already operational.
+                • Now you must defend your territory against new tech giants entering the fray.
+                • By staying the course, you’ve secured a dominant foothold in a fast-growing industry.
+                """
+            )
             hideAllButtons()
             revealButtonsSequentially([
                 (choiceButton1 , "Stay the course"),
@@ -520,13 +573,10 @@ class GameViewController: UIViewController {
             scenarioTitleLabel.text = "Capital in Hand"
             scenatioDescriptionLabel.typeThenReveal(
                     """
-            You’ve exited Legacy Motors completely.
-
-            Selling 50% earlier softened the blow.
-            Now your remaining capital is finally free.
-
-            The optimal strategy is to reinvest into a faster-growing sector —
-            where disruption creates opportunity, and timing defines returns.
+            • You’ve exited Legacy Motors completely.
+            • Selling 50% earlier softened the blow. Now your remaining capital is free.
+            • The optimal strategy is to reinvest into a faster-growing sector.
+            • In this market, disruption creates opportunity, and timing defines returns.
             """
             )
             hideAllButtons()
@@ -543,7 +593,11 @@ class GameViewController: UIViewController {
             
         case .ev_profit_book:
             scenarioTitleLabel.text = "You booked the profit timely"
-            scenatioDescriptionLabel.typeThenReveal("Timings matter in the market")
+            scenatioDescriptionLabel.typeThenReveal(
+                """
+                • Timings matter in the market.
+                """
+            )
             choiceButton1.isHidden = true
             choiceButton2.isHidden = true
             choiceButton3.isHidden = true

@@ -1,0 +1,90 @@
+{
+  "id": "scenario_esop_03",
+  "type": "calculator",
+  "meta": {
+    "title": "The Real Cost Calculator",
+    "description": "Linear — zero branching"
+  },
+  "part1": {
+    "title": "The gap made physical",
+    "facts": [
+      "₹17,000/month less",
+      "Over 4 years = ₹8,16,000 sacrificed"
+    ],
+    "allocationQuestion": "If you kept this ₹17,000 — where would it go?",
+    "buckets": [
+      { "id": "bucket_em", "name": "Emergency fund" },
+      { "id": "bucket_mf", "name": "Mutual fund SIP" },
+      { "id": "bucket_loan", "name": "Loan repayment" },
+      { "id": "bucket_life", "name": "Lifestyle / spending" },
+      { "id": "bucket_goal", "name": "Specific goal: house / travel / etc" }
+    ]
+  },
+  "part2": {
+    "title": "The ESOP upside",
+    "question": "What do you believe about this startup's future?",
+    "scenarios": [
+      {
+        "id": "scenario_bull",
+        "emoji": "🚀",
+        "name": "Bull case",
+        "details": [
+          "They nail it — 10x growth",
+          "Your ESOPs: ₹50,00,000",
+          "Probability: 10-15% of startups"
+        ]
+      },
+      {
+        "id": "scenario_base",
+        "emoji": "📈",
+        "name": "Base case",
+        "details": [
+          "Steady growth — 3x in 4 years",
+          "Your ESOPs: ₹15,00,000",
+          "Probability: 25-30% of startups"
+        ]
+      },
+      {
+        "id": "scenario_bear",
+        "emoji": "📉",
+        "name": "Bear case",
+        "details": [
+          "Struggles — pivot or shut",
+          "Your ESOPs: ₹0 - ₹2,00,000",
+          "Probability: 55-65% of startups"
+        ]
+      }
+    ]
+  },
+  "part3": {
+    "title": "The negotiation instinct",
+    "question": "Before you sign — what do you do?",
+    "options": [
+      {
+        "id": "neg_accept",
+        "text": "Accept as is — grateful for the opportunity",
+        "response": "Most people don't negotiate.\nMost companies expect you to."
+      },
+      {
+        "id": "neg_salary",
+        "text": "Ask for ₹5,000 more salary",
+        "response": "Reasonable. Most startups have 10-15% flex on salary."
+      },
+      {
+        "id": "neg_esop",
+        "text": "Ask for 200 more ESOPs instead",
+        "response": "Bold. Shows you understand equity.\nFounders respect this."
+      },
+      {
+        "id": "neg_bonus",
+        "text": "Ask for a joining bonus to cover Year 1 gap",
+        "response": "Smart. One-time cost for them.\nCovers your Year 1 adjustment."
+      },
+      {
+        "id": "neg_both",
+        "text": "Counter on both salary and ESOPs",
+        "response": "High confidence. Works if your skills are genuinely scarce."
+      }
+    ]
+  }
+}

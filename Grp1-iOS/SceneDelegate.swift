@@ -1,15 +1,15 @@
-//
-//  SceneDelegate.swift
-//  Grp1-iOS
-//
-//  Created by SDC-USER on 25/11/25.
-//
+ //
+ //  SceneDelegate.swift
+ //  Grp1-iOS
+ //
+ //  Created by SDC-USER on 25/11/25.
+ //
 
-import UIKit
+ import UIKit
 
-class SceneDelegate: UIResponder, UIWindowSceneDelegate {
+ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
-    var window: UIWindow?
+     var window: UIWindow?
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession,
                options connectionOptions: UIScene.ConnectionOptions) {
@@ -44,10 +44,24 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
         window?.makeKeyAndVisible()
     }
+     
+//      func scene(_ scene: UIScene, willConnectTo session: UISceneSession,
+//                 options connectionOptions: UIScene.ConnectionOptions) {
+//
+//          guard let windowScene = (scene as? UIWindowScene) else { return }
+//          window = UIWindow(windowScene: windowScene)
+//
+//          // Directly launch Generative Scenario for testing:
+//          let storyboard = UIStoryboard(name: "Scenario", bundle: nil)
+//          window?.rootViewController = storyboard.instantiateInitialViewController()
+//
+//          window?.makeKeyAndVisible()
+//      }
 
-    func sceneDidDisconnect(_ scene: UIScene) {}
-    func sceneDidBecomeActive(_ scene: UIScene) {}
-    func sceneWillResignActive(_ scene: UIScene) {}
-    func sceneWillEnterForeground(_ scene: UIScene) {}
-    func sceneDidEnterBackground(_ scene: UIScene) {}
-}
+
+     func sceneDidDisconnect(_ scene: UIScene) {}
+     func sceneDidBecomeActive(_ scene: UIScene) {}
+     func sceneWillResignActive(_ scene: UIScene) {}
+     func sceneWillEnterForeground(_ scene: UIScene) {}
+     func sceneDidEnterBackground(_ scene: UIScene) {}
+ }

@@ -85,6 +85,7 @@ struct APIProfileResponse: Decodable {
 	let gender: String
 	let profileImageUrl: String? // presigned R2 URL returned by backend
 	let level: String
+	let hasOnboarding: Bool?
 }
 
 struct APIUserProfileResponse: Decodable {
