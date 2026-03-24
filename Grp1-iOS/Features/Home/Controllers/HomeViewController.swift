@@ -145,11 +145,11 @@ class HomeViewController: UIViewController, UICollectionViewDelegate {
             guard !trendingNews.isEmpty else { return }
             selectedArticle = trendingNews[0]
         } else if indexPath.section == 2 {
-            let items = Array(marketHighlights.filter { $0.relevanceScore >= 35 }.dropFirst(1))
+            let items = Array(marketHighlights.filter { $0.relevanceScore >= 2 }.dropFirst(1))
             guard indexPath.row < items.count else { return }
             selectedArticle = items[indexPath.row]
         } else {
-            let items = marketHighlights.filter { $0.relevanceScore < 35 }
+            let items = marketHighlights.filter { $0.relevanceScore < 2 }
             guard indexPath.row < items.count else { return }
             selectedArticle = items[indexPath.row]
         }
@@ -309,8 +309,8 @@ extension HomeViewController: UICollectionViewDataSource {
         switch section {
         case 0: return min(todaysPick.count, 4)
         case 1: return min(trendingNews.count, 1)
-        case 2: return marketHighlights.filter { $0.relevanceScore >= 35 }.dropFirst(1).count
-        case 3: return marketHighlights.filter { $0.relevanceScore < 35 }.count
+        case 2: return marketHighlights.filter { $0.relevanceScore >= 2 }.dropFirst(1).count
+        case 3: return marketHighlights.filter { $0.relevanceScore < 2 }.count
         default: return 0
         }
     }
@@ -353,7 +353,7 @@ extension HomeViewController: UICollectionViewDataSource {
             return cell
 
         case 2:
-            let items = Array(marketHighlights.filter { $0.relevanceScore >= 35 }.dropFirst(1))
+            let items = Array(marketHighlights.filter { $0.relevanceScore >= 2 }.dropFirst(1))
             guard indexPath.row < items.count else {
                 return collectionView.dequeueReusableCell(withReuseIdentifier: "explore_cell", for: indexPath)
             }
@@ -376,7 +376,7 @@ extension HomeViewController: UICollectionViewDataSource {
             return cell
 
         default:
-            let items = marketHighlights.filter { $0.relevanceScore < 35 }
+            let items = marketHighlights.filter { $0.relevanceScore < 2 }
             guard indexPath.row < items.count else {
                 return collectionView.dequeueReusableCell(withReuseIdentifier: "realexplore_cell", for: indexPath)
             }
