@@ -12,7 +12,7 @@ class InterestCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var interestIconView: UIImageView!
     @IBOutlet weak var interestLabel: UILabel!
     @IBOutlet weak var subtitleInterestLabel: UILabel!
-    @IBOutlet weak var checkmarkView: UIImageView!
+    
     let selectedBorderWidth : CGFloat = 2
     let unselectedBorderWidth : CGFloat = 1
     let config = UIImage.SymbolConfiguration(weight: .light)
@@ -38,7 +38,6 @@ class InterestCollectionViewCell: UICollectionViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         isSelected = false
-        checkmarkView.alpha = 0
         contentView.transform = .identity
     }
     
@@ -85,10 +84,6 @@ class InterestCollectionViewCell: UICollectionViewCell {
                self.contentView.layer.borderColor = self.isSelected ?
                UIColor.systemBlue.cgColor : UIColor.systemGray4.cgColor
                
-               self.checkmarkView.alpha = self.isSelected ? 1 : 0
-               self.checkmarkView.transform = self.isSelected
-                              ? .identity
-                              : CGAffineTransform(scaleX: 0.6, y: 0.6)
            }
        )
    }
@@ -97,10 +92,6 @@ class InterestCollectionViewCell: UICollectionViewCell {
         contentView.layer.borderWidth = 1.75
         contentView.layer.borderColor = UIColor.systemGray4.cgColor
         contentView.backgroundColor = UIColor.white
-        
-        checkmarkView.tintColor = .systemBlue
-        checkmarkView.alpha = 0
-        checkmarkView.transform = CGAffineTransform(scaleX: 0.6, y: 0.6)
    }
     func configure(_ model: OnboardingInterestModel) {
         interestLabel.text = model.title
