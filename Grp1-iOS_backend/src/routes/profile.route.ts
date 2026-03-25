@@ -7,6 +7,8 @@ const controller = new Profile();
 
 profileRoute.get('/profile', proxyAuth, controller.getProfile);
 profileRoute.patch('/profile', proxyAuth, controller.editProfile);
+profileRoute.patch('/level', proxyAuth, controller.updateLevel);
+profileRoute.patch('/onboarding', proxyAuth, controller.finishOnboarding);
 profileRoute.get(
   '/users/:userId/profile',
   proxyAuth,

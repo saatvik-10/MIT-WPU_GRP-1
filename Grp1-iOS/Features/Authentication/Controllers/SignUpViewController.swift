@@ -353,7 +353,7 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
             if success {
                 print("✅ Sign up successful — now auto signing in...")
 
-                AuthenticationService.shared.signIn(email: email, password: password) { signInSuccess, token, signInError in
+                AuthenticationService.shared.signIn(email: email, password: password) { signInSuccess, token, hasOnboarding, signInError in
                     self.showLoading(false)
 
                     if signInSuccess, let token = token {

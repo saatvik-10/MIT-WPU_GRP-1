@@ -11,7 +11,7 @@ final class APIService {
 		   !configuredURL.isEmpty {
 			self.baseURL = configuredURL
 		} else {
-			self.baseURL = "http://localhost:8081"
+			self.baseURL = "http://localhost:8080"
 		}
 		self.session = session
 	}
@@ -323,12 +323,13 @@ final class APIService {
 		request(method: .post, path: "/api/profile/interests", token: token, body: APIAddInterestRequest(interestId: interestId), completion: completion)
 	}
 
+
 	func deleteInterest(
 		interestId: String,
 		token: String,
 		completion: @escaping (Result<Void, APIError>) -> Void
 	) {
-		requestStatus(method: .delete, path: "/api/profile/interests/\(interestId)", token: token, body: Optional<EmptyBody>.none, completion: completion)
+		requestStatus(method: .delete, path: "/api/interests/\(interestId)", token: token, body: Optional<EmptyBody>.none, completion: completion)
 	}
 
 	func saveLevel(
@@ -337,6 +338,13 @@ final class APIService {
 		completion: @escaping (Result<Void, APIError>) -> Void
 	) {
 		requestStatus(method: .patch, path: "/api/profile/level", token: token, body: APISetLevelRequest(level: level), completion: completion)
+	}
+
+	func finishOnboarding(
+		token: String,
+		completion: @escaping (Result<Void, APIError>) -> Void
+	) {
+		requestStatus(method: .patch, path: "/api/profile/onboarding", token: token, body: Optional<EmptyBody>.none, completion: completion)
 	}
 
 	// ─────────────────────────────────────────────

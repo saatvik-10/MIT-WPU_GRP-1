@@ -61,13 +61,13 @@ export class Profile {
         requestedUserId === currentUserId
           ? false
           : !!(await prisma.follow.findUnique({
-              where: {
-                followerId_followingId: {
-                  followerId: currentUserId,
-                  followingId: requestedUserId,
-                },
+            where: {
+              followerId_followingId: {
+                followerId: currentUserId,
+                followingId: requestedUserId,
               },
-            }));
+            },
+          }));
 
       return ctx.json(
         {
@@ -439,6 +439,39 @@ export class Profile {
     } catch (err) {
       console.log(err);
       return ctx.json({ error: 'Error adding interest' }, 500);
+    }
+  }
+
+  async finishOnboarding(ctx: Context) {
+    const userId = ctx.get('userId');
+    if (!userId) return ctx.json({ error: 'Unauthorized' }, 401);
+    try {
+      await prisma.user.update({ where: { id: userId }, data: { hasOnboarding: true } });
+      return ctx.json({ message: 'Onboarding completed' }, 200);
+    } catch (err) {
+      console.log(err);
+      return ctx.json({ error: 'Database error' }, 500);
+    }
+  }
+
+  async updateLevel(ctx: Context) {
+    const userId = ctx.get('userId');
+    if (!userId) return ctx.json({ error: 'Unauthorized' }, 401);
+    
+    const body = await ctx.req.json();
+    const level = body.level;
+    
+    if (!level) return ctx.json({ error: 'Level is required' }, 400);
+    
+    try {
+      await prisma.user.update({
+        where: { id: userId },
+        data: { level },
+      });
+      return ctx.json({ message: 'Level updated successfully' }, 200);
+    } catch (err) {
+      console.log(err);
+      return ctx.json({ error: 'Database error' }, 500);
     }
   }
 }

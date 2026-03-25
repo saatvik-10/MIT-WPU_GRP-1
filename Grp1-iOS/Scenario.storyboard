@@ -308,7 +308,7 @@
                                                             <constraint firstAttribute="height" constant="56" id="7oz-RY-Ncg"/>
                                                         </constraints>
                                                         <state key="normal" title="Button"/>
-                                                        <buttonConfiguration key="configuration" style="filled" title=" "/>
+                                                        <buttonConfiguration key="configuration" style="filled" title=" Go to Home"/>
                                                         <connections>
                                                             <action selector="restartTapped:" destination="UbD-cy-6xf" eventType="touchUpInside" id="Dkk-kQ-aX3"/>
                                                         </connections>
