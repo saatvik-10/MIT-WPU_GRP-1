@@ -71,10 +71,10 @@ class AuthenticationService {
     func signIn(
         email: String,
         password: String,
-        completion: @escaping (Bool, String?, String?) -> Void
+        completion: @escaping (Bool, String?, Bool, String?) -> Void
     ) {
         guard !email.isEmpty, !password.isEmpty else {
-            completion(false, nil, "Email and password required")
+            completion(false, nil, false, "Email and password required")
             return
         }
 
@@ -88,15 +88,16 @@ class AuthenticationService {
                 SessionManager.shared.authToken = token
                 UserDefaults.standard.set(token, forKey: "authToken")
                 UserDefaults.standard.set(response.userId, forKey: "userId")
+                UserDefaults.standard.set(response.hasOnboarding ?? false, forKey: "hasOnboarding")
 
                 DispatchQueue.main.async {
-                    completion(saved, token, nil)
+                    completion(saved, token, response.hasOnboarding ?? false, nil)
                 }
 
             case .failure(let error):
                 print("❌ Sign in error: \(error)")
                 DispatchQueue.main.async {
-                    completion(false, nil, error.localizedDescription)
+                    completion(false, nil, false, error.localizedDescription)
                 }
             }
         }

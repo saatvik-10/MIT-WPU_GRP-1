@@ -168,7 +168,7 @@ class SignInViewController: UIViewController {
 
         showLoading(true)
 
-        AuthenticationService.shared.signIn(email: email, password: password) { [weak self] success, token, error in
+        AuthenticationService.shared.signIn(email: email, password: password) { [weak self] success, token, hasOnboarding, error in
             guard let self = self else { return }
             self.showLoading(false)
 
@@ -183,8 +183,7 @@ class SignInViewController: UIViewController {
 
                 print("✅ Sign in successful")
 
-                // Check if user has completed onboarding
-                let hasOnboarding = UserDefaults.standard.bool(forKey: "hasOnboarding")
+                // Database hasOnboarding status
                 if hasOnboarding {
                     self.navigateToHome()
                 } else {
