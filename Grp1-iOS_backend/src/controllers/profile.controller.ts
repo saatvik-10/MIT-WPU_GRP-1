@@ -126,7 +126,6 @@ export class Profile {
                 await r2Service.getPresignedUrl(profileImageUrl);
             } catch (err) {
               console.error('Failed to get presigned URL for follower:', err);
-              return ctx.json({ error: 'Error fetching follower image' }, 500);
             }
           }
           return {
@@ -176,7 +175,6 @@ export class Profile {
         },
       });
 
-      // Fetch presigned URLs for profile images
       const followingWithUrls = await Promise.all(
         following.map(async (item) => {
           let profileImageUrl = item.following.profileImageUrl;
@@ -189,7 +187,6 @@ export class Profile {
                 'Failed to get presigned URL for following user:',
                 err,
               );
-              // Keep original URL if presigned URL fails
             }
           }
           return {
@@ -234,7 +231,19 @@ export class Profile {
         return ctx.json('User not found', 404);
       }
 
-      return ctx.json(profile, 200);
+      // ✅ FIXED: Generate presigned URL before returning — was returning raw S3 key
+      let profileImageUrl: string | null = null;
+      if (profile.profileImageUrl) {
+        try {
+          profileImageUrl = await r2Service.getPresignedUrl(
+            profile.profileImageUrl,
+          );
+        } catch (err) {
+          console.error('[Profile] Failed to get presigned URL:', err);
+        }
+      }
+
+      return ctx.json({ ...profile, profileImageUrl }, 200);
     } catch (err) {
       console.log(err);
       return ctx.json('Error fetching profile', 500);

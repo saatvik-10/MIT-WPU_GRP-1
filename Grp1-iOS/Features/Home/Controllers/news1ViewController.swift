@@ -406,7 +406,9 @@ class news1ViewController: UIViewController, UICollectionViewDataSource {
             image: UIImage(systemName: "hand.thumbsup")
         ) { [weak self] _ in
             guard let self = self, let article = self.article else { return }
-
+            
+            ArticleScorer.shared.updateWeights(for: article.title, body: article.bodyText, signal: .recommendMore)
+            
             let generator = UINotificationFeedbackGenerator()
             generator.notificationOccurred(.success)
 
@@ -431,9 +433,10 @@ class news1ViewController: UIViewController, UICollectionViewDataSource {
                 folders: Bookmarks.mockBookmarks,
                 articleTitle: article.title
             ) { [weak self] folderTitle in
-                self?.animateSaveBookmarkIcon()
-                self?.showToast(message: "Saved to \(folderTitle)")
-                print("Saved article '\(article.title)' to folder: \(folderTitle)")
+                guard let self = self, let article = self.article else { return }
+                SavedArticlesStore.shared.save(article, to: folderTitle)   // ← add this
+                self.animateSaveBookmarkIcon()
+                self.showToast(message: "Saved to \(folderTitle)")
             }
 
             sheetVC.modalPresentationStyle = .pageSheet
@@ -594,7 +597,7 @@ class news1ViewController: UIViewController, UICollectionViewDataSource {
             let button = UIButton(type: .system)
             button.setTitle(word, for: .normal)
             button.setTitleColor(.white, for: .normal)
-            button.backgroundColor = AppTheme.shared.dominantColor ?? .systemBlue
+            button.backgroundColor = AppTheme.shared.dominantColor
             button.layer.cornerRadius = buttonSize / 2
             button.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: .semibold)
             button.titleLabel?.numberOfLines = 2
@@ -644,6 +647,11 @@ class news1ViewController: UIViewController, UICollectionViewDataSource {
     }
     
     @objc func jargonTapped(_ sender: UIButton) {
+        if let article = article {
+            _ = article.overview.joined(separator: " ")
+            ArticleScorer.shared.updateWeights(for: article.title, body: article.bodyText, signal: .readFull)
+        }
+
         guard let word = sender.accessibilityIdentifier else { return }
 
         print("Jargon tapped:", word)
@@ -654,7 +662,6 @@ class news1ViewController: UIViewController, UICollectionViewDataSource {
         selectedWord.word = word
         performSegue(withIdentifier: "showJargonDetail", sender: self)
     }
-    
     private func addTwinkleEffect(to view: UIView) {
         let scale = CABasicAnimation(keyPath: "transform.scale")
         scale.fromValue = 1.0

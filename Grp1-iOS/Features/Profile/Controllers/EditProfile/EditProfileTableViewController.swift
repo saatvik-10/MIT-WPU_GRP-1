@@ -19,7 +19,7 @@ class EditProfileTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
-        populate()
+        fetchAndPopulate()
     }
     
     var onProfileUpdated: (() -> Void)?
@@ -38,7 +38,44 @@ class EditProfileTableViewController: UITableViewController {
         emailField.keyboardType = .emailAddress
     }
     
-    private func populate() {
+    private func fetchAndPopulate() {
+        guard let token = SessionManager.shared.authToken else {
+            populateFromLocal()
+            return
+        }
+        
+        APIService.shared.fetchProfile(token: token) { [weak self] result in
+            switch result {
+            case .success(let profile):
+                self?.populateFromAPI(profile)
+            case .failure:
+                self?.populateFromLocal()
+            }
+        }
+    }
+    
+    private func populateFromAPI(_ profile: APIProfileResponse) {
+        nameField.text = profile.name
+        phoneField.text = profile.phone
+        emailField.text = profile.email
+        dobField.text = profile.dob
+        genderField.text = profile.gender.capitalized
+        
+        userImage.layer.cornerRadius = userImage.bounds.width / 2
+        userImage.clipsToBounds = true
+        userImage.contentMode = .scaleAspectFill
+        
+        if let urlString = profile.profileImageUrl, let url = URL(string: urlString) {
+            URLSession.shared.dataTask(with: url) { [weak self] data, _, _ in
+                guard let data = data, let image = UIImage(data: data) else { return }
+                DispatchQueue.main.async {
+                    self?.userImage.image = image
+                }
+            }.resume()
+        }
+    }
+    
+    private func populateFromLocal() {
         let user = User.current
         
         userImage.image = UIImage(named: user.image)
@@ -84,16 +121,50 @@ class EditProfileTableViewController: UITableViewController {
     // MARK: - Save
     
     private func save() {
-        User.current = UserProfile(
-            image: User.current.image,
-            name: nameField.text ?? "",
-            phone: phoneField.text ?? "",
-            email: emailField.text ?? "",
-            level: User.current.level,
-            dob: dobField.text ?? "",
-            gender: Gender(rawValue: genderField.text ?? "") ?? .male
-        )
-        onProfileUpdated?()
+        let name = nameField.text ?? ""
+        let phone = phoneField.text ?? ""
+        let email = emailField.text ?? ""
+        let dob = dobField.text ?? ""
+        let gender = genderField.text ?? ""
+        
+        if let token = SessionManager.shared.authToken {
+            let payload = APIEditProfileRequest(
+                name: name,
+                email: email,
+                phone: phone,
+                dob: dob,
+                gender: gender.uppercased()
+            )
+            
+            APIService.shared.editProfile(payload: payload, token: token) { [weak self] result in
+                switch result {
+                case .success(let profile):
+                    User.current = UserProfile(
+                        image: User.current.image,
+                        name: profile.name,
+                        phone: profile.phone,
+                        email: profile.email,
+                        level: UserLevel(rawValue: profile.level.capitalized) ?? User.current.level,
+                        dob: profile.dob,
+                        gender: Gender(rawValue: profile.gender.capitalized) ?? .male
+                    )
+                    self?.onProfileUpdated?()
+                case .failure(let error):
+                    print("EditProfile: failed to save - \(error)")
+                }
+            }
+        } else {
+            User.current = UserProfile(
+                image: User.current.image,
+                name: name,
+                phone: phone,
+                email: email,
+                level: User.current.level,
+                dob: dob,
+                gender: Gender(rawValue: gender) ?? .male
+            )
+            onProfileUpdated?()
+        }
     }
     
     

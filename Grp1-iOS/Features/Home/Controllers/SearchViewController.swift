@@ -22,7 +22,7 @@ class SearchViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        articles = newsStore.getAllNews()
+        articles = Array(newsStore.getAllNews().sorted { $0.relevanceScore > $1.relevanceScore }.prefix(4))
                 setupCollectionView()
         setupSearchBar()
         registerForKeyboardNotifications()
@@ -154,7 +154,6 @@ extension SearchViewController: UISearchBarDelegate {
     
 
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-
         let trimmed = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
 
         if trimmed.isEmpty {
@@ -162,7 +161,8 @@ extension SearchViewController: UISearchBarDelegate {
             filteredArticles = []
         } else {
             isSearching = true
-            filteredArticles = articles.filter {
+            let allArticles = newsStore.getAllNews()
+            filteredArticles = allArticles.filter {
                 $0.title.lowercased().contains(trimmed.lowercased())
             }
         }
@@ -181,7 +181,8 @@ extension SearchViewController: UISearchBarDelegate {
         searchBar.resignFirstResponder()
 
         isSearching = false
-        filteredArticles = articles
+        filteredArticles = []
+        articles = Array(newsStore.getAllNews().sorted { $0.relevanceScore > $1.relevanceScore }.prefix(4))
         collectionView.reloadData()
     }
 
@@ -311,7 +312,7 @@ extension SearchViewController: UICollectionViewDataSource, UICollectionViewDele
     func updateHeaderUI() {
         guard let header = currentHeaderView else { return }
 
-        header.titleLabel.text = isSearching ? "Results" : "Recent Searches"
+        header.titleLabel.text = isSearching ? "Results" : "Might Interest You"
 
         let shouldEnableClear = !isSearching && (searchBar.text?.isEmpty ?? true)
 

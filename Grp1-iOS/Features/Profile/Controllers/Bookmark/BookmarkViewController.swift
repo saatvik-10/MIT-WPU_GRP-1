@@ -162,6 +162,14 @@ class BookmarkViewController: UIViewController {
         let indexPath = IndexPath(item: currentItems.count - 1, section: 0)
         collectionView.insertItems(at: [indexPath])
     }
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "savedScreen",
+           let vc = segue.destination as? SavedViewController,
+           let folderName = sender as? String {
+            vc.folderName = folderName
+        }
+    }
+
 }
  
 // MARK: - Layout
@@ -213,6 +221,8 @@ extension BookmarkViewController: UICollectionViewDataSource, UICollectionViewDe
 extension BookmarkViewController: BookmarkCellDelegate {
     func didTapBookmark(in cell: BookmarkViewCell) {
         guard let indexPath = collectionView.indexPath(for: cell) else { return }
-        print("Bookmark tapped → \(currentItems[indexPath.row].title)")
+        let folder = currentItems[indexPath.row]
+        performSegue(withIdentifier: "savedScreen", sender: folder.title)
     }
 }
+

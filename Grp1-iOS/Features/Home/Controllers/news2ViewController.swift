@@ -425,7 +425,7 @@ class news2ViewController: UIViewController, UICollectionViewDataSource {
             let button = UIButton(type: .system)
             button.setTitle(word, for: .normal)
             button.setTitleColor(.white, for: .normal)
-            button.backgroundColor = AppTheme.shared.dominantColor ?? .systemBlue
+            button.backgroundColor = AppTheme.shared.dominantColor
             button.layer.cornerRadius = buttonSize / 2
             button.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: .semibold)
             button.titleLabel?.numberOfLines = 2
@@ -599,7 +599,10 @@ class news2ViewController: UIViewController, UICollectionViewDataSource {
     
     
     @IBAction func startQuizTapped(_ sender: Any) {
-        
+        if let article = article {
+            _ = article.overview.joined(separator: " ")
+            ArticleScorer.shared.updateWeights(for: article.title, body: article.bodyText, signal: .readFull)
+        }
         guard let article = article else { return }
            QuizContext.shared.selectedArticleId = article.id
            QuizContext.shared.currentArticle = article

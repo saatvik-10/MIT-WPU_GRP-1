@@ -145,13 +145,17 @@ class HomeViewController: UIViewController, UICollectionViewDelegate {
             guard !trendingNews.isEmpty else { return }
             selectedArticle = trendingNews[0]
         } else if indexPath.section == 2 {
-            let items = Array(marketHighlights.filter { $0.relevanceScore >= 35 }.dropFirst(1))
+            let items = Array(marketHighlights.filter { $0.relevanceScore >= 2 }.dropFirst(1))
             guard indexPath.row < items.count else { return }
             selectedArticle = items[indexPath.row]
         } else {
-            let items = marketHighlights.filter { $0.relevanceScore < 35 }
+            let items = marketHighlights.filter { $0.relevanceScore < 2 }
             guard indexPath.row < items.count else { return }
             selectedArticle = items[indexPath.row]
+        }
+        // At the very start of didSelectItemAt, before the segue
+        if let article = selectedArticle {
+            ArticleScorer.shared.updateWeights(for: article.title, body: article.bodyText, signal: .clicked)
         }
 
         performSegue(withIdentifier: "showArticleDetail", sender: selectedArticle)
@@ -309,8 +313,8 @@ extension HomeViewController: UICollectionViewDataSource {
         switch section {
         case 0: return min(todaysPick.count, 4)
         case 1: return min(trendingNews.count, 1)
-        case 2: return marketHighlights.filter { $0.relevanceScore >= 35 }.dropFirst(1).count
-        case 3: return marketHighlights.filter { $0.relevanceScore < 35 }.count
+        case 2: return marketHighlights.filter { $0.relevanceScore >= 2 }.dropFirst(1).count
+        case 3: return marketHighlights.filter { $0.relevanceScore < 2 }.count
         default: return 0
         }
     }
@@ -338,22 +342,23 @@ extension HomeViewController: UICollectionViewDataSource {
                 withReuseIdentifier: "trending_cell", for: indexPath
             ) as! TrendingCollectionViewCell
             cell.configureCell(with: trendingNews[0])
-            cell.onArticleLensTapped = { [weak self] in
-                guard let self = self else { return }
-                let popupVC = ArticleLensPopupViewController(
-                    nibName: "ArticleLensPopupViewController", bundle: nil
-                )
-                popupVC.modalPresentationStyle = .overFullScreen
-                popupVC.modalTransitionStyle   = .crossDissolve
-                self.present(popupVC, animated: true)
-            }
+            
             cell.onRecommendTapped = { [weak self] in
-                self?.showToast(message: "Recommendation sent!")
+                guard let self = self else { return }
+                ArticleScorer.shared.updateWeights(for: self.trendingNews[0].title, body: self.trendingNews[0].bodyText, signal: .recommendMore)
+                self.showToast(message: "Recommendation sent!")
+            }
+            cell.onNotRecommendTapped = { [weak self] in
+                guard let self = self else { return }
+                let article = self.trendingNews[0]
+                let body = article.overview.joined(separator: " ")
+                ArticleScorer.shared.updateWeights(for: article.title, body: body, signal: .recommendLess)
+                self.showToast(message: "Got it! We'll show less of this.")
             }
             return cell
 
         case 2:
-            let items = Array(marketHighlights.filter { $0.relevanceScore >= 35 }.dropFirst(1))
+            let items = Array(marketHighlights.filter { $0.relevanceScore >= 2 }.dropFirst(1))
             guard indexPath.row < items.count else {
                 return collectionView.dequeueReusableCell(withReuseIdentifier: "explore_cell", for: indexPath)
             }
@@ -361,22 +366,27 @@ extension HomeViewController: UICollectionViewDataSource {
                 withReuseIdentifier: "explore_cell", for: indexPath
             ) as! ExploreCollectionViewCell
             cell.configureCell(with: items[indexPath.row])
-            cell.onArticleLensTapped = { [weak self] in
-                guard let self = self else { return }
-                let popupVC = ArticleLensPopupViewController(
-                    nibName: "ArticleLensPopupViewController", bundle: nil
-                )
-                popupVC.modalPresentationStyle = .overFullScreen
-                popupVC.modalTransitionStyle   = .crossDissolve
-                self.present(popupVC, animated: true)
-            }
+            
             cell.onRecommendTapped = { [weak self] in
-                self?.showToast(message: "Recommendation sent!")
+                guard let self = self else { return }
+                let items = Array(self.marketHighlights.filter { $0.relevanceScore >= 2 }.dropFirst(1))
+                guard indexPath.row < items.count else { return }
+                ArticleScorer.shared.updateWeights(for: items[indexPath.row].title, body: items[indexPath.row].bodyText, signal: .recommendMore)
+                self.showToast(message: "Recommendation sent!")
+            }
+            cell.onNotRecommendTapped = { [weak self] in
+                guard let self = self else { return }
+                let items = Array(self.marketHighlights.filter { $0.relevanceScore >= 2 }.dropFirst(1))
+                guard indexPath.row < items.count else { return }
+                let article = items[indexPath.row]
+                let body = article.overview.joined(separator: " ")
+                ArticleScorer.shared.updateWeights(for: article.title, body: body, signal: .recommendLess)
+                self.showToast(message: "Got it! We'll show less of this.")
             }
             return cell
 
         default:
-            let items = marketHighlights.filter { $0.relevanceScore < 35 }
+            let items = marketHighlights.filter { $0.relevanceScore < 2 }
             guard indexPath.row < items.count else {
                 return collectionView.dequeueReusableCell(withReuseIdentifier: "realexplore_cell", for: indexPath)
             }
