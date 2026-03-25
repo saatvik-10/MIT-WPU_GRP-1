@@ -296,7 +296,7 @@ final class APIService {
 		token: String,
 		completion: @escaping (Result<APIProfileResponse, APIError>) -> Void
 	) {
-		request(method: .get, path: "/api/profile", token: token, body: Optional<EmptyBody>.none, completion: completion)
+		request(method: .get, path: "/api/profile/get", token: token, body: Optional<EmptyBody>.none, completion: completion)
 	}
 
 	func editProfile(
@@ -304,7 +304,7 @@ final class APIService {
 		token: String,
 		completion: @escaping (Result<APIProfileResponse, APIError>) -> Void
 	) {
-		request(method: .patch, path: "/api/profile", token: token, body: payload, completion: completion)
+		request(method: .patch, path: "/api/profile/edit", token: token, body: payload, completion: completion)
 	}
 
 	func fetchAvailableInterests(
