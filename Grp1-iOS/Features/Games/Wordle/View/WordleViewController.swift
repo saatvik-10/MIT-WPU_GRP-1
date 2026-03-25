@@ -442,6 +442,7 @@ class WordleViewController: UIViewController {
         isGameOver = true
 
         self.presentWinSheet()
+        DailyGameManager.shared.markGamePlayed(.Wordle)
     }
     private func presentWinSheet() {
         let sheet = LearnMoreViewController(

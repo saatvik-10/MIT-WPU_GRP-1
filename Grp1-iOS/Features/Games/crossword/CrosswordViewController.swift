@@ -571,6 +571,7 @@ final class CrosswordViewController: UIViewController, UICollectionViewDataSourc
         })
 
         present(alert, animated: true)
+        DailyGameManager.shared.markGamePlayed(.crossword)
         stopTimer()
     }
 
