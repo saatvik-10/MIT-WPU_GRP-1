@@ -52,7 +52,7 @@ class news1ViewController: UIViewController, UICollectionViewDataSource {
         
         if let currentScore = article?.relevanceScore {
             relatedNews = newsStore.getAllNews()
-                .filter { $0.id != article?.id && abs($0.relevanceScore - currentScore) <= 25 }
+                .filter { $0.id != article?.id && abs($0.relevanceScore - currentScore) <= 1 }
                 .shuffled()
         } else {
             relatedNews = newsStore.getAllNews().shuffled()
