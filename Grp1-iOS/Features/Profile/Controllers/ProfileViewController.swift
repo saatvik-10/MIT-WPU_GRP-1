@@ -82,9 +82,9 @@ class ProfileViewController: UIViewController, ProfileOptionCellDelegate {
         
         if let profile = profileData {
             profileName.text = profile.name
-            let level = UserLevel(rawValue: profile.level.capitalized) ?? .beginner
-            profileLevel.text = level.rawValue
-            profileLevel.textColor = level.color
+            let level = profile.username
+            profileLevel.text = level
+            
             
             if let urlString = profile.profileImageUrl, let url = URL(string: urlString) {
                 URLSession.shared.dataTask(with: url) { [weak self] data, _, _ in

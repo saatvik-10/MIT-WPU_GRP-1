@@ -71,7 +71,7 @@ struct InterestModel {
 struct ProfileView {
     let image: String
     let name: String
-    let level: UserLevel
+    let userName: String
 }
 
 enum Gender: String {
