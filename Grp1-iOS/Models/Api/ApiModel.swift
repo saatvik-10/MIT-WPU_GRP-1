@@ -66,6 +66,7 @@ struct APISignInRequest: Encodable {
 struct APISignInResponse: Decodable {
 	let userId: String
 	let token: String
+	let hasOnboarding: Bool?
 }
 
 struct APIGetMeResponse: Decodable {
