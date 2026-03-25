@@ -21,11 +21,11 @@ export class UserAuth {
 
         const body = await ctx.req.parseBody();
 
-// 🔍 TEMPORARY DEBUG — remove after fix
-console.log('[DEBUG] Body keys:', Object.keys(body));
-console.log('[DEBUG] profileImage type:', typeof body['profileImage']);
-console.log('[DEBUG] profileImage is File:', body['profileImage'] instanceof File);
-console.log('[DEBUG] profileImage value:', body['profileImage']);
+        // 🔍 TEMPORARY DEBUG — remove after fix
+        console.log('[DEBUG] Body keys:', Object.keys(body));
+        console.log('[DEBUG] profileImage type:', typeof body['profileImage']);
+        console.log('[DEBUG] profileImage is File:', body['profileImage'] instanceof File);
+        console.log('[DEBUG] profileImage value:', body['profileImage']);
 
         // Extract text fields
         for (const [key, value] of Object.entries(body)) {
@@ -100,7 +100,7 @@ console.log('[DEBUG] profileImage value:', body['profileImage']);
             level: data.data.level,
             dob: data.data.dob,
             gender: data.data.gender,
-            hasOnboarding: true as boolean,
+            hasOnboarding: data.data.hasOnboarding,
             profileImageUrl: profileImageS3Key ?? null,
           },
         });
@@ -112,11 +112,11 @@ console.log('[DEBUG] profileImage value:', body['profileImage']);
             .deleteProfileImage(profileImageS3Key)
             .catch(console.error);
         console.error('[UserAuth] DB error during signup:', err);
-        return ctx.json('Server Err', 500);
+        return ctx.json(`Server Err: ${err instanceof Error ? err.message : String(err)}`, 500);
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error('[UserAuth] Signup error:', err);
-      return ctx.json('Server Err', 500);
+      return ctx.json(`Server Err: ${err instanceof Error ? err.message : String(err)}`, 500);
     }
   }
 
@@ -137,7 +137,7 @@ console.log('[DEBUG] profileImage value:', body['profileImage']);
 
     const token = await jwtAuth({ userId: user.id });
 
-    return ctx.json({ userId: user.id, token }, 200);
+    return ctx.json({ userId: user.id, token, hasOnboarding: user.hasOnboarding }, 200);
   }
 
   async getMe(ctx: Context) {
