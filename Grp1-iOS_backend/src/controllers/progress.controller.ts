@@ -22,19 +22,13 @@ export class UserProgress {
           id: userId,
         },
         update: {
-          totalXP: { increment: data.data.xpEarned },
           currentStreak: data.data.streakIncrement
             ? { increment: data.data.streakIncrement }
-            : undefined,
-          overallProgress: data.data.progressIncrement
-            ? { increment: data.data.progressIncrement }
             : undefined,
         },
         create: {
           userId,
-          totalXP: data.data.xpEarned,
           currentStreak: data.data.streakIncrement ?? 0,
-          overallProgress: data.data.progressIncrement ?? 0.0,
         },
       });
 

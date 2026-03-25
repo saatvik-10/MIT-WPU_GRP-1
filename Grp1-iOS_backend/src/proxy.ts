@@ -8,8 +8,7 @@ export const proxyAuth = async (ctx: Context, next: Next) => {
     : undefined;
 
   if (!token) {
-    ctx.text('Not Authenticated', 401);
-    return;
+    return ctx.text('Not Authenticated', 401);
   }
 
   try {
@@ -17,6 +16,6 @@ export const proxyAuth = async (ctx: Context, next: Next) => {
     ctx.set('userId', verified.userId);
     await next();
   } catch {
-    ctx.text('Not Authenticated', 401);
+    return ctx.text('Not Authenticated', 401);
   }
 };
