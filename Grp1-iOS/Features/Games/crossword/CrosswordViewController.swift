@@ -47,7 +47,6 @@ final class CrosswordViewController: UIViewController, UICollectionViewDataSourc
         setupCollectionView()
         setupKeyboard()
 
-        // Hide all game UI immediately so nothing flashes before the puzzle is ready
         gridCollectionView.alpha = 0
         questionLabel.alpha = 0
         keyboardStack.alpha = 0
@@ -61,7 +60,6 @@ final class CrosswordViewController: UIViewController, UICollectionViewDataSourc
         guard !didLoadOnce else { return }
         didLoadOnce = true
 
-        // Show loading overlay right away, then generate + load, then reveal UI
         showLoadingOverlay()
 
         Task {
@@ -91,7 +89,6 @@ final class CrosswordViewController: UIViewController, UICollectionViewDataSourc
     }
 
 
-    // MARK: - Loading Overlay
 
     private func showLoadingOverlay() {
         let overlay = UIView(frame: view.bounds)
@@ -123,7 +120,6 @@ final class CrosswordViewController: UIViewController, UICollectionViewDataSourc
         loadingOverlay = overlay
     }
 
-    // Fade out overlay and fade in all game UI simultaneously
     private func hideLoadingOverlayAndRevealUI() {
         UIView.animate(withDuration: 0.3, animations: {
             self.loadingOverlay?.alpha = 0
@@ -139,7 +135,6 @@ final class CrosswordViewController: UIViewController, UICollectionViewDataSourc
     }
 
 
-    // MARK: - Collection View Setup
 
     private func setupCollectionView() {
         gridCollectionView.dataSource = self
@@ -152,7 +147,6 @@ final class CrosswordViewController: UIViewController, UICollectionViewDataSourc
     }
 
 
-    // MARK: - Puzzle Generation
 
     @MainActor
     private func generatePuzzles() async {
@@ -167,7 +161,6 @@ final class CrosswordViewController: UIViewController, UICollectionViewDataSourc
     }
 
 
-    // MARK: - Load Level
 
     @MainActor
     private func loadLevel() async {
@@ -279,7 +272,6 @@ final class CrosswordViewController: UIViewController, UICollectionViewDataSourc
     }
 
 
-    // MARK: - Helpers
 
     private func indexForCell(x: Int, y: Int) -> Int {
         return y * totalCols + x
@@ -310,7 +302,6 @@ final class CrosswordViewController: UIViewController, UICollectionViewDataSourc
     }
 
 
-    // MARK: - Grid Tap
 
     private func handleGridTap(_ cell: CrosswordCell) {
         guard !isReadOnly else { return }
@@ -353,7 +344,6 @@ final class CrosswordViewController: UIViewController, UICollectionViewDataSourc
     }
 
 
-    // MARK: - Selection Movement
 
     private func moveSelectionForward(from index: Int) {
         guard let word = gameState.selectedWord else { return }
@@ -394,7 +384,6 @@ final class CrosswordViewController: UIViewController, UICollectionViewDataSourc
     }
 
 
-    // MARK: - Haptic
 
     private func playLightHaptic() {
         lightHaptic.prepare()
@@ -402,7 +391,6 @@ final class CrosswordViewController: UIViewController, UICollectionViewDataSourc
     }
 
 
-    // MARK: - Keyboard Input
 
     private func insertLetter(_ char: Character) {
         guard !isReadOnly else { return }
@@ -505,7 +493,6 @@ final class CrosswordViewController: UIViewController, UICollectionViewDataSourc
     }
 
 
-    // MARK: - Word Completion
 
     private func checkWordCompletion(_ word: CrosswordWord) {
         var r = cells[word.startIndex].row
@@ -553,7 +540,6 @@ final class CrosswordViewController: UIViewController, UICollectionViewDataSourc
     }
 
 
-    // MARK: - Puzzle Complete Alert
 
     private func showPuzzleCompleteAlert() {
         let alert = UIAlertController(
@@ -576,7 +562,6 @@ final class CrosswordViewController: UIViewController, UICollectionViewDataSourc
     }
 
 
-    // MARK: - CollectionView
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return cells.count
@@ -606,7 +591,6 @@ final class CrosswordViewController: UIViewController, UICollectionViewDataSourc
     }
 
 
-    // MARK: - Keyboard Setup
 
     private func setupKeyboard() {
         let rows: [[String]] = [
@@ -682,7 +666,6 @@ final class CrosswordViewController: UIViewController, UICollectionViewDataSourc
     }
 
     @objc private func submitTapped() {
-        // optional: validate whole crossword or move to next word
     }
 
     @objc private func deleteTapped() {
@@ -694,7 +677,6 @@ final class CrosswordViewController: UIViewController, UICollectionViewDataSourc
     }
 
 
-    // MARK: - Points Popup & Progress
 
     private func showPointsPopupFromBottom(text: String, color: UIColor, completion: @escaping () -> Void) {
         let label = UILabel()
@@ -761,7 +743,6 @@ final class CrosswordViewController: UIViewController, UICollectionViewDataSourc
     }
 
 
-    // MARK: - Timer
 
     private func startCountdownTimer() {
         countdownTimer?.invalidate()
@@ -832,7 +813,6 @@ final class CrosswordViewController: UIViewController, UICollectionViewDataSourc
 
         UIImpactFeedbackGenerator(style: .medium).impactOccurred()
 
-        // Add a persistent Go Back button in the nav bar
         let backButton = UIBarButtonItem(
             title: "Go Back",
             style: .plain,
@@ -842,13 +822,11 @@ final class CrosswordViewController: UIViewController, UICollectionViewDataSourc
         backButton.tintColor = .systemRed
         navigationItem.leftBarButtonItem = backButton
 
-        // Clear selection and highlights
         for i in cells.indices {
             cells[i].isSelected = false
             cells[i].isHighlighted = false
         }
 
-        // Fill in all correct answers (grid stays locked, shown on "See Answers")
         for i in cells.indices where !cells[i].isBlocked {
             if let correct = cells[i].correctLetter {
                 cells[i].letter = correct
@@ -858,7 +836,6 @@ final class CrosswordViewController: UIViewController, UICollectionViewDataSourc
             }
         }
 
-        // Show alert — Go Back or See Answers
         let alert = UIAlertController(
             title: "⏱ Time's Up!",
             message: "Would you like to see the answers or go back?",
@@ -870,7 +847,6 @@ final class CrosswordViewController: UIViewController, UICollectionViewDataSourc
         })
 
         alert.addAction(UIAlertAction(title: "See Answers", style: .default) { [weak self] _ in
-            // Alert dismisses — reload grid to show filled answers, fully locked
             self?.gridCollectionView.reloadData()
         })
 
@@ -878,7 +854,6 @@ final class CrosswordViewController: UIViewController, UICollectionViewDataSourc
     }
 
 
-    // MARK: - Ring Setup
 
     private func setupRing() {
         ringLayer.removeFromSuperlayer()

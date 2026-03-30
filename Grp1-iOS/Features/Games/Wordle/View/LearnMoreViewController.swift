@@ -5,13 +5,11 @@ final class LearnMoreViewController: UIViewController {
     private let word: String
     private let definition: String
 
-    // MARK: - UI
     private let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .systemUltraThinMaterial))
     private let container = UIView()
     private let titleLabel = UILabel()
     private let definitionLabel = UILabel()
 
-    // MARK: - Init
     init(word: String, definition: String) {
         self.word = word
         self.definition = definition
@@ -22,22 +20,18 @@ final class LearnMoreViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
-    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
         animateIn()
     }
 
-    // MARK: - UI Setup
     private func setupUI() {
         view.backgroundColor = UIColor.black.withAlphaComponent(0.2)
 
-        // Blur
         blurView.frame = view.bounds
         view.addSubview(blurView)
 
-        // Container
         container.backgroundColor = UIColor.systemBackground.withAlphaComponent(0.7)
         container.layer.cornerRadius = 22
         container.layer.shadowColor = UIColor.black.cgColor
@@ -59,14 +53,12 @@ final class LearnMoreViewController: UIViewController {
         titleLabel.font = .systemFont(ofSize: 28, weight: .bold)
         titleLabel.textAlignment = .center
 
-        // Definition
         definitionLabel.text = definition
         definitionLabel.font = .systemFont(ofSize: 16)
         definitionLabel.textAlignment = .center
         definitionLabel.numberOfLines = 0
         definitionLabel.textColor = .secondaryLabel
 
-        // Buttons
         let backButton = makeButton(title: "Go Back", style: .secondary)
         let learnButton = makeButton(title: "Next", style: .primary)
 
@@ -93,7 +85,6 @@ final class LearnMoreViewController: UIViewController {
         ])
     }
 
-    // MARK: - Animations
     private func animateIn() {
         container.transform = CGAffineTransform(translationX: 0, y: 60)
         container.alpha = 0
@@ -111,17 +102,14 @@ final class LearnMoreViewController: UIViewController {
         )
     }
 
-    // MARK: - Actions
     @objc private func dismissSelf() {
         dismiss(animated: true)
     }
 
     @objc private func openLearnMore() {
 
-        // 1️⃣ First dismiss the glass popover
         dismiss(animated: true) {
 
-            // 2️⃣ Then present native iOS alert
             let alert = UIAlertController(
                 title: "It is Over",
                 message: "Click on Close to Continue",
@@ -132,7 +120,6 @@ final class LearnMoreViewController: UIViewController {
                 UIAlertAction(title: "Close", style: .default)
             )
 
-            // Present from the top-most VC
             UIApplication.shared
                 .connectedScenes
                 .compactMap { $0 as? UIWindowScene }
@@ -143,7 +130,6 @@ final class LearnMoreViewController: UIViewController {
                 .present(alert, animated: true)
         }
     }
-    // MARK: - Button Factory
     private func makeButton(title: String, style: ButtonStyle) -> UIButton {
         let button = UIButton(type: .system)
         button.setTitle(title, for: .normal)

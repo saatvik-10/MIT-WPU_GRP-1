@@ -8,13 +8,11 @@
 import WidgetKit
 import SwiftUI
 
-// What data the widget shows
 struct NewsEntry: TimelineEntry {
     let date: Date
     let articles: [WidgetArticle]
 }
 
-// Lightweight model — widget can't import your full NewsArticle
 struct WidgetArticle: Codable {
     let title: String
     let source: String
@@ -22,7 +20,6 @@ struct WidgetArticle: Codable {
     let relevanceScore: Double
 }
 
-// Feeds data to the widget
 struct NewsProvider: TimelineProvider {
 
     func placeholder(in context: Context) -> NewsEntry {
@@ -35,7 +32,6 @@ struct NewsProvider: TimelineProvider {
 
     func getTimeline(in context: Context, completion: @escaping (Timeline<NewsEntry>) -> Void) {
         let entry = NewsEntry(date: .now, articles: loadArticles())
-        // Refresh every 30 minutes
         let next = Calendar.current.date(byAdding: .minute, value: 30, to: .now)!
         completion(Timeline(entries: [entry], policy: .after(next)))
     }
@@ -50,7 +46,6 @@ struct NewsProvider: TimelineProvider {
     }
 }
 
-// The widget UI
 struct NewsWidgetEntryView: View {
     var entry: NewsEntry
 

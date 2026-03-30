@@ -105,7 +105,7 @@ final class JargonContentGenerator {
 
         } catch {
             self.error = error
-            print("❌ JargonContentGenerator error: \(error)")
+            print("JargonContentGenerator error: \(error)")
         }
 
         isLoading = false
@@ -126,10 +126,7 @@ final class JargonContentGenerator {
         return pages
     }
 
-    /// Ensures exactly one blank line between paragraphs.
-    /// Splits on sentence boundaries (~midpoint) if no \n\n found.
     private func formatParagraphs(_ text: String) -> String {
-        // If model already added paragraph break, normalise and return
         if text.contains("\n\n") {
             return text
                 .components(separatedBy: "\n\n")
@@ -138,7 +135,6 @@ final class JargonContentGenerator {
                 .joined(separator: "\n\n")
         }
 
-        // If model returned one block, split at sentence midpoint
         let sentences = text.components(separatedBy: ". ")
             .map { $0.trimmingCharacters(in: .whitespaces) }
             .filter { !$0.isEmpty }

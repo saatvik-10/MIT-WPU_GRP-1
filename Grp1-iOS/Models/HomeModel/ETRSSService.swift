@@ -40,14 +40,12 @@ final class ETRSSParser: NSObject, XMLParserDelegate {
             currentItem = RSSItem()
         }
 
-        // ET images come via <enclosure url="...cms" type="image/jpeg" />
         if elementName == "enclosure",
            let url = attributeDict["url"],
            currentItem?.imageURL.isEmpty == true {
             currentItem?.imageURL = url
         }
 
-        // Some ET feeds also use <media:content url="..." />
         if elementName == "media:content",
            let url = attributeDict["url"],
            currentItem?.imageURL.isEmpty == true {
@@ -76,8 +74,7 @@ final class ETRSSParser: NSObject, XMLParserDelegate {
             currentItem?.description += value.stripHTML()
 
         case "link":
-            // ET <link> nodes can emit the channel URL before any item starts.
-            // Only accept it when it actually looks like an article (.cms suffix).
+
             if value.lowercased().hasSuffix(".cms") {
                 currentItem?.link += value
             }
@@ -97,7 +94,6 @@ final class ETRSSParser: NSObject, XMLParserDelegate {
     }
 }
 
-// MARK: - ET RSS Service
 
 final class ETRSSService {
 
@@ -130,11 +126,7 @@ final class ETRSSService {
     }
 }
 
-// MARK: - ET HTML Article Body Extractor
-//
-// ET runs on the exact same Bennett Coleman CMS as TOI.
-// Both use data-articlebody as the article wrapper in HTML.
-// So we just call extractTOIArticleBody() — no duplication needed.
+
 
 extension String {
     func extractETArticleBody(minWords: Int = 12) -> String {
