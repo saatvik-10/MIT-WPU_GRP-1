@@ -40,8 +40,8 @@ final class ArticleSummaryGenerator {
                 """
                 Summarize the following financial news article.
 
-                • Generate a concise overview.
-                • Extract 4–5 key takeaways.
+                • Generate a long overview.
+                • Extract 7-8 key takeaways.
                 • Identify 3-4 advanced financial or economic terms used in the article.
                 • Only include jargon that appears in the text.
                 • Avoid common or simple words.

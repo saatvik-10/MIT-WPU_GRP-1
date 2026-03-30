@@ -32,7 +32,6 @@ class SessionManager {
         UserDefaults.standard.removeObject(forKey: "isLoggedIn")
         UserDefaults.standard.removeObject(forKey: "authToken")
         UserDefaults.standard.removeObject(forKey: "userId")
-        UserDefaults.standard.removeObject(forKey: "hasOnboarding")
 
         _ = CredentialStorageService.shared.deleteCredentials()
     }

@@ -11,7 +11,7 @@ const router = new Hono();
 router.route('/auth', userRoute);
 router.route('/', articleRoute);
 router.route('/', threadRoute)
-router.route("/", profileRoute)
+router.route("/profile", profileRoute)
 router.route("/progress", progressRoute)
 router.route("/bookmarks", bookmarkRoute)
 

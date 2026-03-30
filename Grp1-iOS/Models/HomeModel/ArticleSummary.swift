@@ -13,8 +13,8 @@ struct ArticleSummary: Equatable {
 
     @Guide(
         description: """
-        A detailed overview of the article.
-        Each item should be a long, explanatory point (2–3 sentences),
+        A detailed and very long overview of the article.
+        Each item should be a long, explanatory point (3-4 sentences),
         written in full sentences, similar to professional news analysis.
         """
     )

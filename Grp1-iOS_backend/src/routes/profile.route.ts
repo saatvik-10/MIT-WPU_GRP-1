@@ -5,8 +5,10 @@ import { proxyAuth } from '../proxy';
 const profileRoute = new Hono();
 const controller = new Profile();
 
-profileRoute.get('/profile', proxyAuth, controller.getProfile);
-profileRoute.patch('/profile', proxyAuth, controller.editProfile);
+profileRoute.get('/get', proxyAuth, controller.getProfile);
+profileRoute.patch('/edit', proxyAuth, controller.editProfile);
+profileRoute.patch('/level', proxyAuth, controller.updateLevel);
+profileRoute.patch('/onboarding', proxyAuth, controller.finishOnboarding);
 profileRoute.get(
   '/users/:userId/profile',
   proxyAuth,

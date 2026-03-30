@@ -109,6 +109,15 @@ final class GamesViewController: UIViewController {
 
         return layout
     }
+    private func showAlreadyPlayedAlert(for game: String) {
+        let alert = UIAlertController(
+            title: "Come Back Tomorrow",
+            message: "You've already played \(game) today. Your streak is safe — see you tomorrow!",
+            preferredStyle: .alert
+        )
+        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        present(alert, animated: true)
+    }
 }
 
 extension GamesViewController: UICollectionViewDataSource {
@@ -137,15 +146,30 @@ extension GamesViewController: UICollectionViewDataSource {
 
 extension GamesViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        print("Current streak: \(DailyGameManager.shared.getStreak())") // ← add this
 
+
+        
         let category = categories[indexPath.item]
 
         switch category.title {
         case "Wordle":
-            performSegue(withIdentifier: "Wordle", sender: nil)
+            if DailyGameManager.shared.canPlay(.Wordle) {
+                performSegue(withIdentifier: "Wordle", sender: nil)
+            } else {
+                print("Already played today")
+                showAlreadyPlayedAlert(for: "Wordle")
+
+            }
+            
 
         case "Crossword":
-            performSegue(withIdentifier: "crossword", sender: nil)
+            if DailyGameManager.shared.canPlay(.crossword) {
+                performSegue(withIdentifier: "crossword", sender: nil)
+
+            } else {
+                showAlreadyPlayedAlert(for: "Crossword")
+            }
             
         case "Scenario":
             performSegue(withIdentifier: "scenario", sender: nil)
@@ -157,4 +181,5 @@ extension GamesViewController: UICollectionViewDelegate {
             print("No screen connected for:", category.title)
         }
     }
+    
 }
