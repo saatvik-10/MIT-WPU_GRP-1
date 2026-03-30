@@ -56,8 +56,7 @@ class IndicatorInfoViewController: UIViewController {
     private let titleLabel: UILabel = {
         let l = UILabel()
         l.text      = "Understanding the indicators"
-        l.font      = UIFont(name: "Georgia-Bold", size: 20)
-            ?? UIFont.systemFont(ofSize: 18, weight: .semibold)
+        l.font      = UIFont.systemFont(ofSize: 20, weight: .semibold)
         l.textColor = UIColor(red: 0.08, green: 0.08, blue: 0.08, alpha: 1)
         l.translatesAutoresizingMaskIntoConstraints = false
         return l
