@@ -94,7 +94,6 @@ class WordleViewController: UIViewController {
 
         let row = engine.attempts
 
-        // Find next empty & unlocked tile
         guard let index = (0..<wordLength).first(where: { i in
             let tile = tileGrid[row][i]
             let isEmpty = tile.label.text?.isEmpty ?? true
@@ -113,7 +112,6 @@ class WordleViewController: UIViewController {
 
         let row = engine.attempts
 
-        // Find last editable tile
         guard let index = (0..<wordLength).reversed().first(where: { i in
             let tile = tileGrid[row][i]
             let isFilled = !(tile.label.text?.isEmpty ?? true)
@@ -192,7 +190,6 @@ class WordleViewController: UIViewController {
             to: view
         )
 
-        // 1️⃣ Rise + fade in
         UIView.animate(
             withDuration: 0.70,
             delay: 0,
@@ -206,7 +203,6 @@ class WordleViewController: UIViewController {
             }
         )
 
-        // 2️⃣ Drift & merge into progress bar
         UIView.animate(
             withDuration: 0.6,
             delay: 0.35,
@@ -242,7 +238,6 @@ class WordleViewController: UIViewController {
         let eligibleIndices = (0..<wordLength).filter { index in
             let tile = tileGrid[row][index]
 
-            // Tile must be empty
             guard tile.label.text?.isEmpty ?? true else { return false }
 
             let correctChar = answerChars[index]
@@ -260,7 +255,7 @@ class WordleViewController: UIViewController {
         }
 
         guard let index = eligibleIndices.randomElement() else {
-            print("⚠️ No valid letter to reveal")
+            print("No valid letter to reveal")
             return
         }
 
@@ -279,7 +274,6 @@ class WordleViewController: UIViewController {
 
         updateCurrentGuessFromGrid()
 
-        // ✨ Reveal animation
         UIView.animate(
             withDuration: 0.25,
             animations: {
@@ -314,7 +308,6 @@ class WordleViewController: UIViewController {
         let totalPoints = (greenCount * 10) + (yellowCount * 5)
         guard totalPoints > 0 else { return }
 
-        // Convert points → progress %
         let progressIncrement =
             (Float(greenCount) * 0.10) +
             (Float(yellowCount) * 0.05)
@@ -362,7 +355,6 @@ class WordleViewController: UIViewController {
 
             let oldState = keyStates[letter]
 
-            // ⛔ Never downgrade key color
             if let old = oldState {
                 if old == .correct { continue }
                 if old == .present && newState == .absent { continue }
@@ -417,7 +409,6 @@ class WordleViewController: UIViewController {
         }
     }
 
-        // MARK: - Rendering
 
     private func render(_ result: GuessResult, row: Int) {
             let row = engine.attempts - 1
@@ -528,7 +519,6 @@ class WordleViewController: UIViewController {
             height: 1
         )
 
-        // 🔥 Ensure it's above everything (alerts included)
         emitter.zPosition = CGFloat(Float.greatestFiniteMagnitude)
 
         let colors: [UIColor] = [
@@ -556,7 +546,6 @@ class WordleViewController: UIViewController {
             return cell
         }
 
-        // 🔥 Add to WINDOW, not quizView
         window.layer.addSublayer(emitter)
 
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
@@ -613,7 +602,6 @@ class WordleViewController: UIViewController {
 
         button.heightAnchor.constraint(equalToConstant: 52).isActive = true
 
-        // ✅ ADD THIS BLOCK HERE
         button.addAction(UIAction { _ in
             UIView.animate(withDuration: 0.08, animations: {
                 button.transform = CGAffineTransform(scaleX: 0.95, y: 0.95)
@@ -624,7 +612,6 @@ class WordleViewController: UIViewController {
             }
         }, for: .touchDown)
 
-        // Existing targets
         if title == "⌫" {
             button.addTarget(self, action: #selector(deleteTapped), for: .touchUpInside)
         } else if title == "✓" {
@@ -656,7 +643,6 @@ class WordleViewController: UIViewController {
     @IBAction func hintTapped(_ sender: UIButton) {
         guard !hints.isEmpty else { return }
 
-            // Toggle index: 0 → 1 → 0 → 1
             currentHintIndex = (currentHintIndex + 1) % hints.count
 
             let newHint = hints[currentHintIndex]
@@ -665,7 +651,6 @@ class WordleViewController: UIViewController {
     
     private func glowHintLabel() {
 
-        // Base glow setup
         hintLabel.layer.shadowColor = UIColor(
             red: 1.0,
             green: 0.9,
@@ -676,14 +661,12 @@ class WordleViewController: UIViewController {
         hintLabel.layer.shadowOpacity = 0.8
         hintLabel.layer.shadowOffset = .zero
 
-        // Glow in
         let glowIn = CABasicAnimation(keyPath: "shadowOpacity")
         glowIn.fromValue = 0
         glowIn.toValue = 0.8
         glowIn.duration = 0.35
         glowIn.timingFunction = CAMediaTimingFunction(name: .easeOut)
 
-        // Glow pulse
         let pulse = CABasicAnimation(keyPath: "shadowRadius")
         pulse.fromValue = 12
         pulse.toValue = 22
@@ -692,7 +675,6 @@ class WordleViewController: UIViewController {
         pulse.repeatCount = 2
         pulse.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
 
-        // Glow out
         let glowOut = CABasicAnimation(keyPath: "shadowOpacity")
         glowOut.fromValue = 0.8
         glowOut.toValue = 0
@@ -708,7 +690,6 @@ class WordleViewController: UIViewController {
     
     private func slideHintText(_ text: String) {
 
-        // If label is hidden → first hint
         if hintLabel.alpha == 0 {
             hintLabel.text = text
             hintLabel.transform = CGAffineTransform(translationX: 0, y: 20)
@@ -727,7 +708,6 @@ class WordleViewController: UIViewController {
             return
         }
 
-        // Slide old hint up & out
         UIView.animate(
             withDuration: 0.25,
             animations: {
@@ -735,19 +715,14 @@ class WordleViewController: UIViewController {
                 self.hintLabel.transform = CGAffineTransform(translationX: 0, y: -16)
             },
             completion: { _ in
-                // Reset transform completely
                 self.hintLabel.transform = .identity
                 
-                // Set new text
                 self.hintLabel.text = text
                 
-                // **CRITICAL: Force layout update before animating**
                 self.view.layoutIfNeeded()
                 
-                // Now position it below
                 self.hintLabel.transform = CGAffineTransform(translationX: 0, y: 20)
 
-                // Slide new hint in
                 UIView.animate(
                     withDuration: 0.45,
                     delay: 0,

@@ -123,14 +123,9 @@ final class MintRSSService {
     }
 }
 
-// MARK: - Mint HTML Article Body Extractor
 
 extension String {
 
-    /// Extracts article body text from LiveMint article HTML.
-    /// Mint wraps article content in <div class="storyContent"> or
-    /// <div class="contentSec"> / articleBody data attributes.
-    /// We look for the articleBody / storyContent marker and pull <p> text.
     func extractMintArticleBody(minWords: Int = 12) -> String {
 
         var results: [String] = []
@@ -144,7 +139,6 @@ extension String {
 
             let lower = token.lowercased()
 
-            // Mint's article body is tagged with articleBody, storyContent, or contentSec
             if lower.contains("itemprop=\"articlebody\"")
                 || lower.contains("class=\"storydetailssec\"")
                 || lower.contains("class=\"storycontent\"")
@@ -154,7 +148,6 @@ extension String {
                 continue
             }
 
-            // Stop at related articles / footer sections
             if isInsideArticle
                 && (lower.contains("class=\"also-read\"")
                     || lower.contains("class=\"tagsection\"")

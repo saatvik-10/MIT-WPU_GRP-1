@@ -3,69 +3,46 @@
 //  Grp1-iOS
 //
 //  Created by SDC-USER on 06/03/26.
-//
-//  RESEARCH BASIS:
-//  [1] Salton & Buckley (1987) — Term Weighting in Automatic Text Retrieval
-//  [2] Lops, de Gemmis & Semeraro (2011) — Content-based Recommender Systems
-//  [3] Claypool et al. (2001) — Implicit Interest Indicators
-//  [4] Kelly & Teevan (2003) — Implicit Feedback for Inferring User Preference
 
 import Foundation
 import NaturalLanguage
 
-// MARK: - Feedback Signal
-// Claypool et al. (2001) — experimentally validated implicit signals
-// Kelly & Teevan (2003) — signal ordering: explicit > retain > examine
-// Lops et al. (2011) Section 3.2 — explicit feedback more reliable than implicit
 
 enum FeedbackSignal {
 
-    // EXPLICIT — user directly stated preference
-    // Lops et al. Section 3.2: explicit feedback is well-understood and fairly precise
+
     case recommendMore
     case recommendLess
 
-    // IMPLICIT — inferred from behaviour
-    // Claypool et al.: time on page and scrolling have strong correlation with interest
-    // Kelly & Teevan: retain behaviours (save) > examine behaviours (click)
-    case readFull         // Claypool: time on page = strongest implicit signal
-    case scrolledToBottom // Claypool: scrolling = strong implicit signal
-    case bookmarked       // Kelly & Teevan: saving = stronger than selection
-    case clicked          // Kelly & Teevan: selection = weaker evidence
-    case scrolledPast     // Weak negative — user may have been busy
-    case dismissed        // Strong negative — deliberate rejection
 
-    // NOTE: mouse clicks alone are explicitly found unreliable by Claypool et al.
-    // "the number of mouse clicks is not a good indicator of interest"
-    // This is why clicked has the lowest positive value
+    case readFull         // strongest implicit signal
+    case scrolledToBottom // strong implicit signal
+    case bookmarked       // stronger than selection
+    case clicked          // weaker evidence
+    case scrolledPast     // Weak negative
+    case dismissed        // Strong negative
+
+
 
     var value: Double {
         switch self {
-        // Explicit signals — maximum magnitude
-        // Lops et al.: explicit > implicit in reliability
+
         case .recommendMore:    return +1.0
         case .recommendLess:    return -1.0
 
-        // Implicit signals — ordered by Claypool & Kelly & Teevan reliability ranking
-        case .readFull:         return +0.7   // strongest implicit (Claypool)
-        case .bookmarked:       return +0.6   // retain > examine (Kelly & Teevan)
-        case .scrolledToBottom: return +0.5   // strong implicit (Claypool)
-        case .clicked:          return +0.3   // weakest positive (Kelly & Teevan)
-        case .scrolledPast:     return -0.1   // weak negative — unreliable
-        case .dismissed:        return -0.4   // strong negative — deliberate
+        case .readFull:         return +0.7   // strongest implicit
+        case .bookmarked:       return +0.6   // retain > examine
+        case .scrolledToBottom: return +0.5   // strong implicit
+        case .clicked:          return +0.3   // weakest positive
+        case .scrolledPast:     return -0.1   // weak negative
+        case .dismissed:        return -0.4   // strong negative
 
-        // IMPORTANT: exact values are hyperparameters
-        // The ordering above is backed by literature
-        // Exact magnitudes require empirical tuning in deployment
+
         }
     }
 }
 
-// MARK: - User Profile
-// Lops et al. (2011) Section 3.2:
-// "Users can explicitly define their areas of interest
-//  as an initial profile without providing any feedback"
-// Equal initialisation (1.0) is correct when no prior feedback exists
+
 
 struct UserProfile1 {
 
@@ -77,13 +54,11 @@ struct UserProfile1 {
 
     private static let weightsKey = "userProfile1_weights"
 
-    // Load from UserDefaults, fall back to default 1.0 if not saved yet
     static var weights: [String: Double] {
         get {
             if let saved = UserDefaults.standard.dictionary(forKey: weightsKey) as? [String: Double] {
                 return saved
             }
-            // First launch — return default weights
             var defaults: [String: Double] = [:]
             for tag in tags { defaults[tag] = 1.0 }
             return defaults
@@ -99,8 +74,7 @@ struct UserProfile1 {
     static let maxWeight: Double = 5.0
 }
 
-// MARK: - Article Scorer
-// Salton & Buckley (1987) — scoring formula:
+
 // score = Σ confidence(tag) × weight(tag)
 //              ↑                    ↑
 //         how present          how important
@@ -111,19 +85,12 @@ final class ArticleScorer {
     static let shared = ArticleScorer()
     private init() {}
 
-    // Minimum confidence threshold to consider a tag matched
     private let minConfidence: Double = 0.45
     private let semanticFloor: Double = 0.0
 
-    // NLEmbedding loaded once — expensive to reload
     private lazy var embedding: NLEmbedding? = NLEmbedding.wordEmbedding(for: .english)
 
-    // MARK: - Score Article
-    // Salton & Buckley (1987):
-    // score = Σ confidence(tag) × weight(tag)
-    // confidence used as MULTIPLIER not binary gate
-    // An article scoring 0.95 confidence on a tag scores higher
-    // than one scoring 0.46 — both pass the threshold but contribute differently
+
 
     func score(title: String, body: String) -> Double {
 
@@ -145,9 +112,6 @@ final class ArticleScorer {
                 embedding: embedding
             )
 
-            // Confidence used as multiplier — Salton & Buckley
-            // Previously: binary (matched = full weight, not matched = 0)
-            // Now: confidence × weight (proportional contribution)
             if confidence >= minConfidence {
                 let userWeight = UserProfile1.weights[tag] ?? 1.0
                 totalScore += confidence * userWeight
@@ -160,11 +124,7 @@ final class ArticleScorer {
         return totalScore
     }
 
-    // MARK: - Update Weights
-    // Lops et al. (2011) Section 3.3.2.2 — Rocchio's Algorithm
-    // new_weight = old_weight + β × signal  (positive)
-    // new_weight = old_weight + γ × signal  (negative)
-    // β > γ asymmetry justified by unreliability of negative feedback
+
 
     func updateWeights(for title: String, body: String, signal: FeedbackSignal) {
         print("🎯 updateWeights called | signal: \(signal) | '\(title.prefix(40))'")
@@ -184,8 +144,6 @@ final class ArticleScorer {
             print("   🔍 tag: '\(tag)' | confidence: \(String(format: "%.3f", confidence))")
 
 
-            // Only update weights for tags that were actually present
-            // in this article — otherwise unrelated interests get updated
             guard confidence >= minConfidence else { continue }
 
             let oldWeight    = UserProfile1.weights[tag] ?? 1.0
@@ -194,18 +152,15 @@ final class ArticleScorer {
             let newWeight: Double
 
             if signalValue > 0 {
-                // Positive interaction — Rocchio positive update with β
-                // β = 0.8: system learns eagerly from positive signals
+ 
                 newWeight = oldWeight + UserProfile1.beta * signalValue
 
             } else {
-                // Negative interaction — Rocchio negative update with γ
-                // γ = 0.2: system is cautious with negative signals
-                // Lops et al.: negative feedback is rarer and less reliable
+
                 newWeight = oldWeight + UserProfile1.gamma * signalValue
             }
 
-            // Clamp to bounds — prevent weights going to zero or infinity
+  
             UserProfile1.weights[tag] = max(
                 UserProfile1.minWeight,
                 min(newWeight, UserProfile1.maxWeight)
@@ -215,10 +170,7 @@ final class ArticleScorer {
         }
     }
 
-    // MARK: - Compute Confidence
-    // Core semantic matching logic
-    // Returns a value between 0.0 and 1.0
-    // 1.0 = exact match, lower = semantic similarity via NLEmbedding
+ 
 
     private func computeConfidence(
         tag: String,
@@ -238,7 +190,6 @@ final class ArticleScorer {
             outer: for phrase in phrases {
                 let phraseWords = phrase.split(separator: " ").map(String.init)
 
-                // Exact phrase match — highest confidence
                 if phrase.contains(tagWord) {
                     bestScore = 1.0
                     break outer
@@ -247,15 +198,12 @@ final class ArticleScorer {
                 for phraseWord in phraseWords {
                     let phraseRoot = stem(phraseWord)
 
-                    // Stem match — high confidence
                     if tagWord == phraseWord || tagRoot == phraseRoot {
                         bestScore = 1.0
                         break outer
                     }
 
-                    // Semantic similarity via NLEmbedding
-                    // distance 0 = identical, distance 1 = completely different
-                    // similarity = 1 - distance
+
                     let distance   = embedding.distance(between: tagWord, and: phraseWord)
                     let similarity = max(semanticFloor, 1.0 - distance)
                     bestScore      = max(bestScore, similarity)
@@ -265,14 +213,12 @@ final class ArticleScorer {
             tagWordScores.append(bestScore)
         }
 
-        // Average score across all words in a multi-word tag
-        // e.g. "interest rate" = average of score("interest") and score("rate")
+
         return tagWordScores.isEmpty
             ? 0.0
             : tagWordScores.reduce(0, +) / Double(tagWordScores.count)
     }
 
-    // MARK: - Helpers
 
     private func cleanText(_ text: String) -> String {
         text.lowercased()
