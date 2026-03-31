@@ -6,9 +6,9 @@
 import UIKit
 
 class ThreadDetailViewController: UIViewController {
- 
-    var thread: ThreadPost!
- 
+
+    var thread: APIThread!
+
     // MARK: - UI Elements
     private let scrollView = UIScrollView()
     private let scrollContent = UIView()          // scroll container
@@ -37,11 +37,12 @@ class ThreadDetailViewController: UIViewController {
     private let actionsStackView  = UIStackView()
  
     private var isLiked = false
- 
+    private var currentLikesCount = 0
+
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor(white: 250/255, alpha: 1)   // same bg as feed
+        view.backgroundColor = UIColor(white: 250/255, alpha: 1)  
         setupScrollView()
         setupCard()
         setupActionButtons()
@@ -76,7 +77,7 @@ class ThreadDetailViewController: UIViewController {
         cardView.translatesAutoresizingMaskIntoConstraints = false
         cardView.backgroundColor = .white
         cardView.layer.cornerRadius = 16
-        cardView.layer.masksToBounds = true        // clips inner content
+        cardView.layer.masksToBounds = true        
         scrollContent.addSubview(cardView)
  
         // Shadow lives on scrollContent (not cardView) so masksToBounds doesn't clip it
@@ -275,12 +276,12 @@ class ThreadDetailViewController: UIViewController {
         // Post image
         if let imageName = thread.imageName {
             postImageView.isHidden = false
-            postImageView.image = imageName.contains("/")
-                ? UIImage(contentsOfFile: imageName)
-                : UIImage(named: imageName)
+            URLSession.shared.dataTask(with: url) { [weak self] data, _, _ in
+                guard let data, let img = UIImage(data: data) else { return }
+                DispatchQueue.main.async { self?.postImageView.image = img }
+            }.resume()
         } else {
             postImageView.isHidden = true
-            // Re-anchor description directly under title when no image
             descriptionLabel.topAnchor
                 .constraint(equalTo: titleLabel.bottomAnchor, constant: 14)
                 .isActive = true
@@ -290,30 +291,50 @@ class ThreadDetailViewController: UIViewController {
         tagsStackView.arrangedSubviews.forEach {
             tagsStackView.removeArrangedSubview($0); $0.removeFromSuperview()
         }
-        for tag in thread.tags.prefix(3) {
+        for tag in thread.tags!.prefix(3) {
             tagsStackView.addArrangedSubview(makeTagPill(text: tag))
         }
-        tagsStackView.isHidden = thread.tags.isEmpty
- 
+        tagsStackView.isHidden = thread.tags!.isEmpty
+
         // Counts
-        likeCountLabel.text    = "\(thread.likes)"
-        commentCountLabel.text = "\(thread.comments.count)"
-        shareCountLabel.text   = "\(thread.shares)"
- 
-        isLiked = thread.isLiked
+        currentLikesCount = thread.likesCount
+        likeCountLabel.text    = "\(currentLikesCount)"
+        commentCountLabel.text = "\(thread.commentsCount)"
+        shareCountLabel.text   = "0"
+
+        isLiked = thread.isLiked ?? false
         updateLikeUI()
     }
  
     // MARK: - Like action
     @objc private func didTapLike() {
+        guard let token = UserDefaults.standard.string(forKey: "authToken") else { return }
+
+        // Optimistic update using tracked state
         isLiked.toggle()
-        likeCountLabel.text = "\(isLiked ? thread.likes + 1 : thread.likes - 1)"
+        currentLikesCount += isLiked ? 1 : -1
         updateLikeUI()
-        ThreadsDataStore.shared.toggleLike(for: thread.id)
+
+        APIService.shared.toggleLike(threadId: thread.id, token: token) { [weak self] result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let response):
+                    self?.isLiked = response.liked
+                    self?.currentLikesCount = response.likesCount  // sync with server
+                    self?.updateLikeUI()
+                case .failure:
+                    // Revert on failure
+                    self?.isLiked.toggle()
+                    self?.currentLikesCount += (self?.isLiked == true ? 1 : -1)
+                    self?.updateLikeUI()
+                }
+            }
+        }
     }
  
     private func updateLikeUI() {
         likeButton.setImage(UIImage(systemName: isLiked ? "heart.fill" : "heart"), for: .normal)
         likeButton.tintColor = isLiked ? .systemRed : .systemBlue
+        likeCountLabel.text = "\(currentLikesCount)"
     }
 }

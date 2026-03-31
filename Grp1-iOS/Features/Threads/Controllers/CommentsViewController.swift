@@ -147,6 +147,7 @@ final class CommentsViewController: UIViewController {
     // MARK: - Data
     let threadsStore = ThreadsDataStore.shared
     var postID: Int?
+    var threadId : String = ""
     private var comments: [Comment] = []
 
     // MARK: - Lifecycle

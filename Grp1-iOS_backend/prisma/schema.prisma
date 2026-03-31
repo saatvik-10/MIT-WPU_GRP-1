@@ -34,6 +34,7 @@ model User {
   // chatSessions ChatSession[]
   thread             Thread[]
   likes              ThreadLike[]
+  commentLikes       ThreadCommentLike[]
   comments           ThreadComment[]
   // shares             ThreadShare[]
   followers          Follow[]            @relation("UserFollowers")
@@ -177,7 +178,7 @@ model Thread {
 
   title         String
   description   String
-  imageName     String
+  imageName     String?
   tags          String[]
   likesCount    Int      @default(0)
   commentsCount Int      @default(0)
@@ -216,13 +217,15 @@ model ThreadLike {
   id String @id @default(cuid())
 
   userId   String
-  user     User    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  threadId String? @unique
-  thread   Thread? @relation(fields: [threadId], references: [id], onDelete: Cascade)
+  user     User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  threadId String          // ← remove ? and remove @unique
+  thread   Thread @relation(fields: [threadId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
 
-  @@unique([userId, threadId])
+  @@unique([userId, threadId])  // ← this is the only unique constraint needed
+  @@index([threadId])
+  @@index([userId])
 }
 
 model ThreadComment {
@@ -241,8 +244,25 @@ model ThreadComment {
 
   createdAt DateTime @default(now())
 
+  likes     ThreadCommentLike[]
+
   @@index([userId])
   @@index([threadId])
+}
+
+model ThreadCommentLike {
+  id String @id @default(cuid())
+
+  userId    String
+  user      User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  commentId String
+  comment   ThreadComment @relation(fields: [commentId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@unique([userId, commentId])
+  @@index([commentId])
+  @@index([userId])
 }
 
 // model ThreadShare {

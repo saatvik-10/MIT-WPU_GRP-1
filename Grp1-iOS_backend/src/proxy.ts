@@ -19,3 +19,20 @@ export const proxyAuth = async (ctx: Context, next: Next) => {
     return ctx.text('Not Authenticated', 401);
   }
 };
+
+export const proxyOptionalAuth = async (ctx: Context, next: Next) => {
+  const authHeader = ctx.req.header('Authorization');
+  const token = authHeader?.startsWith('Bearer ')
+    ? authHeader.slice(7).trim()
+    : undefined;
+
+  if (token) {
+    try {
+      const verified = await jwtVerify(token);
+      ctx.set('userId', verified.userId);
+    } catch {
+      // ignore invalid tokens
+    }
+  }
+  await next();
+};

@@ -69,76 +69,87 @@ class CreatePostViewController: UIViewController,UITextViewDelegate, UITextField
     @IBAction func didTapSaveDraft(_ sender: UIButton) {
         
         
-            let title = titleTextField.text
-            let topic = addTopicTextField.text
-            let body = bodyTextView.text
-            
-            let imagePath: String?
-            if let image = postImageView.image {
-                imagePath = saveImageToDisk(image)
-            } else {
-                imagePath = nil
+        guard let token = UserDefaults.standard.string(forKey: "authToken") else { return }
+        let title = titleTextField.text ?? ""
+        let body = bodyTextView.text ?? ""
+        let rawTags = addTopicTextField.text ?? ""
+        let tags = rawTags.split(separator: ",")
+            .map { $0.trimmingCharacters(in: .whitespaces) }
+            .filter { !$0.isEmpty }
+        let imageData = postImageView.image?.jpegData(compressionQuality: 0.8)
+        let payload = APICreateDraftRequest(
+            title: title,
+            description: body,
+            tags: tags,
+            threadId: nil,
+            imageData: imageData,
+            imageFileName: imageData != nil ? "draft.jpg" : nil
+        )
+        APIService.shared.saveDraft(payload: payload, token: token) { [weak self] result in
+            DispatchQueue.main.async {
+                if case .success = result {
+                    print("✅ Draft saved to DB!")
+                }
+                self?.navigationController?.popViewController(animated: true)
             }
-            
-            switch mode {
-            case .newPost:
-                ThreadsDataStore.shared.saveDraft(
-                    title: title,
-                    topic: topic,
-                    body: body,
-                    imageName: imagePath
-                )
-                
-            case .editDraft:
-                guard let draft else { return }
-                ThreadsDataStore.shared.updateDraft(
-                    id: draft.id,
-                    title: title,
-                    topic: topic,
-                    body: body,
-                    imageName: imagePath
-                )
-            }
-            
-            // Go back to drafts without pushing a new VC
-            navigationController?.popViewController(animated: true)
+        }
         
     }
     
     @IBAction func didTapPost(_ sender: UIButton) {
-        
-        guard
-                let title = titleTextField.text, !title.isEmpty,
-                let body = bodyTextView.text, !body.isEmpty
-            else { return }
-
-            let imagePath: String?
-            if let image = postImageView.image {
-                imagePath = saveImageToDisk(image)
-            } else {
-                imagePath = nil
-            }
-
-            // Parse tags from comma-separated input e.g. "iOS, Swift, UIKit"
-            let rawTags = addTopicTextField.text ?? ""
-            let tags = rawTags
-                .split(separator: ",")
-                .map { $0.trimmingCharacters(in: .whitespaces) }
-                .filter { !$0.isEmpty }
-
-            ThreadsDataStore.shared.postThreadFromCreate(
-                title: title,
-                body: body,
-                imageName: imagePath,
-                tags: tags.isEmpty ? ["General"] : tags
-            )
-
-            if mode == .editDraft, let draft {
-                ThreadsDataStore.shared.deleteDraft(id: draft.id)
-            }
-
-            navigationController?.popViewController(animated: true)
+        guard let title = titleTextField.text, !title.isEmpty,
+              let body = bodyTextView.text, !body.isEmpty
+        else { return }
+        guard let token = UserDefaults.standard.string(forKey: "authToken") else {
+            print("❌ No auth token — user not logged in")
+            return
         }
+        let rawTags = addTopicTextField.text ?? ""
+        let tags = rawTags
+            .split(separator: ",")
+            .map { $0.trimmingCharacters(in: .whitespaces) }
+            .filter { !$0.isEmpty }
+        
+        // Debug: print the JSON body
+        let bodyDict: [String: Any] = [
+            "title": title,
+            "description": body,
+            "tags": tags.isEmpty ? ["General"] : tags
+        ]
+        if let jsonData = try? JSONSerialization.data(withJSONObject: bodyDict, options: .prettyPrinted),
+           let jsonString = String(data: jsonData, encoding: .utf8) {
+            print("📦 JSON being sent:\n\(jsonString)")
+        }
+        
+        postButton.isEnabled = false
+        postButton.setTitle("Posting...", for: .normal)
+        let payload = APICreateThreadRequest(
+            title: title,
+            description: body, // use "description" as per backend
+            tags: tags.isEmpty ? ["General"] : tags,
+            imageData: postImageView.image?.jpegData(compressionQuality: 0.8),
+            imageFileName: postImageView.image != nil ? "thread.jpg" : nil
+        )
+        APIService.shared.createThread(
+            payload: payload,
+            token: token
+        ) { [weak self] (result: Result<APIThread, APIError>) in
+            DispatchQueue.main.async {
+                self?.postButton.isEnabled = true
+                self?.postButton.setTitle("Post", for: .normal)
+                switch result {
+                case .success:
+                    print("✅ Thread posted to DB!")
+                    self?.navigationController?.popViewController(animated: true)
+                case .failure(let error):
+                    print("❌ Failed to post thread: \(error)")
+                    let alert = UIAlertController(title: "Error", message: "Failed to post. Try again.", preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: "OK", style: .default))
+                    self?.present(alert, animated: true)
+                }
+            }
+        }
+    }
     
     
     func setupUI() {
@@ -376,3 +387,140 @@ class CreatePostViewController: UIViewController,UITextViewDelegate, UITextField
              }
          }
        
+    func setupTextViewPlaceholder() {
+        placeholderLabel.text = "Body Text"
+        placeholderLabel.textColor = .secondaryLabel
+        placeholderLabel.font = .systemFont(ofSize: 16)
+        placeholderLabel.translatesAutoresizingMaskIntoConstraints = false
+        
+        bodyTextView.addSubview(placeholderLabel)
+        
+        NSLayoutConstraint.activate([
+            placeholderLabel.topAnchor.constraint(equalTo: bodyTextView.topAnchor, constant: 7),
+            placeholderLabel.leadingAnchor.constraint(equalTo: bodyTextView.leadingAnchor, constant: 10),
+            placeholderLabel.trailingAnchor.constraint(lessThanOrEqualTo: bodyTextView.trailingAnchor, constant: -10)
+        ])
+        
+        bodyTextView.delegate = self  //check this
+        placeholderLabel.isHidden = !bodyTextView.text.isEmpty
+    }
+    
+    
+    
+    func textViewDidChange(_ textView: UITextView) {
+        placeholderLabel.isHidden = !textView.text.isEmpty
+    }
+    
+    
+    
+    private func configureForMode() {
+        
+        if mode == .editDraft {
+            navigationItem.title = "Draft"
+            prefillDraftData()
+        }
+    }
+    
+    private func prefillDraftData() {
+        guard let draft else { return }
+        
+        addTopicTextField.text = draft.topic
+        titleTextField.text = draft.title
+        bodyTextView.text = draft.body
+        
+        placeholderLabel.isHidden = !(draft.body?.isEmpty ?? true)
+        
+        // Image is optional (important)
+        if let path = draft.imageName {
+            let url = URL(fileURLWithPath: path)
+            if let image = UIImage(contentsOfFile: url.path) {
+                showDraftImage(image)
+            }
+        }
+    }
+    func styleSaveDraftButton() {
+        saveDraft.setTitleColor(.systemBlue, for: .normal)
+        saveDraft.layer.borderWidth = 1.5
+        saveDraft.layer.borderColor = UIColor.systemBlue.cgColor
+        saveDraft.layer.cornerRadius = 22
+        
+    }
+    
+    func handleSelectedImage(_ image: UIImage) {
+        postImageView.image = image
+        
+        addImageButton.isHidden = true
+        postImageView.isHidden = false
+        removeImageButton.isHidden = false
+        imageContainerHeight.constant = 220
+        
+        imageView.bringSubviewToFront(removeImageButton)
+        
+        UIView.animate(withDuration: 0.25) {
+            self.view.layoutIfNeeded()
+        }
+    }
+    
+    func showDraftImage(_ image: UIImage) {
+        postImageView.image = image
+        
+        addImageButton.isHidden = true
+        postImageView.isHidden = false
+        
+        imageContainerHeight.constant = 220
+    }
+    
+    func removeImage() {
+        postImageView.image = nil
+        
+        postImageView.isHidden = true
+        removeImageButton.isHidden = true
+        addImageButton.isHidden = false
+        
+        imageContainerHeight.constant = 0
+        
+        UIView.animate(withDuration: 0.25) {
+            self.view.layoutIfNeeded()
+        }
+    }
+    
+    func saveImageToDisk(_ image: UIImage) -> String? {
+        guard let data = image.jpegData(compressionQuality: 0.8) else { return nil }
+        
+        let fileName = UUID().uuidString + ".jpg"
+        let url = FileManager.default
+            .urls(for: .documentDirectory, in: .userDomainMask)[0]
+            .appendingPathComponent(fileName)
+        
+        do {
+            try data.write(to: url)
+            return url.path
+        } catch {
+            print("Failed to save image:", error)
+            return nil
+        }
+    }
+    
+}
+
+
+extension CreatePostViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    
+    func openImagePicker() {
+        let picker = UIImagePickerController()
+        picker.delegate = self
+        picker.sourceType = .photoLibrary
+        present(picker, animated: true)
+    }
+    
+    func imagePickerController(
+        _ picker: UIImagePickerController,
+        didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]
+    ) {
+        picker.dismiss(animated: true)
+        
+        guard let image = info[.originalImage] as? UIImage else { return }
+        
+        handleSelectedImage(image)
+    }
+}

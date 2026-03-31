@@ -325,87 +325,85 @@ class collectionViewCell: UICollectionViewCell {
        //
        //    }
        //
-       func configure(with post: ThreadPost, isFollowing: Bool, isOwnPost: Bool) {
-           
-           
-           self.isFollowingUser = isFollowing
-           self.shouldShowFollowAction = !isOwnPost
-           self.isOwnPost = isOwnPost
-          
-           userNameLabel.text = post.userName
-           timeAgoLabel.text = post.timeAgo
-           titleLabel.text = post.title
-           descriptionLabel.text = post.description
-           
-           profileImg.image = UIImage(named: post.userProfileImage)
-           ?? UIImage(systemName: "person.circle.fill")
-           
-         
-   //        if let imageName = post.imageName {
-   //            threadImg.isHidden = false
-   //            threadImg.image = UIImage(named: imageName)
-   //        } else {
-   //            threadImg.isHidden = true
-   //            threadImg.image = nil
-   //        }
-   //
-           
-           if let path = post.imageName {
-               
-               // If imageName is actually a file path (saved from gallery)
-               if path.contains("/") {
-                   let url = URL(fileURLWithPath: path)
-                   threadImg.image = UIImage(contentsOfFile: url.path)
-               }
-               // Else fallback to asset images (your bundled images)
-               else {
-                   threadImg.image = UIImage(named: path)
-               }
-               
-               threadImg.isHidden = false
-           } else {
-               threadImg.image = nil
-               threadImg.isHidden = true
-           }
-          
-           likesButton.setTitle("\(post.likes)", for: .normal)
-           
-           let heartName = post.isLiked ? "heart.fill" : "heart"
-           likesButton.setImage(
-               UIImage(systemName: heartName),
-               for: .normal
-           )
-           likesButton.tintColor = post.isLiked ? .systemRed : .systemBlue
-           
-      
-           commentsButton.setTitle("\(post.comments.count)", for: .normal)
-           sharesButton.setTitle("\(post.shares)", for: .normal)
-           
-           // TAGS
-           tagsStackView.arrangedSubviews.forEach {
-               tagsStackView.removeArrangedSubview($0)
-               $0.removeFromSuperview()
-           }
-           
-           let tags = Array(post.tags.prefix(3))
-           tagsStackView.isHidden = tags.isEmpty
-           
-           for tag in tags {
-               let label = makeTagLabel(text: tag)
-               tagsStackView.addArrangedSubview(label)
-           }
-    
-           // Spacer eats leftover width — keeps pills at intrinsic size
-           // (XIB distribution was "fillEqually"; overridden to .fill in awakeFromNib)
-           let spacer = UIView()
-           spacer.backgroundColor = .clear
-           spacer.setContentHuggingPriority(.defaultLow, for: .horizontal)
-           spacer.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
-           tagsStackView.addArrangedSubview(spacer)
-           
-           
-           setupMoreMenu()
-       }
+       // MARK: - Configure with APIThread (API-synced data)
+func configure(with thread: APIThread, isFollowing: Bool, isOwnPost: Bool) {
+    self.isFollowingUser = isFollowing
+    self.shouldShowFollowAction = !isOwnPost
+    self.isOwnPost = isOwnPost
+
+    // Show normal name first, fallback to username, then userId
+    userNameLabel.text = thread.user?.name ?? thread.user?.username ?? thread.userId
+    titleLabel.text = thread.title
+    descriptionLabel.text = thread.description
+
+    // Relative time from ISO8601 createdAt
+    let isoFormatter = ISO8601DateFormatter()
+    isoFormatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+    if let date = isoFormatter.date(from: thread.createdAt) {
+        let rel = RelativeDateTimeFormatter()
+        rel.unitsStyle = .abbreviated
+        timeAgoLabel.text = rel.localizedString(for: date, relativeTo: Date())
+    } else {
+        timeAgoLabel.text = ""
+    }
+
+    // Fix profile image: set a placeholder FIRST to handle cell reuse
+    profileImg.image = UIImage(systemName: "person.circle.fill")
+    profileImg.tintColor = .lightGray
+
+    // Load profile image from R2 presigned URL if available
+    if let profileUrlStr = thread.user?.profileImageUrl,
+       let url = URL(string: profileUrlStr) {
+        print("🖼 Loading profile image from: \(profileUrlStr)")
+        URLSession.shared.dataTask(with: url) { [weak self] data, _, _ in
+            guard let data, let img = UIImage(data: data) else { return }
+            DispatchQueue.main.async { self?.profileImg.image = img }
+        }.resume()
+    }
+
+    // Post image from R2 presigned URL
+    if let imageUrlStr = thread.imageUrl, let url = URL(string: imageUrlStr) {
+        threadImg.isHidden = false
+        threadImg.image = nil
+        URLSession.shared.dataTask(with: url) { [weak self] data, _, _ in
+            guard let data, let img = UIImage(data: data) else { return }
+            DispatchQueue.main.async { self?.threadImg.image = img }
+        }.resume()
+    } else {
+        threadImg.image = nil
+        threadImg.isHidden = true
+    }
+
+    // Counts
+    likesButton.setTitle("\(thread.likesCount)", for: .normal)
+    let liked = thread.isLiked ?? false
+    let image = liked ? UIImage(systemName: "heart.fill") : UIImage(systemName: "heart")
+    likesButton.setImage(image, for: .normal)
+    likesButton.tintColor = liked ? .systemRed : .systemBlue
+
+    commentsButton.setTitle("\(thread.commentsCount)", for: .normal)
+    sharesButton.setTitle("\(thread.sharesCount)", for: .normal)
+
+    // Tags
+    tagsStackView.arrangedSubviews.forEach {
+        tagsStackView.removeArrangedSubview($0)
+        $0.removeFromSuperview()
+    }
+    let tags = Array(thread.tags!.prefix(3))
+    tagsStackView.isHidden = tags.isEmpty
+    for tag in tags {
+        let label = makeTagLabel(text: tag)
+        tagsStackView.addArrangedSubview(label)
+    }
+    let spacer = UIView()
+    spacer.backgroundColor = .clear
+    spacer.setContentHuggingPriority(.defaultLow, for: .horizontal)
+    spacer.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+    tagsStackView.addArrangedSubview(spacer)
+
+    setupMoreMenu()
+}
+
        
        
        //    private func setupMoreMenu() {

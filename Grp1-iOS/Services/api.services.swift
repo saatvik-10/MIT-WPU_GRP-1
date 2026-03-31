@@ -352,9 +352,10 @@ final class APIService {
 	// ─────────────────────────────────────────────
 
 	func fetchForYouThreads(
+		token: String? = nil,
 		completion: @escaping (Result<[APIThread], APIError>) -> Void
 	) {
-		request(method: .get, path: "/api/for-you-threads", body: Optional<EmptyBody>.none, completion: completion)
+		request(method: .get, path: "/api/for-you-threads", token: token, body: Optional<EmptyBody>.none, completion: completion)
 	}
 
 	func fetchFollowingThreads(
@@ -364,7 +365,7 @@ final class APIService {
 		request(method: .post, path: "/api/following-threads", token: token, body: EmptyBody(), completion: completion)
 	}
 
-	/// ✅ Creates a thread with optional image via multipart/form-data
+	// ✅ Creates a thread with optional image via multipart/form-data
 	func createThread(
 		payload: APICreateThreadRequest,
 		token: String,
@@ -385,6 +386,22 @@ final class APIService {
 			completion: completion
 		)
 	}
+
+// 	func createThreadJSON(
+//     title: String,
+//     content: String,
+//     tags: [String],
+//     token: String,
+//     completion: @escaping (Result<APIThread, APIError>) -> Void
+// ) {
+//     struct Body: Encodable {
+//         let title: String
+//         let content: String
+//         let tags: [String]
+//     }
+//     let body = Body(title: title, content: content, tags: tags)
+//     request(method: .post, path: "/api/create-thread", token: token, body: body, completion: completion)
+// }
 
 	/// ✅ Saves a draft with optional image via multipart/form-data
 	func saveDraft(
@@ -481,12 +498,15 @@ final class APIService {
 		request(method: .get, path: "/api/comments", queryItems: [URLQueryItem(name: "threadId", value: threadId)], body: Optional<EmptyBody>.none, completion: completion)
 	}
 
-	func toggleThreadLike(
+	func toggleLike(
 		threadId: String,
 		token: String,
 		completion: @escaping (Result<APIThreadLikeResponse, APIError>) -> Void
 	) {
 		request(method: .post, path: "/api/like", token: token, body: APIThreadLikeRequest(threadId: threadId), completion: completion)
+		print("🔁 Toggling like for threadId: \(threadId)")  // ← check threadId isn't empty
+    print("🔑 Token: \(token.prefix(20))...")             // ← check token exists
+    request(method: .post, path: "/api/like", token: token, body: APIThreadLikeRequest(threadId: threadId), completion: completion)
 	}
 
 	// ─────────────────────────────────────────────
@@ -514,6 +534,7 @@ final class APIService {
 	) {
 		request(method: .get, path: "/api/all-following", token: token, body: Optional<EmptyBody>.none, completion: completion)
 	}
+
 
 	// ─────────────────────────────────────────────
 	// MARK: - User Profile

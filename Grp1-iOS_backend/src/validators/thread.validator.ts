@@ -36,6 +36,10 @@ export const threadLikeSchema = z.object({
   threadId: z.string().trim().min(1, 'threadId is required'),
 });
 
+export const commentLikeSchema = z.object({
+  commentId: z.string().trim().min(1, 'commentId is required'),
+});
+
 export const followSchema = z.object({
   followingId: z.string().trim().min(1, 'followingId is required'),
 });
@@ -46,4 +50,5 @@ export type ThreadDraftType = z.infer<typeof threadDraftSchema>;
 export type UpdateThreadDraftType = z.infer<typeof updateThreadDraftSchema>;
 export type ThreadCommentType = z.infer<typeof threadCommentSchema>;
 export type ThreadLikeType = z.infer<typeof threadLikeSchema>;
+export type CommentLikeType = z.infer<typeof commentLikeSchema>;
 export type FollowType = z.infer<typeof followSchema>;

@@ -9,41 +9,43 @@ import {
   updateThreadDraftSchema,
   threadCommentSchema,
   threadLikeSchema,
+  commentLikeSchema,
 } from '../validators/thread.validator';
 
-// ✅ Helper: parse multipart body using Hono's built-in parseBody
-// Returns text fields as a plain object + the image File if present
+
 async function parseMultipart(ctx: Context, imageFieldName: string) {
   const body = await ctx.req.parseBody();
   const fields: Record<string, any> = {};
-
   for (const [key, value] of Object.entries(body)) {
-    if (typeof value === 'string') {
-      // ✅ Handle tags[] array fields sent from Swift
-      if (key === 'tags[]') {
+    // Handle tags[] array fields from Swift
+    if (key === 'tags[]') {
+      if (Array.isArray(value)) {
+        fields['tags'] = value.filter(v => typeof v === 'string');
+      } else if (typeof value === 'string') {
         if (!fields['tags']) fields['tags'] = [];
         fields['tags'].push(value);
-      } else {
-        fields[key] = value;
+      }
+    } 
+    // Handle tags already parsed as array by Hono
+    else if (key === 'tags') {
+      if (Array.isArray(value)) {
+        fields['tags'] = value.filter(v => typeof v === 'string');
+      } else if (typeof value === 'string') {
+        fields['tags'] = [value];
       }
     }
+    else if (typeof value === 'string') {
+      fields[key] = value;
+    }
   }
-
-  // Handle case where parseBody returns multiple values for tags[]
-  const rawBody = body;
-  const tagValues = Object.entries(rawBody)
-    .filter(([k]) => k === 'tags[]')
-    .map(([, v]) => v as string);
-  if (tagValues.length > 0) fields['tags'] = tagValues;
-
   const imageFile = body[imageFieldName];
   const file = imageFile instanceof File ? imageFile : null;
-
   return { fields, file };
 }
 
 export class Threads {
   async getForYouThreads(ctx: Context) {
+    const userId = ctx.get('userId');
     try {
       const threads = await prisma.thread.findMany({
         include: { user: true, likes: true, comments: true },
@@ -63,7 +65,11 @@ export class Threads {
               );
             }
           }
-          return { ...thread, imageUrl };
+          const isLiked = userId
+            ? thread.likes.some((like) => like.userId === userId)
+            : false;
+
+          return { ...thread, imageUrl, isLiked };
         }),
       );
 
@@ -105,7 +111,9 @@ export class Threads {
               );
             }
           }
-          return { ...thread, imageUrl };
+          const isLiked = thread.likes.some((like) => like.userId === userId);
+
+          return { ...thread, imageUrl, isLiked };
         }),
       );
 
@@ -429,18 +437,34 @@ export class Threads {
       let liked = false;
 
       if (existingLike) {
-        await prisma.threadLike.delete({ where: { id: existingLike.id } });
-        await prisma.thread.update({
-          where: { id: threadId },
-          data: { likesCount: { decrement: 1 } },
-        });
+        try {
+          await prisma.threadLike.delete({
+            where: { userId_threadId: { userId, threadId } },
+          });
+          await prisma.thread.update({
+            where: { id: threadId },
+            data: { likesCount: { decrement: 1 } },
+          });
+        } catch (e: any) {
+          // If already deleted concurrently
+          if (e.code !== 'P2025') throw e; 
+        }
       } else {
-        await prisma.threadLike.create({ data: { userId, threadId } });
-        await prisma.thread.update({
-          where: { id: threadId },
-          data: { likesCount: { increment: 1 } },
-        });
-        liked = true;
+        try {
+          await prisma.threadLike.create({ data: { userId, threadId } });
+          await prisma.thread.update({
+            where: { id: threadId },
+            data: { likesCount: { increment: 1 } },
+          });
+          liked = true;
+        } catch (e: any) {
+          // If already created concurrently
+          if (e.code === 'P2002') {
+             liked = true;
+          } else {
+             throw e;
+          }
+        }
       }
 
       const updatedThread = await prisma.thread.findUnique({
@@ -454,17 +478,56 @@ export class Threads {
     }
   }
 
-  async getComments(ctx: Context) {
+    async getComments(ctx: Context) {
     const threadId = ctx.req.query('threadId');
+    const userId = ctx.get('userId'); // Read user (optional)
     if (!threadId) return ctx.json({ error: 'threadId is required' }, 400);
-
     try {
       const comments = await prisma.threadComment.findMany({
         where: { threadId },
-        include: { user: true },
+        include: { user: true, likes: true }, // Include likes strictly for the true/false calculation
         orderBy: { createdAt: 'desc' },
       });
-      return ctx.json(comments);
+      // Format response to include isLiked
+      const formattedComments = comments.map(c => {
+        const isLiked = userId ? c.likes.some(l => l.userId === userId) : false;
+        const { likes, ...rest } = c; // drop the raw array
+        return { ...rest, isLiked };
+      });
+      return ctx.json(formattedComments);
+    } catch (err) {
+      return ctx.json({ error: 'Internal server error' }, 500);
+    }
+  }  
+
+  async toggleCommentLike(ctx: Context) {
+    const userId = ctx.get('userId');
+    if (!userId) return ctx.json({ error: 'Unauthorized' }, 401);
+    try {
+      const data = commentLikeSchema.safeParse(await ctx.req.json());
+      if (!data.success) return ctx.json({ error: 'Invalid input' }, 422);
+      const { commentId } = data.data;
+      const comment = await prisma.threadComment.findUnique({
+        where: { id: commentId }, select: { id: true }
+      });
+      if (!comment) return ctx.json({ error: 'Comment not found' }, 404);
+      const existingLike = await prisma.threadCommentLike.findUnique({
+        where: { userId_commentId: { userId, commentId } }
+      });
+      let liked = false;
+      // Simply create or delete the relation
+      if (existingLike) {
+        await prisma.threadCommentLike.delete({
+          where: { userId_commentId: { userId, commentId } }
+        });
+      } else {
+        await prisma.threadCommentLike.create({
+          data: { userId, commentId }
+        });
+        liked = true;
+      }
+      // NO COUNTER RETURNED
+      return ctx.json({ liked });
     } catch (err) {
       return ctx.json({ error: 'Internal server error' }, 500);
     }

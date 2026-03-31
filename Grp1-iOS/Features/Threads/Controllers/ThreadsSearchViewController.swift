@@ -210,7 +210,7 @@ extension ThreadsSearchViewController: UITableViewDelegate {
         tableView.deselectRow(at: indexPath, animated: true)
         let post = filteredPosts[indexPath.row]
         let detailVC = ThreadDetailViewController()
-        detailVC.thread = post
+        //detailVC.thread = post
         navigationController?.pushViewController(detailVC, animated: true)
     }
 }
