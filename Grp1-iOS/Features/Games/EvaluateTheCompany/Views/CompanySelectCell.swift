@@ -36,8 +36,7 @@ final class CompanySelectCell: UITableViewCell {
             containerView.layer.shadowOffset  = CGSize(width: 0, height: 3)
      
             // ── Labels ──
-            nameLabel.font      = UIFont(name: "Georgia-Bold", size: 20)
-                ?? UIFont.systemFont(ofSize: 15, weight: .semibold)
+            nameLabel.font      = UIFont.systemFont(ofSize: 20, weight: .semibold)
             nameLabel.textColor = UIColor(red: 0.08, green: 0.08, blue: 0.08, alpha: 1)
      
             descLabel.font      = UIFont.systemFont(ofSize: 14, weight: .regular)

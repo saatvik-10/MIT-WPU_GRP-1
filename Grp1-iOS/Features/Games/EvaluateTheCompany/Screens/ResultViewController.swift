@@ -198,8 +198,7 @@ final class ResultViewController: UIViewController {
         // Title
         let title = UILabel()
         title.text          = data.isCorrect ? "Nailed It, Analyst!" : "Close, But Not Quite!"
-        title.font          = UIFont(name: "Georgia-Bold", size: 22)
-            ?? UIFont.systemFont(ofSize: 22, weight: .bold)
+        title.font          = UIFont.systemFont(ofSize: 22, weight: .bold)
         title.textColor     = .white
         title.numberOfLines = 0
  
@@ -240,8 +239,7 @@ final class ResultViewController: UIViewController {
         // Name + badge
         let nameLabel = UILabel()
         nameLabel.text      = data.selectedCompany.name
-        nameLabel.font      = UIFont(name: "Georgia-Bold", size: 16)
-            ?? UIFont.systemFont(ofSize: 16, weight: .semibold)
+        nameLabel.font      = UIFont.systemFont(ofSize: 16, weight: .semibold)
         nameLabel.textColor = C.text
  
         let badgeBg  = UIView()
@@ -363,8 +361,7 @@ final class ResultViewController: UIViewController {
  
         let nameLabel = UILabel()
         nameLabel.text      = data.twistIndicatorName
-        nameLabel.font      = UIFont(name: "Georgia-Bold", size: 15)
-            ?? UIFont.systemFont(ofSize: 15, weight: .semibold)
+        nameLabel.font      = UIFont.systemFont(ofSize: 15, weight: .semibold)
         nameLabel.textColor = C.text
  
         let subLabel = UILabel()
@@ -559,8 +556,7 @@ final class ResultViewController: UIViewController {
  
         let nameLabel = UILabel()
         nameLabel.text      = data.bestCompany.name
-        nameLabel.font      = UIFont(name: "Georgia-Bold", size: 17)
-            ?? UIFont.systemFont(ofSize: 17, weight: .bold)
+        nameLabel.font      = UIFont.systemFont(ofSize: 17, weight: .bold)
         nameLabel.textColor = C.text
  
         let descLabel = UILabel()
@@ -686,7 +682,7 @@ final class ResultViewController: UIViewController {
             let base = NSMutableAttributedString(
                 string: entry.company.name + "  ",
                 attributes: [
-                    .font: UIFont(name: "Georgia-Bold", size: 13) ?? UIFont.systemFont(ofSize: 13, weight: .semibold),
+                    .font: UIFont.systemFont(ofSize: 13, weight: .semibold),
                     .foregroundColor: C.text
                 ]
             )
@@ -700,7 +696,7 @@ final class ResultViewController: UIViewController {
             nameLbl.attributedText = base
         } else {
             nameLbl.text      = entry.company.name
-            nameLbl.font      = UIFont(name: "Georgia-Bold", size: 13) ?? UIFont.systemFont(ofSize: 13, weight: .semibold)
+            nameLbl.font      = UIFont.systemFont(ofSize: 13, weight: .semibold)
             nameLbl.textColor = C.text
         }
  

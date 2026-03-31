@@ -60,7 +60,7 @@ final class TwistViewController: UIViewController {
         // ── "TWIST" small caps label ──
         let twistBadge = UILabel()
         twistBadge.text          = "TWIST"
-        twistBadge.font          = UIFont(name: "Georgia-Bold", size: 40)
+        twistBadge.font          = UIFont.systemFont(ofSize: 40, weight: .bold)
         twistBadge.textColor     = UIColor(red: 0.18, green: 0.62, blue: 0.37, alpha: 1)
         twistBadge.textAlignment = .center
         twistBadge.letterSpacing(2)
@@ -70,8 +70,7 @@ final class TwistViewController: UIViewController {
         // ── "Wait!" — Georgia serif, matches screen 1 title ──
         let waitLabel = UILabel()
         waitLabel.text          = "Wait!"
-        waitLabel.font          = UIFont(name: "Georgia-Bold", size: 28)
-            ?? UIFont.systemFont(ofSize: 28, weight: .bold)
+        waitLabel.font          = UIFont.systemFont(ofSize: 28, weight: .bold)
         waitLabel.textColor     = UIColor(red: 0.08, green: 0.08, blue: 0.08, alpha: 1)
         waitLabel.textAlignment = .center
         mainStack.addArrangedSubview(waitLabel)

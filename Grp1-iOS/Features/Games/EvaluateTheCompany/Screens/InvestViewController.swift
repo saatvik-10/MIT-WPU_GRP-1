@@ -30,15 +30,14 @@ final class InvestViewController: UIViewController {
             // "PICK" badge
             let badge = UILabel()
             badge.text          = "PICK"
-            badge.font          = UIFont(name: "Georgia-Bold", size: 20)
+            badge.font          = UIFont.systemFont(ofSize: 20, weight: .semibold)
             badge.textColor     = UIColor(red: 0.18, green: 0.62, blue: 0.37, alpha: 1)
             badge.translatesAutoresizingMaskIntoConstraints = false
      
             // Serif title
             let title = UILabel()
             title.text          = "Which company\ndo you back?"
-            title.font          = UIFont(name: "Georgia-Bold", size: 32)
-                ?? UIFont.systemFont(ofSize: 26, weight: .bold)
+            title.font          = UIFont.systemFont(ofSize: 32, weight: .bold)
             title.textColor     = UIColor(red: 0.08, green: 0.08, blue: 0.08, alpha: 1)
             title.numberOfLines = 2
             title.translatesAutoresizingMaskIntoConstraints = false
