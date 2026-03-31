@@ -43,8 +43,7 @@ class InvestGameHomeViewController: UIViewController {
         private func setupHeader() {
             let titleLabel = UILabel()
             titleLabel.text          = "Evaluate The\nCompany"
-            titleLabel.font          = UIFont(name: "Georgia-Bold", size: 40)
-                ?? UIFont.systemFont(ofSize: 30, weight: .bold)
+            titleLabel.font          = UIFont.systemFont(ofSize: 40, weight: .bold)
             titleLabel.textColor     = UIColor(red: 0.08, green: 0.08, blue: 0.08, alpha: 1)
             titleLabel.textAlignment = .center
             titleLabel.numberOfLines = 2

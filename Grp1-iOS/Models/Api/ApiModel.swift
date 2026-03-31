@@ -370,17 +370,13 @@ struct APICreateBookmarkedThreadRequest: Encodable {
 struct APIUserProgress: Decodable {
 	let id: String?
 	let userId: String
-	let totalXP: Int
 	let currentStreak: Int
-	let overallProgress: Float
 	let createdAt: Date?
 	let updatedAt: Date?
 }
 
 struct APIUpdateProgressRequest: Encodable {
-	let xpEarned: Int
 	let streakIncrement: Int
-	let progressIncrement: Float
 }
 
 struct APIUpdateProgressResponse: Decodable {

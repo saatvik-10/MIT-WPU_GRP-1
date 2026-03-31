@@ -54,11 +54,7 @@ model UserProgress {
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   currentStreak   Int      @default(0)
-  // totalQuizzesPlayed Int      @default(0)
-  totalXP         Int      @default(0)
-  // averageAccuracy    Float    @default(0.0)
-  overallProgress Float    @default(0.0)
-  // quizLevel          Int      @default(0)
+  
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 }

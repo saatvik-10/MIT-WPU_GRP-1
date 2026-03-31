@@ -15,7 +15,6 @@ final class LetterTileView: UIView {
         case absent
     }
 
-    // MARK: - Subviews
 
     private let blurView: UIVisualEffectView = {
         let blur = UIBlurEffect(style: .systemUltraThinMaterial)
@@ -40,7 +39,6 @@ final class LetterTileView: UIView {
         return label
     }()
 
-    // MARK: - Init
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -52,7 +50,6 @@ final class LetterTileView: UIView {
         setup()
     }
 
-    // MARK: - Setup
 
     private func setup() {
         clipsToBounds = true
@@ -60,7 +57,6 @@ final class LetterTileView: UIView {
         layer.borderWidth = 1
         layer.borderColor = UIColor.systemGray4.cgColor
 
-        // ⬇️ Order MATTERS
         addSubview(blurView)
         addSubview(tintOverlay)
         addSubview(label)
@@ -81,7 +77,6 @@ final class LetterTileView: UIView {
         ])
     }
 
-    // MARK: - Update State
 
     func update(letter: Character, state: State) {
         label.text = String(letter).uppercased()
@@ -113,7 +108,6 @@ final class LetterTileView: UIView {
         }
     }
 
-    // MARK: - Reset
 
     func reset() {
         label.text = ""
@@ -137,24 +131,19 @@ struct GuessResult {
 
 final class WordleEngine {
 
-    // MARK: - Private State
     private let answer: String
 
-    // MARK: - Public Read-Only State
     private(set) var attempts: Int = 0
     let maxAttempts: Int = 4
 
-    // MARK: - Init
     init(answer: String) {
         self.answer = answer.lowercased()
     }
 
-    // MARK: - Safe Read Access (IMPORTANT)
     var revealedAnswer: String {
         answer
     }
 
-    // MARK: - Core Logic
     func evaluate(_ guess: String) -> GuessResult {
         attempts += 1
 
@@ -178,7 +167,6 @@ final class WordleEngine {
         return GuessResult(evaluations: result)
     }
 
-    // MARK: - Game State
     func hasWon(_ result: GuessResult) -> Bool {
         result.isCorrect
     }
@@ -191,7 +179,6 @@ final class WordleEngine {
         attempts < maxAttempts
     }
 
-    // MARK: - Reset
     func reset() {
         attempts = 0
     }

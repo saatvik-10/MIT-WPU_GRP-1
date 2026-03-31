@@ -20,8 +20,8 @@ struct NewsArticle: Codable {
     let jargons: [String]
     var selectedJargon: String? = ""
     var qaHistory: [ArticleQA] = []
-    var relevanceScore: Double = 0.0   // ✅ NEW — scored at fetch time
-    var bodyText: String   // ← add this
+    var relevanceScore: Double = 0.0   //scored at fetch time
+    var bodyText: String
 
 }
 
@@ -48,9 +48,8 @@ final class QuizContext {
     private init() {}
 
     var selectedArticleId: Int?
-    var generatedQuestions: [QuizQuestion] = []   // ← store generated questions here
-    var currentArticle: NewsArticle?          // ← add this
-
+    var generatedQuestions: [QuizQuestion] = []
+    var currentArticle: NewsArticle?
 }
 
 struct QuizQuestion {
@@ -80,7 +79,7 @@ struct NewsArticleAssembler {
     static func makeArticle(
         from scraped: ScrapedArticle,
         summary: ArticleSummary,
-        score: Double = 0.0          // ✅ NEW param
+        score: Double = 0.0
     ) -> NewsArticle {
 
         return NewsArticle(
@@ -96,8 +95,8 @@ struct NewsArticleAssembler {
             jargons: summary.jargons,
             selectedJargon: nil,
             qaHistory: [],
-            relevanceScore: score,    // ✅ stored on the article
-            bodyText: scraped.bodyText,        // ← add this
+            relevanceScore: score,
+            bodyText: scraped.bodyText,
 
         )
     }
@@ -109,14 +108,13 @@ struct DateUtils {
         output.dateFormat = "MMM d, yyyy • h:mm a"
         output.locale = Locale.current
 
-        // 1. ISO 8601 — used internally when assembling articles
+        
         let isoFormatter = ISO8601DateFormatter()
         isoFormatter.formatOptions = [.withInternetDateTime]
         if let date = isoFormatter.date(from: dateString) {
             return output.string(from: date)
         }
 
-        // 2. RFC 2822 — used by TOI, ET, and Mint RSS feeds
         let rfc2822 = DateFormatter()
         rfc2822.locale = Locale(identifier: "en_US_POSIX")
         rfc2822.dateFormat = "EEE, dd MMM yyyy HH:mm:ss Z"
@@ -124,7 +122,6 @@ struct DateUtils {
             return output.string(from: date)
         }
 
-        // 3. RFC 2822 without seconds — some feeds omit them
         let rfc2822Short = DateFormatter()
         rfc2822Short.locale = Locale(identifier: "en_US_POSIX")
         rfc2822Short.dateFormat = "EEE, dd MMM yyyy HH:mm Z"
@@ -132,7 +129,6 @@ struct DateUtils {
             return output.string(from: date)
         }
 
-        // Fallback — return raw string if nothing matched
         return dateString
     }
 }
@@ -173,7 +169,7 @@ class SavedArticlesStore {
 
     func save(_ article: NewsArticle, to folderName: String) {
         guard !savedArticles.contains(where: { $0.id == article.id && $0.folderName == folderName }) else {
-            print("⚠️ Already saved in \(folderName)")
+            print("Already saved in \(folderName)")
             return
         }
 
@@ -194,7 +190,7 @@ class SavedArticlesStore {
 
         savedArticles.append(saved)
         persist()
-        print("💾 Saved '\(article.title)' to folder: \(folderName)")
+        print("Saved '\(article.title)' to folder: \(folderName)")
     }
 
     func articles(in folderName: String) -> [SavedArticle] {

@@ -42,7 +42,12 @@ class CreatePostViewController: UIViewController,UITextViewDelegate, UITextField
         setupUI()
         setupTextViewPlaceholder()
         configureForMode()
-        styleSaveDraftButton()
+       
+        // Start with pill height visible, image hidden
+               imageContainerHeight.constant = 50
+               postImageView.isHidden = true
+               removeImageButton.isHidden = true
+               addImageButton.isHidden = false
         
         imageView.bringSubviewToFront(removeImageButton)
     }
@@ -147,14 +152,241 @@ class CreatePostViewController: UIViewController,UITextViewDelegate, UITextField
     }
     
     
+    func setupUI() {
+              bodyTextView.delegate = self
+              bodyTextView.isScrollEnabled = true
+       
+              view.backgroundColor = UIColor(white: 249/255, alpha: 1)
+              contentView.backgroundColor = .clear
+       
+              styleTitleField()
+              styleTagsField()
+              styleBodyView()
+              styleImageZone()
+            styleSaveDraftButton()
+          }
+       
+          // MARK: - Title field
+          private func styleTitleField() {
+              titleTextField.borderStyle = .none
+              titleTextField.font = .systemFont(ofSize: 20, weight: .medium)
+              titleTextField.attributedPlaceholder = NSAttributedString(
+                  string: "Title",
+                  attributes: [.foregroundColor: UIColor.tertiaryLabel,
+                               .font: UIFont.systemFont(ofSize: 20, weight: .medium)]
+              )
+              let divider = UIView()
+              divider.translatesAutoresizingMaskIntoConstraints = false
+              divider.backgroundColor = .systemGray5
+              titleTextField.addSubview(divider)
+              NSLayoutConstraint.activate([
+                  divider.leadingAnchor.constraint(equalTo: titleTextField.leadingAnchor),
+                  divider.trailingAnchor.constraint(equalTo: titleTextField.trailingAnchor),
+                  divider.bottomAnchor.constraint(equalTo: titleTextField.bottomAnchor),
+                  divider.heightAnchor.constraint(equalToConstant: 0.5),
+              ])
+          }
+       
+          // MARK: - Tags field
+          private func styleTagsField() {
+              addTopicTextField.borderStyle = .none
+              addTopicTextField.font = .systemFont(ofSize: 14)
+              addTopicTextField.textColor = .label
+              addTopicTextField.attributedPlaceholder = NSAttributedString(
+                  string: "Add tags, separated by commas",
+                  attributes: [.foregroundColor: UIColor.tertiaryLabel,
+                               .font: UIFont.systemFont(ofSize: 14)]
+              )
+              addTopicTextField.backgroundColor = UIColor(white: 243/255, alpha: 1)
+              addTopicTextField.layer.cornerRadius = 10
+              addTopicTextField.layer.masksToBounds = true
+              let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 12, height: 0))
+              addTopicTextField.leftView = paddingView
+              addTopicTextField.leftViewMode = .always
+          }
+       
+          // MARK: - Body text view
+          private func styleBodyView() {
+              bodyTextView.font = .systemFont(ofSize: 15)
+              bodyTextView.textColor = .label
+              bodyTextView.backgroundColor = .white
+              bodyTextView.layer.cornerRadius = 12
+              bodyTextView.layer.borderWidth = 0.5
+              bodyTextView.layer.borderColor = UIColor.systemGray4.cgColor
+              bodyTextView.textContainerInset = UIEdgeInsets(top: 12, left: 10, bottom: 12, right: 10)
+          }
+       
+          // MARK: - Image zone
+          private func styleImageZone() {
+              // Container: rounded corners + clips so the image inherits them
+              imageView.layer.cornerRadius = 12
+              imageView.layer.borderWidth = 1
+              imageView.layer.borderColor = UIColor.systemGray4.cgColor
+              imageView.backgroundColor = UIColor(white: 246/255, alpha: 1)
+              imageView.clipsToBounds = true          // ← image will be clipped to rounded corners
+     
+              // Add Image pill button
+              var config = UIButton.Configuration.plain()
+              config.image = UIImage(systemName: "photo")
+              config.imagePlacement = .leading
+              config.imagePadding = 6
+              config.baseForegroundColor = .secondaryLabel
+              config.attributedTitle = AttributedString("Add Image", attributes: AttributeContainer([
+                  .font: UIFont.systemFont(ofSize: 14),
+                  .foregroundColor: UIColor.secondaryLabel
+              ]))
+              addImageButton.configuration = config
+              addImageButton.backgroundColor = .clear
+     
+              postImageView.layer.cornerRadius = 0
+              postImageView.clipsToBounds = true
+              postImageView.contentMode = .scaleAspectFill
+     
+              removeImageButton.tintColor = .white
+              removeImageButton.backgroundColor = UIColor.black.withAlphaComponent(0.5)
+              removeImageButton.layer.cornerRadius = 14
+              removeImageButton.clipsToBounds = true
+          }
+             
     
-    func setupUI(){
-        bodyTextView.delegate = self
-        bodyTextView.isScrollEnabled = true
-        
-        
-    }
     
+          // MARK: - Save Draft button
+          private func styleSaveDraftButton() {
+              saveDraft.setTitleColor(.systemBlue, for: .normal)
+              saveDraft.layer.borderWidth = 1.5
+              saveDraft.layer.borderColor = UIColor.systemBlue.cgColor
+              saveDraft.layer.cornerRadius = 22
+          }
+    
+             func setupTextViewPlaceholder() {
+                 placeholderLabel.text = "Description"
+                 placeholderLabel.textColor = .secondaryLabel
+                 placeholderLabel.font = .systemFont(ofSize: 16)
+                 placeholderLabel.translatesAutoresizingMaskIntoConstraints = false
+                 
+                 bodyTextView.addSubview(placeholderLabel)
+                 
+                 NSLayoutConstraint.activate([
+                     placeholderLabel.topAnchor.constraint(equalTo: bodyTextView.topAnchor, constant: 7),
+                     placeholderLabel.leadingAnchor.constraint(equalTo: bodyTextView.leadingAnchor, constant: 10),
+                     placeholderLabel.trailingAnchor.constraint(lessThanOrEqualTo: bodyTextView.trailingAnchor, constant: -10)
+                 ])
+                 
+                 bodyTextView.delegate = self  //check this
+                 placeholderLabel.isHidden = !bodyTextView.text.isEmpty
+             }
+             
+             
+             
+             func textViewDidChange(_ textView: UITextView) {
+                 placeholderLabel.isHidden = !textView.text.isEmpty
+             }
+             
+             
+             
+             private func configureForMode() {
+                 
+                 if mode == .editDraft {
+                     navigationItem.title = "Draft"
+                     prefillDraftData()
+                 }
+             }
+             
+             private func prefillDraftData() {
+                 guard let draft else { return }
+                 
+                 addTopicTextField.text = draft.topic
+                 titleTextField.text = draft.title
+                 bodyTextView.text = draft.body
+                 
+                 placeholderLabel.isHidden = !(draft.body?.isEmpty ?? true)
+                 
+                 // Image is optional (important)
+                 if let path = draft.imageName {
+                     let url = URL(fileURLWithPath: path)
+                     if let image = UIImage(contentsOfFile: url.path) {
+                         showDraftImage(image)
+                     }
+                 }
+             }
+                 func handleSelectedImage(_ image: UIImage) {
+                     postImageView.image = image
+                     
+                     addImageButton.isHidden = true
+                     postImageView.isHidden = false
+                     removeImageButton.isHidden = false
+                     imageContainerHeight.constant = 220
+                     
+                     imageView.bringSubviewToFront(removeImageButton)
+                     
+                     UIView.animate(withDuration: 0.25) {
+                         self.view.layoutIfNeeded()
+                     }
+                 }
+                 
+                 func showDraftImage(_ image: UIImage) {
+                     postImageView.image = image
+                     
+                     addImageButton.isHidden = true
+                     postImageView.isHidden = false
+                     
+                     imageContainerHeight.constant = 220
+                 }
+                 
+                 func removeImage() {
+                     postImageView.image = nil
+                     
+                     postImageView.isHidden = true
+                     removeImageButton.isHidden = true
+                     addImageButton.isHidden = false
+                     
+                     imageContainerHeight.constant = 50
+                     
+                     UIView.animate(withDuration: 0.25) {
+                         self.view.layoutIfNeeded()
+                     }
+                 }
+                 
+                 func saveImageToDisk(_ image: UIImage) -> String? {
+                     guard let data = image.jpegData(compressionQuality: 0.8) else { return nil }
+                     
+                     let fileName = UUID().uuidString + ".jpg"
+                     let url = FileManager.default
+                         .urls(for: .documentDirectory, in: .userDomainMask)[0]
+                         .appendingPathComponent(fileName)
+                     
+                     do {
+                         try data.write(to: url)
+                         return url.path
+                     } catch {
+                         print("Failed to save image:", error)
+                         return nil
+                     }
+                 }
+             }
+          
+          
+         extension CreatePostViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+          
+             func openImagePicker() {
+                 let picker = UIImagePickerController()
+                 picker.delegate = self
+                 picker.sourceType = .photoLibrary
+                 present(picker, animated: true)
+             }
+          
+             func imagePickerController(
+                 _ picker: UIImagePickerController,
+                 didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]
+             ) {
+                 picker.dismiss(animated: true)
+          
+                 guard let image = info[.originalImage] as? UIImage else { return }
+          
+                 handleSelectedImage(image)
+             }
+         }
+       
     func setupTextViewPlaceholder() {
         placeholderLabel.text = "Body Text"
         placeholderLabel.textColor = .secondaryLabel

@@ -66,8 +66,7 @@ class CompanyCardCollectionViewCell: UICollectionViewCell {
  
     private func styleFront() {
         frontView.backgroundColor  = .systemBackground
-        companyNameLabel.font      = UIFont(name: "Georgia-Bold", size: 20)
-            ?? UIFont.systemFont(ofSize: 20, weight: .semibold)
+        companyNameLabel.font      = UIFont.systemFont(ofSize: 20, weight: .semibold)
         companyNameLabel.textColor = UIColor(red: 0.08, green: 0.08, blue: 0.08, alpha: 1)
         companyNameLabel.numberOfLines = 2
         descLabel.font             = UIFont.systemFont(ofSize: 15, weight: .regular)

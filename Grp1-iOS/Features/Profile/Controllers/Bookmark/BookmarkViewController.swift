@@ -48,7 +48,7 @@ class BookmarkViewController: UIViewController {
         super.viewDidLoad()
  
         title = "Bookmarks"
-        setupNavBar()
+//        setupNavBar()
         setupSegmentControl()
         setupCollectionView()
         collectionView.setCollectionViewLayout(generateLayout(), animated: false)
@@ -56,17 +56,17 @@ class BookmarkViewController: UIViewController {
  
     // MARK: - Setup
  
-    private func setupNavBar() {
-        let appearance = UINavigationBarAppearance()
-        appearance.configureWithTransparentBackground()
-        appearance.backgroundColor = UIColor.systemGray6
-        appearance.shadowColor = .clear
-        appearance.titleTextAttributes = [.foregroundColor: UIColor.black]
-        navigationController?.navigationBar.standardAppearance = appearance
-        navigationController?.navigationBar.scrollEdgeAppearance = appearance
-        navigationController?.navigationBar.compactAppearance = appearance
-        view.backgroundColor = UIColor.systemGray6
-    }
+//    private func setupNavBar() {
+//        let appearance = UINavigationBarAppearance()
+//        appearance.configureWithTransparentBackground()
+//        appearance.backgroundColor = UIColor.systemGray6
+//        appearance.shadowColor = .clear
+//        appearance.titleTextAttributes = [.foregroundColor: UIColor.black]
+//        navigationController?.navigationBar.standardAppearance = appearance
+//        navigationController?.navigationBar.scrollEdgeAppearance = appearance
+//        navigationController?.navigationBar.compactAppearance = appearance
+//        view.backgroundColor = UIColor.systemGray6
+//    }
  
     private func setupSegmentControl() {
         segmentControl.selectedSegmentIndex = 0
