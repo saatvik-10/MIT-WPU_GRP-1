@@ -21,16 +21,6 @@ class CommentTableViewCell: UITableViewCell {
     var onLikeTapped: (() -> Void)?
         var onReplyTapped: (() -> Void)?
 
-//        
-//        private let replyButton: UIButton = {
-//            let btn = UIButton(type: .system)
-//            btn.setTitle("Reply", for: .normal)
-//            btn.titleLabel?.font = .systemFont(ofSize: 13)
-//            btn.tintColor = .secondaryLabel
-//            btn.translatesAutoresizingMaskIntoConstraints = false
-//            return btn
-//        }()
-
         override func awakeFromNib() {
             super.awakeFromNib()
             selectionStyle = .none
@@ -45,31 +35,11 @@ class CommentTableViewCell: UITableViewCell {
             contentView.preservesSuperviewLayoutMargins = false
             separatorInset = .zero
             layoutMargins = .zero
-
-           // setupReplyButton()
         }
 
-//        private func setupReplyButton() {
-//            contentView.addSubview(replyButton)
-//            replyButton.addTarget(self, action: #selector(didTapReply), for: .touchUpInside)
-//
-//            // Pin reply button below commentLabel, aligned to its leading edge
-//            // Since XIB manages commentLabel, we use it as anchor
-//            NSLayoutConstraint.activate([
-//                replyButton.topAnchor.constraint(equalTo: commentLabel.bottomAnchor, constant: 4),
-//                replyButton.leadingAnchor.constraint(equalTo: commentLabel.leadingAnchor),
-//                replyButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -12),
-//                replyButton.heightAnchor.constraint(equalToConstant: -8),
-//            ])
-//        }
-
-        @IBAction func didTapLike(_ sender: UIButton) {
-            onLikeTapped?()
-        }
-
-//        @objc private func didTapReply() {
-//            onReplyTapped?()
-//        }
+    @IBAction func didTapLike(_ sender: UIButton) {
+        onLikeTapped?()
+    }
 
         func configure(with comment: Comment) {
             nameLabel.text = comment.userName

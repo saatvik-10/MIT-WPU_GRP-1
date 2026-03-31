@@ -3,7 +3,8 @@
 <plist version="1.0">
 <dict>
 	<key>API_BASE_URL</key>
-	<string>https://mit-wpu-grp-1.onrender.com</string>
+	<!-- <string>https://mit-wpu-grp-1.onrender.com</string> -->
+   <string>http://localhost:8080</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>

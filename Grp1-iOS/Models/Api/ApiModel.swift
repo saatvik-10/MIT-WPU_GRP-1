@@ -163,10 +163,11 @@ struct APIThread: Decodable {
 	let description: String
 	let imageName: String?  // the S3 key stored in DB — may be null
 	let imageUrl: String?   // ✅ presigned R2 URL for display — use this in your ImageView
-	let tags: [String]
-	let likesCount: Int
+	let tags: [String]?
+	var likesCount: Int
+	var isLiked: Bool?      // ✅ true if current user liked this thread
 	let commentsCount: Int
-	let sharesCount: Int
+	let sharesCount: Int?
 	let createdAt: String
 	let updatedAt: String
 	let user: APIThreadUser?
@@ -200,8 +201,8 @@ struct APIThreadDraft: Decodable {
 	let description: String
 	let imageName: String? // S3 key — may be null
 	let tags: [String]
-	let createdAt: Date
-	let updatedAt: Date
+	let createdAt: String 
+	let updatedAt: String
 }
 
 // ✅ Used only for JSON-only draft updates (no image change).

@@ -11,10 +11,9 @@ final class BloggerProfileViewController: UIViewController {
  
     // MARK: - Input
     var bloggerUserName: String = ""
- 
+    var bloggerUserId: String = ""
     // MARK: - Data
-    private let store = ThreadsDataStore.shared
-    private var posts: [ThreadPost] = []
+    private var posts: [APIThread] = []
  
     // MARK: - UI
     private let collectionView: UICollectionView = {
@@ -45,7 +44,15 @@ final class BloggerProfileViewController: UIViewController {
  
     // MARK: - Data
     private func loadPosts() {
-        posts = store.getAllPostsForSearch().filter { $0.userName == bloggerUserName }
+        let token = UserDefaults.standard.string(forKey: "authToken")
+        APIService.shared.fetchForYouThreads(token: token) { [weak self] result in
+            DispatchQueue.main.async {
+                if case .success(let threads) = result {
+                    self?.posts = threads.filter { $0.userId == self?.bloggerUserId }
+                    self?.collectionView.reloadData()
+                }
+            }
+        }
     }
  
     // MARK: - CollectionView setup
@@ -82,46 +89,41 @@ extension BloggerProfileViewController: UICollectionViewDataSource {
     }
  
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(
-            withReuseIdentifier: "collectionViewCell", for: indexPath
-        ) as! collectionViewCell
- 
-        let post = posts[indexPath.item]
-        let isFollowing = store.isFollowing( post.userName)
-        cell.configure(with: post, isFollowing: isFollowing, isOwnPost: false)
-        cell.applyStyle(isCard: true)
- 
-        cell.onLikeTapped = { [weak self] in
-            guard let self else { return }
-            self.store.toggleLike(for: post.id)
-            self.loadPosts()
-            collectionView.reloadItems(at: [indexPath])
-        }
- 
-        cell.onFollowTapped = { [weak self] in
-            guard let self else { return }
-            self.store.toggleFollow(post.userName)
-            self.loadPosts()
-            collectionView.reloadData()
-        }
- 
-        cell.onCommentTapped = { [weak self] in
-            guard let self else { return }
-            let vc = CommentsViewController()
-            vc.postID = post.id
-            vc.modalPresentationStyle = .pageSheet
-            if let sheet = vc.sheetPresentationController {
-                sheet.prefersGrabberVisible = true
-                sheet.preferredCornerRadius = 40
-                sheet.largestUndimmedDetentIdentifier = .medium
-                sheet.selectedDetentIdentifier = .medium
-                sheet.widthFollowsPreferredContentSizeWhenEdgeAttached = true
-                sheet.prefersEdgeAttachedInCompactHeight = true
+    let cell = collectionView.dequeueReusableCell(
+        withReuseIdentifier: "collectionViewCell", for: indexPath
+    ) as! collectionViewCell
+    let post = posts[indexPath.item]
+    cell.configure(with: post, isFollowing: false, isOwnPost: false)  // uses APIThread overload
+    cell.applyStyle(isCard: true)
+    cell.onLikeTapped = { [weak self] in
+        guard let token = UserDefaults.standard.string(forKey: "authToken") else { return }
+        APIService.shared.toggleLike(threadId: post.id, token: token) { result in
+            DispatchQueue.main.async {
+                if case .success = result { self?.loadPosts() }
             }
-            self.present(vc, animated: true)
         }
- 
-        return cell
+    }
+    cell.onFollowTapped = { [weak self] in
+        guard let token = UserDefaults.standard.string(forKey: "authToken"),
+              let userId = post.user?.id else { return }
+        APIService.shared.updateFollow(followingId: userId, token: token) { result in
+            DispatchQueue.main.async {
+                if case .success = result { self?.loadPosts() }
+            }
+        }
+    }
+    cell.onCommentTapped = { [weak self] in
+        guard let self else { return }
+        let vc = CommentsViewController()
+        vc.threadId = post.id
+        vc.modalPresentationStyle = .pageSheet
+        if let sheet = vc.sheetPresentationController {
+            sheet.prefersGrabberVisible = true
+            sheet.preferredCornerRadius = 40
+        }
+        self.present(vc, animated: true)
+    }
+    return cell
     }
  
     func collectionView(_ collectionView: UICollectionView,
@@ -133,23 +135,25 @@ extension BloggerProfileViewController: UICollectionViewDataSource {
             for: indexPath
         ) as! BloggerProfileHeaderView
  
-        let isFollowing = store.isFollowing( bloggerUserName)
-        let postCount = posts.count
-        header.configure(userName: bloggerUserName, posts: postCount, isFollowing: isFollowing)
+        let isFollowing = false
+        header.configure(userName: bloggerUserName, posts: posts.count, isFollowing: isFollowing)
  
         header.onFollowTapped = { [weak self] in
-            guard let self else { return }
-            self.store.toggleFollow(self.bloggerUserName)
-            self.loadPosts()
-            collectionView.reloadData()
+    guard let self,
+          let token = UserDefaults.standard.string(forKey: "authToken") else { return }
+    APIService.shared.updateFollow(followingId: self.bloggerUserId, token: token) { result in
+        DispatchQueue.main.async {
+            if case .success = result { self.loadPosts(); collectionView.reloadData() }
         }
+    }
+}
  
         header.onFollowersTapped = { [weak self] in
             guard let self else { return }
             let vc = FollowersFollowingViewController()
             vc.initialSegment = 0
             vc.followerNames = ["Rishabh Kothari", "Tanmay Verma", "Mitali Shah"]
-            vc.followingNames = Array(Set(self.store.getFollowingThreads().map { $0.userName }))
+            vc.followingNames = []
             self.navigationController?.pushViewController(vc, animated: true)
         }
  
@@ -158,7 +162,7 @@ extension BloggerProfileViewController: UICollectionViewDataSource {
             let vc = FollowersFollowingViewController()
             vc.initialSegment = 1
             vc.followerNames = ["Rishabh Kothari", "Tanmay Verma", "Mitali Shah"]
-            vc.followingNames = Array(Set(self.store.getFollowingThreads().map { $0.userName }))
+            vc.followingNames = []
             self.navigationController?.pushViewController(vc, animated: true)
         }
  
