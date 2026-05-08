@@ -264,20 +264,39 @@ class ThreadDetailViewController: UIViewController {
     private func configureWithData() {
         guard let thread else { return }
  
-        usernameLabel.text = thread.userName
-        timeLabel.text     = thread.timeAgo
+        usernameLabel.text = thread.user?.username ?? "Unknown User"
+        
+        // Basic date formatting (assuming ISO string)
+        let formatter = ISO8601DateFormatter()
+        formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+        if let date = formatter.date(from: thread.createdAt) {
+            let rel = RelativeDateTimeFormatter()
+            rel.unitsStyle = .short
+            timeLabel.text = rel.localizedString(for: date, relativeTo: Date())
+        } else {
+            // fallback
+            timeLabel.text = String(thread.createdAt.prefix(10))
+        }
+        
         titleLabel.text    = thread.title
         descriptionLabel.text = thread.description
  
         // Profile image
-        profileImageView.image = UIImage(named: thread.userProfileImage)
-            ?? UIImage(systemName: "person.circle.fill")
+        if let urlStr = thread.user?.profileImageUrl, let url = URL(string: urlStr) {
+            URLSession.shared.dataTask(with: url) { [weak self] data, _, _ in
+                if let data = data, let img = UIImage(data: data) {
+                    DispatchQueue.main.async { self?.profileImageView.image = img }
+                }
+            }.resume()
+        } else {
+            profileImageView.image = UIImage(systemName: "person.circle.fill")
+        }
  
         // Post image
-        if let imageName = thread.imageName {
+        if let imageUrlStr = thread.imageUrl, let url = URL(string: imageUrlStr) {
             postImageView.isHidden = false
             URLSession.shared.dataTask(with: url) { [weak self] data, _, _ in
-                guard let data, let img = UIImage(data: data) else { return }
+                guard let data = data, let img = UIImage(data: data) else { return }
                 DispatchQueue.main.async { self?.postImageView.image = img }
             }.resume()
         } else {
