@@ -58,9 +58,6 @@ class CommentTableViewCell: UITableViewCell {
                 profileImageView.image = UIImage(systemName: "person.circle.fill")
             }
 
-            let isLiked = comment.isLiked ?? false
-            let imageName = isLiked ? "heart.fill" : "heart"
-            likeButton.setImage(UIImage(systemName: imageName), for: .normal)
-            likeButton.tintColor = isLiked ? .systemRed : .systemGray
+            likeButton.isHidden = true
         }
     }
