@@ -14,6 +14,7 @@ final class BloggerProfileViewController: UIViewController {
     var bloggerUserId: String = ""
     // MARK: - Data
     private var posts: [APIThread] = []
+    private var bloggerProfile: APIUserProfileResponse?
  
     // MARK: - UI
     private let collectionView: UICollectionView = {
@@ -31,6 +32,7 @@ final class BloggerProfileViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = UIColor(white: 250/255, alpha: 1)
         navigationItem.title = bloggerUserName
+        loadProfile()
         loadPosts()
         setupCollectionView()
     }
@@ -43,6 +45,18 @@ final class BloggerProfileViewController: UIViewController {
     }
  
     // MARK: - Data
+    private func loadProfile() {
+        guard let token = UserDefaults.standard.string(forKey: "authToken") else { return }
+        APIService.shared.fetchUserProfile(userId: bloggerUserId, token: token) { [weak self] result in
+            DispatchQueue.main.async {
+                if case .success(let profile) = result {
+                    self?.bloggerProfile = profile
+                    self?.collectionView.reloadData()
+                }
+            }
+        }
+    }
+    
     private func loadPosts() {
         let token = UserDefaults.standard.string(forKey: "authToken")
         APIService.shared.fetchForYouThreads(token: token) { [weak self] result in
@@ -135,25 +149,39 @@ extension BloggerProfileViewController: UICollectionViewDataSource {
             for: indexPath
         ) as! BloggerProfileHeaderView
  
-        let isFollowing = false
-        header.configure(userName: bloggerUserName, posts: posts.count, isFollowing: isFollowing)
+        let isFollowing = bloggerProfile?.isFollowing ?? false
+        let followers = bloggerProfile?.followersCount ?? 0
+        let following = bloggerProfile?.followingCount ?? 0
+        let profileUrl = bloggerProfile?.profileImageUrl
+        let name = bloggerProfile?.name ?? bloggerUserName
+        
+        header.configure(
+            userName: name,
+            profileImageUrl: profileUrl,
+            posts: posts.count,
+            followers: followers,
+            following: following,
+            isFollowing: isFollowing
+        )
  
         header.onFollowTapped = { [weak self] in
-    guard let self,
-          let token = UserDefaults.standard.string(forKey: "authToken") else { return }
-    APIService.shared.updateFollow(followingId: self.bloggerUserId, token: token) { result in
-        DispatchQueue.main.async {
-            if case .success = result { self.loadPosts(); collectionView.reloadData() }
+            guard let self,
+                  let token = UserDefaults.standard.string(forKey: "authToken") else { return }
+            APIService.shared.updateFollow(followingId: self.bloggerUserId, token: token) { result in
+                DispatchQueue.main.async {
+                    if case .success = result { 
+                        self.loadPosts()
+                        self.loadProfile() 
+                    }
+                }
+            }
         }
-    }
-}
  
         header.onFollowersTapped = { [weak self] in
             guard let self else { return }
             let vc = FollowersFollowingViewController()
             vc.initialSegment = 0
-            vc.followerNames = ["Rishabh Kothari", "Tanmay Verma", "Mitali Shah"]
-            vc.followingNames = []
+            vc.targetUserId = self.bloggerUserId
             self.navigationController?.pushViewController(vc, animated: true)
         }
  
@@ -161,8 +189,7 @@ extension BloggerProfileViewController: UICollectionViewDataSource {
             guard let self else { return }
             let vc = FollowersFollowingViewController()
             vc.initialSegment = 1
-            vc.followerNames = ["Rishabh Kothari", "Tanmay Verma", "Mitali Shah"]
-            vc.followingNames = []
+            vc.targetUserId = self.bloggerUserId
             self.navigationController?.pushViewController(vc, animated: true)
         }
  
@@ -288,12 +315,23 @@ final class BloggerProfileHeaderView: UICollectionReusableView {
         ])
     }
  
-    func configure(userName: String, posts: Int, isFollowing: Bool) {
+    func configure(userName: String, profileImageUrl: String?, posts: Int, followers: Int, following: Int, isFollowing: Bool) {
         userNameLabel.text = userName
         postsStatView.configure(value: "\(posts)", label: "posts")
-        followersStatView.configure(value: "—", label: "followers")
-        followingStatView.configure(value: "—", label: "following")
+        followersStatView.configure(value: "\(followers)", label: "followers")
+        followingStatView.configure(value: "\(following)", label: "following")
         updateFollowButton(isFollowing: isFollowing)
+        
+        if let profileUrlStr = profileImageUrl, let url = URL(string: profileUrlStr) {
+            URLSession.shared.dataTask(with: url) { [weak self] data, _, _ in
+                guard let data, let img = UIImage(data: data) else { return }
+                DispatchQueue.main.async { self?.profileImageView.image = img }
+            }.resume()
+        } else {
+            profileImageView.image = UIImage(systemName: "person.circle.fill")?
+                .withRenderingMode(.alwaysOriginal)
+                .withTintColor(.systemGray3)
+        }
     }
  
     private func updateFollowButton(isFollowing: Bool) {
