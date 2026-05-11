@@ -21,7 +21,7 @@ class BookmarkViewController: UIViewController {
  
     // MARK: - Data Source (separate arrays per segment)
     private var articleItems: [BookmarkItem] = Bookmarks.mockBookmarks
-    private var blogItems: [BookmarkItem] = []
+    private var blogItems: [BookmarkItem] = SavedThreadsStore.shared.bookmarkFolders()
  
     // MARK: - Computed active items
     private var currentSegment: BookmarkSegment {
@@ -52,6 +52,13 @@ class BookmarkViewController: UIViewController {
         setupSegmentControl()
         setupCollectionView()
         collectionView.setCollectionViewLayout(generateLayout(), animated: false)
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        // Refresh thread folders from the store (in case new ones were created)
+        blogItems = SavedThreadsStore.shared.bookmarkFolders()
+        collectionView.reloadData()
     }
  
     // MARK: - Setup
@@ -156,7 +163,9 @@ class BookmarkViewController: UIViewController {
  
         switch currentSegment {
         case .articles: articleItems.append(newItem)
-        case .blogs:    blogItems.append(newItem)
+        case .blogs:
+            SavedThreadsStore.shared.addFolder(named: name)
+            blogItems = SavedThreadsStore.shared.bookmarkFolders()
         }
  
         let indexPath = IndexPath(item: currentItems.count - 1, section: 0)
@@ -167,6 +176,7 @@ class BookmarkViewController: UIViewController {
            let vc = segue.destination as? SavedViewController,
            let folderName = sender as? String {
             vc.folderName = folderName
+            vc.segment = self.currentSegment
         }
     }
 

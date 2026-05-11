@@ -593,6 +593,34 @@ class threadsViewController: UIViewController {
             myThreads[idx].likesCount = count
         }
     }
+
+    private func presentBookmarkSheet(for thread: APIThread) {
+        let generator = UINotificationFeedbackGenerator()
+        generator.notificationOccurred(.success)
+
+        let threadFolders = SavedThreadsStore.shared.bookmarkFolders()
+
+        let sheetVC = SaveArticleSheetViewController(
+            folders: threadFolders,
+            articleTitle: thread.title,
+            sheetTitle: "Save Thread"
+        ) { [weak self] folderTitle in
+            SavedThreadsStore.shared.saveThreadToFolder(thread, folderName: folderTitle)
+            self?.collectionView.reloadData()   // refresh bookmark icon state
+            self?.showToast(message: "Saved to \(folderTitle)")
+        }
+
+        sheetVC.modalPresentationStyle = .pageSheet
+        if #available(iOS 16.0, *) {
+            if let sheet = sheetVC.sheetPresentationController {
+                sheet.detents = [.medium(), .large()]
+                sheet.prefersGrabberVisible = true
+                sheet.preferredCornerRadius = 24
+            }
+        }
+
+        present(sheetVC, animated: true)
+    }
 }
 
 // MARK: - DataSource
@@ -610,6 +638,7 @@ extension threadsViewController: UICollectionViewDataSource {
         let thread = currentThreads()[indexPath.item]
         let isOwnPost = thread.userId == currentUserId
         
+        cell.isBookmarked = SavedThreadsStore.shared.isThreadBookmarkedAnywhere(thread.id)
         cell.configure(with: thread, isFollowing: false, isOwnPost: isOwnPost)
         cell.applyStyle(isCard: selectedSegment != .myThreads)
         
@@ -706,6 +735,21 @@ extension threadsViewController: UICollectionViewDataSource {
                 }
             })
             self.present(alert, animated: true)
+        }
+        
+        // ── Bookmark (toggle) ──
+        cell.onBookmarkTapped = { [weak self] in
+            guard let self else { return }
+            
+            if SavedThreadsStore.shared.isThreadBookmarkedAnywhere(thread.id) {
+                // Already saved → unsave from all folders
+                SavedThreadsStore.shared.removeThreadFromAllFolders(thread.id)
+                self.collectionView.reloadData()
+                self.showToast(message: "Removed from bookmarks")
+            } else {
+                // Not saved → show folder picker
+                self.presentBookmarkSheet(for: thread)
+            }
         }
         
         return cell

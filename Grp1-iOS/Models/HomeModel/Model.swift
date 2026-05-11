@@ -215,3 +215,114 @@ class SavedArticlesStore {
         savedArticles = decoded
     }
 }
+
+// MARK: - Thread Bookmarking
+
+struct SavedThreadItem: Codable {
+    let thread: APIThread
+    var folderName: String
+}
+
+class SavedThreadsStore {
+    static let shared = SavedThreadsStore()
+    private init() {
+        loadFolders()
+        load()
+    }
+
+    private let cacheKey = "saved_threads"
+    private let foldersKey = "thread_bookmark_folders"
+    private(set) var savedThreads: [SavedThreadItem] = []
+    private(set) var folders: [String] = []
+
+    // MARK: - Folder Management
+
+    /// Returns the list of thread bookmark folders as BookmarkItem array
+    func bookmarkFolders() -> [BookmarkItem] {
+        return folders.enumerated().map { (index, name) in
+            BookmarkItem(
+                icon: UIImage(systemName: "folder")!,
+                id: "thread_folder_\(index)",
+                title: name
+            )
+        }
+    }
+
+    func addFolder(named name: String) {
+        guard !folders.contains(name) else { return }
+        folders.append(name)
+        persistFolders()
+    }
+
+    // MARK: - Thread Save / Fetch
+
+    func saveThreadToFolder(_ thread: APIThread, folderName: String) {
+        // Ensure the folder exists
+        if !folders.contains(folderName) {
+            addFolder(named: folderName)
+        }
+
+        guard !savedThreads.contains(where: { $0.thread.id == thread.id && $0.folderName == folderName }) else {
+            print("Already saved in \(folderName)")
+            return
+        }
+
+        let saved = SavedThreadItem(thread: thread, folderName: folderName)
+        savedThreads.append(saved)
+        persist()
+        print("Saved '\(thread.title)' to folder: \(folderName)")
+    }
+
+    func fetchBookmarkedThreads(in folderName: String) -> [APIThread] {
+        return savedThreads.filter { $0.folderName == folderName }.map { $0.thread }
+    }
+
+    func removeThreadBookmark(_ threadId: String, from folderName: String) {
+        savedThreads.removeAll { $0.thread.id == threadId && $0.folderName == folderName }
+        persist()
+    }
+
+    func isThreadBookmarked(_ threadId: String, in folderName: String) -> Bool {
+        return savedThreads.contains { $0.thread.id == threadId && $0.folderName == folderName }
+    }
+
+    /// Returns true if this thread is bookmarked in ANY folder
+    func isThreadBookmarkedAnywhere(_ threadId: String) -> Bool {
+        return savedThreads.contains { $0.thread.id == threadId }
+    }
+
+    /// Removes the thread from ALL folders (used for unsave toggle)
+    func removeThreadFromAllFolders(_ threadId: String) {
+        savedThreads.removeAll { $0.thread.id == threadId }
+        persist()
+    }
+
+    // MARK: - Persistence
+
+    private func persist() {
+        guard let data = try? JSONEncoder().encode(savedThreads) else { return }
+        UserDefaults.standard.set(data, forKey: cacheKey)
+    }
+
+    private func load() {
+        guard
+            let data = UserDefaults.standard.data(forKey: cacheKey),
+            let decoded = try? JSONDecoder().decode([SavedThreadItem].self, from: data)
+        else { return }
+        savedThreads = decoded
+    }
+
+    private func persistFolders() {
+        UserDefaults.standard.set(folders, forKey: foldersKey)
+    }
+
+    private func loadFolders() {
+        if let saved = UserDefaults.standard.stringArray(forKey: foldersKey) {
+            folders = saved
+        } else {
+            // Default thread folders
+            folders = ["Fav", "Future Investments"]
+            persistFolders()
+        }
+    }
+}

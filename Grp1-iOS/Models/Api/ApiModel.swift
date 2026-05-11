@@ -146,7 +146,7 @@ struct APISetLevelRequest: Encodable {
 // MARK: - Threads
 // ─────────────────────────────────────────────
 
-struct APIThreadUser: Decodable {
+struct APIThreadUser: Codable {
 	let id: String
 	let name: String
 	let username: String
@@ -156,7 +156,7 @@ struct APIThreadUser: Decodable {
 // ✅ FIXED: imageName is now Optional (backend stores null when no image).
 //           imageUrl added — this is the presigned R2 URL your UI should load.
 //           NOT Encodable — use APICreateThreadRequest for sending.
-struct APIThread: Decodable {
+struct APIThread: Codable {
 	let id: String
 	let userId: String
 	let title: String
