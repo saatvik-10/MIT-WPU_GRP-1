@@ -14,18 +14,19 @@ import {
 
 
 async function parseMultipart(ctx: Context, imageFieldName: string) {
-  const body = await ctx.req.parseBody();
+  const body = await ctx.req.parseBody({ all: true });
   const fields: Record<string, any> = {};
+  let file: File | null = null;
+
   for (const [key, value] of Object.entries(body)) {
     // Handle tags[] array fields from Swift
     if (key === 'tags[]') {
       if (Array.isArray(value)) {
         fields['tags'] = value.filter(v => typeof v === 'string');
       } else if (typeof value === 'string') {
-        if (!fields['tags']) fields['tags'] = [];
-        fields['tags'].push(value);
+        fields['tags'] = [value];
       }
-    } 
+    }
     // Handle tags already parsed as array by Hono
     else if (key === 'tags') {
       if (Array.isArray(value)) {
@@ -34,12 +35,20 @@ async function parseMultipart(ctx: Context, imageFieldName: string) {
         fields['tags'] = [value];
       }
     }
+    // Extract the image file
+    else if (key === imageFieldName) {
+      if (value instanceof File) {
+        file = value;
+      } else if (Array.isArray(value)) {
+        const f = value.find(v => v instanceof File);
+        if (f instanceof File) file = f;
+      }
+    }
     else if (typeof value === 'string') {
       fields[key] = value;
     }
   }
-  const imageFile = body[imageFieldName];
-  const file = imageFile instanceof File ? imageFile : null;
+
   return { fields, file };
 }
 
@@ -48,6 +57,11 @@ export class Threads {
     const userId = ctx.get('userId');
     try {
       const threads = await prisma.thread.findMany({
+        where: {
+          drafts: {
+            none: {} // Only show threads that DON'T have an associated draft
+          }
+        },
         include: { user: true, likes: true, comments: true },
         orderBy: { createdAt: 'desc' },
       });
@@ -93,7 +107,12 @@ export class Threads {
       const followingIds = followingUsers.map((f) => f.followingId);
 
       const threads = await prisma.thread.findMany({
-        where: { userId: { in: followingIds } },
+        where: { 
+          userId: { in: followingIds },
+          drafts: {
+            none: {} // Only show threads that DON'T have an associated draft
+          }
+        },
         include: { user: true, likes: true, comments: true },
         orderBy: { createdAt: 'desc' },
       });
@@ -209,27 +228,54 @@ export class Threads {
       }
 
       const data = threadDraftSchema.safeParse(formData);
-      if (!data.success)
+      if (!data.success) {
+        console.error('Draft validation error:', data.error.flatten());
         return ctx.json(
-          { error: 'Content is required and must be a string' },
+          { error: 'Invalid draft data', details: data.error.flatten() },
           422,
         );
+      }
+
+      // DB requires a threadId (NOT NULL in database despite schema saying String?)
+      let targetThreadId = data.data.threadId;
+      if (!targetThreadId) {
+        const placeholderThread = await prisma.thread.create({
+          data: {
+            userId,
+            title: data.data.title,
+            description: data.data.description,
+            tags: data.data.tags,
+          },
+        });
+        targetThreadId = placeholderThread.id;
+      }
 
       const draft = await prisma.threadDrafts.create({
         data: {
           userId,
-          threadId: data.data.threadId,
+          threadId: targetThreadId,
           title: data.data.title,
           description: data.data.description,
-          imageName: draftImageS3Key ?? null!,
+          imageName: draftImageS3Key,
           tags: data.data.tags,
         },
       });
 
-      return ctx.json(draft, 201);
-    } catch (err) {
+      // Resolve imageUrl for the response (consistent with getDrafts)
+      let imageUrl: string | null = null;
+      if (draft.imageName && draft.imageName.trim() !== '') {
+        try {
+          imageUrl = await r2Service.getPresignedUrl(draft.imageName);
+        } catch (err) {
+          console.error(`[Drafts] Failed presign for ${draft.imageName}:`, err);
+        }
+      }
+
+      return ctx.json({ ...draft, imageUrl }, 201);
+    } catch (err: any) {
       console.error('Error saving draft:', err);
-      return ctx.json({ error: 'Internal server error' }, 500);
+      console.error('Error stack:', err?.stack);
+      return ctx.json({ error: 'Internal server error', message: err?.message ?? String(err) }, 500);
     }
   }
 
@@ -242,7 +288,20 @@ export class Threads {
         where: { userId },
         orderBy: { createdAt: 'desc' },
       });
-      return ctx.json(drafts);
+      const draftsWithUrls = await Promise.all(
+        drafts.map(async (draft) => {
+          let imageUrl: string | null = null;
+          if (draft.imageName && draft.imageName.trim() !== '') {
+            try {
+              imageUrl = await r2Service.getPresignedUrl(draft.imageName);
+            } catch (err) {
+              console.error(`[Drafts] Failed presign for ${draft.imageName}:`, err);
+            }
+          }
+          return { ...draft, imageUrl };
+        })
+      );
+      return ctx.json(draftsWithUrls);
     } catch (err) {
       console.error('Error fetching drafts:', err);
       return ctx.json({ error: 'Internal server error' }, 500);
@@ -302,7 +361,17 @@ export class Threads {
         data: updateData,
       });
 
-      return ctx.json(updatedDraft);
+      // Resolve imageUrl for the response (consistent with getDrafts)
+      let imageUrl: string | null = null;
+      if (updatedDraft.imageName && updatedDraft.imageName.trim() !== '') {
+        try {
+          imageUrl = await r2Service.getPresignedUrl(updatedDraft.imageName);
+        } catch (err) {
+          console.error(`[Drafts] Failed presign for ${updatedDraft.imageName}:`, err);
+        }
+      }
+
+      return ctx.json({ ...updatedDraft, imageUrl });
     } catch (err) {
       console.error('Error updating draft:', err);
       return ctx.json({ error: 'Internal server error' }, 500);
@@ -543,11 +612,18 @@ export class Threads {
 
       const draft = await prisma.threadDrafts.findUnique({
         where: { id: draftId },
-        select: { userId: true },
+        select: { userId: true, threadId: true },
       });
       if (!draft) return ctx.json({ error: 'Draft not found' }, 404);
       if (draft.userId !== userId)
         return ctx.json({ error: 'Unauthorized' }, 401);
+
+      // If there's a thread associated with this draft, delete it too
+      if (draft.threadId) {
+        await prisma.thread.delete({ where: { id: draft.threadId } }).catch(err => {
+          console.error('Failed to delete associated thread for draft:', err);
+        });
+      }
 
       await prisma.threadDrafts.delete({ where: { id: draftId } });
       return ctx.json({ message: 'Draft deleted successfully' }, 200);
