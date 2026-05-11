@@ -145,10 +145,8 @@ final class CommentsViewController: UIViewController {
     override var canBecomeFirstResponder: Bool { true }
 
     // MARK: - Data
-    let threadsStore = ThreadsDataStore.shared
-    var postID: Int?
     var threadId : String = ""
-    private var comments: [Comment] = []
+    private var comments: [APIThreadComment] = []
 
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -232,12 +230,19 @@ final class CommentsViewController: UIViewController {
     // MARK: - Input Callbacks
     private func setupInputCallbacks() {
         commentInputView.onSend = { [weak self] text in
-            guard let self, let postID = self.postID else { return }
-            self.threadsStore.addComment(to: postID, text: text)
-            self.loadComments()
-            NotificationCenter.default.post(name: .commentAdded, object: nil)
-            if !self.comments.isEmpty {
-                self.tableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
+            guard let self, let token = UserDefaults.standard.string(forKey: "authToken") else { return }
+            let payload = APICreateCommentRequest(threadId: self.threadId, description: text)
+            APIService.shared.createComment(payload: payload, token: token) { [weak self] result in
+                DispatchQueue.main.async {
+                    switch result {
+                    case .success:
+                        self?.loadComments()
+                        NotificationCenter.default.post(name: .commentAdded, object: nil)
+                        self?.commentInputView.textField.text = ""
+                    case .failure(let error):
+                        print("❌ Failed to add comment: \(error)")
+                    }
+                }
             }
         }
 
@@ -253,9 +258,18 @@ final class CommentsViewController: UIViewController {
 
     // MARK: - Data
     private func loadComments() {
-        guard let postID else { return }
-        comments = threadsStore.getComments(for: postID)
-        tableView.reloadData()
+        guard !threadId.isEmpty else { return }
+        APIService.shared.fetchComments(threadId: threadId) { [weak self] result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let apiComments):
+                    self?.comments = apiComments
+                    self?.tableView.reloadData()
+                case .failure(let error):
+                    print("❌ Failed to load comments: \(error)")
+                }
+            }
+        }
     }
 
     // MARK: - Actions
@@ -267,16 +281,10 @@ final class CommentsViewController: UIViewController {
 // MARK: - UITextFieldDelegate
 extension CommentsViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        guard let text = textField.text, !text.trimmingCharacters(in: .whitespaces).isEmpty,
-              let postID else { return true }
-        threadsStore.addComment(to: postID, text: text)
-        textField.text = ""
+        guard let text = textField.text, !text.trimmingCharacters(in: .whitespaces).isEmpty else { return true }
+        
         textField.resignFirstResponder()
-        loadComments()
-        NotificationCenter.default.post(name: .commentAdded, object: nil)
-        if !comments.isEmpty {
-            tableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
-        }
+        commentInputView.onSend?(text)
         return true
     }
 }
@@ -293,9 +301,12 @@ extension CommentsViewController: UITableViewDataSource {
         cell.configure(with: comment)
 
         cell.onLikeTapped = { [weak self] in
-            guard let self, let postID = self.postID else { return }
-            self.threadsStore.toggleLikeOnComment(postID: postID, commentID: comment.id)
-            self.loadComments()
+            guard let self, let token = UserDefaults.standard.string(forKey: "authToken") else { return }
+            APIService.shared.toggleCommentLike(commentId: comment.id, token: token) { [weak self] result in
+                if case .success = result {
+                    self?.loadComments()
+                }
+            }
         }
 
         return cell
