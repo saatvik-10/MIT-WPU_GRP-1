@@ -493,9 +493,10 @@ final class APIService {
 
 	func fetchComments(
 		threadId: String,
+		token: String? = nil,
 		completion: @escaping (Result<[APIThreadComment], APIError>) -> Void
 	) {
-		request(method: .get, path: "/api/comments", queryItems: [URLQueryItem(name: "threadId", value: threadId)], body: Optional<EmptyBody>.none, completion: completion)
+		request(method: .get, path: "/api/comments", token: token, queryItems: [URLQueryItem(name: "threadId", value: threadId)], body: Optional<EmptyBody>.none, completion: completion)
 	}
 
     func toggleCommentLike(

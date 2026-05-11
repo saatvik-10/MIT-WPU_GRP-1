@@ -158,9 +158,33 @@ final class CommentsViewController: UIViewController {
         setupInputCallbacks()
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        loadUserAvatar()
+    }
+
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         becomeFirstResponder()
+    }
+
+    private func loadUserAvatar() {
+        guard let token = UserDefaults.standard.string(forKey: "authToken"),
+              let userId = UserDefaults.standard.string(forKey: "userId") else { return }
+        
+        APIService.shared.fetchUserProfile(userId: userId, token: token) { [weak self] result in
+            if case .success(let profile) = result, 
+               let urlStr = profile.profileImageUrl,
+               let url = URL(string: urlStr) {
+                URLSession.shared.dataTask(with: url) { [weak self] data, _, _ in
+                    if let data = data, let img = UIImage(data: data) {
+                        DispatchQueue.main.async {
+                            self?.commentInputView.avatarImageView.image = img
+                        }
+                    }
+                }.resume()
+            }
+        }
     }
 
     // MARK: - Header
@@ -259,7 +283,8 @@ final class CommentsViewController: UIViewController {
     // MARK: - Data
     private func loadComments() {
         guard !threadId.isEmpty else { return }
-        APIService.shared.fetchComments(threadId: threadId) { [weak self] result in
+        let token = UserDefaults.standard.string(forKey: "authToken")
+        APIService.shared.fetchComments(threadId: threadId, token: token) { [weak self] result in
             DispatchQueue.main.async {
                 switch result {
                 case .success(let apiComments):
@@ -299,15 +324,6 @@ extension CommentsViewController: UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CommentCell", for: indexPath) as! CommentTableViewCell
         let comment = comments[indexPath.row]
         cell.configure(with: comment)
-
-        cell.onLikeTapped = { [weak self] in
-            guard let self, let token = UserDefaults.standard.string(forKey: "authToken") else { return }
-            APIService.shared.toggleCommentLike(commentId: comment.id, token: token) { [weak self] result in
-                if case .success = result {
-                    self?.loadComments()
-                }
-            }
-        }
 
         return cell
     }

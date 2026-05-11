@@ -463,6 +463,12 @@ class threadsViewController: UIViewController {
             name: .threadCreated,
             object: nil
         )
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(refreshFeed),
+            name: .commentAdded,
+            object: nil
+        )
         
         loadThreads()
     }
