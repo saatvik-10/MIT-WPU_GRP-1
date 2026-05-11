@@ -79,9 +79,19 @@ class StreakCircleView: UIView {
         countLabel.translatesAutoresizingMaskIntoConstraints = false
         addSubview(countLabel)
         
+        let subtitleLabel = UILabel()
+        subtitleLabel.text = "Days Streak"
+        subtitleLabel.font = UIFont.systemFont(ofSize: 18, weight: .bold)
+        subtitleLabel.textColor = .secondaryLabel
+        subtitleLabel.textAlignment = .center
+        subtitleLabel.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(subtitleLabel)
+        
         NSLayoutConstraint.activate([
             countLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
-            countLabel.centerYAnchor.constraint(equalTo: centerYAnchor)
+            countLabel.centerYAnchor.constraint(equalTo: centerYAnchor, constant: -10),
+            subtitleLabel.topAnchor.constraint(equalTo: countLabel.bottomAnchor, constant: -10),
+            subtitleLabel.centerXAnchor.constraint(equalTo: centerXAnchor)
         ])
     }
     
