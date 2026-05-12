@@ -211,16 +211,16 @@ class ProfileInputViewController: UIViewController, UIImagePickerControllerDeleg
     }
 
     private func makeGenderOption(title: String, icon: String) -> UIButton {
-        var config = UIButton.Configuration.filled()
+        var config = UIButton.Configuration.plain()
         config.title = title
-        config.image = UIImage(systemName: icon)
-        config.imagePadding = 8
-        config.cornerStyle = .capsule
+        config.image = UIImage(systemName: "circle")
+        config.imagePadding = 12
         config.baseForegroundColor = .label
-        config.baseBackgroundColor = unselectedColor
+        config.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 0, bottom: 8, trailing: 0)
         let button = UIButton(configuration: config)
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.heightAnchor.constraint(equalToConstant: 48).isActive = true
+        button.contentHorizontalAlignment = .left
+        button.heightAnchor.constraint(equalToConstant: 40).isActive = true
         return button
     }
 
@@ -235,20 +235,13 @@ class ProfileInputViewController: UIViewController, UIImagePickerControllerDeleg
     }
 
     private func updateGenderSelection() {
-        let selectedBg = accentColor.withAlphaComponent(0.15)
-        let unselectedBg = unselectedColor
-
-        maleButton.configuration?.baseBackgroundColor = selectedGender == .male ? selectedBg : unselectedBg
+        maleButton.configuration?.image = UIImage(systemName: selectedGender == .male ? "circle.inset.filled" : "circle")
         maleButton.configuration?.baseForegroundColor = selectedGender == .male ? accentColor : .label
-        maleButton.layer.borderWidth = selectedGender == .male ? 1.5 : 0
-        maleButton.layer.borderColor = selectedGender == .male ? accentColor.cgColor : UIColor.clear.cgColor
-        maleButton.layer.cornerRadius = 24
+        maleButton.layer.borderWidth = 0
 
-        femaleButton.configuration?.baseBackgroundColor = selectedGender == .female ? selectedBg : unselectedBg
+        femaleButton.configuration?.image = UIImage(systemName: selectedGender == .female ? "circle.inset.filled" : "circle")
         femaleButton.configuration?.baseForegroundColor = selectedGender == .female ? accentColor : .label
-        femaleButton.layer.borderWidth = selectedGender == .female ? 1.5 : 0
-        femaleButton.layer.borderColor = selectedGender == .female ? accentColor.cgColor : UIColor.clear.cgColor
-        femaleButton.layer.cornerRadius = 24
+        femaleButton.layer.borderWidth = 0
     }
 
     // MARK: - Prefill
@@ -426,11 +419,29 @@ class ProfileInputViewController: UIViewController, UIImagePickerControllerDeleg
             cameraBadge.bottomAnchor.constraint(equalTo: profileImageView.bottomAnchor, constant: 2),
         ])
 
-        // Gender buttons row
         let genderStack = UIStackView(arrangedSubviews: [maleButton, femaleButton])
         genderStack.axis = .horizontal
+        genderStack.alignment = .leading
         genderStack.spacing = 12
         genderStack.distribution = .fillEqually
+
+        let genderContainer = UIView()
+        genderContainer.backgroundColor = .secondarySystemBackground
+        genderContainer.layer.cornerRadius = 12
+        genderContainer.translatesAutoresizingMaskIntoConstraints = false
+
+        let innerStack = UIStackView(arrangedSubviews: [genderLabel, genderStack])
+        innerStack.axis = .vertical
+        innerStack.spacing = 12
+        innerStack.translatesAutoresizingMaskIntoConstraints = false
+        genderContainer.addSubview(innerStack)
+
+        NSLayoutConstraint.activate([
+            innerStack.topAnchor.constraint(equalTo: genderContainer.topAnchor, constant: 16),
+            innerStack.leadingAnchor.constraint(equalTo: genderContainer.leadingAnchor, constant: 16),
+            innerStack.trailingAnchor.constraint(equalTo: genderContainer.trailingAnchor, constant: -16),
+            innerStack.bottomAnchor.constraint(equalTo: genderContainer.bottomAnchor, constant: -16),
+        ])
 
         let stackView = UIStackView(arrangedSubviews: [
             titleLabel,
@@ -443,9 +454,7 @@ class ProfileInputViewController: UIViewController, UIImagePickerControllerDeleg
             emailField,
             phoneField,
             dobField,
-            makeSpacer(height: 8),
-            genderLabel,
-            genderStack,
+            genderContainer,
             makeSpacer(height: 30),
             continueButton
         ])
