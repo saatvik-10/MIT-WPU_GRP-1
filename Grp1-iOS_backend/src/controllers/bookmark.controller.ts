@@ -322,6 +322,7 @@ export class Bookmarks {
         data: {
           userId,
           folderId,
+          threadId,
           title,
           description,
           imageName,

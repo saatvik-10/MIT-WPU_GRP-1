@@ -10,9 +10,8 @@ import UIKit
 class ThreadsSearchViewController: UIViewController {
 
     // MARK: - Properties
-    private let threadsStore = ThreadsDataStore.shared
-    private var allPosts: [ThreadPost] = []
-    private var filteredPosts: [ThreadPost] = []
+    private var allPosts: [APIThread] = []
+    private var filteredPosts: [APIThread] = []
     private var isSearchActive = false
 
     // MARK: - UI
@@ -101,10 +100,22 @@ class ThreadsSearchViewController: UIViewController {
         title = "Search"
         view.backgroundColor = UIColor(white: 250/255, alpha: 1)
 
-        allPosts = threadsStore.getAllPostsForSearch()
-
         setupNavigationSearch()
         setupLayout()
+        fetchLatestPosts()
+    }
+
+    private func fetchLatestPosts() {
+        APIService.shared.fetchForYouThreads(token: UserDefaults.standard.string(forKey: "authToken")) { [weak self] result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let threads):
+                    self?.allPosts = threads
+                case .failure(let error):
+                    print("❌ Search failed to fetch posts: \(error)")
+                }
+            }
+        }
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -156,8 +167,9 @@ class ThreadsSearchViewController: UIViewController {
         isSearchActive = true
         filteredPosts = allPosts.filter { post in
             post.title.lowercased().contains(trimmed) ||
-            post.userName.lowercased().contains(trimmed) ||
-            post.tags.contains { $0.lowercased().contains(trimmed) }
+            (post.user?.name ?? "").lowercased().contains(trimmed) ||
+            (post.user?.username ?? "").lowercased().contains(trimmed) ||
+            post.tags!.contains { $0.lowercased().contains(trimmed) }
         }
         updateUI()
     }
@@ -210,7 +222,7 @@ extension ThreadsSearchViewController: UITableViewDelegate {
         tableView.deselectRow(at: indexPath, animated: true)
         let post = filteredPosts[indexPath.row]
         let detailVC = ThreadDetailViewController()
-        //detailVC.thread = post
+        detailVC.thread = post
         navigationController?.pushViewController(detailVC, animated: true)
     }
 }
@@ -321,17 +333,21 @@ class SearchResultCell: UITableViewCell {
         ])
     }
 
-    func configure(with post: ThreadPost) {
-        userNameLabel.text = post.userName
-        timeAgoLabel.text = post.timeAgo
+    func configure(with post: APIThread) {
+        userNameLabel.text = post.user?.name ?? post.user?.username ?? "Unknown"
         titleLabel.text = post.title
-        tagsLabel.text = post.tags.prefix(3).map { "#\($0)" }.joined(separator: "  ")
+        tagsLabel.text = post.tags!.prefix(3).map { "#\($0)" }.joined(separator: "  ")
 
-        if post.userProfileImage.contains("/") {
-            profileImg.image = UIImage(contentsOfFile: post.userProfileImage)
+        if let imageUrl = post.user?.profileImageUrl, let url = URL(string: imageUrl) {
+            URLSession.shared.dataTask(with: url) { [weak self] data, _, _ in
+                if let data = data, let image = UIImage(data: data) {
+                    DispatchQueue.main.async {
+                        self?.profileImg.image = image
+                    }
+                }
+            }.resume()
         } else {
-            profileImg.image = UIImage(named: post.userProfileImage)
-                ?? UIImage(systemName: "person.circle.fill")
+            profileImg.image = UIImage(systemName: "person.circle.fill")
         }
     }
 }

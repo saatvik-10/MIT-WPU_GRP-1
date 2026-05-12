@@ -53,10 +53,10 @@ model UserProgress {
   userId String @unique
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  currentStreak   Int      @default(0)
-  
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  currentStreak Int @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Interest {
@@ -130,6 +130,8 @@ model BookmarkedThread {
   user     User           @relation(fields: [userId], references: [id], onDelete: Cascade)
   folderId String
   folder   BookmarkFolder @relation(fields: [folderId], references: [id], onDelete: Cascade)
+  threadId String
+  thread   Thread         @relation(fields: [threadId], references: [id], onDelete: Cascade)
 
   title       String
   description String
@@ -138,9 +140,10 @@ model BookmarkedThread {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  @@unique([userId, folderId, title])
+  @@unique([userId, folderId, threadId])
   @@index([userId])
   @@index([folderId])
+  @@index([threadId])
 }
 
 // model ChatSession {
@@ -186,10 +189,11 @@ model Thread {
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
-  likes    ThreadLike[]
-  comments ThreadComment[]
+  likes             ThreadLike[]
+  comments          ThreadComment[]
+  bookmarkedThreads BookmarkedThread[]
   // shares   ThreadShare[]
-  drafts   ThreadDrafts[]
+  drafts            ThreadDrafts[]
 
   @@index([userId])
   @@index([createdAt])
@@ -205,9 +209,9 @@ model ThreadDrafts {
   updatedAt   DateTime @updatedAt
 
   userId   String
-  user     User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  threadId String
-  thread   Thread @relation(fields: [threadId], references: [id], onDelete: Cascade)
+  user     User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  threadId String?
+  thread   Thread? @relation(fields: [threadId], references: [id], onDelete: Cascade)
 
   @@index([userId])
   @@index([createdAt])
@@ -218,12 +222,12 @@ model ThreadLike {
 
   userId   String
   user     User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  threadId String          // ← remove ? and remove @unique
+  threadId String // ← remove ? and remove @unique
   thread   Thread @relation(fields: [threadId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
 
-  @@unique([userId, threadId])  // ← this is the only unique constraint needed
+  @@unique([userId, threadId]) // ← this is the only unique constraint needed
   @@index([threadId])
   @@index([userId])
 }
@@ -244,7 +248,7 @@ model ThreadComment {
 
   createdAt DateTime @default(now())
 
-  likes     ThreadCommentLike[]
+  likes ThreadCommentLike[]
 
   @@index([userId])
   @@index([threadId])

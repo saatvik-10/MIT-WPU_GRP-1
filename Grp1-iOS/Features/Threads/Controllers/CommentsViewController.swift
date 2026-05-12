@@ -145,10 +145,8 @@ final class CommentsViewController: UIViewController {
     override var canBecomeFirstResponder: Bool { true }
 
     // MARK: - Data
-    let threadsStore = ThreadsDataStore.shared
-    var postID: Int?
     var threadId : String = ""
-    private var comments: [Comment] = []
+    private var comments: [APIThreadComment] = []
 
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -160,9 +158,33 @@ final class CommentsViewController: UIViewController {
         setupInputCallbacks()
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        loadUserAvatar()
+    }
+
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         becomeFirstResponder()
+    }
+
+    private func loadUserAvatar() {
+        guard let token = UserDefaults.standard.string(forKey: "authToken"),
+              let userId = UserDefaults.standard.string(forKey: "userId") else { return }
+        
+        APIService.shared.fetchUserProfile(userId: userId, token: token) { [weak self] result in
+            if case .success(let profile) = result, 
+               let urlStr = profile.profileImageUrl,
+               let url = URL(string: urlStr) {
+                URLSession.shared.dataTask(with: url) { [weak self] data, _, _ in
+                    if let data = data, let img = UIImage(data: data) {
+                        DispatchQueue.main.async {
+                            self?.commentInputView.avatarImageView.image = img
+                        }
+                    }
+                }.resume()
+            }
+        }
     }
 
     // MARK: - Header
@@ -232,12 +254,19 @@ final class CommentsViewController: UIViewController {
     // MARK: - Input Callbacks
     private func setupInputCallbacks() {
         commentInputView.onSend = { [weak self] text in
-            guard let self, let postID = self.postID else { return }
-            self.threadsStore.addComment(to: postID, text: text)
-            self.loadComments()
-            NotificationCenter.default.post(name: .commentAdded, object: nil)
-            if !self.comments.isEmpty {
-                self.tableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
+            guard let self, let token = UserDefaults.standard.string(forKey: "authToken") else { return }
+            let payload = APICreateCommentRequest(threadId: self.threadId, description: text)
+            APIService.shared.createComment(payload: payload, token: token) { [weak self] result in
+                DispatchQueue.main.async {
+                    switch result {
+                    case .success:
+                        self?.loadComments()
+                        NotificationCenter.default.post(name: .commentAdded, object: nil)
+                        self?.commentInputView.textField.text = ""
+                    case .failure(let error):
+                        print("❌ Failed to add comment: \(error)")
+                    }
+                }
             }
         }
 
@@ -253,9 +282,19 @@ final class CommentsViewController: UIViewController {
 
     // MARK: - Data
     private func loadComments() {
-        guard let postID else { return }
-        comments = threadsStore.getComments(for: postID)
-        tableView.reloadData()
+        guard !threadId.isEmpty else { return }
+        let token = UserDefaults.standard.string(forKey: "authToken")
+        APIService.shared.fetchComments(threadId: threadId, token: token) { [weak self] result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let apiComments):
+                    self?.comments = apiComments
+                    self?.tableView.reloadData()
+                case .failure(let error):
+                    print("❌ Failed to load comments: \(error)")
+                }
+            }
+        }
     }
 
     // MARK: - Actions
@@ -267,16 +306,10 @@ final class CommentsViewController: UIViewController {
 // MARK: - UITextFieldDelegate
 extension CommentsViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        guard let text = textField.text, !text.trimmingCharacters(in: .whitespaces).isEmpty,
-              let postID else { return true }
-        threadsStore.addComment(to: postID, text: text)
-        textField.text = ""
+        guard let text = textField.text, !text.trimmingCharacters(in: .whitespaces).isEmpty else { return true }
+        
         textField.resignFirstResponder()
-        loadComments()
-        NotificationCenter.default.post(name: .commentAdded, object: nil)
-        if !comments.isEmpty {
-            tableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
-        }
+        commentInputView.onSend?(text)
         return true
     }
 }
@@ -291,12 +324,6 @@ extension CommentsViewController: UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CommentCell", for: indexPath) as! CommentTableViewCell
         let comment = comments[indexPath.row]
         cell.configure(with: comment)
-
-        cell.onLikeTapped = { [weak self] in
-            guard let self, let postID = self.postID else { return }
-            self.threadsStore.toggleLikeOnComment(postID: postID, commentID: comment.id)
-            self.loadComments()
-        }
 
         return cell
     }

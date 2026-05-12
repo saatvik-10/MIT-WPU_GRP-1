@@ -14,7 +14,7 @@ export const createThreadSchema = z.object({
 // });
 
 export const threadDraftSchema = z.object({
-  threadId: z.string().trim().min(1, 'threadId is required'),
+  threadId: z.string().trim().min(1, 'threadId is required').optional(),
   title: z.string().trim().min(1, 'title is required').max(200),
   description: z.string().trim().min(1, 'description is required'),
   tags: z.array(z.string()).default([]),

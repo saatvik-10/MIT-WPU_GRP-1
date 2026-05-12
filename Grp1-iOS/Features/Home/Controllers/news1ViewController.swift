@@ -402,7 +402,7 @@ class news1ViewController: UIViewController, UICollectionViewDataSource {
     
     private func setupOptionsMenu() {
         let recommendAction = UIAction(
-            title: "Recommend article more",
+            title: "Recommend more",
             image: UIImage(systemName: "hand.thumbsup")
         ) { [weak self] _ in
             guard let self = self, let article = self.article else { return }
@@ -414,9 +414,9 @@ class news1ViewController: UIViewController, UICollectionViewDataSource {
 
             self.animateRecommendationPulse()
 
-            self.showToast(message: "We'll show you more stories like this.")
+            self.showToast(message: "We'll show you more articles like this.")
             
-            print("Recommend more articles like: \(article.title)")
+            print("Recommend more like: \(article.title)")
         }
 
         let saveAction = UIAction(

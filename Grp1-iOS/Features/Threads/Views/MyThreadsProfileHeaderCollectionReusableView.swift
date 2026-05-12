@@ -66,13 +66,17 @@ class MyThreadsProfileHeaderCollectionReusableView: UICollectionReusableView {
             
             func configure(
                 userName: String,
-                profileImage: String,
+                profileImage: String?,
                 posts: Int,
                 followers: Int,
                 following: Int
             ) {
                 userNameLabel.text = userName
-                profileImageView.image = UIImage(named: profileImage)
+                if let profileImage = profileImage, !profileImage.isEmpty {
+                    profileImageView.setSmartImage(from: profileImage)
+                } else {
+                    profileImageView.image = UIImage(systemName: "person.circle.fill")
+                }
                 
                 postsCountLabel.text = "\(posts)\nposts"
                 followersCountLabel.text = "\(followers)\nfollowers"
