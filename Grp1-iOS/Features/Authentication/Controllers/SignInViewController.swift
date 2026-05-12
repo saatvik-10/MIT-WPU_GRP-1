@@ -154,7 +154,17 @@ class SignInViewController: UIViewController {
     }
 
     @objc private func goBack() {
-        dismiss(animated: true)
+        if let presentingVC = self.presentingViewController {
+            self.dismiss(animated: true) {
+                let signUpVC = SignUpViewController()
+                signUpVC.modalPresentationStyle = .fullScreen
+                presentingVC.present(signUpVC, animated: true)
+            }
+        } else {
+            let signUpVC = SignUpViewController()
+            signUpVC.modalPresentationStyle = .fullScreen
+            self.present(signUpVC, animated: true)
+        }
     }
 
     // MARK: - Sign In
@@ -202,20 +212,24 @@ class SignInViewController: UIViewController {
         if let onboardingVC = storyboard.instantiateViewController(
             withIdentifier: "OnboardingPageViewController"
         ) as? OnboardingPageViewController {
-            if let window = self.view.window {
-                window.rootViewController = onboardingVC
-                UIView.transition(with: window, duration: 0.3, options: .transitionCrossDissolve, animations: nil)
-            }
+            guard let window = UIApplication.shared.connectedScenes
+                .compactMap({ $0 as? UIWindowScene })
+                .flatMap({ $0.windows })
+                .first(where: { $0.isKeyWindow }) else { return }
+            window.rootViewController = onboardingVC
+            UIView.transition(with: window, duration: 0.3, options: .transitionCrossDissolve, animations: nil)
         }
     }
 
     private func navigateToHome() {
         let storyboard = UIStoryboard(name: "HomeMain", bundle: nil)
         if let homeVC = storyboard.instantiateInitialViewController() {
-            if let window = self.view.window {
-                window.rootViewController = homeVC
-                UIView.transition(with: window, duration: 0.3, options: .transitionCrossDissolve, animations: nil)
-            }
+            guard let window = UIApplication.shared.connectedScenes
+                .compactMap({ $0 as? UIWindowScene })
+                .flatMap({ $0.windows })
+                .first(where: { $0.isKeyWindow }) else { return }
+            window.rootViewController = homeVC
+            UIView.transition(with: window, duration: 0.3, options: .transitionCrossDissolve, animations: nil)
         }
     }
 
