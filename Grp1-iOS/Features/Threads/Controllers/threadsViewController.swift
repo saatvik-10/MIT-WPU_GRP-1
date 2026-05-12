@@ -434,6 +434,8 @@ class threadsViewController: UIViewController {
     private var forYouThreads: [APIThread] = []
     private var followingThreads: [APIThread] = []
     private var myThreads: [APIThread] = []
+    private var currentUserProfile: APIUserProfileResponse?
+    private var followingUserIds: Set<String> = []
     private var selectedSegment: ThreadsSegment = .forYou
     
     private var currentUserId: String? {
@@ -459,6 +461,12 @@ class threadsViewController: UIViewController {
             self,
             selector: #selector(refreshFeed),
             name: .threadCreated,
+            object: nil
+        )
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(refreshFeed),
+            name: .commentAdded,
             object: nil
         )
         
@@ -530,9 +538,23 @@ class threadsViewController: UIViewController {
     // MARK: - API Fetching
     
     private func loadThreads() {
+        loadFollowingUserIds()
         loadForYouThreads()
         loadFollowingThreads()
         loadMyThreads()
+        loadUserProfile()
+    }
+    
+    private func loadFollowingUserIds() {
+        guard let token = authToken, let userId = currentUserId else { return }
+        APIService.shared.fetchUserFollowing(userId: userId, token: token) { [weak self] result in
+            DispatchQueue.main.async {
+                if case .success(let users) = result {
+                    self?.followingUserIds = Set(users.map { $0.id })
+                    self?.collectionView.reloadData()
+                }
+            }
+        }
     }
     
     private func loadForYouThreads() {
@@ -565,6 +587,18 @@ class threadsViewController: UIViewController {
             DispatchQueue.main.async {
                 if case .success(let threads) = result {
                     self?.myThreads = threads.filter { $0.userId == self?.currentUserId }
+                    if self?.selectedSegment == .myThreads { self?.collectionView.reloadData() }
+                }
+            }
+        }
+    }
+    
+    private func loadUserProfile() {
+        guard let token = authToken, let userId = currentUserId else { return }
+        APIService.shared.fetchUserProfile(userId: userId, token: token) { [weak self] result in
+            DispatchQueue.main.async {
+                if case .success(let profile) = result {
+                    self?.currentUserProfile = profile
                     if self?.selectedSegment == .myThreads { self?.collectionView.reloadData() }
                 }
             }
@@ -609,8 +643,9 @@ extension threadsViewController: UICollectionViewDataSource {
         
         let thread = currentThreads()[indexPath.item]
         let isOwnPost = thread.userId == currentUserId
+        let isFollowing = followingUserIds.contains(thread.userId)
         
-        cell.configure(with: thread, isFollowing: false, isOwnPost: isOwnPost)
+        cell.configure(with: thread, isFollowing: isFollowing, isOwnPost: isOwnPost)
         cell.applyStyle(isCard: selectedSegment != .myThreads)
         
         // ── Like ──
@@ -659,11 +694,35 @@ extension threadsViewController: UICollectionViewDataSource {
         
         // ── Follow ──
         cell.onFollowTapped = { [weak self] in
-            guard let self, let token = self.authToken,
-                  let userId = thread.user?.id else { return }
-            APIService.shared.updateFollow(followingId: userId, token: token) { result in
+            guard let self, let token = self.authToken else { return }
+            let authorId = thread.userId
+            
+            let wasFollowing = self.followingUserIds.contains(authorId)
+            
+            if wasFollowing {
+                self.followingUserIds.remove(authorId)
+                self.followingThreads.removeAll { $0.userId == authorId }
+            } else {
+                self.followingUserIds.insert(authorId)
+            }
+            
+            self.collectionView.reloadData()
+            
+            APIService.shared.updateFollow(followingId: authorId, token: token) { result in
                 DispatchQueue.main.async {
-                    if case .success = result { self.loadThreads() }
+                    switch result {
+                    case .success:
+                        self.loadFollowingThreads()
+                        self.loadUserProfile()
+                    case .failure:
+                        if wasFollowing {
+                            self.followingUserIds.insert(authorId)
+                        } else {
+                            self.followingUserIds.remove(authorId)
+                        }
+                        self.loadFollowingThreads()
+                        self.collectionView.reloadData()
+                    }
                 }
             }
         }
@@ -720,14 +779,35 @@ extension threadsViewController: UICollectionViewDataSource {
             for: indexPath
         ) as! MyThreadsProfileHeaderCollectionReusableView
         
-        let user = MockEnvironment.shared.anandita
+        let userName = currentUserProfile?.name ?? currentUserProfile?.username ?? "Loading..."
+        let profileImage = currentUserProfile?.profileImageUrl
+        let followers = currentUserProfile?.followersCount ?? 0
+        let following = currentUserProfile?.followingCount ?? 0
+        
         header.configure(
-            userName: user.userName,
-            profileImage: user.profileImage,
+            userName: userName,
+            profileImage: profileImage,
             posts: myThreads.count,
-            followers: user.followerCount,
-            following: user.followingCount
+            followers: followers,
+            following: following
         )
+        
+        header.onFollowersTapped = { [weak self] in
+            guard let self, let userId = self.currentUserId else { return }
+            let vc = FollowersFollowingViewController()
+            vc.initialSegment = 0
+            vc.targetUserId = userId
+            self.navigationController?.pushViewController(vc, animated: true)
+        }
+        
+        header.onFollowingTapped = { [weak self] in
+            guard let self, let userId = self.currentUserId else { return }
+            let vc = FollowersFollowingViewController()
+            vc.initialSegment = 1
+            vc.targetUserId = userId
+            self.navigationController?.pushViewController(vc, animated: true)
+        }
+        
         return header
     }
 }

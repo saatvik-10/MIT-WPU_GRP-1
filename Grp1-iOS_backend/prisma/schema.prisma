@@ -206,8 +206,8 @@ model ThreadDrafts {
 
   userId   String
   user     User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  threadId String
-  thread   Thread @relation(fields: [threadId], references: [id], onDelete: Cascade)
+  threadId String?
+  thread   Thread? @relation(fields: [threadId], references: [id], onDelete: Cascade)
 
   @@index([userId])
   @@index([createdAt])

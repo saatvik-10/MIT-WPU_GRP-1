@@ -41,20 +41,23 @@ class CommentTableViewCell: UITableViewCell {
         onLikeTapped?()
     }
 
-        func configure(with comment: Comment) {
-            nameLabel.text = comment.userName
-            commentLabel.text = comment.text
+        func configure(with comment: APIThreadComment) {
+            nameLabel.text = comment.user?.name ?? comment.user?.username ?? "Unknown"
+            commentLabel.text = comment.description
 
-            if let image = UIImage(named: comment.userProfileImage) {
-                profileImageView.image = image
-            } else if let systemImage = UIImage(systemName: comment.userProfileImage) {
-                profileImageView.image = systemImage
+            if let imageUrl = comment.user?.profileImageUrl, let url = URL(string: imageUrl) {
+                // Async load image
+                URLSession.shared.dataTask(with: url) { [weak self] data, _, _ in
+                    if let data = data, let image = UIImage(data: data) {
+                        DispatchQueue.main.async {
+                            self?.profileImageView.image = image
+                        }
+                    }
+                }.resume()
             } else {
                 profileImageView.image = UIImage(systemName: "person.circle.fill")
             }
 
-            let imageName = comment.isLiked ? "heart.fill" : "heart"
-            likeButton.setImage(UIImage(systemName: imageName), for: .normal)
-            likeButton.tintColor = comment.isLiked ? .systemRed : .systemGray
+            likeButton.isHidden = true
         }
     }

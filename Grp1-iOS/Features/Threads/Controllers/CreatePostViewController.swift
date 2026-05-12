@@ -10,7 +10,7 @@ class CreatePostViewController: UIViewController,UITextViewDelegate, UITextField
     }
     
     var mode: CreatePostMode = .newPost
-    var draft: Draft?
+    var apiDraft: APIThreadDraft?
     
     
     //@IBOutlet weak var scrollView: UIScrollView!
@@ -67,33 +67,93 @@ class CreatePostViewController: UIViewController,UITextViewDelegate, UITextField
     }
     
     @IBAction func didTapSaveDraft(_ sender: UIButton) {
+        print("🟡 didTapSaveDraft called")
         
+        guard let token = UserDefaults.standard.string(forKey: "authToken") else {
+            print("❌ No authToken found in UserDefaults!")
+            let alert = UIAlertController(title: "Not Logged In", message: "Please log in to save a draft.", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default))
+            present(alert, animated: true)
+            return
+        }
+        print("✅ Token found: \(token.prefix(20))...")
         
-        guard let token = UserDefaults.standard.string(forKey: "authToken") else { return }
-        let title = titleTextField.text ?? ""
-        let body = bodyTextView.text ?? ""
+        let title = titleTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        let body = bodyTextView.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        
+        print("📝 Title: '\(title)', Body length: \(body.count)")
+        
+        if title.isEmpty || body.isEmpty {
+            print("❌ Title and description cannot be empty!")
+            let alert = UIAlertController(title: "Missing Fields", message: "Title and description cannot be empty.", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default))
+            present(alert, animated: true)
+            return
+        }
+        
         let rawTags = addTopicTextField.text ?? ""
         let tags = rawTags.split(separator: ",")
             .map { $0.trimmingCharacters(in: .whitespaces) }
             .filter { !$0.isEmpty }
         let imageData = postImageView.image?.jpegData(compressionQuality: 0.8)
-        let payload = APICreateDraftRequest(
-            title: title,
-            description: body,
-            tags: tags,
-            threadId: nil,
-            imageData: imageData,
-            imageFileName: imageData != nil ? "draft.jpg" : nil
-        )
-        APIService.shared.saveDraft(payload: payload, token: token) { [weak self] result in
-            DispatchQueue.main.async {
-                if case .success = result {
-                    print("✅ Draft saved to DB!")
+        
+        // Disable button to prevent double-tap
+        saveDraft.isEnabled = false
+        saveDraft.setTitle("Saving...", for: .normal)
+        
+        print("🚀 Sending draft to API — baseURL: \(APIService.shared.baseURL)")
+        
+        if let existingDraft = apiDraft {
+            APIService.shared.updateDraft(
+                draftId: existingDraft.id,
+                title: title,
+                description: body,
+                tags: tags,
+                imageData: imageData,
+                imageFileName: imageData != nil ? "draft.jpg" : nil,
+                token: token
+            ) { [weak self] result in
+                DispatchQueue.main.async {
+                    self?.saveDraft.isEnabled = true
+                    self?.saveDraft.setTitle("Save Draft", for: .normal)
+                    switch result {
+                    case .success:
+                        print("✅ Draft updated in DB!")
+                        self?.navigationController?.popViewController(animated: true)
+                    case .failure(let error):
+                        print("❌ Failed to update draft: \(error)")
+                        let alert = UIAlertController(title: "Error", message: "Failed to update draft: \(error)", preferredStyle: .alert)
+                        alert.addAction(UIAlertAction(title: "OK", style: .default))
+                        self?.present(alert, animated: true)
+                    }
                 }
-                self?.navigationController?.popViewController(animated: true)
+            }
+        } else {
+            let payload = APICreateDraftRequest(
+                title: title,
+                description: body,
+                tags: tags,
+                threadId: nil,
+                imageData: imageData,
+                imageFileName: imageData != nil ? "draft.jpg" : nil
+            )
+            APIService.shared.saveDraft(payload: payload, token: token) { [weak self] result in
+                DispatchQueue.main.async {
+                    self?.saveDraft.isEnabled = true
+                    self?.saveDraft.setTitle("Save Draft", for: .normal)
+                    switch result {
+                    case .success:
+                        print("✅ Draft saved to DB!")
+                        self?.navigationController?.popViewController(animated: true)
+                    case .failure(let error):
+                        print("❌ Failed to save draft: \(error)")
+                        let alert = UIAlertController(title: "Error", message: "Failed to save draft: \(error)", preferredStyle: .alert)
+                        alert.addAction(UIAlertAction(title: "OK", style: .default))
+                        self?.present(alert, animated: true)
+                    }
+                }
             }
         }
-        
     }
     
     @IBAction func didTapPost(_ sender: UIButton) {
@@ -140,6 +200,19 @@ class CreatePostViewController: UIViewController,UITextViewDelegate, UITextField
                 switch result {
                 case .success:
                     print("✅ Thread posted to DB!")
+                    
+                    // If we were editing a draft, delete the draft now that it's published
+                    if let draftId = self?.apiDraft?.id {
+                        APIService.shared.deleteDraft(draftId: draftId, token: token) { deleteResult in
+                            switch deleteResult {
+                            case .success:
+                                print("✅ Associated draft \(draftId) deleted successfully")
+                            case .failure(let error):
+                                print("⚠️ Failed to delete associated draft \(draftId): \(error)")
+                            }
+                        }
+                    }
+                    
                     self?.navigationController?.popViewController(animated: true)
                 case .failure(let error):
                     print("❌ Failed to post thread: \(error)")
@@ -287,26 +360,29 @@ class CreatePostViewController: UIViewController,UITextViewDelegate, UITextField
              private func configureForMode() {
                  
                  if mode == .editDraft {
-                     navigationItem.title = "Draft"
+                                           navigationItem.title = "Draft"
+                      navigationItem.rightBarButtonItem = nil
                      prefillDraftData()
                  }
              }
              
              private func prefillDraftData() {
-                 guard let draft else { return }
+                 guard let draft = apiDraft else { return }
                  
-                 addTopicTextField.text = draft.topic
+                 addTopicTextField.text = draft.tags.joined(separator: ", ")
                  titleTextField.text = draft.title
-                 bodyTextView.text = draft.body
+                 bodyTextView.text = draft.description
                  
-                 placeholderLabel.isHidden = !(draft.body?.isEmpty ?? true)
+                 placeholderLabel.isHidden = !draft.description.isEmpty
                  
                  // Image is optional (important)
-                 if let path = draft.imageName {
-                     let url = URL(fileURLWithPath: path)
-                     if let image = UIImage(contentsOfFile: url.path) {
-                         showDraftImage(image)
-                     }
+                 if let imageUrlStr = draft.imageUrl, let url = URL(string: imageUrlStr) {
+                     URLSession.shared.dataTask(with: url) { [weak self] data, _, _ in
+                         guard let data = data, let image = UIImage(data: data) else { return }
+                         DispatchQueue.main.async {
+                             self?.showDraftImage(image)
+                         }
+                     }.resume()
                  }
              }
                  func handleSelectedImage(_ image: UIImage) {

@@ -362,7 +362,7 @@ final class APIService {
 		token: String,
 		completion: @escaping (Result<[APIThread], APIError>) -> Void
 	) {
-		request(method: .post, path: "/api/following-threads", token: token, body: EmptyBody(), completion: completion)
+		request(method: .get, path: "/api/following-threads", token: token, body: Optional<EmptyBody>.none, completion: completion)
 	}
 
 	// ✅ Creates a thread with optional image via multipart/form-data
@@ -493,20 +493,27 @@ final class APIService {
 
 	func fetchComments(
 		threadId: String,
+		token: String? = nil,
 		completion: @escaping (Result<[APIThreadComment], APIError>) -> Void
 	) {
-		request(method: .get, path: "/api/comments", queryItems: [URLQueryItem(name: "threadId", value: threadId)], body: Optional<EmptyBody>.none, completion: completion)
+		request(method: .get, path: "/api/comments", token: token, queryItems: [URLQueryItem(name: "threadId", value: threadId)], body: Optional<EmptyBody>.none, completion: completion)
 	}
+
+    func toggleCommentLike(
+        commentId: String,
+        token: String,
+        completion: @escaping (Result<APICommentLikeResponse, APIError>) -> Void
+    ) {
+        request(method: .post, path: "/api/comment/like", token: token, body: APICommentLikeRequest(commentId: commentId), completion: completion)
+    }
 
 	func toggleLike(
 		threadId: String,
 		token: String,
 		completion: @escaping (Result<APIThreadLikeResponse, APIError>) -> Void
 	) {
+		print("🔁 Toggling like for threadId: \(threadId)")
 		request(method: .post, path: "/api/like", token: token, body: APIThreadLikeRequest(threadId: threadId), completion: completion)
-		print("🔁 Toggling like for threadId: \(threadId)")  // ← check threadId isn't empty
-    print("🔑 Token: \(token.prefix(20))...")             // ← check token exists
-    request(method: .post, path: "/api/like", token: token, body: APIThreadLikeRequest(threadId: threadId), completion: completion)
 	}
 
 	// ─────────────────────────────────────────────
@@ -545,7 +552,7 @@ final class APIService {
 		token: String,
 		completion: @escaping (Result<APIUserProfileResponse, APIError>) -> Void
 	) {
-		request(method: .get, path: "/api/users/\(userId)/profile", token: token, body: Optional<EmptyBody>.none, completion: completion)
+		request(method: .get, path: "/api/profile/users/\(userId)/profile", token: token, body: Optional<EmptyBody>.none, completion: completion)
 	}
 
 	func fetchUserFollowers(
@@ -553,7 +560,7 @@ final class APIService {
 		token: String,
 		completion: @escaping (Result<[APIUserBasicInfo], APIError>) -> Void
 	) {
-		request(method: .get, path: "/api/users/\(userId)/followers", token: token, body: Optional<EmptyBody>.none, completion: completion)
+		request(method: .get, path: "/api/profile/users/\(userId)/followers", token: token, body: Optional<EmptyBody>.none, completion: completion)
 	}
 
 	func fetchUserFollowing(
@@ -561,7 +568,7 @@ final class APIService {
 		token: String,
 		completion: @escaping (Result<[APIUserBasicInfo], APIError>) -> Void
 	) {
-		request(method: .get, path: "/api/users/\(userId)/following", token: token, body: Optional<EmptyBody>.none, completion: completion)
+		request(method: .get, path: "/api/profile/users/\(userId)/following", token: token, body: Optional<EmptyBody>.none, completion: completion)
 	}
 
 	func fetchUserInterests(

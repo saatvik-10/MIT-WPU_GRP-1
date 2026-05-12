@@ -99,9 +99,17 @@ struct APIUserProfileResponse: Decodable {
 	let gender: String
 	let profileImageUrl: String? // presigned R2 URL returned by backend
 	let level: String
-	let followersCount: Int?
-	let followingCount: Int?
-	let threadCount: Int?
+	let _count: ProfileCounts?
+	
+	struct ProfileCounts: Decodable {
+		let followers: Int
+		let following: Int
+		let thread: Int
+	}
+	
+	var followersCount: Int { _count?.followers ?? 0 }
+	var followingCount: Int { _count?.following ?? 0 }
+	var threadCount: Int { _count?.thread ?? 0 }
 	let isSelf: Bool?
 	let isFollowing: Bool?
 }
@@ -161,20 +169,17 @@ struct APIThread: Decodable {
 	let userId: String
 	let title: String
 	let description: String
-	let imageName: String?  // the S3 key stored in DB — may be null
-	let imageUrl: String?   // ✅ presigned R2 URL for display — use this in your ImageView
+	let imageName: String?  
+	let imageUrl: String?   
 	let tags: [String]?
 	var likesCount: Int
-	var isLiked: Bool?      // ✅ true if current user liked this thread
+	var isLiked: Bool?      
 	let commentsCount: Int
 	let sharesCount: Int?
 	let createdAt: String
 	let updatedAt: String
 	let user: APIThreadUser?
 }
-
-// ✅ FIXED: NOT Encodable — sent via multipart, not JSON.
-//           Added imageData + imageFileName for actual image upload.
 struct APICreateThreadRequest {
 	let title: String
 	let description: String
@@ -200,6 +205,7 @@ struct APIThreadDraft: Decodable {
 	let title: String
 	let description: String
 	let imageName: String? // S3 key — may be null
+	let imageUrl: String?  // presigned URL for display
 	let tags: [String]
 	let createdAt: String 
 	let updatedAt: String
@@ -220,6 +226,7 @@ struct APIThreadComment: Decodable {
 	let description: String
 	let createdAt: Date
 	let user: APIThreadUser?
+    let isLiked: Bool?
 }
 
 struct APICreateCommentRequest: Encodable {
@@ -234,6 +241,14 @@ struct APIThreadLikeResponse: Decodable {
 
 struct APIThreadLikeRequest: Encodable {
 	let threadId: String
+}
+
+struct APICommentLikeRequest: Encodable {
+    let commentId: String
+}
+
+struct APICommentLikeResponse: Decodable {
+    let liked: Bool
 }
 
 // ─────────────────────────────────────────────

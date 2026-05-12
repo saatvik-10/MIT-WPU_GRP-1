@@ -47,6 +47,29 @@ class ThreadDetailViewController: UIViewController {
         setupCard()
         setupActionButtons()
         configureWithData()
+
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(refreshThread),
+            name: .commentAdded,
+            object: nil
+        )
+    }
+
+    @objc private func refreshThread() {
+        guard let token = UserDefaults.standard.string(forKey: "authToken") else { return }
+        // Fetch the full thread again if we had a dedicated "fetch thread" endpoint.
+        // For now, we can just fetch all for-you threads and find this one, or just increment locally.
+        // Since we want accuracy, let's fetch for-you threads.
+        APIService.shared.fetchForYouThreads(token: token) { [weak self] result in
+            DispatchQueue.main.async {
+                if case .success(let threads) = result, 
+                   let updated = threads.first(where: { $0.id == self?.thread.id }) {
+                    self?.thread = updated
+                    self?.configureWithData()
+                }
+            }
+        }
     }
  
     // MARK: - ScrollView + outer container
