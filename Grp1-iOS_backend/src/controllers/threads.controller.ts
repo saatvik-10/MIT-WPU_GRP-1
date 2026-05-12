@@ -79,11 +79,26 @@ export class Threads {
               );
             }
           }
+
+          let profileImageUrl = thread.user?.profileImageUrl ?? null;
+          if (profileImageUrl && profileImageUrl.trim() !== '') {
+            try {
+              profileImageUrl = await r2Service.getPresignedUrl(profileImageUrl);
+            } catch (err) {
+              console.error(`[Threads] Failed presign user image:`, err);
+            }
+          }
+
           const isLiked = userId
             ? thread.likes.some((like) => like.userId === userId)
             : false;
 
-          return { ...thread, imageUrl, isLiked };
+          return {
+            ...thread,
+            imageUrl,
+            isLiked,
+            user: thread.user ? { ...thread.user, profileImageUrl } : thread.user
+          };
         }),
       );
 
@@ -130,9 +145,24 @@ export class Threads {
               );
             }
           }
+
+          let profileImageUrl = thread.user?.profileImageUrl ?? null;
+          if (profileImageUrl && profileImageUrl.trim() !== '') {
+            try {
+              profileImageUrl = await r2Service.getPresignedUrl(profileImageUrl);
+            } catch (err) {
+              console.error(`[Threads] Failed presign user image:`, err);
+            }
+          }
+
           const isLiked = thread.likes.some((like) => like.userId === userId);
 
-          return { ...thread, imageUrl, isLiked };
+          return {
+            ...thread,
+            imageUrl,
+            isLiked,
+            user: thread.user ? { ...thread.user, profileImageUrl } : thread.user
+          };
         }),
       );
 
@@ -557,12 +587,26 @@ export class Threads {
         include: { user: true, likes: true }, // Include likes strictly for the true/false calculation
         orderBy: { createdAt: 'desc' },
       });
-      // Format response to include isLiked
-      const formattedComments = comments.map(c => {
+      // Format response to include isLiked and presigned profileImageUrl
+      const formattedComments = await Promise.all(comments.map(async (c) => {
         const isLiked = userId ? c.likes.some(l => l.userId === userId) : false;
+        
+        let profileImageUrl = c.user?.profileImageUrl ?? null;
+        if (profileImageUrl && profileImageUrl.trim() !== '') {
+          try {
+            profileImageUrl = await r2Service.getPresignedUrl(profileImageUrl);
+          } catch (err) {
+            console.error(`[Comments] Failed presign user image:`, err);
+          }
+        }
+
         const { likes, ...rest } = c; // drop the raw array
-        return { ...rest, isLiked };
-      });
+        return { 
+          ...rest, 
+          isLiked,
+          user: rest.user ? { ...rest.user, profileImageUrl } : rest.user
+        };
+      }));
       return ctx.json(formattedComments);
     } catch (err) {
       return ctx.json({ error: 'Internal server error' }, 500);
