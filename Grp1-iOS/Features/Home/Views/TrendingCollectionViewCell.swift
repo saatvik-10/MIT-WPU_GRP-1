@@ -45,7 +45,7 @@ class TrendingCollectionViewCell: UICollectionViewCell {
     }
     @IBAction func moreButtonTapped(_ sender: UIButton) {
         let recommendAction = UIAction(
-            title: "Recommend this article more",
+            title: "Recommend this more",
             image: UIImage(systemName: "hand.thumbsup")
         ) { [weak self] _ in
             

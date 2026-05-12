@@ -25,14 +25,15 @@ class OnboardingPageViewController: UIPageViewController {
         step1.loadViewIfNeeded()
         step1.configure(
             with: OnboardingPage(
-                title: "Select your investment experience level",
+                title: "Experience Level",
                 options: [
-                    (title: "Beginner", subtitle: "Just starting my financial journey"),
-                    (title: "Intermediate", subtitle: "I have some experience"),
-                    (title: "Advanced", subtitle: "I understand markets")
+                    (title: "Beginner", subtitle: "New to investing. Guidance and simple concepts for your journey."),
+                    (title: "Intermediate", subtitle: "Some experience. You understand basic assets and have traded before."),
+                    (title: "Expert", subtitle: "Seasoned investor. Familiar with complex strategies and analysis.")
                 ]
             )
         )
+        selectedLevel = "Intermediate"
 
         step1.onOptionSelected = { [weak self] selected in
             self?.selectedLevel = selected
@@ -70,6 +71,7 @@ class OnboardingPageViewController: UIPageViewController {
         pageControl.pageIndicatorTintColor = UIColor.systemGray4
         pageControl.currentPageIndicatorTintColor = UIColor.systemBlue // or any brand color
         pageControl.isUserInteractionEnabled = false 
+        pageControl.isHidden = true
         pageControl.translatesAutoresizingMaskIntoConstraints = false
         
         // Add to main view and pin to the bottom
@@ -131,8 +133,9 @@ class OnboardingPageViewController: UIPageViewController {
         let api = APIService.shared
         let dispatchGroup = DispatchGroup()
 
-        if let levelString = self.selectedLevel?.components(separatedBy: "\n").first?.uppercased(),
-           let levelEnum = APILevel(rawValue: levelString) {
+        if let selectedLevel = self.selectedLevel?.components(separatedBy: "\n").first?.uppercased() {
+            let levelString = selectedLevel == "EXPERT" ? APILevel.advance.rawValue : selectedLevel
+            guard let levelEnum = APILevel(rawValue: levelString) else { return }
             
             dispatchGroup.enter()
             api.saveLevel(levelEnum, token: token) { result in
@@ -212,4 +215,3 @@ class OnboardingPageViewController: UIPageViewController {
         }
     }
 }
-
