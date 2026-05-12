@@ -11,7 +11,7 @@ final class APIService {
 		   !configuredURL.isEmpty {
 			self.baseURL = configuredURL
 		} else {
-			self.baseURL = "http://localhost:8080"
+			self.baseURL = "http://localhost:8081"
 		}
 		self.session = session
 	}
