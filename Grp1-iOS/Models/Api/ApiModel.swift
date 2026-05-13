@@ -107,8 +107,11 @@ struct APIUserProfileResponse: Decodable {
 		let thread: Int
 	}
 	
-	var followersCount: Int { _count?.followers ?? 0 }
-	var followingCount: Int { _count?.following ?? 0 }
+	// Prisma naming inversion fix:
+	// _count.following = rows where followingId=userId → people who follow this user = FOLLOWERS
+	// _count.followers = rows where followerId=userId → people this user follows    = FOLLOWING
+	var followersCount: Int { _count?.following ?? 0 }
+	var followingCount: Int { _count?.followers ?? 0 }
 	var threadCount: Int { _count?.thread ?? 0 }
 	let isSelf: Bool?
 	let isFollowing: Bool?
