@@ -255,6 +255,7 @@ class ThreadDetailViewController: UIViewController {
         actionsStackView.addArrangedSubview(makeActionPair(button: commentButton, label: commentCountLabel))
  
         likeButton.addTarget(self, action: #selector(didTapLike), for: .touchUpInside)
+        commentButton.addTarget(self, action: #selector(didTapComment), for: .touchUpInside)
     }
  
     private func makeActionPair(button: UIButton, label: UILabel) -> UIStackView {
@@ -287,7 +288,7 @@ class ThreadDetailViewController: UIViewController {
     private func configureWithData() {
         guard let thread else { return }
  
-        usernameLabel.text = thread.user?.username ?? "Unknown User"
+        usernameLabel.text = thread.user?.name ?? thread.user?.username ?? thread.userId
         
         // Basic date formatting (assuming ISO string)
         let formatter = ISO8601DateFormatter()
@@ -379,4 +380,19 @@ class ThreadDetailViewController: UIViewController {
         likeButton.tintColor = isLiked ? .systemRed : .systemBlue
         likeCountLabel.text = "\(currentLikesCount)"
     }
+
+    // MARK: - Comment action
+    @objc private func didTapComment() {
+        let vc = CommentsViewController()
+        vc.threadId = thread.id
+        vc.modalPresentationStyle = .pageSheet
+        if let sheet = vc.sheetPresentationController {
+            sheet.prefersGrabberVisible = true
+            sheet.preferredCornerRadius = 40
+            sheet.largestUndimmedDetentIdentifier = .medium
+            sheet.selectedDetentIdentifier = .medium
+        }
+        present(vc, animated: true)
+    }
 }
+

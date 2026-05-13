@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="24765" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="sUp-R7-HvU">
-    <device id="retina6_7" orientation="portrait" appearance="light"/>
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24743"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
@@ -15,11 +15,11 @@
             <objects>
                 <viewController id="BYZ-38-t0r" customClass="HomeViewController" customModule="Grp1_iOS" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
-                        <rect key="frame" x="0.0" y="0.0" width="430" height="932"/>
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="feY-SO-TRv">
-                                <rect key="frame" x="0.0" y="-50" width="430" height="982"/>
+                                <rect key="frame" x="0.0" y="-50" width="393" height="902"/>
                                 <color key="backgroundColor" systemColor="systemGray6Color"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="SjN-mx-edl">
                                     <size key="itemSize" width="210" height="203"/>
@@ -29,7 +29,7 @@
                                 </collectionViewFlowLayout>
                                 <cells>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="tlq-S2-gkS">
-                                        <rect key="frame" x="0.0" y="0.0" width="210" height="203"/>
+                                        <rect key="frame" x="91.666666666666671" y="0.0" width="210" height="203"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="Sk7-KX-gH3">
                                             <rect key="frame" x="0.0" y="0.0" width="210" height="203"/>
@@ -67,41 +67,41 @@
             <objects>
                 <viewController storyboardIdentifier="news1ViewController" id="RW8-V3-59t" customClass="news1ViewController" customModule="Grp1_iOS" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="KSv-zy-usd">
-                        <rect key="frame" x="0.0" y="0.0" width="430" height="932"/>
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="JYZ-WH-P5M">
-                                <rect key="frame" x="0.0" y="0.0" width="430" height="932"/>
+                                <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uq0-jf-7vI">
-                                        <rect key="frame" x="0.0" y="0.0" width="430" height="1750"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="393" height="1750"/>
                                         <subviews>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="urban_6" translatesAutoresizingMaskIntoConstraints="NO" id="ZKl-PX-dzR">
-                                                <rect key="frame" x="0.0" y="-170" width="430" height="407"/>
+                                                <rect key="frame" x="0.0" y="-170" width="393" height="407"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="407" id="RHM-9X-5En"/>
                                                 </constraints>
                                             </imageView>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="80U-0C-Ql1">
-                                                <rect key="frame" x="-10" y="-110" width="450" height="601"/>
+                                                <rect key="frame" x="-10" y="-110" width="413" height="601"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="601" id="YjV-Az-cYe"/>
                                                 </constraints>
                                             </imageView>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="BBC news  3 hours ago" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cAS-Rx-qhM">
-                                                <rect key="frame" x="10" y="110" width="370" height="14.333333333333329"/>
+                                                <rect key="frame" x="10" y="110" width="333" height="14.333333333333329"/>
                                                 <fontDescription key="fontDescription" style="UICTFontTextStyleCaption2"/>
                                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Nifty above 25,000, Sensex rises 583 pts led by IT, finance" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pH7-BD-D8p">
-                                                <rect key="frame" x="10" y="128.33333333333334" width="410" height="45.666666666666657"/>
+                                                <rect key="frame" x="10" y="128.33333333333334" width="373" height="45.666666666666657"/>
                                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="19"/>
                                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="vBW-Gj-mU6">
-                                                <rect key="frame" x="9" y="200" width="412" height="32"/>
+                                                <rect key="frame" x="9" y="200" width="375" height="32"/>
                                                 <segments>
                                                     <segment title="Overview"/>
                                                     <segment title="Key Takeaways"/>
@@ -112,10 +112,10 @@
                                                 </connections>
                                             </segmentedControl>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fQp-ra-bih">
-                                                <rect key="frame" x="17" y="243.99999999999997" width="396" height="358.33333333333326"/>
+                                                <rect key="frame" x="17" y="243.99999999999997" width="359" height="402.33333333333326"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OuD-kg-sle">
-                                                        <rect key="frame" x="15" y="15" width="366" height="328.33333333333331"/>
+                                                        <rect key="frame" x="15" y="15" width="329" height="372.33333333333331"/>
                                                         <string key="text">The market continued its upward move on Friday, with Nifty gaining 103 points and closing near the day’s high, showing strong buying interest throughout the session.
 
 Bullish patterns on the daily and weekly charts indicate that the ongoing uptrend is healthy and likely to continue in the coming week.
@@ -137,7 +137,7 @@ Overall sentiment remains positive, and dips are expected to attract fresh buyin
                                                 </constraints>
                                             </view>
                                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="Nuz-gK-vkj">
-                                                <rect key="frame" x="0.0" y="982.33333333333348" width="430" height="767.66666666666652"/>
+                                                <rect key="frame" x="0.0" y="1026.3333333333333" width="393" height="723.66666666666674"/>
                                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                 <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="kmC-28-wvm">
                                                     <size key="itemSize" width="196" height="131"/>
@@ -147,7 +147,7 @@ Overall sentiment remains positive, and dips are expected to attract fresh buyin
                                                 </collectionViewFlowLayout>
                                                 <cells>
                                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="KUR-nq-tAM">
-                                                        <rect key="frame" x="0.0" y="0.0" width="196" height="131"/>
+                                                        <rect key="frame" x="98.666666666666671" y="0.0" width="196" height="131"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                         <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="NKG-B2-hOb">
                                                             <rect key="frame" x="0.0" y="0.0" width="196" height="131"/>
@@ -158,13 +158,13 @@ Overall sentiment remains positive, and dips are expected to attract fresh buyin
                                                 </cells>
                                             </collectionView>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Jargons" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DCd-VE-pN3">
-                                                <rect key="frame" x="10" y="640.33333333333337" width="128" height="27"/>
+                                                <rect key="frame" x="10" y="684.33333333333337" width="91" height="27"/>
                                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="22"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="g1x-L6-LQf">
-                                                <rect key="frame" x="17" y="682.33333333333337" width="396" height="254"/>
+                                                <rect key="frame" x="17" y="726.33333333333337" width="359" height="254"/>
                                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="254" id="kIC-TC-loh"/>
@@ -217,7 +217,7 @@ Overall sentiment remains positive, and dips are expected to attract fresh buyin
                                 </constraints>
                             </scrollView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BQ9-Y9-BCB">
-                                <rect key="frame" x="140" y="770" width="150" height="35"/>
+                                <rect key="frame" x="120" y="690" width="153" height="35"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="filled" title="Ask Question"/>
                                 <connections>
@@ -233,8 +233,8 @@ Overall sentiment remains positive, and dips are expected to attract fresh buyin
                             <constraint firstItem="OK9-Wy-aEa" firstAttribute="bottom" secondItem="BQ9-Y9-BCB" secondAttribute="bottom" constant="10" id="VAd-Eu-HU4"/>
                             <constraint firstItem="JYZ-WH-P5M" firstAttribute="top" secondItem="KSv-zy-usd" secondAttribute="top" id="bAj-su-Q46"/>
                             <constraint firstAttribute="trailing" secondItem="JYZ-WH-P5M" secondAttribute="trailing" id="gPF-5N-eMU"/>
-                            <constraint firstItem="OK9-Wy-aEa" firstAttribute="trailing" secondItem="BQ9-Y9-BCB" secondAttribute="trailing" constant="140" id="hFy-04-E9y"/>
-                            <constraint firstItem="BQ9-Y9-BCB" firstAttribute="leading" secondItem="OK9-Wy-aEa" secondAttribute="leading" constant="140" id="pPs-1f-jqJ"/>
+                            <constraint firstItem="OK9-Wy-aEa" firstAttribute="trailing" secondItem="BQ9-Y9-BCB" secondAttribute="trailing" constant="120" id="hFy-04-E9y"/>
+                            <constraint firstItem="BQ9-Y9-BCB" firstAttribute="leading" secondItem="OK9-Wy-aEa" secondAttribute="leading" constant="120" id="pPs-1f-jqJ"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="cGd-fr-GiW">
@@ -263,7 +263,7 @@ Overall sentiment remains positive, and dips are expected to attract fresh buyin
             <objects>
                 <viewController id="zua-AY-Mfj" customClass="HomeChatDetailViewController" customModule="Grp1_iOS" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="UpF-yT-9H2">
-                        <rect key="frame" x="0.0" y="0.0" width="430" height="873"/>
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <viewLayoutGuide key="safeArea" id="leh-V6-Grb"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -290,11 +290,11 @@ Overall sentiment remains positive, and dips are expected to attract fresh buyin
             <objects>
                 <viewController id="BqM-84-1bU" customClass="ExploreMoreViewController" customModule="Grp1_iOS" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="MzI-it-gjN">
-                        <rect key="frame" x="0.0" y="0.0" width="430" height="932"/>
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="del-ne-d1T">
-                                <rect key="frame" x="0.0" y="0.0" width="430" height="932"/>
+                                <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                                 <color key="backgroundColor" systemColor="systemGray6Color"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="Ftu-N2-qe3">
                                     <size key="itemSize" width="128" height="128"/>
@@ -304,10 +304,10 @@ Overall sentiment remains positive, and dips are expected to attract fresh buyin
                                 </collectionViewFlowLayout>
                                 <cells>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="V5f-l9-Loc">
-                                        <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="127.99999999999997" height="128"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="obW-oF-747">
-                                            <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="127.99999999999997" height="128"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </collectionViewCellContentView>
                                         <connections>
@@ -346,11 +346,11 @@ Overall sentiment remains positive, and dips are expected to attract fresh buyin
             <objects>
                 <viewController id="LDp-nh-vMu" customClass="SearchViewController" customModule="Grp1_iOS" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8fe-ou-m5X">
-                        <rect key="frame" x="0.0" y="0.0" width="430" height="932"/>
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="yC2-QB-vrt">
-                                <rect key="frame" x="0.0" y="171" width="430" height="590"/>
+                                <rect key="frame" x="0.0" y="171" width="393" height="510"/>
                                 <color key="backgroundColor" systemColor="systemGray6Color"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="Huo-an-Nei">
                                     <size key="itemSize" width="128" height="128"/>
@@ -360,10 +360,10 @@ Overall sentiment remains positive, and dips are expected to attract fresh buyin
                                 </collectionViewFlowLayout>
                                 <cells>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="2h4-OZ-wNm">
-                                        <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="127.99999999999997" height="128"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="dRs-ni-dLV">
-                                            <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="127.99999999999997" height="128"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </collectionViewCellContentView>
                                         <connections>
@@ -373,7 +373,7 @@ Overall sentiment remains positive, and dips are expected to attract fresh buyin
                                 </cells>
                             </collectionView>
                             <searchBar contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="9BM-fD-Z0j">
-                                <rect key="frame" x="10" y="756" width="410" height="54"/>
+                                <rect key="frame" x="10" y="676" width="373" height="54"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="54" id="AhS-X3-yv5"/>
@@ -415,7 +415,7 @@ Overall sentiment remains positive, and dips are expected to attract fresh buyin
                     <tabBarItem key="tabBarItem" title="Home" image="house" catalog="system" id="QI9-fg-fRO"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" largeTitles="YES" id="XMt-N7-va3">
-                        <rect key="frame" x="0.0" y="118" width="430" height="106"/>
+                        <rect key="frame" x="0.0" y="118" width="393" height="106"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
@@ -434,7 +434,7 @@ Overall sentiment remains positive, and dips are expected to attract fresh buyin
                     <toolbarItems/>
                     <navigationItem key="navigationItem" id="aML-ib-zZ8"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="0O8-DG-dhA">
-                        <rect key="frame" x="0.0" y="20" width="430" height="54"/>
+                        <rect key="frame" x="0.0" y="118" width="393" height="54"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
@@ -451,20 +451,11 @@ Overall sentiment remains positive, and dips are expected to attract fresh buyin
             <objects>
                 <viewController id="Xaa-hw-BRK" customClass="JargonDetailViewController" customModule="Grp1_iOS" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="nXc-sM-c4Q">
-                        <rect key="frame" x="0.0" y="0.0" width="430" height="873"/>
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="793"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="A3A-Wz-fty">
-                                <rect key="frame" x="62" y="632" width="306" height="25.333333333333371"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="25.329999999999998" id="tKD-mI-yoE"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="boldSystem" pointSize="21"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ePT-lS-R7c">
-                                <rect key="frame" x="349" y="9" width="67" height="35"/>
+                                <rect key="frame" x="312" y="9" width="67" height="35"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" title="Close"/>
                                 <connections>
@@ -472,203 +463,86 @@ Overall sentiment remains positive, and dips are expected to attract fresh buyin
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Bnk-YJ-5Mp">
-                                <rect key="frame" x="20" y="671.66666666666663" width="390" height="86.333333333333371"/>
+                                <rect key="frame" x="20" y="619.66666666666663" width="353" height="108.33333333333337"/>
                                 <string key="text">Ready to understand this term? We’ll explain it in clear, simple language so you can follow the story with more confidence and clarity.                                  Tap on Continue to start your learning journey</string>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
                                 <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Xtp-is-140">
-                                <rect key="frame" x="20" y="801" width="390" height="35"/>
+                                <rect key="frame" x="20" y="748" width="353" height="35"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="filled" title="Continue"/>
                                 <connections>
                                     <segue destination="PnM-LS-zjX" kind="show" id="OZ9-lz-w5K"/>
                                 </connections>
                             </button>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="questionmark" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="BkJ-3t-8Yf">
-                                <rect key="frame" x="90" y="292" width="251" height="179"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="A3A-Wz-fty">
+                                <rect key="frame" x="62" y="572.66666666666663" width="269" height="25.333333333333371"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="251" id="g9X-CU-068"/>
-                                    <constraint firstAttribute="height" constant="181.33000000000001" id="iYQ-DT-NJf"/>
+                                    <constraint firstAttribute="height" constant="25.329999999999998" id="tKD-mI-yoE"/>
                                 </constraints>
-                            </imageView>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="graduationcap" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="jN3-Ql-4CA">
-                                <rect key="frame" x="90" y="257" width="37" height="37"/>
-                                <color key="tintColor" systemColor="systemYellowColor"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="21"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="questionmark" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="Sf3-5h-lbO">
+                                <rect key="frame" x="76" y="274" width="240" height="147.66666666666663"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="35" id="8Vi-1e-waY"/>
-                                    <constraint firstAttribute="width" constant="37" id="CPX-tw-LwZ"/>
-                                </constraints>
-                            </imageView>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="graph.2d" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="1sT-yx-uAl">
-                                <rect key="frame" x="212" y="232.33333333333334" width="37" height="32.333333333333286"/>
-                                <color key="tintColor" name="outgoingMessageBackground"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="37" id="45D-jD-2bp"/>
-                                    <constraint firstAttribute="height" constant="35" id="mTl-Y5-dop"/>
-                                </constraints>
-                            </imageView>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="pencil" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="Eke-Ns-aYv">
-                                <rect key="frame" x="331" y="292.66666666666669" width="37" height="29.999999999999943"/>
-                                <color key="tintColor" systemColor="systemYellowColor"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="35" id="YQe-ef-hbL"/>
-                                    <constraint firstAttribute="width" constant="37" id="ta1-vp-YJZ"/>
-                                </constraints>
-                            </imageView>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="indianrupeesign" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="Qdv-Hd-0qs">
-                                <rect key="frame" x="319" y="365.66666666666669" width="37" height="32"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="37" id="39j-GL-mIC"/>
-                                    <constraint firstAttribute="height" constant="35" id="lpS-hn-ekh"/>
-                                </constraints>
-                            </imageView>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="dollarsign" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="jVd-n2-uh2">
-                                <rect key="frame" x="73" y="403.66666666666669" width="37" height="35.666666666666686"/>
-                                <color key="tintColor" name="label"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="37" id="0qo-QY-8t6"/>
-                                    <constraint firstAttribute="height" constant="35" id="wnp-lL-nzU"/>
-                                </constraints>
-                            </imageView>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bitcoinsign.arrow.trianglehead.counterclockwise.rotate.90" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="9k0-og-vku">
-                                <rect key="frame" x="61.666666666666657" y="322.66666666666669" width="37.333333333333343" height="33.666666666666686"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="37" id="Xyd-TQ-kfl"/>
-                                    <constraint firstAttribute="height" constant="35" id="rHb-fC-IKw"/>
-                                </constraints>
-                            </imageView>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="graph.2d" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="5M2-OZ-hB2">
-                                <rect key="frame" x="304" y="463.33333333333331" width="37" height="32.333333333333314"/>
-                                <color key="tintColor" red="0.91976243260000001" green="0.01039442554" blue="0.026362170220000002" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="35" id="BZU-Nk-p9N"/>
-                                    <constraint firstAttribute="width" constant="37" id="jfn-Oh-Rsp"/>
-                                </constraints>
-                            </imageView>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="eurosign" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="Wbx-LG-ZoP">
-                                <rect key="frame" x="150" y="487.66666666666669" width="37" height="31.666666666666686"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="37" id="6I2-ma-mNs"/>
-                                    <constraint firstAttribute="height" constant="35" id="OPg-fb-aeb"/>
-                                </constraints>
-                            </imageView>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="pencil" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="Cji-d7-8Yb">
-                                <rect key="frame" x="119" y="177.66666666666666" width="37" height="30"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="35" id="IrH-8w-GLA"/>
-                                    <constraint firstAttribute="width" constant="37" id="kcG-A2-GKM"/>
-                                </constraints>
-                            </imageView>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="graduationcap" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="eco-Fz-FyO">
-                                <rect key="frame" x="370" y="421" width="40" height="37"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="35" id="niU-ms-czr"/>
-                                </constraints>
-                            </imageView>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="dollarsign.arrow.trianglehead.counterclockwise.rotate.90" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="t7S-OW-1TS">
-                                <rect key="frame" x="212.66666666666666" y="146.66666666666666" width="37.333333333333343" height="33.666666666666657"/>
-                                <color key="tintColor" systemColor="systemMintColor"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="35" id="VcL-vg-FZD"/>
-                                    <constraint firstAttribute="width" constant="37" id="msT-bh-DF6"/>
-                                </constraints>
-                            </imageView>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="eurosign.arrow.trianglehead.counterclockwise.rotate.90" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="lSP-vc-Rcp">
-                                <rect key="frame" x="300.66666666666669" y="206.66666666666666" width="40.333333333333314" height="33.666666666666657"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="35" id="nmZ-6u-Xw8"/>
+                                    <constraint firstAttribute="width" constant="240" id="5N8-Sp-okb"/>
+                                    <constraint firstAttribute="height" constant="150" id="rzT-xg-Bc8"/>
                                 </constraints>
                             </imageView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Uzs-h4-Xh6"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="Qdv-Hd-0qs" firstAttribute="leading" secondItem="Uzs-h4-Xh6" secondAttribute="leading" constant="319" id="6xl-5t-apz"/>
+                            <constraint firstItem="Xtp-is-140" firstAttribute="top" secondItem="Bnk-YJ-5Mp" secondAttribute="bottom" constant="20" id="02N-9L-9oF"/>
                             <constraint firstItem="ePT-lS-R7c" firstAttribute="top" secondItem="nXc-sM-c4Q" secondAttribute="top" constant="9" id="7NN-Mi-axb"/>
-                            <constraint firstItem="9k0-og-vku" firstAttribute="top" secondItem="jN3-Ql-4CA" secondAttribute="bottom" constant="31" id="7eY-9a-Sne"/>
-                            <constraint firstItem="Uzs-h4-Xh6" firstAttribute="trailing" secondItem="jVd-n2-uh2" secondAttribute="trailing" constant="320" id="9x6-GB-t1e"/>
-                            <constraint firstItem="Uzs-h4-Xh6" firstAttribute="trailing" secondItem="Eke-Ns-aYv" secondAttribute="trailing" constant="62" id="BfK-Ul-N8t"/>
-                            <constraint firstItem="Cji-d7-8Yb" firstAttribute="leading" secondItem="Uzs-h4-Xh6" secondAttribute="leading" constant="119" id="DDt-d4-8xr"/>
-                            <constraint firstItem="Eke-Ns-aYv" firstAttribute="top" secondItem="lSP-vc-Rcp" secondAttribute="bottom" constant="49" id="DN2-9p-lQw"/>
-                            <constraint firstItem="jN3-Ql-4CA" firstAttribute="leading" secondItem="Uzs-h4-Xh6" secondAttribute="leading" constant="90" id="Ds3-Ww-T6l"/>
-                            <constraint firstItem="5M2-OZ-hB2" firstAttribute="leading" secondItem="Wbx-LG-ZoP" secondAttribute="trailing" constant="117" id="EFC-IT-FGn"/>
-                            <constraint firstItem="Bnk-YJ-5Mp" firstAttribute="top" secondItem="A3A-Wz-fty" secondAttribute="bottom" constant="14.33" id="FtU-Yx-b6p"/>
                             <constraint firstItem="Xtp-is-140" firstAttribute="leading" secondItem="Uzs-h4-Xh6" secondAttribute="leading" constant="20" id="Hev-EI-beK"/>
-                            <constraint firstItem="Uzs-h4-Xh6" firstAttribute="trailing" secondItem="t7S-OW-1TS" secondAttribute="trailing" constant="180" id="Iem-oH-U1N"/>
                             <constraint firstItem="A3A-Wz-fty" firstAttribute="leading" secondItem="Uzs-h4-Xh6" secondAttribute="leading" constant="62" id="JSy-uh-7XB"/>
                             <constraint firstItem="Uzs-h4-Xh6" firstAttribute="trailing" secondItem="A3A-Wz-fty" secondAttribute="trailing" constant="62" id="LPU-KH-Rb4"/>
-                            <constraint firstItem="Uzs-h4-Xh6" firstAttribute="bottom" secondItem="Xtp-is-140" secondAttribute="bottom" constant="37" id="LjC-HR-8DJ"/>
-                            <constraint firstItem="Qdv-Hd-0qs" firstAttribute="leading" secondItem="Uzs-h4-Xh6" secondAttribute="leading" constant="319" id="OrT-f1-eii"/>
-                            <constraint firstItem="1sT-yx-uAl" firstAttribute="top" secondItem="t7S-OW-1TS" secondAttribute="bottom" constant="50" id="PNG-0y-Ecd"/>
+                            <constraint firstItem="Uzs-h4-Xh6" firstAttribute="bottom" secondItem="Xtp-is-140" secondAttribute="bottom" constant="10" id="LjC-HR-8DJ"/>
                             <constraint firstItem="Bnk-YJ-5Mp" firstAttribute="leading" secondItem="Uzs-h4-Xh6" secondAttribute="leading" constant="20" id="QnG-xi-s2W"/>
-                            <constraint firstItem="jN3-Ql-4CA" firstAttribute="top" secondItem="Cji-d7-8Yb" secondAttribute="bottom" constant="46" id="Rkd-NA-nPX"/>
-                            <constraint firstItem="Uzs-h4-Xh6" firstAttribute="trailing" secondItem="5M2-OZ-hB2" secondAttribute="trailing" constant="89" id="TKJ-pL-H12"/>
-                            <constraint firstItem="jVd-n2-uh2" firstAttribute="top" secondItem="9k0-og-vku" secondAttribute="bottom" constant="47" id="U4U-uL-mza"/>
-                            <constraint firstItem="eco-Fz-FyO" firstAttribute="top" secondItem="nXc-sM-c4Q" secondAttribute="top" constant="420" id="UwS-qJ-BOs"/>
-                            <constraint firstItem="1sT-yx-uAl" firstAttribute="leading" secondItem="jN3-Ql-4CA" secondAttribute="trailing" constant="85" id="VzL-Ah-Id5"/>
-                            <constraint firstItem="Eke-Ns-aYv" firstAttribute="leading" secondItem="Uzs-h4-Xh6" secondAttribute="leading" constant="331" id="Ybq-Lb-8aI"/>
-                            <constraint firstItem="jVd-n2-uh2" firstAttribute="leading" secondItem="Uzs-h4-Xh6" secondAttribute="leading" constant="73" id="ZQd-Ht-x9S"/>
-                            <constraint firstItem="eco-Fz-FyO" firstAttribute="leading" secondItem="BkJ-3t-8Yf" secondAttribute="trailing" constant="29" id="bqf-yL-g87"/>
-                            <constraint firstItem="Qdv-Hd-0qs" firstAttribute="top" secondItem="Eke-Ns-aYv" secondAttribute="bottom" constant="39" id="dPh-2g-nJM"/>
-                            <constraint firstItem="5M2-OZ-hB2" firstAttribute="top" secondItem="Qdv-Hd-0qs" secondAttribute="bottom" constant="63" id="du7-ED-4Bx"/>
-                            <constraint firstItem="9k0-og-vku" firstAttribute="leading" secondItem="Uzs-h4-Xh6" secondAttribute="leading" constant="62" id="hC4-nd-mqh"/>
-                            <constraint firstItem="Uzs-h4-Xh6" firstAttribute="trailing" secondItem="Qdv-Hd-0qs" secondAttribute="trailing" constant="74" id="hba-Od-sWO"/>
-                            <constraint firstItem="5M2-OZ-hB2" firstAttribute="leading" secondItem="Wbx-LG-ZoP" secondAttribute="trailing" constant="117" id="hq5-ea-fCp"/>
-                            <constraint firstItem="Uzs-h4-Xh6" firstAttribute="trailing" secondItem="Qdv-Hd-0qs" secondAttribute="trailing" constant="74" id="jLY-Zr-c4i"/>
-                            <constraint firstItem="BkJ-3t-8Yf" firstAttribute="leading" secondItem="Uzs-h4-Xh6" secondAttribute="leading" constant="90" id="jS3-ob-Wqg"/>
-                            <constraint firstItem="Uzs-h4-Xh6" firstAttribute="trailing" secondItem="9k0-og-vku" secondAttribute="trailing" constant="331" id="k9S-1X-BW3"/>
-                            <constraint firstItem="A3A-Wz-fty" firstAttribute="top" secondItem="5M2-OZ-hB2" secondAttribute="bottom" constant="135" id="l1o-V7-uYq"/>
-                            <constraint firstItem="Bnk-YJ-5Mp" firstAttribute="top" secondItem="eco-Fz-FyO" secondAttribute="bottom" constant="216.66999999999999" id="mRB-8L-TQt"/>
-                            <constraint firstItem="BkJ-3t-8Yf" firstAttribute="top" secondItem="1sT-yx-uAl" secondAttribute="bottom" constant="24.670000000000002" id="mg3-80-s5r"/>
-                            <constraint firstItem="eco-Fz-FyO" firstAttribute="trailing" secondItem="Bnk-YJ-5Mp" secondAttribute="trailing" id="oEw-rl-xrq"/>
-                            <constraint firstItem="A3A-Wz-fty" firstAttribute="top" secondItem="jVd-n2-uh2" secondAttribute="bottom" constant="193" id="oM8-td-q0y"/>
-                            <constraint firstItem="Uzs-h4-Xh6" firstAttribute="trailing" secondItem="lSP-vc-Rcp" secondAttribute="trailing" constant="89" id="oTu-07-QC1"/>
-                            <constraint firstItem="A3A-Wz-fty" firstAttribute="top" secondItem="Wbx-LG-ZoP" secondAttribute="bottom" constant="111" id="pd2-Oh-RWn"/>
+                            <constraint firstItem="Sf3-5h-lbO" firstAttribute="leading" secondItem="Uzs-h4-Xh6" secondAttribute="leading" constant="76" id="X6e-nw-hhR"/>
+                            <constraint firstItem="Uzs-h4-Xh6" firstAttribute="trailing" secondItem="Sf3-5h-lbO" secondAttribute="trailing" constant="77" id="XBR-KA-J28"/>
+                            <constraint firstItem="A3A-Wz-fty" firstAttribute="top" secondItem="Sf3-5h-lbO" secondAttribute="bottom" constant="150" id="dfO-dO-Brs"/>
+                            <constraint firstItem="Bnk-YJ-5Mp" firstAttribute="top" secondItem="A3A-Wz-fty" secondAttribute="bottom" constant="21.670000000000002" id="oLu-Xf-1gt"/>
                             <constraint firstItem="Uzs-h4-Xh6" firstAttribute="trailing" secondItem="Bnk-YJ-5Mp" secondAttribute="trailing" constant="20" id="pqv-u9-7ao"/>
-                            <constraint firstItem="Eke-Ns-aYv" firstAttribute="top" secondItem="lSP-vc-Rcp" secondAttribute="bottom" constant="49" id="srp-5Y-pKF"/>
                             <constraint firstAttribute="trailing" secondItem="ePT-lS-R7c" secondAttribute="trailing" constant="14" id="tdx-WA-Tog"/>
-                            <constraint firstItem="A3A-Wz-fty" firstAttribute="top" secondItem="BkJ-3t-8Yf" secondAttribute="bottom" constant="160" id="vs3-xm-PeK"/>
-                            <constraint firstItem="lSP-vc-Rcp" firstAttribute="leading" secondItem="1sT-yx-uAl" secondAttribute="trailing" constant="52" id="wzO-YE-PNF"/>
-                            <constraint firstItem="t7S-OW-1TS" firstAttribute="leading" secondItem="Cji-d7-8Yb" secondAttribute="trailing" constant="57" id="wzk-Na-cxW"/>
                             <constraint firstItem="Uzs-h4-Xh6" firstAttribute="trailing" secondItem="Xtp-is-140" secondAttribute="trailing" constant="20" id="ybE-WM-KkF"/>
-                            <constraint firstItem="t7S-OW-1TS" firstAttribute="leading" secondItem="Cji-d7-8Yb" secondAttribute="trailing" constant="57" id="zbw-A7-Bhk"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="Zm1-sZ-sXW"/>
                     <connections>
                         <outlet property="continueButton" destination="Xtp-is-140" id="jo9-xB-A9j"/>
-                        <outlet property="questionMark" destination="BkJ-3t-8Yf" id="dhY-ux-Vfe"/>
+                        <outlet property="questionMark" destination="Sf3-5h-lbO" id="uIV-KJ-muh"/>
                         <outlet property="titleLabel" destination="A3A-Wz-fty" id="XfP-xd-9Bh"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="JLg-9T-xrd" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="6883" y="973"/>
+            <point key="canvasLocation" x="6881.679389312977" y="972.53521126760563"/>
         </scene>
         <!--Jargon Defination View Controller-->
         <scene sceneID="VsL-Ac-Zqg">
             <objects>
                 <viewController id="PnM-LS-zjX" customClass="jargonDefinationViewController" customModule="Grp1_iOS" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="gk9-oQ-4pU" customClass="jargon">
-                        <rect key="frame" x="0.0" y="0.0" width="430" height="873"/>
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="793"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PH8-T7-5CV">
-                                <rect key="frame" x="27" y="109" width="390" height="719"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="PH8-T7-5CV">
+                                <rect key="frame" x="20" y="105" width="353" height="643"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XXc-ym-pyi">
-                                        <rect key="frame" x="15" y="20.000000000000004" width="360" height="44.333333333333343"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="360" id="ASU-cL-ACn"/>
-                                        </constraints>
+                                        <rect key="frame" x="15" y="20.000000000000004" width="323" height="44.333333333333343"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="37"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mkq-1B-bFV">
-                                        <rect key="frame" x="350" y="679" width="40" height="35"/>
+                                        <rect key="frame" x="313" y="603" width="40" height="35"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" image="chevron.right" catalog="system" title=""/>
                                         <connections>
@@ -676,7 +550,7 @@ Overall sentiment remains positive, and dips are expected to attract fresh buyin
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qwi-h3-kcb">
-                                        <rect key="frame" x="0.0" y="679" width="40" height="35"/>
+                                        <rect key="frame" x="0.0" y="603" width="40" height="35"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" image="chevron.left" catalog="system" title=""/>
                                         <connections>
@@ -684,22 +558,19 @@ Overall sentiment remains positive, and dips are expected to attract fresh buyin
                                         </connections>
                                     </button>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="249" verticalHuggingPriority="251" text="1/2" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mVG-zi-Q1X">
-                                        <rect key="frame" x="170" y="686" width="51" height="21"/>
+                                        <rect key="frame" x="160" y="610" width="33" height="21"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <color key="textColor" systemColor="systemBlueColor"/>
                                         <color key="highlightedColor" systemColor="systemBlueColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ILs-od-vVb">
-                                        <rect key="frame" x="15" y="74.333333333333343" width="360" height="16.333333333333329"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="360" id="4sP-RE-dSp"/>
-                                        </constraints>
+                                        <rect key="frame" x="15" y="74.333333333333343" width="323" height="16.333333333333329"/>
                                         <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="14"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="F4H-u6-vHW">
-                                        <rect key="frame" x="40" y="635" width="310" height="35"/>
+                                        <rect key="frame" x="40" y="559" width="273" height="35"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="filled" title="Take Quiz"/>
                                         <connections>
@@ -709,6 +580,7 @@ Overall sentiment remains positive, and dips are expected to attract fresh buyin
                                 </subviews>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="ILs-od-vVb" secondAttribute="trailing" constant="15" id="5IQ-Te-dQA"/>
                                     <constraint firstItem="ILs-od-vVb" firstAttribute="leading" secondItem="PH8-T7-5CV" secondAttribute="leading" constant="15" id="7CR-jT-2Ie"/>
                                     <constraint firstAttribute="bottom" secondItem="qwi-h3-kcb" secondAttribute="bottom" constant="5" id="7td-E9-tQk"/>
                                     <constraint firstItem="mVG-zi-Q1X" firstAttribute="top" secondItem="F4H-u6-vHW" secondAttribute="bottom" constant="16" id="87k-zS-fd8"/>
@@ -716,13 +588,12 @@ Overall sentiment remains positive, and dips are expected to attract fresh buyin
                                     <constraint firstItem="ILs-od-vVb" firstAttribute="top" secondItem="XXc-ym-pyi" secondAttribute="bottom" constant="10" id="Fib-79-n2M"/>
                                     <constraint firstAttribute="bottom" secondItem="mVG-zi-Q1X" secondAttribute="bottom" constant="12" id="HTj-py-M6a"/>
                                     <constraint firstItem="F4H-u6-vHW" firstAttribute="leading" secondItem="PH8-T7-5CV" secondAttribute="leading" constant="40" id="I3e-2a-vw6"/>
+                                    <constraint firstAttribute="trailing" secondItem="F4H-u6-vHW" secondAttribute="trailing" constant="40" id="Ikv-JP-EUp"/>
+                                    <constraint firstAttribute="trailing" secondItem="XXc-ym-pyi" secondAttribute="trailing" constant="15" id="R7C-W3-rzN"/>
                                     <constraint firstItem="XXc-ym-pyi" firstAttribute="top" secondItem="PH8-T7-5CV" secondAttribute="top" constant="20" id="Tx7-4S-M3t"/>
-                                    <constraint firstAttribute="trailing" secondItem="F4H-u6-vHW" secondAttribute="trailing" constant="40" id="Wu0-tI-JVM"/>
-                                    <constraint firstAttribute="trailing" secondItem="XXc-ym-pyi" secondAttribute="trailing" constant="15" id="YH7-TV-tAh"/>
-                                    <constraint firstAttribute="trailing" secondItem="ILs-od-vVb" secondAttribute="trailing" constant="15" id="cSf-nm-PzZ"/>
                                     <constraint firstAttribute="bottom" secondItem="mkq-1B-bFV" secondAttribute="bottom" constant="5" id="dWS-4O-eUm"/>
-                                    <constraint firstItem="mkq-1B-bFV" firstAttribute="leading" secondItem="mVG-zi-Q1X" secondAttribute="trailing" constant="129" id="enG-Dp-WHy"/>
-                                    <constraint firstItem="mVG-zi-Q1X" firstAttribute="leading" secondItem="qwi-h3-kcb" secondAttribute="trailing" constant="130" id="gWh-uT-C2r"/>
+                                    <constraint firstItem="mkq-1B-bFV" firstAttribute="leading" secondItem="mVG-zi-Q1X" secondAttribute="trailing" constant="120" id="enG-Dp-WHy"/>
+                                    <constraint firstItem="mVG-zi-Q1X" firstAttribute="leading" secondItem="qwi-h3-kcb" secondAttribute="trailing" constant="120" id="gWh-uT-C2r"/>
                                     <constraint firstItem="qwi-h3-kcb" firstAttribute="leading" secondItem="PH8-T7-5CV" secondAttribute="leading" id="tF3-XH-fBp"/>
                                     <constraint firstItem="XXc-ym-pyi" firstAttribute="leading" secondItem="PH8-T7-5CV" secondAttribute="leading" constant="15" id="v7H-0i-fuU"/>
                                 </constraints>
@@ -761,11 +632,11 @@ Overall sentiment remains positive, and dips are expected to attract fresh buyin
             <objects>
                 <viewController id="Pan-k1-rfG" customClass="jargonQuizViewController" customModule="Grp1_iOS" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Lfo-9h-TxT">
-                        <rect key="frame" x="0.0" y="0.0" width="430" height="873"/>
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="793"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MGO-S3-pNM">
-                                <rect key="frame" x="20" y="109" width="390" height="719"/>
+                                <rect key="frame" x="20" y="105" width="139.33333333333334" height="643"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lr2-02-9S6">
                                         <rect key="frame" x="15" y="57.000000000000007" width="360" height="20.333333333333336"/>
@@ -777,7 +648,7 @@ Overall sentiment remains positive, and dips are expected to attract fresh buyin
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="leading" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="h9K-f8-hb8">
-                                        <rect key="frame" x="26" y="215.33333333333331" width="338" height="56"/>
+                                        <rect key="frame" x="25.999999999999993" y="215.33333333333331" width="87.333333333333314" height="56"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="56" id="twW-pI-jWp"/>
                                         </constraints>
@@ -790,7 +661,7 @@ Overall sentiment remains positive, and dips are expected to attract fresh buyin
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="leading" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="csr-e2-BNG">
-                                        <rect key="frame" x="26" y="301.33333333333331" width="338" height="56"/>
+                                        <rect key="frame" x="25.999999999999993" y="301.33333333333331" width="87.333333333333314" height="56"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="56" id="jnQ-5L-wBa"/>
                                         </constraints>
@@ -803,7 +674,7 @@ Overall sentiment remains positive, and dips are expected to attract fresh buyin
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="leading" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="M34-bT-KEH">
-                                        <rect key="frame" x="26" y="387.33333333333331" width="338" height="56"/>
+                                        <rect key="frame" x="25.999999999999993" y="387.33333333333331" width="87.333333333333314" height="56"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="56" id="ZAW-pd-K7k"/>
                                         </constraints>
@@ -816,7 +687,7 @@ Overall sentiment remains positive, and dips are expected to attract fresh buyin
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="leading" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GKS-Ky-pjb">
-                                        <rect key="frame" x="26" y="129.33333333333334" width="338" height="56"/>
+                                        <rect key="frame" x="25.999999999999993" y="129.33333333333334" width="87.333333333333314" height="56"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="56" id="rQh-QE-9Xu"/>
                                         </constraints>
@@ -829,13 +700,13 @@ Overall sentiment remains positive, and dips are expected to attract fresh buyin
                                         </connections>
                                     </button>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EPS-re-nSw">
-                                        <rect key="frame" x="26" y="532.66666666666663" width="338" height="0.0"/>
+                                        <rect key="frame" x="25.999999999999993" y="532.66666666666663" width="87.333333333333314" height="0.0"/>
                                         <fontDescription key="fontDescription" style="UICTFontTextStyleTitle3"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jVA-ET-6dG">
-                                        <rect key="frame" x="26" y="512.33333333333337" width="338" height="0.0"/>
+                                        <rect key="frame" x="25.999999999999993" y="512.33333333333337" width="87.333333333333314" height="0.0"/>
                                         <fontDescription key="fontDescription" style="UICTFontTextStyleTitle1"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
@@ -905,11 +776,11 @@ Overall sentiment remains positive, and dips are expected to attract fresh buyin
             <objects>
                 <viewController id="rig-zl-LNm" customClass="QuizResultViewController" customModule="Grp1_iOS" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="9JH-lI-59K">
-                        <rect key="frame" x="0.0" y="0.0" width="430" height="873"/>
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="793"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eYd-Fo-Bjq">
-                                <rect key="frame" x="135" y="321" width="160.33333333333337" height="76.666666666666686"/>
+                                <rect key="frame" x="135" y="317" width="160.33333333333337" height="76.666666666666686"/>
                                 <constraints>
                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="160.33000000000001" id="NoN-BX-Czq"/>
                                     <constraint firstAttribute="height" constant="76.670000000000002" id="vkc-st-wBg"/>
@@ -919,7 +790,7 @@ Overall sentiment remains positive, and dips are expected to attract fresh buyin
                                 <nil key="highlightedColor"/>
                             </label>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="indianrupeesign.bank.building.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="i8h-Ga-c3v">
-                                <rect key="frame" x="80" y="229.33333333333334" width="37" height="35.666666666666657"/>
+                                <rect key="frame" x="80" y="225.33333333333334" width="37" height="35.666666666666657"/>
                                 <color key="tintColor" systemColor="systemRedColor"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="36" id="FSk-LG-IhG"/>
@@ -927,7 +798,7 @@ Overall sentiment remains positive, and dips are expected to attract fresh buyin
                                 </constraints>
                             </imageView>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="graph.2d" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="EX4-fj-TRD">
-                                <rect key="frame" x="125" y="185.33333333333334" width="37" height="33.333333333333343"/>
+                                <rect key="frame" x="125" y="181.33333333333334" width="37" height="33.333333333333343"/>
                                 <color key="tintColor" red="0.91976243260000001" green="0.01039442554" blue="0.026362170220000002" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="36" id="Yfn-lu-yAF"/>
@@ -935,7 +806,7 @@ Overall sentiment remains positive, and dips are expected to attract fresh buyin
                                 </constraints>
                             </imageView>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="dollarsign" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="pLe-xr-GEI">
-                                <rect key="frame" x="291" y="244.66666666666666" width="37" height="36.666666666666714"/>
+                                <rect key="frame" x="291" y="240.66666666666666" width="37" height="36.666666666666714"/>
                                 <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="37" id="LvF-uJ-6AV"/>
@@ -943,7 +814,7 @@ Overall sentiment remains positive, and dips are expected to attract fresh buyin
                                 </constraints>
                             </imageView>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="graduationcap.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="sTJ-Gv-Zn8">
-                                <rect key="frame" x="113" y="417.33333333333331" width="37" height="38"/>
+                                <rect key="frame" x="113" y="413.33333333333331" width="37" height="38"/>
                                 <color key="tintColor" systemColor="systemPinkColor"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="37" id="Cff-li-jpI"/>
@@ -951,7 +822,7 @@ Overall sentiment remains positive, and dips are expected to attract fresh buyin
                                 </constraints>
                             </imageView>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bitcoinsign" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="5aM-y0-m0e">
-                                <rect key="frame" x="170" y="470.33333333333337" width="37" height="36.666666666666686"/>
+                                <rect key="frame" x="170" y="466.33333333333337" width="37" height="36.666666666666686"/>
                                 <color key="tintColor" name="outgoingMessageBackground"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="37" id="5KX-UP-JAd"/>
@@ -959,14 +830,14 @@ Overall sentiment remains positive, and dips are expected to attract fresh buyin
                                 </constraints>
                             </imageView>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="indianrupeesign" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="qty-9p-QD9">
-                                <rect key="frame" x="47" y="311.33333333333337" width="37" height="33"/>
+                                <rect key="frame" x="47" y="307.33333333333337" width="37" height="33"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="37" id="jqi-s8-9wh"/>
                                     <constraint firstAttribute="height" constant="36" id="wSz-bp-cqN"/>
                                 </constraints>
                             </imageView>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="graph.2d" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="E0K-OA-W7x">
-                                <rect key="frame" x="282" y="430.33333333333331" width="37" height="33.333333333333314"/>
+                                <rect key="frame" x="282" y="426.33333333333331" width="37" height="33.333333333333314"/>
                                 <color key="tintColor" name="outgoingMessageBackground"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="36" id="tiP-jB-OJu"/>
@@ -974,14 +845,14 @@ Overall sentiment remains positive, and dips are expected to attract fresh buyin
                                 </constraints>
                             </imageView>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="eurosign" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="wUC-NH-aRS">
-                                <rect key="frame" x="188" y="255.66666666666671" width="37" height="32.6666666666666"/>
+                                <rect key="frame" x="188" y="251.66666666666666" width="37" height="32.666666666666714"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="36" id="GyM-yn-VoV"/>
                                     <constraint firstAttribute="width" constant="37" id="pas-At-G4t"/>
                                 </constraints>
                             </imageView>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="dollarsign" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="ZAn-Xk-xkm">
-                                <rect key="frame" x="60" y="454.33333333333337" width="37" height="36.666666666666686"/>
+                                <rect key="frame" x="60" y="450.33333333333337" width="37" height="36.666666666666686"/>
                                 <color key="tintColor" systemColor="systemYellowColor"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="37" id="BVr-ek-JyL"/>
@@ -989,14 +860,14 @@ Overall sentiment remains positive, and dips are expected to attract fresh buyin
                                 </constraints>
                             </imageView>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="indianrupeesign.bank.building.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="Eaj-MY-ML7">
-                                <rect key="frame" x="235" y="533.33333333333337" width="37" height="35.666666666666629"/>
+                                <rect key="frame" x="235" y="529.33333333333337" width="37" height="35.666666666666629"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="36" id="SYD-px-J2y"/>
                                     <constraint firstAttribute="width" constant="37" id="fKD-wK-zi4"/>
                                 </constraints>
                             </imageView>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="pencil" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="N8z-jb-X95">
-                                <rect key="frame" x="361" y="436.66666666666669" width="37" height="31"/>
+                                <rect key="frame" x="361" y="432.66666666666669" width="37" height="31"/>
                                 <color key="tintColor" systemColor="systemYellowColor"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="36" id="a5k-TG-AuO"/>
@@ -1004,7 +875,7 @@ Overall sentiment remains positive, and dips are expected to attract fresh buyin
                                 </constraints>
                             </imageView>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bitcoinsign" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="AWr-oZ-iZJ">
-                                <rect key="frame" x="258" y="158.66666666666666" width="37" height="36.666666666666657"/>
+                                <rect key="frame" x="258" y="154.66666666666666" width="37" height="36.666666666666657"/>
                                 <color key="tintColor" name="outgoingMessageBackground"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="37" id="b9a-45-Uhc"/>
@@ -1012,34 +883,34 @@ Overall sentiment remains positive, and dips are expected to attract fresh buyin
                                 </constraints>
                             </imageView>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="rz6-vZ-f4Y">
-                                <rect key="frame" x="529" y="533" width="37" height="36"/>
+                                <rect key="frame" x="529" y="529" width="37" height="36"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="36" id="uX7-J9-iYF"/>
                                     <constraint firstAttribute="width" constant="37" id="vgV-Z6-k5R"/>
                                 </constraints>
                             </imageView>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="UnT-qq-MBT">
-                                <rect key="frame" x="450" y="470.66666666666669" width="37" height="36"/>
+                                <rect key="frame" x="450" y="466.66666666666669" width="37" height="36"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="36" id="DqO-yX-hHX"/>
                                     <constraint firstAttribute="width" constant="37" id="JoN-7M-BQj"/>
                                 </constraints>
                             </imageView>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="eurosign" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="1bd-H3-XyS">
-                                <rect key="frame" x="361" y="300.66666666666669" width="37" height="32.666666666666686"/>
+                                <rect key="frame" x="361" y="296.66666666666669" width="37" height="32.666666666666686"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="36" id="PrW-xF-6HF"/>
                                     <constraint firstAttribute="width" constant="37" id="Y63-09-2E4"/>
                                 </constraints>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6hc-OB-ing">
-                                <rect key="frame" x="20" y="614" width="390" height="20.333333333333371"/>
+                                <rect key="frame" x="20" y="610" width="390" height="20.333333333333371"/>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3bk-71-aNg">
-                                <rect key="frame" x="20" y="642.33333333333337" width="390" height="20.333333333333371"/>
+                                <rect key="frame" x="20" y="638.33333333333337" width="390" height="20.333333333333371"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="390" id="Zgu-wR-chJ"/>
                                 </constraints>
@@ -1127,14 +998,14 @@ Overall sentiment remains positive, and dips are expected to attract fresh buyin
             <objects>
                 <viewController id="nNH-tG-DMm" customClass="QuizViewController" customModule="Grp1_iOS" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="1de-RX-xv5">
-                        <rect key="frame" x="0.0" y="0.0" width="430" height="873"/>
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="793"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="Ghn-xQ-90b">
-                                <rect key="frame" x="140" y="74" width="150" height="4"/>
+                                <rect key="frame" x="140" y="70" width="0.0" height="4"/>
                             </progressView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cE5-6W-Qkw">
-                                <rect key="frame" x="20" y="133" width="390" height="20.333333333333343"/>
+                                <rect key="frame" x="20" y="129" width="240" height="20.333333333333343"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="390" id="9BN-KA-aTu"/>
                                 </constraints>
@@ -1143,7 +1014,7 @@ Overall sentiment remains positive, and dips are expected to attract fresh buyin
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rR0-5i-f9z">
-                                <rect key="frame" x="20" y="191" width="390" height="65"/>
+                                <rect key="frame" x="20" y="187" width="240" height="65"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="65" id="Br4-hb-JCl"/>
                                 </constraints>
@@ -1154,7 +1025,7 @@ Overall sentiment remains positive, and dips are expected to attract fresh buyin
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6Cd-U9-3Ml">
-                                <rect key="frame" x="20" y="264" width="390" height="65"/>
+                                <rect key="frame" x="20" y="260" width="240" height="65"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="65" id="OdK-rp-VW9"/>
                                 </constraints>
@@ -1165,7 +1036,7 @@ Overall sentiment remains positive, and dips are expected to attract fresh buyin
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WqS-VV-ORo">
-                                <rect key="frame" x="20" y="337" width="390" height="65"/>
+                                <rect key="frame" x="20" y="333" width="240" height="65"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="65" id="wq0-Iy-e7x"/>
                                 </constraints>
@@ -1176,7 +1047,7 @@ Overall sentiment remains positive, and dips are expected to attract fresh buyin
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YIs-fd-zC9">
-                                <rect key="frame" x="20" y="410" width="390" height="65"/>
+                                <rect key="frame" x="20" y="406" width="240" height="65"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="65" id="sWb-X4-DaH"/>
                                 </constraints>
@@ -1187,7 +1058,7 @@ Overall sentiment remains positive, and dips are expected to attract fresh buyin
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RgN-ri-XLT">
-                                <rect key="frame" x="20" y="535" width="390" height="45"/>
+                                <rect key="frame" x="20" y="531" width="240" height="45"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="45" id="rQs-JW-fpP"/>
                                 </constraints>
@@ -1198,7 +1069,7 @@ Overall sentiment remains positive, and dips are expected to attract fresh buyin
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SGC-CV-muz">
-                                <rect key="frame" x="20" y="590" width="390" height="45"/>
+                                <rect key="frame" x="20" y="586" width="240" height="45"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="45" id="p3h-Er-wtz"/>
                                 </constraints>
@@ -1209,7 +1080,7 @@ Overall sentiment remains positive, and dips are expected to attract fresh buyin
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kIw-4v-2ut">
-                                <rect key="frame" x="20" y="590" width="390" height="45"/>
+                                <rect key="frame" x="20" y="586" width="240" height="45"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="45" id="yVe-XJ-3kB"/>
                                 </constraints>
@@ -1327,7 +1198,7 @@ Overall sentiment remains positive, and dips are expected to attract fresh buyin
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="SjI-kF-Db3" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="d0i-7D-QIi">
-                        <rect key="frame" x="0.0" y="20" width="430" height="54"/>
+                        <rect key="frame" x="0.0" y="16" width="393" height="54"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
@@ -1344,41 +1215,41 @@ Overall sentiment remains positive, and dips are expected to attract fresh buyin
             <objects>
                 <viewController storyboardIdentifier="news2ViewController" id="ISY-Je-4QW" customClass="news2ViewController" customModule="Grp1_iOS" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="8VF-LR-Pf7">
-                        <rect key="frame" x="0.0" y="0.0" width="430" height="932"/>
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ZXG-30-wkd">
-                                <rect key="frame" x="0.0" y="0.0" width="430" height="932"/>
+                                <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ynt-Fx-Kn2">
-                                        <rect key="frame" x="0.0" y="0.0" width="430" height="1750"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="393" height="1750"/>
                                         <subviews>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="urban_6" translatesAutoresizingMaskIntoConstraints="NO" id="IsZ-ju-pxd">
-                                                <rect key="frame" x="0.0" y="-170" width="430" height="407"/>
+                                                <rect key="frame" x="0.0" y="-170" width="393" height="407"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="407" id="eC6-PO-JlI"/>
                                                 </constraints>
                                             </imageView>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="euE-MK-Inl">
-                                                <rect key="frame" x="-10" y="-110" width="450" height="601"/>
+                                                <rect key="frame" x="-10" y="-110" width="413" height="601"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="601" id="JfL-ve-yn0"/>
                                                 </constraints>
                                             </imageView>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="BBC news  3 hours ago" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8aC-xQ-Fal">
-                                                <rect key="frame" x="10" y="110" width="370" height="14.333333333333329"/>
+                                                <rect key="frame" x="10" y="110" width="333" height="14.333333333333329"/>
                                                 <fontDescription key="fontDescription" style="UICTFontTextStyleCaption2"/>
                                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Nifty above 25,000, Sensex rises 583 pts led by IT, finance" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ngz-E4-T7Z">
-                                                <rect key="frame" x="10" y="128.33333333333334" width="410" height="45.666666666666657"/>
+                                                <rect key="frame" x="10" y="128.33333333333334" width="373" height="45.666666666666657"/>
                                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="19"/>
                                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="Idg-9I-eww">
-                                                <rect key="frame" x="9" y="200" width="412" height="32"/>
+                                                <rect key="frame" x="9" y="200" width="375" height="32"/>
                                                 <segments>
                                                     <segment title="Overview"/>
                                                     <segment title="Key Takeaways"/>
@@ -1389,10 +1260,10 @@ Overall sentiment remains positive, and dips are expected to attract fresh buyin
                                                 </connections>
                                             </segmentedControl>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="LTQ-a3-9s3">
-                                                <rect key="frame" x="17" y="243.99999999999997" width="396" height="358.33333333333326"/>
+                                                <rect key="frame" x="17" y="243.99999999999997" width="359" height="402.33333333333326"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0lF-ZJ-Ihp">
-                                                        <rect key="frame" x="15" y="15" width="366" height="328.33333333333331"/>
+                                                        <rect key="frame" x="15" y="15" width="329" height="372.33333333333331"/>
                                                         <string key="text">The market continued its upward move on Friday, with Nifty gaining 103 points and closing near the day’s high, showing strong buying interest throughout the session.
 
 Bullish patterns on the daily and weekly charts indicate that the ongoing uptrend is healthy and likely to continue in the coming week.
@@ -1414,7 +1285,7 @@ Overall sentiment remains positive, and dips are expected to attract fresh buyin
                                                 </constraints>
                                             </view>
                                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="0rF-st-xLO">
-                                                <rect key="frame" x="0.0" y="982.33333333333348" width="430" height="767.66666666666652"/>
+                                                <rect key="frame" x="0.0" y="1026.3333333333333" width="393" height="723.66666666666674"/>
                                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                 <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="Bz0-2A-Q57">
                                                     <size key="itemSize" width="196" height="131"/>
@@ -1424,7 +1295,7 @@ Overall sentiment remains positive, and dips are expected to attract fresh buyin
                                                 </collectionViewFlowLayout>
                                                 <cells>
                                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="xib-DT-ckb">
-                                                        <rect key="frame" x="0.0" y="0.0" width="196" height="131"/>
+                                                        <rect key="frame" x="98.666666666666671" y="0.0" width="196" height="131"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                         <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="Sk1-MM-t2N">
                                                             <rect key="frame" x="0.0" y="0.0" width="196" height="131"/>
@@ -1435,13 +1306,13 @@ Overall sentiment remains positive, and dips are expected to attract fresh buyin
                                                 </cells>
                                             </collectionView>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Jargons" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QoV-5H-8vy">
-                                                <rect key="frame" x="10" y="640.33333333333337" width="128" height="27"/>
+                                                <rect key="frame" x="10" y="684.33333333333337" width="91" height="27"/>
                                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="22"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="CDj-HO-XOM">
-                                                <rect key="frame" x="17" y="682.33333333333337" width="396" height="254"/>
+                                                <rect key="frame" x="17" y="726.33333333333337" width="359" height="254"/>
                                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="254" id="o8r-0i-UaJ"/>
@@ -1493,7 +1364,7 @@ Overall sentiment remains positive, and dips are expected to attract fresh buyin
                                 </constraints>
                             </scrollView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6sP-3C-7VY">
-                                <rect key="frame" x="105" y="770" width="135" height="35"/>
+                                <rect key="frame" x="60" y="690" width="143" height="35"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="filled" title="Ask Question"/>
                                 <connections>
@@ -1501,7 +1372,7 @@ Overall sentiment remains positive, and dips are expected to attract fresh buyin
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IS3-Gf-cab">
-                                <rect key="frame" x="250" y="770" width="65" height="35"/>
+                                <rect key="frame" x="213" y="690" width="120" height="35"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="filled" title="Quiz"/>
                                 <connections>
@@ -1514,10 +1385,10 @@ Overall sentiment remains positive, and dips are expected to attract fresh buyin
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="ZXG-30-wkd" firstAttribute="leading" secondItem="8VF-LR-Pf7" secondAttribute="leading" id="0WJ-zT-rto"/>
-                            <constraint firstItem="chS-UE-USX" firstAttribute="trailing" secondItem="IS3-Gf-cab" secondAttribute="trailing" constant="115" id="Idz-Ao-Paa"/>
+                            <constraint firstItem="chS-UE-USX" firstAttribute="trailing" secondItem="IS3-Gf-cab" secondAttribute="trailing" constant="60" id="Idz-Ao-Paa"/>
                             <constraint firstItem="IS3-Gf-cab" firstAttribute="baseline" secondItem="6sP-3C-7VY" secondAttribute="baseline" id="Is1-6V-e49"/>
                             <constraint firstAttribute="bottom" secondItem="ZXG-30-wkd" secondAttribute="bottom" id="NTa-m2-tpv"/>
-                            <constraint firstItem="6sP-3C-7VY" firstAttribute="leading" secondItem="chS-UE-USX" secondAttribute="leading" constant="105" id="P9a-ae-TJ8"/>
+                            <constraint firstItem="6sP-3C-7VY" firstAttribute="leading" secondItem="chS-UE-USX" secondAttribute="leading" constant="60" id="P9a-ae-TJ8"/>
                             <constraint firstItem="ZXG-30-wkd" firstAttribute="top" secondItem="8VF-LR-Pf7" secondAttribute="top" id="VQT-WG-qby"/>
                             <constraint firstItem="IS3-Gf-cab" firstAttribute="leading" secondItem="6sP-3C-7VY" secondAttribute="trailing" constant="10" id="b9D-6s-Qxi"/>
                             <constraint firstAttribute="trailing" secondItem="ZXG-30-wkd" secondAttribute="trailing" id="gUd-qT-Roo"/>
@@ -1553,7 +1424,7 @@ Overall sentiment remains positive, and dips are expected to attract fresh buyin
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="BTb-3f-FUD" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="0nO-k5-yVr">
-                        <rect key="frame" x="0.0" y="20" width="430" height="54"/>
+                        <rect key="frame" x="0.0" y="16" width="393" height="54"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
@@ -1567,21 +1438,17 @@ Overall sentiment remains positive, and dips are expected to attract fresh buyin
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="VeV-ul-P58"/>
-        <segue reference="pHB-98-V88"/>
-        <segue reference="NU8-u0-eeh"/>
+        <segue reference="neQ-sD-S1T"/>
+        <segue reference="Zyn-wo-F6R"/>
+        <segue reference="BYb-6d-kEA"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="bitcoinsign" catalog="system" width="87" height="128"/>
-        <image name="bitcoinsign.arrow.trianglehead.counterclockwise.rotate.90" catalog="system" width="128" height="119"/>
         <image name="chevron.left" catalog="system" width="97" height="128"/>
         <image name="chevron.right" catalog="system" width="97" height="128"/>
         <image name="dollarsign" catalog="system" width="89" height="128"/>
-        <image name="dollarsign.arrow.trianglehead.counterclockwise.rotate.90" catalog="system" width="128" height="119"/>
         <image name="ellipsis" catalog="system" width="128" height="37"/>
         <image name="eurosign" catalog="system" width="122" height="128"/>
-        <image name="eurosign.arrow.trianglehead.counterclockwise.rotate.90" catalog="system" width="128" height="119"/>
-        <image name="graduationcap" catalog="system" width="128" height="107"/>
         <image name="graduationcap.fill" catalog="system" width="128" height="108"/>
         <image name="graph.2d" catalog="system" width="128" height="114"/>
         <image name="house" catalog="system" width="128" height="104"/>
@@ -1592,9 +1459,6 @@ Overall sentiment remains positive, and dips are expected to attract fresh buyin
         <image name="questionmark" catalog="system" width="94" height="128"/>
         <image name="urban_6" width="1080" height="608"/>
         <image name="xmark" catalog="system" width="128" height="113"/>
-        <namedColor name="label">
-            <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </namedColor>
         <namedColor name="outgoingMessageBackground">
             <color red="0.20399999618530273" green="0.77999997138977051" blue="0.34900000691413879" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
@@ -1602,22 +1466,19 @@ Overall sentiment remains positive, and dips are expected to attract fresh buyin
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="systemBlueColor">
-            <color red="0.0" green="0.53333333329999999" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.0" green="0.53333333333333333" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemGray6Color">
-            <color red="0.94901960780000005" green="0.94901960780000005" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemGrayColor">
-            <color red="0.5568627451" green="0.5568627451" blue="0.57647058819999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
-        <systemColor name="systemMintColor">
-            <color red="0.0" green="0.7843137255" blue="0.70196078429999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.55686274509803924" green="0.55686274509803924" blue="0.57647058823529407" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemPinkColor">
-            <color red="1" green="0.1764705882" blue="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="1" green="0.17647058823529413" blue="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemRedColor">
-            <color red="1" green="0.21960784310000001" blue="0.23529411759999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="1" green="0.2196078431372549" blue="0.23529411764705882" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemYellowColor">
             <color red="1" green="0.80000000000000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

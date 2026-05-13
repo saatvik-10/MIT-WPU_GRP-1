@@ -179,7 +179,7 @@ extension FollowersFollowingViewController: UITableViewDelegate {
         guard user.id != currentUserId else { return }
         let profileVC = BloggerProfileViewController()
         profileVC.bloggerUserId = user.id
-        profileVC.bloggerUserName = user.username
+        profileVC.bloggerUserName = user.name.isEmpty ? user.username : user.name
         navigationController?.pushViewController(profileVC, animated: true)
     }
 }
@@ -258,8 +258,8 @@ final class FollowUserCell: UITableViewCell {
     }
  
     func configure(with user: APIUserBasicInfo, isFollowing: Bool, isOwnProfile: Bool) {
-        usernameLabel.text = user.username
-        nameLabel.text = user.name
+        usernameLabel.text = user.name.isEmpty ? user.username : user.name
+        nameLabel.text = "@\(user.username)"
         
         profileImageView.image = UIImage(systemName: "person.circle.fill")?
             .withRenderingMode(.alwaysOriginal)
