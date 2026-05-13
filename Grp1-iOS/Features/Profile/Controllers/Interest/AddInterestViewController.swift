@@ -66,8 +66,19 @@ extension AddInterestViewController: UITableViewDataSource, UITableViewDelegate 
         
         let item = isSearching ? filteredItems[indexPath.row] : sourceItems[indexPath.row]
         print("Selected: \(item.title)")
-        
-        // TODO: Add the item to user's interests
+
+        switch interestType {
+        case .domain:
+            if !UserInterests.domains.contains(where: { $0.title == item.title }) {
+                UserInterests.domains.append(item)
+            }
+        case .preference:
+            if !UserInterests.preferences.contains(where: { $0.title == item.title }) {
+                UserInterests.preferences.append(item)
+            }
+        }
+
+        NotificationCenter.default.post(name: .userInterestsDidChange, object: nil)
         dismiss(animated: true)
     }
 }

@@ -360,7 +360,9 @@ extension ProfileViewController: UICollectionViewDataSource, UICollectionViewDel
         case .interests(let data):
             let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: "interests_cell", for: indexPath) as! InterestsViewCell
-            cell.configure(interests: data.interests)
+            // Render latest user-selected interests rather than the static snapshot.
+            let latest = Array(UserInterests.domains.map { $0.title }.prefix(4))
+            cell.configure(interests: latest.isEmpty ? data.interests : latest)
             cell.contentView.backgroundColor = .white
             cell.backgroundColor = .white
             cell.layer.cornerRadius = 12

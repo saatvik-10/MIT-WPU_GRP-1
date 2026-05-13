@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="24506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="HWG-ao-lyw">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="24765" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="HWG-ao-lyw">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24504"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24743"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="collection view cell content view" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Games-->
+        <!--Title-->
         <scene sceneID="s0d-6b-0kx">
             <objects>
                 <viewController id="Y6W-OH-hqX" customClass="GamesViewController" customModule="Grp1_iOS" customModuleProvider="target" sceneMemberID="viewController">
@@ -51,9 +51,12 @@
                             <constraint firstItem="hUl-rh-p0C" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="tls-Kz-ND7"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Games" id="JFP-ve-Ll6"/>
+                    <navigationItem key="navigationItem" title="Title" id="1aI-tL-F7L">
+                        <barButtonItem key="rightBarButtonItem" image="info.circle" catalog="system" id="DOs-j0-KH9"/>
+                    </navigationItem>
                     <connections>
                         <outlet property="collectionView" destination="hUl-rh-p0C" id="grD-G9-lQN"/>
+                        <outlet property="gamesInfoButton" destination="DOs-j0-KH9" id="Phc-oZ-nOx"/>
                         <segue destination="jBd-ck-25J" kind="show" identifier="crossword" id="zi8-ZI-bSf"/>
                         <segue destination="kgA-qV-NU9" kind="show" identifier="scenario" id="hAQ-Xe-9HH"/>
                         <segue destination="2Zt-D8-Bw3" kind="show" identifier="Evaluate" id="cgC-YZ-mRc"/>
@@ -102,13 +105,13 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleAspectFit" axis="vertical" distribution="fillEqually" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="lkp-f7-xIj">
-                                <rect key="frame" x="37" y="354" width="147" height="131"/>
+                                <rect key="frame" x="37" y="354" width="319" height="131"/>
                             </stackView>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" spacing="4" translatesAutoresizingMaskIntoConstraints="NO" id="zCT-kF-bRi">
-                                <rect key="frame" x="16" y="535" width="189" height="275"/>
+                                <rect key="frame" x="16" y="535" width="361" height="275"/>
                             </stackView>
                             <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="dNA-AB-FGK">
-                                <rect key="frame" x="80" y="90" width="61" height="4"/>
+                                <rect key="frame" x="80" y="90" width="233" height="4"/>
                                 <color key="progressTintColor" systemColor="systemGreenColor"/>
                             </progressView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DYk-7V-Z6f">
@@ -121,7 +124,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6bL-kd-gIP">
-                                <rect key="frame" x="37" y="132" width="147" height="35"/>
+                                <rect key="frame" x="37" y="132" width="319" height="35"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="tinted" title="Hint"/>
                                 <connections>
@@ -129,7 +132,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jHq-Mv-F1e">
-                                <rect key="frame" x="37" y="182" width="147" height="35"/>
+                                <rect key="frame" x="37" y="182" width="319" height="35"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="filled" title="Reveal Alphabet"/>
                                 <connections>
@@ -278,14 +281,15 @@
     </scenes>
     <resources>
         <image name="gamecontroller" catalog="system" width="128" height="79"/>
+        <image name="info.circle" catalog="system" width="128" height="123"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="systemGray6Color">
-            <color red="0.94901960780000005" green="0.94901960780000005" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemGreenColor">
-            <color red="0.20392156859999999" green="0.78039215689999997" blue="0.34901960780000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.20392156862745098" green="0.7803921568627451" blue="0.34901960784313724" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>
