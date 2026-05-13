@@ -25,6 +25,16 @@ export class Bookmarks {
     const { name } = data.data;
 
     try {
+      const user = await prisma.user.findUnique({
+        where: {
+          id: userId,
+        },
+      });
+
+      if (!user) {
+        return ctx.json({ error: 'Unauthorized' }, 401);
+      }
+
       const folder = await prisma.bookmarkFolder.create({
         data: {
           userId,
@@ -37,6 +47,9 @@ export class Bookmarks {
       console.error('Error creating bookmark folder:', err);
       if ((err as any).code === 'P2002') {
         return ctx.json({ error: 'Folder with this name already exists' }, 409);
+      }
+      if ((err as any).code === 'P2003') {
+        return ctx.json({ error: 'Invalid reference for bookmark folder' }, 409);
       }
       return ctx.json({ error: 'Internal server error' }, 500);
     }
@@ -137,6 +150,16 @@ export class Bookmarks {
     } = data.data;
 
     try {
+      const user = await prisma.user.findUnique({
+        where: {
+          id: userId,
+        },
+      });
+
+      if (!user) {
+        return ctx.json({ error: 'Unauthorized' }, 401);
+      }
+
       // Verify folder exists and belongs to user
       const folder = await prisma.bookmarkFolder.findUnique({
         where: {
@@ -171,6 +194,9 @@ export class Bookmarks {
           { error: 'Article already bookmarked in this folder' },
           409,
         );
+      }
+      if ((err as any).code === 'P2003') {
+        return ctx.json({ error: 'Invalid reference for bookmark' }, 409);
       }
       return ctx.json({ error: 'Internal server error' }, 500);
     }
@@ -296,6 +322,16 @@ export class Bookmarks {
     } = data.data;
 
     try {
+      const user = await prisma.user.findUnique({
+        where: {
+          id: userId,
+        },
+      });
+
+      if (!user) {
+        return ctx.json({ error: 'Unauthorized' }, 401);
+      }
+
       // Verify folder exists and belongs to user
       const folder = await prisma.bookmarkFolder.findUnique({
         where: {
@@ -338,6 +374,9 @@ export class Bookmarks {
           { error: 'Thread already bookmarked in this folder' },
           409,
         );
+      }
+      if ((err as any).code === 'P2003') {
+        return ctx.json({ error: 'Invalid reference for bookmark' }, 409);
       }
       return ctx.json({ error: 'Internal server error' }, 500);
     }
