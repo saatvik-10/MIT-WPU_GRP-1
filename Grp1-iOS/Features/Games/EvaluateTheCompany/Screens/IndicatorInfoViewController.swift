@@ -16,32 +16,26 @@ struct IndicatorInfo {
 
 class IndicatorInfoViewController: UIViewController {
 
-    private let indicators: [IndicatorInfo] = [
-        IndicatorInfo(
-            icon: "chart.line.uptrend.xyaxis",
-            iconBg: UIColor(red: 0.91, green: 0.96, blue: 0.87, alpha: 1),
-            name: "Net Profit Margin",
-            description: "How much profit a company keeps from every ₹100 of revenue. Higher is generally better."
-        ),
-        IndicatorInfo(
-            icon: "arrow.up.right.circle",
-            iconBg: UIColor(red: 0.90, green: 0.95, blue: 0.98, alpha: 1),
-            name: "EPS Growth (YoY)",
-            description: "Growth in earnings per share vs last year. Shows if the company is becoming more profitable over time."
-        ),
-        IndicatorInfo(
-            icon: "scalemass",
-            iconBg: UIColor(red: 0.98, green: 0.93, blue: 0.85, alpha: 1),
-            name: "Debt-to-Equity",
-            description: "How much the company relies on debt vs its own funds. A lower ratio means less financial risk."
-        ),
-        IndicatorInfo(
-            icon: "tag",
-            iconBg: UIColor(red: 0.98, green: 0.91, blue: 0.94, alpha: 1),
-            name: "P/E Ratio",
-            description: "Price investors pay for every ₹1 of earnings. High P/E can mean growth expectations are already priced in."
-        )
-    ]
+    private var indicators: [IndicatorInfo] = []
+    private let visibleIndicatorNames: [String]
+
+    init(visibleIndicatorNames: [String]) {
+        self.visibleIndicatorNames = visibleIndicatorNames
+        super.init(nibName: nil, bundle: nil)
+        
+        let allDefs = DailyPuzzle.getAllIndicatorDefinitions()
+        for name in visibleIndicatorNames {
+            if let def = allDefs[name] {
+                indicators.append(IndicatorInfo(icon: def.icon, iconBg: def.iconBg, name: name, description: def.definition))
+            } else {
+                indicators.append(IndicatorInfo(icon: "chart.bar", iconBg: UIColor.systemGray5, name: name, description: "A key financial metric."))
+            }
+        }
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     // MARK: - UI
 
