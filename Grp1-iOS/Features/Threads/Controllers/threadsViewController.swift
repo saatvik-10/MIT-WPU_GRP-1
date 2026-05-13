@@ -823,7 +823,7 @@ extension threadsViewController: UICollectionViewDataSource {
             guard thread.userId != self.currentUserId else { return }
             let profileVC = BloggerProfileViewController()
             profileVC.bloggerUserId = thread.userId
-            profileVC.bloggerUserName = thread.user?.username ?? thread.userId
+            profileVC.bloggerUserName = thread.user?.name ?? thread.user?.username ?? thread.userId
             self.navigationController?.pushViewController(profileVC, animated: true)
         }
         
