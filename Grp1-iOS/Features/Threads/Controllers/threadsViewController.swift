@@ -735,7 +735,7 @@ extension threadsViewController: UICollectionViewDataSource {
         let isFollowing = followingUserIds.contains(thread.userId)
         
         cell.isBookmarked = bookmarkedThreadIds.contains(thread.id)
-        cell.configure(with: thread, isFollowing: false, isOwnPost: isOwnPost)
+        cell.configure(with: thread, isFollowing: isFollowing, isOwnPost: isOwnPost)
         cell.applyStyle(isCard: selectedSegment != .myThreads)
         
         // ── Like ──
