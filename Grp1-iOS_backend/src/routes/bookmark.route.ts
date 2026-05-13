@@ -15,6 +15,9 @@ bookmarkRoute.delete('/articles/:articleId', proxyAuth, controller.deleteBookmar
 
 bookmarkRoute.post('/threads', proxyAuth, controller.createBookmarkedThread);
 bookmarkRoute.get('/threads', proxyAuth, controller.getBookmarkedThreads);
+bookmarkRoute.get('/threads/check', proxyAuth, controller.checkThreadBookmarkState);
+bookmarkRoute.delete('/threads/by-thread/:threadId', proxyAuth, controller.deleteBookmarkedThreadByThreadId);
 bookmarkRoute.delete('/threads/:threadId', proxyAuth, controller.deleteBookmarkedThread);
 
 export default bookmarkRoute;
+

@@ -844,13 +844,15 @@ class SaveArticleSheetViewController: UIViewController {
     
     private let folders: [BookmarkItem]
     private let articleTitle: String
+    private let sheetTitle: String
     private let onFolderSelected: (String) -> Void
     
     private let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
     
-    init(folders: [BookmarkItem], articleTitle: String, onFolderSelected: @escaping (String) -> Void) {
+    init(folders: [BookmarkItem], articleTitle: String, sheetTitle: String = "Save Article", onFolderSelected: @escaping (String) -> Void) {
         self.folders = folders
         self.articleTitle = articleTitle
+        self.sheetTitle = sheetTitle
         self.onFolderSelected = onFolderSelected
         super.init(nibName: nil, bundle: nil)
     }
@@ -875,13 +877,13 @@ class SaveArticleSheetViewController: UIViewController {
         view.addSubview(headerStack)
         
         let titleLabel = UILabel()
-        titleLabel.text = "Save Article"
+        titleLabel.text = sheetTitle
         titleLabel.font = UIFont.systemFont(ofSize: 24, weight: .bold)
         titleLabel.textColor = .label
         headerStack.addArrangedSubview(titleLabel)
         
         let subtitleLabel = UILabel()
-        subtitleLabel.text = "Choose a folder to save this article"
+        subtitleLabel.text = "Choose a folder to save this \(sheetTitle.lowercased().contains("thread") ? "thread" : "article")"
         subtitleLabel.font = UIFont.systemFont(ofSize: 15, weight: .regular)
         subtitleLabel.textColor = .secondaryLabel
         subtitleLabel.numberOfLines = 2

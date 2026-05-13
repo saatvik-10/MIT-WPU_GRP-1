@@ -11,7 +11,9 @@ class collectionViewCell: UICollectionViewCell {
     var onFollowTapped: (() -> Void)?
     var onDeleteTapped: (() -> Void)?
     var onUsernameTapped: (() -> Void)?
+    var onBookmarkTapped: (() -> Void)?
     var isFollowingUser: Bool = false
+    var isBookmarked: Bool = false
     var shouldShowFollowAction: Bool = true
     var isOwnPost: Bool = false
     var onMoreTapped: (() -> Void)?
@@ -78,6 +80,24 @@ class collectionViewCell: UICollectionViewCell {
                 let labelTap = UITapGestureRecognizer(target: self, action: #selector(handleUsernameTap))
                 userNameLabel.isUserInteractionEnabled = true
                 userNameLabel.addGestureRecognizer(labelTap)
+    }
+
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        onFollowTapped = nil
+        onDeleteTapped = nil
+        onUsernameTapped = nil
+        onBookmarkTapped = nil
+        onMoreTapped = nil
+        onLikeTapped = nil
+        onCommentTapped = nil
+        isFollowingUser = false
+        isBookmarked = false
+        shouldShowFollowAction = true
+        isOwnPost = false
+        profileImg.image = nil
+        threadImg.image = nil
+        threadImg.isHidden = true
     }
 
     
@@ -489,11 +509,13 @@ func configure(with thread: APIThread, isFollowing: Bool, isOwnPost: Bool) {
                    actions.append(followAction)
                }
     
+               let bookmarkTitle = isBookmarked ? "Saved" : "Bookmark"
+               let bookmarkIcon = isBookmarked ? "bookmark.fill" : "bookmark"
                let bookmarkAction = UIAction(
-                   title: "Bookmark",
-                   image: UIImage(systemName: "bookmark")
-               ) { _ in
-                   // TODO: wire up in v2
+                   title: bookmarkTitle,
+                   image: UIImage(systemName: bookmarkIcon)
+               ) { [weak self] _ in
+                   self?.onBookmarkTapped?()
                }
                actions.append(bookmarkAction)
     

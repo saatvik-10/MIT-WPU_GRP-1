@@ -25,6 +25,16 @@ export class Bookmarks {
     const { name } = data.data;
 
     try {
+      const user = await prisma.user.findUnique({
+        where: {
+          id: userId,
+        },
+      });
+
+      if (!user) {
+        return ctx.json({ error: 'Unauthorized' }, 401);
+      }
+
       const folder = await prisma.bookmarkFolder.create({
         data: {
           userId,
@@ -37,6 +47,9 @@ export class Bookmarks {
       console.error('Error creating bookmark folder:', err);
       if ((err as any).code === 'P2002') {
         return ctx.json({ error: 'Folder with this name already exists' }, 409);
+      }
+      if ((err as any).code === 'P2003') {
+        return ctx.json({ error: 'Invalid reference for bookmark folder' }, 409);
       }
       return ctx.json({ error: 'Internal server error' }, 500);
     }
@@ -137,6 +150,16 @@ export class Bookmarks {
     } = data.data;
 
     try {
+      const user = await prisma.user.findUnique({
+        where: {
+          id: userId,
+        },
+      });
+
+      if (!user) {
+        return ctx.json({ error: 'Unauthorized' }, 401);
+      }
+
       // Verify folder exists and belongs to user
       const folder = await prisma.bookmarkFolder.findUnique({
         where: {
@@ -171,6 +194,9 @@ export class Bookmarks {
           { error: 'Article already bookmarked in this folder' },
           409,
         );
+      }
+      if ((err as any).code === 'P2003') {
+        return ctx.json({ error: 'Invalid reference for bookmark' }, 409);
       }
       return ctx.json({ error: 'Internal server error' }, 500);
     }
@@ -296,6 +322,16 @@ export class Bookmarks {
     } = data.data;
 
     try {
+      const user = await prisma.user.findUnique({
+        where: {
+          id: userId,
+        },
+      });
+
+      if (!user) {
+        return ctx.json({ error: 'Unauthorized' }, 401);
+      }
+
       // Verify folder exists and belongs to user
       const folder = await prisma.bookmarkFolder.findUnique({
         where: {
@@ -338,6 +374,9 @@ export class Bookmarks {
           { error: 'Thread already bookmarked in this folder' },
           409,
         );
+      }
+      if ((err as any).code === 'P2003') {
+        return ctx.json({ error: 'Invalid reference for bookmark' }, 409);
       }
       return ctx.json({ error: 'Internal server error' }, 500);
     }
@@ -435,6 +474,68 @@ export class Bookmarks {
       return ctx.json({ message: 'Thread unbookmarked successfully' });
     } catch (err) {
       console.error('Error deleting bookmarked thread:', err);
+      return ctx.json({ error: 'Internal server error' }, 500);
+    }
+  }
+
+  // Check if a thread is bookmarked by the current user (any folder)
+  async checkThreadBookmarkState(ctx: Context) {
+    const userId = ctx.get('userId');
+    const threadId = ctx.req.query('threadId');
+
+    if (!userId) {
+      return ctx.json({ error: 'Unauthorized' }, 401);
+    }
+
+    if (!threadId) {
+      return ctx.json({ error: 'threadId query param is required' }, 400);
+    }
+
+    try {
+      const bookmark = await prisma.bookmarkedThread.findFirst({
+        where: { userId, threadId },
+        select: { id: true, folderId: true },
+      });
+
+      return ctx.json({
+        isBookmarked: !!bookmark,
+        bookmarkId: bookmark?.id ?? null,
+        folderId: bookmark?.folderId ?? null,
+      });
+    } catch (err) {
+      console.error('Error checking bookmark state:', err);
+      return ctx.json({ error: 'Internal server error' }, 500);
+    }
+  }
+
+  // Delete all bookmarks for a specific thread (by original threadId, not bookmark row ID)
+  async deleteBookmarkedThreadByThreadId(ctx: Context) {
+    const userId = ctx.get('userId');
+    const threadId = ctx.req.param('threadId');
+
+    if (!userId) {
+      return ctx.json({ error: 'Unauthorized' }, 401);
+    }
+
+    if (!threadId) {
+      return ctx.json({ error: 'threadId is required' }, 400);
+    }
+
+    try {
+      const deleted = await prisma.bookmarkedThread.deleteMany({
+        where: { userId, threadId },
+      });
+
+      if (deleted.count === 0) {
+        return ctx.json({ error: 'No bookmarks found for this thread' }, 404);
+      }
+
+      return ctx.json({
+        message: 'Thread unbookmarked successfully',
+        deletedCount: deleted.count,
+      });
+    } catch (err) {
+      console.error('Error deleting bookmarked thread by threadId:', err);
       return ctx.json({ error: 'Internal server error' }, 500);
     }
   }

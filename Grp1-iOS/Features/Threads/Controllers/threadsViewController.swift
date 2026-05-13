@@ -436,6 +436,7 @@ class threadsViewController: UIViewController {
     private var myThreads: [APIThread] = []
     private var currentUserProfile: APIUserProfileResponse?
     private var followingUserIds: Set<String> = []
+    private var bookmarkedThreadIds: Set<String> = []
     private var selectedSegment: ThreadsSegment = .forYou
     
     private var currentUserId: String? {
@@ -543,6 +544,20 @@ class threadsViewController: UIViewController {
         loadFollowingThreads()
         loadMyThreads()
         loadUserProfile()
+        loadBookmarkStates()
+    }
+
+    /// Fetches ALL bookmarked threads for the current user and populates the fast-lookup set
+    private func loadBookmarkStates() {
+        guard let token = authToken else { return }
+        APIService.shared.fetchBookmarkedThreads(token: token) { [weak self] result in
+            DispatchQueue.main.async {
+                if case .success(let bookmarked) = result {
+                    self?.bookmarkedThreadIds = Set(bookmarked.compactMap { $0.threadId })
+                    self?.collectionView.reloadData()
+                }
+            }
+        }
     }
     
     private func loadFollowingUserIds() {
@@ -627,6 +642,80 @@ class threadsViewController: UIViewController {
             myThreads[idx].likesCount = count
         }
     }
+
+    private func presentBookmarkSheet(for thread: APIThread) {
+        guard let token = authToken else { return }
+
+        let generator = UINotificationFeedbackGenerator()
+        generator.notificationOccurred(.success)
+
+        // Fetch folders from backend API
+        APIService.shared.fetchBookmarkFolders(token: token) { [weak self] result in
+            guard let self else { return }
+            switch result {
+            case .success(let apiFolders):
+                // Convert API folders to BookmarkItem for the sheet UI
+                let folderItems = apiFolders.map { folder in
+                    BookmarkItem(
+                        icon: UIImage(systemName: "folder")!,
+                        id: folder.id,
+                        title: folder.name
+                    )
+                }
+
+                let sheetVC = SaveArticleSheetViewController(
+                    folders: folderItems,
+                    articleTitle: thread.title,
+                    sheetTitle: "Save Thread"
+                ) { [weak self] folderTitle in
+                    guard let self else { return }
+                    // Find the folder ID matching the selected title
+                    guard let selectedFolder = apiFolders.first(where: { $0.name == folderTitle }) else { return }
+
+                    let payload = APICreateBookmarkedThreadRequest(
+                        folderId: selectedFolder.id,
+                        threadId: thread.id,
+                        title: thread.title,
+                        description: thread.description,
+                        imageName: thread.imageName ?? thread.imageUrl ?? "",
+                        tags: thread.tags ?? []
+                    )
+
+                    APIService.shared.createBookmarkedThread(payload: payload, token: token) { [weak self] result in
+                        DispatchQueue.main.async {
+                            switch result {
+                            case .success:
+                                self?.bookmarkedThreadIds.insert(thread.id)
+                                self?.collectionView.reloadData()
+                                self?.showToast(message: "Saved to \(folderTitle)")
+                            case .failure(let error):
+                                print("[Bookmark] createBookmarkedThread failed: \(error)")
+                                if case .server(let code, _) = error, code == 409 {
+                                    self?.showToast(message: "Already saved in \(folderTitle)")
+                                } else {
+                                    self?.showToast(message: "Failed to save")
+                                }
+                            }
+                        }
+                    }
+                }
+
+                sheetVC.modalPresentationStyle = .pageSheet
+                if #available(iOS 16.0, *) {
+                    if let sheet = sheetVC.sheetPresentationController {
+                        sheet.detents = [.medium(), .large()]
+                        sheet.prefersGrabberVisible = true
+                        sheet.preferredCornerRadius = 24
+                    }
+                }
+
+                self.present(sheetVC, animated: true)
+
+            case .failure:
+                self.showToast(message: "Could not load folders")
+            }
+        }
+    }
 }
 
 // MARK: - DataSource
@@ -645,7 +734,8 @@ extension threadsViewController: UICollectionViewDataSource {
         let isOwnPost = thread.userId == currentUserId
         let isFollowing = followingUserIds.contains(thread.userId)
         
-        cell.configure(with: thread, isFollowing: isFollowing, isOwnPost: isOwnPost)
+        cell.isBookmarked = bookmarkedThreadIds.contains(thread.id)
+        cell.configure(with: thread, isFollowing: false, isOwnPost: isOwnPost)
         cell.applyStyle(isCard: selectedSegment != .myThreads)
         
         // ── Like ──
@@ -765,6 +855,39 @@ extension threadsViewController: UICollectionViewDataSource {
                 }
             })
             self.present(alert, animated: true)
+        }
+        
+        // ── Bookmark (toggle) ──
+        cell.onBookmarkTapped = { [weak self] in
+            guard let self else { return }
+            
+            if self.bookmarkedThreadIds.contains(thread.id) {
+                // Already saved → unsave via API
+                guard let token = self.authToken else { return }
+                
+                // Optimistic UI update
+                self.bookmarkedThreadIds.remove(thread.id)
+                self.collectionView.reloadData()
+                
+                APIService.shared.deleteBookmarkedThreadByThreadId(
+                    threadId: thread.id, token: token
+                ) { [weak self] result in
+                    DispatchQueue.main.async {
+                        switch result {
+                        case .success:
+                            self?.showToast(message: "Removed from bookmarks")
+                        case .failure:
+                            // Revert on failure
+                            self?.bookmarkedThreadIds.insert(thread.id)
+                            self?.collectionView.reloadData()
+                            self?.showToast(message: "Failed to remove")
+                        }
+                    }
+                }
+            } else {
+                // Not saved → show folder picker
+                self.presentBookmarkSheet(for: thread)
+            }
         }
         
         return cell

@@ -22,6 +22,7 @@ class BookmarkViewController: UIViewController {
     // MARK: - Data Source (separate arrays per segment)
     private var articleItems: [BookmarkItem] = Bookmarks.mockBookmarks
     private var blogItems: [BookmarkItem] = []
+    private var apiFolders: [APIBookmarkFolder] = []  // cached API response for folderId lookup
  
     // MARK: - Computed active items
     private var currentSegment: BookmarkSegment {
@@ -52,6 +53,30 @@ class BookmarkViewController: UIViewController {
         setupSegmentControl()
         setupCollectionView()
         collectionView.setCollectionViewLayout(generateLayout(), animated: false)
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        // Refresh thread folders from backend API
+        loadThreadFolders()
+    }
+
+    private func loadThreadFolders() {
+        guard let token = UserDefaults.standard.string(forKey: "authToken") else { return }
+        APIService.shared.fetchBookmarkFolders(token: token) { [weak self] result in
+            guard let self else { return }
+            if case .success(let folders) = result {
+                self.apiFolders = folders
+                self.blogItems = folders.map { folder in
+                    BookmarkItem(
+                        icon: UIImage(systemName: "folder")!,
+                        id: folder.id,
+                        title: folder.name
+                    )
+                }
+                self.collectionView.reloadData()
+            }
+        }
     }
  
     // MARK: - Setup
@@ -148,25 +173,40 @@ class BookmarkViewController: UIViewController {
     }
  
     private func createBookmarkFolder(named name: String) {
-        let newItem = BookmarkItem(
-            icon: UIImage(systemName: "folder")!,
-            id: UUID().uuidString,
-            title: name
-        )
- 
         switch currentSegment {
-        case .articles: articleItems.append(newItem)
-        case .blogs:    blogItems.append(newItem)
+        case .articles:
+            let newItem = BookmarkItem(
+                icon: UIImage(systemName: "folder")!,
+                id: UUID().uuidString,
+                title: name
+            )
+            articleItems.append(newItem)
+            let indexPath = IndexPath(item: articleItems.count - 1, section: 0)
+            collectionView.insertItems(at: [indexPath])
+
+        case .blogs:
+            guard let token = UserDefaults.standard.string(forKey: "authToken") else { return }
+            APIService.shared.createBookmarkFolder(name: name, token: token) { [weak self] result in
+                guard let self else { return }
+                switch result {
+                case .success:
+                    self.loadThreadFolders()  // refresh from API
+                case .failure(let error):
+                    if case .server(let code, _) = error, code == 409 {
+                        // Folder already exists — just refresh
+                        self.loadThreadFolders()
+                    }
+                }
+            }
         }
- 
-        let indexPath = IndexPath(item: currentItems.count - 1, section: 0)
-        collectionView.insertItems(at: [indexPath])
     }
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "savedScreen",
            let vc = segue.destination as? SavedViewController,
-           let folderName = sender as? String {
-            vc.folderName = folderName
+           let info = sender as? (String, String) {   // (folderName, folderId)
+            vc.folderName = info.0
+            vc.folderId = info.1
+            vc.segment = self.currentSegment
         }
     }
 
@@ -222,7 +262,14 @@ extension BookmarkViewController: BookmarkCellDelegate {
     func didTapBookmark(in cell: BookmarkViewCell) {
         guard let indexPath = collectionView.indexPath(for: cell) else { return }
         let folder = currentItems[indexPath.row]
-        performSegue(withIdentifier: "savedScreen", sender: folder.title)
+
+        if currentSegment == .blogs {
+            // Pass both name and folderId for API-backed threads
+            performSegue(withIdentifier: "savedScreen", sender: (folder.title, folder.id))
+        } else {
+            // Articles still use folder name only
+            performSegue(withIdentifier: "savedScreen", sender: (folder.title, folder.id))
+        }
     }
 }
 
