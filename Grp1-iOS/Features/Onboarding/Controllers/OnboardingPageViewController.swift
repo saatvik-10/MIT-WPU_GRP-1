@@ -52,12 +52,25 @@ class OnboardingPageViewController: UIPageViewController {
         let step2 = storyboard.instantiateViewController(
             withIdentifier: "InterestCollectionViewController"
         ) as! InterestCollectionViewController
-
+ 
         step2.onFinishTapped = { [weak self] in
+            guard let self else { return }
+            let previewCount = min(6, InterestsDataSource.domains.count)
+            var pickedTitles = Set(UserInterests.domains.map { $0.title })
+
             if let indexPaths = step2.interestCollectionView.indexPathsForSelectedItems {
-                self?.selectedInterests = indexPaths.map { preferences[$0.item].title }
+                let previewPicked = indexPaths
+                    .map { $0.item }
+                    .filter { $0 < previewCount }
+                    .map { InterestsDataSource.domains[$0].title }
+                previewPicked.forEach { pickedTitles.insert($0) }
             }
-            self?.submitOnboardingToBackend()
+
+            self.selectedDomains = Array(pickedTitles)
+            // Persist into user interests so Profile -> Interests renders them.
+            UserInterests.domains = InterestsDataSource.domains.filter { pickedTitles.contains($0.title) }
+            NotificationCenter.default.post(name: .userInterestsDidChange, object: nil)
+            self.submitOnboardingToBackend()
         }
 
         step2.onBackTapped = { [weak self] in

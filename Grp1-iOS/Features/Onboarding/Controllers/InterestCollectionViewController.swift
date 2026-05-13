@@ -1,10 +1,107 @@
 import UIKit
 
+// Kept in this file to avoid Xcode project file updates.
+final class AllDomainsViewController: UIViewController {
+    var allItems: [InterestModel] = []
+    var selectedTitles: Set<String> = []
+    var onDone: ((Set<String>) -> Void)?
+
+    private let searchController = UISearchController(searchResultsController: nil)
+    private let tableView = UITableView(frame: .zero, style: .insetGrouped)
+    private var filtered: [InterestModel] = []
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        title = "Other Domains"
+        view.backgroundColor = .systemBackground
+
+        filtered = allItems
+
+        navigationItem.searchController = searchController
+        navigationItem.hidesSearchBarWhenScrolling = false
+        searchController.searchResultsUpdater = self
+        searchController.obscuresBackgroundDuringPresentation = false
+
+        navigationItem.rightBarButtonItem = UIBarButtonItem(
+            title: "Done",
+            style: .done,
+            target: self,
+            action: #selector(doneTapped)
+        )
+
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.dataSource = self
+        tableView.delegate = self
+        view.addSubview(tableView)
+
+        NSLayoutConstraint.activate([
+            tableView.topAnchor.constraint(equalTo: view.topAnchor),
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+        ])
+    }
+
+    @objc private func doneTapped() {
+        onDone?(selectedTitles)
+        dismiss(animated: true)
+    }
+}
+
+extension AllDomainsViewController: UITableViewDataSource, UITableViewDelegate {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        filtered.count
+    }
+
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell")
+            ?? UITableViewCell(style: .subtitle, reuseIdentifier: "Cell")
+
+        let item = filtered[indexPath.row]
+        cell.textLabel?.text = item.title
+        cell.detailTextLabel?.text = item.subtitle
+        cell.imageView?.image = item.icon.flatMap { UIImage(systemName: $0) }
+        cell.accessoryType = selectedTitles.contains(item.title) ? .checkmark : .none
+        return cell
+    }
+
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        let title = filtered[indexPath.row].title
+
+        if selectedTitles.contains(title) {
+            selectedTitles.remove(title)
+        } else {
+            selectedTitles.insert(title)
+        }
+
+        tableView.reloadRows(at: [indexPath], with: .automatic)
+    }
+}
+
+extension AllDomainsViewController: UISearchResultsUpdating {
+    func updateSearchResults(for searchController: UISearchController) {
+        let q = (searchController.searchBar.text ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
+        if q.isEmpty {
+            filtered = allItems
+        } else {
+            filtered = allItems.filter {
+                $0.title.localizedCaseInsensitiveContains(q) || ($0.subtitle?.localizedCaseInsensitiveContains(q) ?? false)
+            }
+        }
+        tableView.reloadData()
+    }
+}
+
 class InterestCollectionViewController: UIViewController {
     var onBackTapped: (() -> Void)?
     var onFinishTapped: (() -> Void)?
 
     @IBOutlet weak var interestCollectionView: UICollectionView!
+
+    // Domain selection onboarding
+    private let domainsPreviewCount = 6
+    private let otherCellTitle = "Other"
 
     private let selectedBlue = UIColor.systemBlue
     private let screenBackground = UIColor(red: 0.96, green: 0.98, blue: 1.0, alpha: 1.0)
@@ -123,14 +220,6 @@ class InterestCollectionViewController: UIViewController {
             InterestCollectionViewCell.self,
             forCellWithReuseIdentifier: "InterestCollectionViewCell"
         )
-
-        DispatchQueue.main.async { [weak self] in
-            [1, 3].forEach { item in
-                let indexPath = IndexPath(item: item, section: 0)
-                self?.interestCollectionView.selectItem(at: indexPath, animated: false, scrollPosition: [])
-                self?.interestCollectionView.cellForItem(at: indexPath)?.isSelected = true
-            }
-        }
     }
 
     @IBAction func backButtonTapped(_ sender: UIButton) {
@@ -144,7 +233,7 @@ class InterestCollectionViewController: UIViewController {
 
 extension InterestCollectionViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        preferences.count
+        min(domainsPreviewCount, InterestsDataSource.domains.count) + 1 // + "Other"
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -152,9 +241,67 @@ extension InterestCollectionViewController: UICollectionViewDataSource {
             withReuseIdentifier: "InterestCollectionViewCell",
             for: indexPath
         ) as! InterestCollectionViewCell
-        cell.configure(preferences[indexPath.item])
-        cell.isSelected = collectionView.indexPathsForSelectedItems?.contains(indexPath) == true
+
+        let previewCount = min(domainsPreviewCount, InterestsDataSource.domains.count)
+        if indexPath.item == previewCount {
+            // "Other" cell
+            cell.configure(title: otherCellTitle, icon: "ellipsis.circle")
+            cell.isSelected = false
+        } else {
+            let model = InterestsDataSource.domains[indexPath.item]
+            cell.configure(title: model.title, icon: model.icon)
+            cell.isSelected = collectionView.indexPathsForSelectedItems?.contains(indexPath) == true
+        }
         return cell
+    }
+}
+
+extension InterestCollectionViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let previewCount = min(domainsPreviewCount, InterestsDataSource.domains.count)
+        if indexPath.item == previewCount {
+            // Don't select the "Other" cell; open full list instead.
+            collectionView.deselectItem(at: indexPath, animated: false)
+            presentAllDomains()
+        }
+    }
+}
+
+extension InterestCollectionViewController {
+    private func presentAllDomains() {
+        let vc = AllDomainsViewController()
+        vc.allItems = InterestsDataSource.domains
+
+        // Seed with current selections from the grid and any previously chosen.
+        var selected = Set(UserInterests.domains.map { $0.title })
+        if let indexPaths = interestCollectionView.indexPathsForSelectedItems {
+            for idx in indexPaths {
+                if idx.item < InterestsDataSource.domains.count {
+                    selected.insert(InterestsDataSource.domains[idx.item].title)
+                }
+            }
+        }
+        vc.selectedTitles = selected
+
+        vc.onDone = { [weak self] titles in
+            UserInterests.domains = InterestsDataSource.domains.filter { titles.contains($0.title) }
+            NotificationCenter.default.post(name: .userInterestsDidChange, object: nil)
+
+            // Reflect selection back into the preview grid (only for the first N items).
+            let previewCount = min(self?.domainsPreviewCount ?? 0, InterestsDataSource.domains.count)
+            self?.interestCollectionView.reloadData()
+            for i in 0..<previewCount {
+                let ip = IndexPath(item: i, section: 0)
+                if titles.contains(InterestsDataSource.domains[i].title) {
+                    self?.interestCollectionView.selectItem(at: ip, animated: false, scrollPosition: [])
+                } else {
+                    self?.interestCollectionView.deselectItem(at: ip, animated: false)
+                }
+            }
+        }
+
+        let nav = UINavigationController(rootViewController: vc)
+        present(nav, animated: true)
     }
 }
 
