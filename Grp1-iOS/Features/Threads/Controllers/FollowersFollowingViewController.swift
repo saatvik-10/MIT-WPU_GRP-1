@@ -179,7 +179,7 @@ extension FollowersFollowingViewController: UITableViewDelegate {
         guard user.id != currentUserId else { return }
         let profileVC = BloggerProfileViewController()
         profileVC.bloggerUserId = user.id
-        profileVC.bloggerUserName = user.username
+        profileVC.bloggerUserName = user.name.isEmpty ? user.username : user.name
         navigationController?.pushViewController(profileVC, animated: true)
     }
 }

@@ -107,8 +107,11 @@ struct APIUserProfileResponse: Decodable {
 		let thread: Int
 	}
 	
-	var followersCount: Int { _count?.followers ?? 0 }
-	var followingCount: Int { _count?.following ?? 0 }
+	// Prisma naming inversion fix:
+	// _count.following = rows where followingId=userId → people who follow this user = FOLLOWERS
+	// _count.followers = rows where followerId=userId → people this user follows    = FOLLOWING
+	var followersCount: Int { _count?.following ?? 0 }
+	var followingCount: Int { _count?.followers ?? 0 }
 	var threadCount: Int { _count?.thread ?? 0 }
 	let isSelf: Bool?
 	let isFollowing: Bool?
@@ -154,7 +157,7 @@ struct APISetLevelRequest: Encodable {
 // MARK: - Threads
 // ─────────────────────────────────────────────
 
-struct APIThreadUser: Decodable {
+struct APIThreadUser: Codable {
 	let id: String
 	let name: String
 	let username: String
@@ -164,7 +167,7 @@ struct APIThreadUser: Decodable {
 // ✅ FIXED: imageName is now Optional (backend stores null when no image).
 //           imageUrl added — this is the presigned R2 URL your UI should load.
 //           NOT Encodable — use APICreateThreadRequest for sending.
-struct APIThread: Decodable {
+struct APIThread: Codable {
 	let id: String
 	let userId: String
 	let title: String
@@ -285,13 +288,19 @@ struct APIArticleChatQuestion: Decodable {
 // MARK: - Bookmark Folders
 // ─────────────────────────────────────────────
 
+struct BookmarkFolderCount: Decodable {
+	let bookmarkedArticle: Int?
+	let bookmarkedThread: Int?
+}
+
 struct APIBookmarkFolder: Decodable {
 	let id: String
 	let userId: String
 	let name: String
 	let createdAt: Date
 	let updatedAt: Date?
-	let bookmarksCount: Int?
+	// Backend returns _count via Prisma include
+	let _count: BookmarkFolderCount?
 }
 
 struct APICreateBookmarkFolderRequest: Encodable {
@@ -362,6 +371,7 @@ struct APIBookmarkedThread: Decodable {
 	let id: String
 	let userId: String
 	let folderId: String
+	let threadId: String?
 	let title: String
 	let description: String
 	let imageName: String?
@@ -376,6 +386,16 @@ struct APICreateBookmarkedThreadRequest: Encodable {
 	let description: String
 	let imageName: String
 	let tags: [String]
+}
+
+// ─────────────────────────────────────────────
+// MARK: - Bookmark State Check
+// ─────────────────────────────────────────────
+
+struct APICheckBookmarkResponse: Decodable {
+	let isBookmarked: Bool
+	let bookmarkId: String?
+	let folderId: String?
 }
 
 // ─────────────────────────────────────────────

@@ -301,7 +301,17 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
     }
 
     @objc private func goBackToSignIn() {
-        dismiss(animated: true)
+        if let presentingVC = self.presentingViewController {
+            self.dismiss(animated: true) {
+                let signInVC = SignInViewController()
+                signInVC.modalPresentationStyle = .fullScreen
+                presentingVC.present(signInVC, animated: true)
+            }
+        } else {
+            let signInVC = SignInViewController()
+            signInVC.modalPresentationStyle = .fullScreen
+            self.present(signInVC, animated: true)
+        }
     }
 
     // MARK: - Sign Up
@@ -384,10 +394,12 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
         if let onboardingVC = storyboard.instantiateViewController(
             withIdentifier: "OnboardingPageViewController"
         ) as? OnboardingPageViewController {
-            if let window = self.view.window {
-                window.rootViewController = onboardingVC
-                UIView.transition(with: window, duration: 0.3, options: .transitionCrossDissolve, animations: nil)
-            }
+            guard let window = UIApplication.shared.connectedScenes
+                .compactMap({ $0 as? UIWindowScene })
+                .flatMap({ $0.windows })
+                .first(where: { $0.isKeyWindow }) else { return }
+            window.rootViewController = onboardingVC
+            UIView.transition(with: window, duration: 0.3, options: .transitionCrossDissolve, animations: nil)
         }
     }
 
