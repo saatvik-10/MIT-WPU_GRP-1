@@ -5,9 +5,11 @@ class InterestsViewController: UIViewController {
     @IBOutlet weak var segmented: UISegmentedControl!
     @IBOutlet weak var collectionView: UICollectionView!
     
-    var domains = InterestsDataSource.domains
+    // Render only the user's saved selections on this screen.
+    // The Add flow still shows the full master list.
+    var domains = UserInterests.domains
     //    let companies = InterestsDataSource.companies
-    var preferences = InterestsDataSource.preferences
+    var preferences = UserInterests.preferences
     
     var currentSection: InterestType {
         segmented.selectedSegmentIndex == 0 ? .domain : .preference
@@ -21,6 +23,17 @@ class InterestsViewController: UIViewController {
         currentItems = domains
         setupSegmented()
         setupCollectionView()
+
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(userInterestsDidChange),
+            name: .userInterestsDidChange,
+            object: nil
+        )
+    }
+
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -28,9 +41,10 @@ class InterestsViewController: UIViewController {
            let vc = navController.viewControllers.first as? AddInterestViewController {
             
             vc.interestType = (segmented.selectedSegmentIndex == 0) ? .domain : .preference
-            vc.sourceItems = (segmented.selectedSegmentIndex == 0) ? domains : preferences
-            
-            
+            // Add screen should show the full list to choose from.
+            vc.sourceItems = (segmented.selectedSegmentIndex == 0) ? InterestsDataSource.domains : InterestsDataSource.preferences
+             
+             
         }
     }
 }
@@ -67,6 +81,14 @@ extension InterestsViewController {
     }
     
     @objc private func segmentChanged() {
+        currentItems = (segmented.selectedSegmentIndex == 0) ? domains : preferences
+        collectionView.reloadData()
+    }
+
+    @objc private func userInterestsDidChange() {
+        // Pull the latest user selections and refresh.
+        domains = UserInterests.domains
+        preferences = UserInterests.preferences
         currentItems = (segmented.selectedSegmentIndex == 0) ? domains : preferences
         collectionView.reloadData()
     }
@@ -184,12 +206,16 @@ extension InterestsViewController {
                     
                 case .domain:
                     self.domains.remove(at: indexPath.item)
+                    UserInterests.domains = self.domains
                     self.currentItems = self.domains
                     
                 case .preference:
                     self.preferences.remove(at: indexPath.item)
+                    UserInterests.preferences = self.preferences
                     self.currentItems = self.preferences
                 }
+
+                NotificationCenter.default.post(name: .userInterestsDidChange, object: nil)
                 
                 self.collectionView.reloadData()
             }

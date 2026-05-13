@@ -101,11 +101,15 @@ final class InterestCollectionViewCell: UICollectionViewCell {
         ])
     }
 
-    func configure(_ model: OnboardingInterestModel) {
-        titleLabel.text = model.title
-        iconImageView.image = UIImage(systemName: model.icon ?? "circle")
-        accessibilityLabel = model.title
+    func configure(title: String, icon: String?) {
+        titleLabel.text = title
+        iconImageView.image = UIImage(systemName: icon ?? "circle")
+        accessibilityLabel = title
         updateSelectionUI()
+    }
+
+    func configure(_ model: OnboardingInterestModel) {
+        configure(title: model.title, icon: model.icon)
     }
 
     private func updateSelectionUI() {
