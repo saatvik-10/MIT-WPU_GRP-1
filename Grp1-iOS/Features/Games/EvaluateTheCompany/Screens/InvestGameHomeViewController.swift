@@ -24,18 +24,114 @@ class InvestGameHomeViewController: UIViewController {
         super.init(coder: coder)
         hidesBottomBarWhenPushed = true
     }
-        override func viewDidLoad() {
-            
-            super.viewDidLoad()
-           
-            puzzle = DailyPuzzleLoader.loadDailyPuzzle()
-            view.backgroundColor = UIColor(red: 0.961, green: 0.957, blue: 0.945, alpha: 1)
-            setupHeader()
-            setupIndicatorInfoButton()
-            setupCollectionView()
-            setupHintLabel()
-            styleStartButton()
+    private var loadingOverlay: UIView?
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.backgroundColor = UIColor(red: 0.961, green: 0.957, blue: 0.945, alpha: 1)
+        
+        Task {
+            await loadPuzzleAsync()
         }
+    }
+    
+    private func loadPuzzleAsync() async {
+        showLoadingOverlay()
+        
+        if #available(iOS 26.0, *) {
+            if let generated = await PuzzleGenerator.shared.generate() {
+                self.puzzle = generated
+            } else {
+                self.puzzle = DailyPuzzleLoader.loadDailyPuzzle()
+            }
+        } else {
+            self.puzzle = DailyPuzzleLoader.loadDailyPuzzle()
+        }
+        
+        hideLoadingOverlay()
+        
+        setupHeader()
+        setupIndicatorInfoButton()
+        setupCollectionView()
+        setupHintLabel()
+        styleStartButton()
+    }
+    
+    private func showLoadingOverlay() {
+        let overlay = UIView(frame: view.bounds)
+        overlay.backgroundColor = view.backgroundColor
+        overlay.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        
+        let stack = UIStackView()
+        stack.axis = .vertical
+        stack.alignment = .center
+        stack.spacing = 16
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        
+        let spinner = UIActivityIndicatorView(style: .large)
+        spinner.color = UIColor(red: 0.18, green: 0.62, blue: 0.37, alpha: 1)
+        spinner.startAnimating()
+        
+        let label = UILabel()
+        label.text = "Generating today's puzzle…"
+        label.font = UIFont.systemFont(ofSize: 18, weight: .medium)
+        label.textColor = .darkGray
+        
+        let badgeStack = UIStackView()
+        badgeStack.axis = .horizontal
+        badgeStack.spacing = 6
+        badgeStack.alignment = .center
+        
+        let icon = UIImageView(image: UIImage(systemName: "sparkles"))
+        icon.tintColor = .systemPurple
+        icon.contentMode = .scaleAspectFit
+        icon.widthAnchor.constraint(equalToConstant: 14).isActive = true
+        icon.heightAnchor.constraint(equalToConstant: 14).isActive = true
+        
+        let badgeLabel = UILabel()
+        badgeLabel.text = "Apple Intelligence"
+        badgeLabel.font = UIFont.systemFont(ofSize: 12, weight: .semibold)
+        badgeLabel.textColor = .systemPurple
+        
+        badgeStack.addArrangedSubview(icon)
+        badgeStack.addArrangedSubview(badgeLabel)
+        
+        let badgeContainer = UIView()
+        badgeContainer.backgroundColor = UIColor.systemPurple.withAlphaComponent(0.1)
+        badgeContainer.layer.cornerRadius = 12
+        badgeContainer.translatesAutoresizingMaskIntoConstraints = false
+        badgeContainer.addSubview(badgeStack)
+        badgeStack.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            badgeStack.topAnchor.constraint(equalTo: badgeContainer.topAnchor, constant: 4),
+            badgeStack.bottomAnchor.constraint(equalTo: badgeContainer.bottomAnchor, constant: -4),
+            badgeStack.leadingAnchor.constraint(equalTo: badgeContainer.leadingAnchor, constant: 10),
+            badgeStack.trailingAnchor.constraint(equalTo: badgeContainer.trailingAnchor, constant: -10)
+        ])
+        
+        stack.addArrangedSubview(spinner)
+        stack.addArrangedSubview(label)
+        stack.addArrangedSubview(badgeContainer)
+        
+        overlay.addSubview(stack)
+        NSLayoutConstraint.activate([
+            stack.centerXAnchor.constraint(equalTo: overlay.centerXAnchor),
+            stack.centerYAnchor.constraint(equalTo: overlay.centerYAnchor)
+        ])
+        
+        view.addSubview(overlay)
+        self.loadingOverlay = overlay
+    }
+    
+    private func hideLoadingOverlay() {
+        UIView.animate(withDuration: 0.3, animations: {
+            self.loadingOverlay?.alpha = 0
+        }) { _ in
+            self.loadingOverlay?.removeFromSuperview()
+            self.loadingOverlay = nil
+        }
+    }
  
 
     // MARK: - Header (title + sector)
@@ -127,7 +223,8 @@ class InvestGameHomeViewController: UIViewController {
         }
      
         @objc private func indicatorInfoTapped() {
-            let vc = IndicatorInfoViewController()
+            let visibleNames = Array(Set(puzzle.visibleIndicators.map { $0.indicatorName })).sorted()
+            let vc = IndicatorInfoViewController(visibleIndicatorNames: visibleNames)
             vc.modalPresentationStyle = .pageSheet
             if let sheet = vc.sheetPresentationController {
                 sheet.detents               = [.large()]
