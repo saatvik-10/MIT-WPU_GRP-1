@@ -5,6 +5,7 @@ class SavedViewController: UIViewController, UICollectionViewDataSource, UIColle
     @IBOutlet weak var collectionView: UICollectionView!
 
     var folderName: String = ""
+    var folderId: String = ""
     var segment: BookmarkSegment = .articles
     
     private var articles: [SavedArticle] = []
@@ -18,9 +19,8 @@ class SavedViewController: UIViewController, UICollectionViewDataSource, UIColle
 
         if segment == .articles {
             articles = SavedArticlesStore.shared.articles(in: folderName)
-        } else {
-            threads = SavedThreadsStore.shared.fetchBookmarkedThreads(in: folderName)
         }
+        // Threads will be loaded in viewWillAppear via API
 
         setupCollectionView()
     }
@@ -31,10 +31,44 @@ class SavedViewController: UIViewController, UICollectionViewDataSource, UIColle
         // Refresh data on appear
         if segment == .articles {
             articles = SavedArticlesStore.shared.articles(in: folderName)
+            collectionView.reloadData()
         } else {
-            threads = SavedThreadsStore.shared.fetchBookmarkedThreads(in: folderName)
+            loadBookmarkedThreads()
         }
-        collectionView.reloadData()
+    }
+
+    private func loadBookmarkedThreads() {
+        guard let token = UserDefaults.standard.string(forKey: "authToken") else { return }
+        APIService.shared.fetchBookmarkedThreads(token: token, folderId: folderId) { [weak self] result in
+            DispatchQueue.main.async {
+                if case .success(let bookmarked) = result {
+                    let fmt = ISO8601DateFormatter()
+                    fmt.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+
+                    // Convert APIBookmarkedThread → APIThread for the cell
+                    self?.threads = bookmarked.map { bt in
+                        let dateStr = fmt.string(from: bt.createdAt)
+                        return APIThread(
+                            id: bt.threadId ?? bt.id,
+                            userId: bt.userId,
+                            title: bt.title,
+                            description: bt.description,
+                            imageName: bt.imageName,
+                            imageUrl: bt.imageName,
+                            tags: bt.tags,
+                            likesCount: 0,
+                            isLiked: nil,
+                            commentsCount: 0,
+                            sharesCount: nil,
+                            createdAt: dateStr,
+                            updatedAt: dateStr,
+                            user: nil
+                        )
+                    }
+                    self?.collectionView.reloadData()
+                }
+            }
+        }
     }
 
     private func setupCollectionView() {
@@ -156,13 +190,29 @@ class SavedViewController: UIViewController, UICollectionViewDataSource, UIColle
             cell.configure(with: thread, isFollowing: false, isOwnPost: isOwnPost)
             cell.applyStyle(isCard: true)
             
-            // Unsave from this folder when toggle tapped
+            // Unsave from this folder via API when toggle tapped
             cell.onBookmarkTapped = { [weak self] in
-                guard let self else { return }
-                SavedThreadsStore.shared.removeThreadBookmark(thread.id, from: self.folderName)
-                self.threads = SavedThreadsStore.shared.fetchBookmarkedThreads(in: self.folderName)
+                guard let self,
+                      let token = UserDefaults.standard.string(forKey: "authToken") else { return }
+                
+                // Optimistic: remove from local array immediately
+                self.threads.remove(at: indexPath.row)
                 self.collectionView.reloadData()
-                self.showToast(message: "Removed from \(self.folderName)")
+                
+                APIService.shared.deleteBookmarkedThreadByThreadId(
+                    threadId: thread.id, token: token
+                ) { [weak self] result in
+                    DispatchQueue.main.async {
+                        switch result {
+                        case .success:
+                            self?.showToast(message: "Removed from \(self?.folderName ?? "")")
+                        case .failure:
+                            // Revert on failure by reloading from API
+                            self?.loadBookmarkedThreads()
+                            self?.showToast(message: "Failed to remove")
+                        }
+                    }
+                }
             }
             
             return cell

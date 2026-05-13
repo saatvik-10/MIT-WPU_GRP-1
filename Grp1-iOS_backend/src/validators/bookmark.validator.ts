@@ -33,8 +33,8 @@ export const createBookmarkedThreadSchema = z.object({
   folderId: z.string().trim().min(1, 'folderId is required'),
   threadId: z.string().trim().min(1, 'threadId is required'),
   title: z.string().trim().min(1, 'title is required').max(200),
-  description: z.string().trim().min(1, 'description is required'),
-  imageName: z.string().trim().min(1, 'imageName is required'),
+  description: z.string().trim().default(''),
+  imageName: z.string().trim().default(''),
   tags: z.array(z.string()).default([]),
 });
 

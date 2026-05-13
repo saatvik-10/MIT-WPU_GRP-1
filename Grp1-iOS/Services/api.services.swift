@@ -608,7 +608,7 @@ final class APIService {
 		token: String,
 		completion: @escaping (Result<[APIBookmarkFolder], APIError>) -> Void
 	) {
-		request(method: .get, path: "/api/folders", token: token, body: Optional<EmptyBody>.none, completion: completion)
+		request(method: .get, path: "/api/bookmarks/folders", token: token, body: Optional<EmptyBody>.none, completion: completion)
 	}
 
 	func createBookmarkFolder(
@@ -616,7 +616,7 @@ final class APIService {
 		token: String,
 		completion: @escaping (Result<APIBookmarkFolder, APIError>) -> Void
 	) {
-		request(method: .post, path: "/api/folders", token: token, body: APICreateBookmarkFolderRequest(name: name), completion: completion)
+		request(method: .post, path: "/api/bookmarks/folders", token: token, body: APICreateBookmarkFolderRequest(name: name), completion: completion)
 	}
 
 	func deleteBookmarkFolder(
@@ -624,7 +624,7 @@ final class APIService {
 		token: String,
 		completion: @escaping (Result<Void, APIError>) -> Void
 	) {
-		requestStatus(method: .delete, path: "/api/folders/\(folderId)", token: token, body: Optional<EmptyBody>.none, completion: completion)
+		requestStatus(method: .delete, path: "/api/bookmarks/folders/\(folderId)", token: token, body: Optional<EmptyBody>.none, completion: completion)
 	}
 
 	// ─────────────────────────────────────────────
@@ -636,7 +636,8 @@ final class APIService {
 		token: String,
 		completion: @escaping (Result<[APIBookmark], APIError>) -> Void
 	) {
-		request(method: .get, path: "/api/bookmarks", token: token, queryItems: [URLQueryItem(name: "folderId", value: folderId)], body: Optional<EmptyBody>.none, completion: completion)
+		// Legacy general bookmarks endpoint
+	request(method: .get, path: "/api/bookmarks", token: token, queryItems: [URLQueryItem(name: "folderId", value: folderId)], body: Optional<EmptyBody>.none, completion: completion)
 	}
 
 	func createBookmark(
@@ -653,7 +654,7 @@ final class APIService {
 		completion: @escaping (Result<[APIBookmarkedArticle], APIError>) -> Void
 	) {
 		let queryItems: [URLQueryItem] = folderId.map { [URLQueryItem(name: "folderId", value: $0)] } ?? []
-		request(method: .get, path: "/api/articles", token: token, queryItems: queryItems, body: Optional<EmptyBody>.none, completion: completion)
+		request(method: .get, path: "/api/bookmarks/articles", token: token, queryItems: queryItems, body: Optional<EmptyBody>.none, completion: completion)
 	}
 
 	func createBookmarkedArticle(
@@ -661,7 +662,7 @@ final class APIService {
 		token: String,
 		completion: @escaping (Result<APIBookmarkedArticle, APIError>) -> Void
 	) {
-		request(method: .post, path: "/api/articles", token: token, body: payload, completion: completion)
+		request(method: .post, path: "/api/bookmarks/articles", token: token, body: payload, completion: completion)
 	}
 
 	func deleteBookmarkedArticle(
@@ -669,7 +670,7 @@ final class APIService {
 		token: String,
 		completion: @escaping (Result<Void, APIError>) -> Void
 	) {
-		requestStatus(method: .delete, path: "/api/articles/\(articleId)", token: token, body: Optional<EmptyBody>.none, completion: completion)
+		requestStatus(method: .delete, path: "/api/bookmarks/articles/\(articleId)", token: token, body: Optional<EmptyBody>.none, completion: completion)
 	}
 
 	func fetchBookmarkedThreads(
@@ -678,7 +679,7 @@ final class APIService {
 		completion: @escaping (Result<[APIBookmarkedThread], APIError>) -> Void
 	) {
 		let queryItems: [URLQueryItem] = folderId.map { [URLQueryItem(name: "folderId", value: $0)] } ?? []
-		request(method: .get, path: "/api/threads", token: token, queryItems: queryItems, body: Optional<EmptyBody>.none, completion: completion)
+		request(method: .get, path: "/api/bookmarks/threads", token: token, queryItems: queryItems, body: Optional<EmptyBody>.none, completion: completion)
 	}
 
 	func createBookmarkedThread(
@@ -686,7 +687,7 @@ final class APIService {
 		token: String,
 		completion: @escaping (Result<APIBookmarkedThread, APIError>) -> Void
 	) {
-		request(method: .post, path: "/api/threads", token: token, body: payload, completion: completion)
+		request(method: .post, path: "/api/bookmarks/threads", token: token, body: payload, completion: completion)
 	}
 
 	func deleteBookmarkedThread(
@@ -694,7 +695,36 @@ final class APIService {
 		token: String,
 		completion: @escaping (Result<Void, APIError>) -> Void
 	) {
-		requestStatus(method: .delete, path: "/api/threads/\(threadId)", token: token, body: Optional<EmptyBody>.none, completion: completion)
+		requestStatus(method: .delete, path: "/api/bookmarks/threads/\(threadId)", token: token, body: Optional<EmptyBody>.none, completion: completion)
+	}
+
+	func checkThreadBookmarkState(
+		threadId: String,
+		token: String,
+		completion: @escaping (Result<APICheckBookmarkResponse, APIError>) -> Void
+	) {
+		request(
+			method: .get,
+			path: "/api/bookmarks/threads/check",
+			token: token,
+			queryItems: [URLQueryItem(name: "threadId", value: threadId)],
+			body: Optional<EmptyBody>.none,
+			completion: completion
+		)
+	}
+
+	func deleteBookmarkedThreadByThreadId(
+		threadId: String,
+		token: String,
+		completion: @escaping (Result<Void, APIError>) -> Void
+	) {
+		requestStatus(
+			method: .delete,
+			path: "/api/bookmarks/threads/by-thread/\(threadId)",
+			token: token,
+			body: Optional<EmptyBody>.none,
+			completion: completion
+		)
 	}
 
 	// ─────────────────────────────────────────────

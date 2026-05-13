@@ -285,13 +285,19 @@ struct APIArticleChatQuestion: Decodable {
 // MARK: - Bookmark Folders
 // ─────────────────────────────────────────────
 
+struct BookmarkFolderCount: Decodable {
+	let bookmarkedArticle: Int?
+	let bookmarkedThread: Int?
+}
+
 struct APIBookmarkFolder: Decodable {
 	let id: String
 	let userId: String
 	let name: String
 	let createdAt: Date
 	let updatedAt: Date?
-	let bookmarksCount: Int?
+	// Backend returns _count via Prisma include
+	let _count: BookmarkFolderCount?
 }
 
 struct APICreateBookmarkFolderRequest: Encodable {
@@ -362,6 +368,7 @@ struct APIBookmarkedThread: Decodable {
 	let id: String
 	let userId: String
 	let folderId: String
+	let threadId: String?
 	let title: String
 	let description: String
 	let imageName: String?
@@ -376,6 +383,16 @@ struct APICreateBookmarkedThreadRequest: Encodable {
 	let description: String
 	let imageName: String
 	let tags: [String]
+}
+
+// ─────────────────────────────────────────────
+// MARK: - Bookmark State Check
+// ─────────────────────────────────────────────
+
+struct APICheckBookmarkResponse: Decodable {
+	let isBookmarked: Bool
+	let bookmarkId: String?
+	let folderId: String?
 }
 
 // ─────────────────────────────────────────────
